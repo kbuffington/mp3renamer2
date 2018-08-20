@@ -1,0 +1,26 @@
+{
+    "name": "mp3renamer2",
+    "version": "1.0.0",
+    "description": "An mp3 renamer/tagger/metadata retriever/artwork downloader",
+    "main": "main.js",
+    "scripts": {
+        "start": "tsc --module commonjs ../node-id3/index.ts; electron ."
+    },
+    "repository": "https://github.com/kbuffington/mp3renamer2",
+    "keywords": [
+        "mp3",
+        "Angular",
+        "Electron",
+        "node",
+        "tagger",
+        "renamer"
+    ],
+    "author": "Kevin Buffington",
+    "license": "MIT",
+    "devDependencies": {
+        "electron": "^2.0.0"
+    },
+    "dependencies": {
+        "node-id3": "^0.1.5"
+    }
+}

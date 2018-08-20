@@ -1,0 +1,81 @@
+// Modules to control application life and create native browser window
+const { app, BrowserWindow, dialog } = require('electron')
+const NodeID3 = require('../node-id3');
+// const taglib = require('../node-taglib');
+
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow
+
+function createWindow() {
+    // Create the browser window.
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600
+    });
+
+    // and load the index.html of the app.
+    mainWindow.loadFile('index.html')
+
+    // Open the DevTools.
+    // mainWindow.webContents.openDevTools()
+
+    // Emitted when the window is closed.
+    mainWindow.on('closed', function() {
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
+        mainWindow = null
+    });
+}
+
+function readFile() {
+    const filePaths = ['~/Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test.mp3'];
+
+    dialog.showOpenDialog({
+            defaultPath: '~/Desktop/Ghost - 2013 - If You Have Ghost/',
+            properties: ['openFile', 'multiSelections']
+        },
+        (filePaths, bookmarks) => {
+            console.log(filePaths);
+            filePaths.forEach(f => {
+            tags = NodeID3.read(f);
+            console.log(tags);
+            // tags.title = tags.title + 's';
+            // tags.userDefined.ARTISTFILTER.push('Esq.');
+            console.log(tags.userDefined['VINYL SIDE']);
+            // delete(tags.userDefined.genre);
+            // NodeID3.update(tags, f);
+        });
+        // console.log(NodeID3.createTextFrame('TPE1', 'abc'));
+        // console.log(NodeID3.createTextFrame('TPE1', ['a','b','c']));
+        // console.log(NodeID3.createUserDefinedFrame({'test': ['a','b','c']}));
+        app.quit();
+        // }
+    });
+}
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', readFile); //createWindow);
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function() {
+    // On OS X it is common for applications and their menu bar
+    // to stay active until the user quits explicitly with Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+})
+
+app.on('activate', function() {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (mainWindow === null) {
+        // createWindow()
+    }
+})
+
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and require them here.
