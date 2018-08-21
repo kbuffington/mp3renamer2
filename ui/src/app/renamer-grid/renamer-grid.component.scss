@@ -1,0 +1,93 @@
+$trackColWidth: 40px;
+
+.grid-container {
+	width: 700px;
+	// height: 300px;
+	// border: 1px solid rgba(0,0,0,0.2);
+	// overflow-y: scroll;
+
+	clr-datagrid {
+		height: 300px;
+	}
+
+	::ng-deep .datagrid {
+		margin: 0;
+		overflow: hidden;
+		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+		.datagrid-body {
+			overflow-x: hidden;
+		}
+
+		.datagrid-fixed-column:first-of-type {
+			-ms-flex: 0 0 27px;
+			flex: 0 0 27px;
+			max-width: 27px;
+			min-width: 27px;
+		}
+
+		clr-dg-cell.ellipsis {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+
+			&[data-title]:not(.editing):hover {
+				overflow: initial;
+				color: rgba(0,0,0,0);
+			}
+
+
+			&[data-title]:not(.editing):hover:before {
+				content: attr(data-title);
+				padding: 3px 5px 3px 0px;
+				color: #333;
+				position: relative;
+				left: 0px;
+				top: 0px;
+				pointer-events: none;
+				background: #eee;
+				border-right: 1px solid #dddddd;
+			}
+
+			span.text {
+				pointer-events: none;
+			}
+
+			&.editing {
+				padding: 0px 5px;
+			}
+
+			input[type=text] {
+				width: 100%;
+				min-width: 50px;
+				padding: 0;
+			}
+		}
+
+		.tracknum {
+			max-width: $trackColWidth;
+			min-width: $trackColWidth;
+			width: $trackColWidth !important;
+			text-align: center;
+		}
+
+		.tracknum-ie {
+			text-align: left;
+			&.datagrid-cell {
+				padding-left: 10px;
+			}
+		}
+
+		.datagrid-column,
+		.datagrid-cell {
+			// min-width: 25px;
+			padding: 5px 5px 5px 5px;
+			font-size: 12px;
+		}
+
+		.datagrid-column .datagrid-column-separator {
+			left: 5px;
+		}
+	}
+}
+

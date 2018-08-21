@@ -1,0 +1,30 @@
+<div class="grid-container">
+	<clr-datagrid class="compact" [(clrDgSelected)]="selected">
+
+		<clr-dg-column>File Name</clr-dg-column>
+		<clr-dg-column>
+			<ng-container *clrDgHideableColumn="{hidden: !showArtist}">
+				Track Artist
+			</ng-container>
+		</clr-dg-column>
+		<clr-dg-column>Title</clr-dg-column>
+		<clr-dg-column class="tracknum">Track#</clr-dg-column>
+
+		<clr-dg-row *clrDgItems="let track of tracks; let i = index" [clrDgItem]="track">
+			<clr-dg-cell class="ellipsis" [ngClass]="{'editing': editing[i]}"
+					[attr.data-title]="track.filename" (click)="edit(track, 'filename', i)">
+				<span *ngIf="!editing[i]" class="text">{{track.filename}}</span>
+				<input *ngIf="editing[i]" type="text" (focus)="gotFocus($event, i)"
+					(keydown)="keypressHandler($event.key, 'filename', i)"
+					[(ngModel)]="track.filename" [autofocus]="editing[i]">
+			</clr-dg-cell>
+			<clr-dg-cell class="ellipsis">{{track.artist}}</clr-dg-cell>
+			<clr-dg-cell class="ellipsis">{{track.title}}</clr-dg-cell>
+			<clr-dg-cell class="tracknum">{{track.tracknumber}}</clr-dg-cell>
+		</clr-dg-row>
+
+		<clr-dg-footer>{{tracks.length}} tracks</clr-dg-footer>
+	</clr-datagrid>
+
+	<!-- Selected tracks: <span *ngFor="let track of selected">{{track.tracknumber}}, </span> -->
+</div>
