@@ -19,9 +19,10 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 
 	public tracks: any[] = [];
 	public editing: boolean[] = [];
-	private backup: string;
 	public selected: any[] = [];
-	subscription: Subscription;
+	public subscription: Subscription;
+
+	private backup: string;
 
 	constructor(private ts: TrackService) {
 		this.subscription = ts.getTracks().subscribe(tracks => this.populateGrid(tracks));
