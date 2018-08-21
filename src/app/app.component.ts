@@ -6,8 +6,8 @@ import { Component } from '@angular/core';
 	styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-	private showArtist = true;
 	fileList: any[] = [];
+	showArtist = true;
 
 	title = 'app';
 

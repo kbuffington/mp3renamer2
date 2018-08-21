@@ -2,13 +2,14 @@
   "name": "mp3renamer2",
   "version": "0.1.0",
   "description": "An mp3 renamer/tagger/metadata retriever/artwork downloader",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "start-id3": "tsc --module commonjs ../node-id3/index.ts; electron .",
-    "start": "ng build --watch --prod && electron ."
+    "start": "ng serve"
   },
   "private": true,
   "dependencies": {
