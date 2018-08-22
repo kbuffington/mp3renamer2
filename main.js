@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog } = require('electron')
+const { app, BrowserWindow, dialog, ipcMain } = require('electron')
 const NodeID3 = require('../node-id3');
 // const taglib = require('../node-taglib');
 
@@ -9,14 +9,14 @@ let mainWindow
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 800, height: 600 });
+    mainWindow = new BrowserWindow({ width: 1200, height: 800 });
 
     // and load the index.html of the app.
     // mainWindow.loadFile('dist/mp3renamer2/index.html')
     mainWindow.loadURL('http://localhost:4200');
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
@@ -27,7 +27,7 @@ function createWindow() {
     });
 }
 
-function readFile() {
+function getFiles() {
     const filePaths = ['~/Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test.mp3'];
 
     dialog.showOpenDialog({
@@ -38,17 +38,17 @@ function readFile() {
             console.log(filePaths);
             filePaths.forEach(f => {
             tags = NodeID3.read(f);
+            mainWindow.webContents.send('files', tags);
             console.log(tags);
             // tags.title = tags.title + 's';
             // tags.userDefined.ARTISTFILTER.push('Esq.');
-            console.log(tags.userDefined['VINYL SIDE']);
             // delete(tags.userDefined.genre);
             // NodeID3.update(tags, f);
         });
         // console.log(NodeID3.createTextFrame('TPE1', 'abc'));
         // console.log(NodeID3.createTextFrame('TPE1', ['a','b','c']));
         // console.log(NodeID3.createUserDefinedFrame({'test': ['a','b','c']}));
-        app.quit();
+        // app.quit();
         // }
     });
 }
@@ -74,6 +74,8 @@ app.on('activate', function() {
         // createWindow()
     }
 })
+
+exports.getFiles = getFiles;
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule, Http } from '@angular/http';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
+import { NgxElectronModule } from 'ngx-electron';
 
 import { AppComponent } from './app.component';
 import { HttpStreamerComponent } from './http-streamer/http-streamer.component';
@@ -12,7 +13,6 @@ import { XmlHandlerComponent } from './xml-handler/xml-handler.component';
 import { RequestFilesComponent } from './request-files/request-files.component';
 import { MusicbrainzService } from './services/musicbrainz.service';
 import { TrackService } from './services/track.service';
-// import { AuthenticatedHttpService } from './services/connection-backend.service';
 
 @NgModule({
 	declarations: [
@@ -27,12 +27,12 @@ import { TrackService } from './services/track.service';
 		BrowserModule,
 		HttpModule,
 		FormsModule,
-		ClarityModule.forRoot()
+		NgxElectronModule,
+		ClarityModule.forRoot(),
 	],
 	providers: [
 		MusicbrainzService,
 		TrackService,
-		// Http
 	],
 	bootstrap: [AppComponent]
 })

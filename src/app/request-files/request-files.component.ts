@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
   selector: 'request-files',
@@ -7,15 +7,19 @@ import { Http, Response } from '@angular/http';
   styleUrls: ['./request-files.component.scss']
 })
 export class RequestFilesComponent implements OnInit {
-	constructor(private http: Http) { }
+	constructor(private electronService: ElectronService) { }
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.electronService.ipcRenderer.on('files', (event, message) => console.log('test:', message));
+	}
 
 	requestFiles() {
-		this.http.post('http://localhost:666/command/file', {})
-			.subscribe(
-				data => data,
-				error => console.log(error));
+		if (this.electronService.isElectronApp) {
+			const mainProcess = this.electronService.remote.require('./main.js');
+			mainProcess.getFiles();
+		} else {
+			// we'll need ot use mocked file data here
+		}
 	}
 
 }
