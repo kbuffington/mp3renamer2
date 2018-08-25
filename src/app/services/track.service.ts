@@ -15,16 +15,6 @@ export class TrackService {
 	}
 
 	setTracks(tracks: any) {
-		tracks = tracks.map(t => {
-			const keys = Object.keys(t);
-			let n = keys.length;
-			while (n--) {
-				const key = keys[n];
-				t[key.toLowerCase()] = t[key];
-			}
-			return t;
-		});
-		console.log(tracks);
 		this._trackList.next(tracks);
 	}
 

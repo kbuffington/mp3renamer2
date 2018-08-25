@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
+import { TrackService } from '../services/track.service';
 
 @Component({
   selector: 'request-files',
@@ -7,10 +8,13 @@ import { ElectronService } from 'ngx-electron';
   styleUrls: ['./request-files.component.scss']
 })
 export class RequestFilesComponent implements OnInit {
-	constructor(private electronService: ElectronService) { }
+	constructor(private electronService: ElectronService,
+				private ts: TrackService) { }
 
 	ngOnInit() {
-		this.electronService.ipcRenderer.on('files', (event, message) => console.log('test:', message));
+		this.electronService.ipcRenderer.on('files', (event, message) => {
+			this.ts.setTracks(message);
+		});
 	}
 
 	requestFiles() {
@@ -22,4 +26,7 @@ export class RequestFilesComponent implements OnInit {
 		}
 	}
 
+	clearFiles() {
+		this.ts.clearTracks();
+	}
 }

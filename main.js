@@ -36,21 +36,24 @@ function getFiles() {
         },
         (filePaths, bookmarks) => {
             console.log(filePaths);
+            const tracks = [];
             filePaths.forEach(f => {
-            tags = NodeID3.read(f);
-            mainWindow.webContents.send('files', tags);
-            console.log(tags);
-            // tags.title = tags.title + 's';
-            // tags.userDefined.ARTISTFILTER.push('Esq.');
-            // delete(tags.userDefined.genre);
-            // NodeID3.update(tags, f);
+                tags = NodeID3.read(f);
+                tags.filename = f.replace(/^.*[\\\/]/, '');
+                tracks.push(tags);
+                console.log(tags);
+                // tags.title = tags.title + 's';
+                // tags.userDefined.ARTISTFILTER.push('Esq.');
+                // delete(tags.userDefined.genre);
+                // NodeID3.update(tags, f);
+            });
+            mainWindow.webContents.send('files', tracks);
+
+            // console.log(NodeID3.createTextFrame('TPE1', 'abc'));
+            // console.log(NodeID3.createTextFrame('TPE1', ['a','b','c']));
+            // console.log(NodeID3.createUserDefinedFrame({'test': ['a','b','c']}));
+            // app.quit();
         });
-        // console.log(NodeID3.createTextFrame('TPE1', 'abc'));
-        // console.log(NodeID3.createTextFrame('TPE1', ['a','b','c']));
-        // console.log(NodeID3.createUserDefinedFrame({'test': ['a','b','c']}));
-        // app.quit();
-        // }
-    });
 }
 
 // This method will be called when Electron has finished

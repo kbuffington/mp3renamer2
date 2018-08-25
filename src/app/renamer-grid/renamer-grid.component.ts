@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, NgZone } from '@angular/core';
 import { TrackService } from '../services/track.service';
 import { Subscription } from 'rxjs';
 
@@ -6,7 +6,7 @@ export class TrackObj {
 	filename: string;
 	title: string;
 	artist: string;
-	tracknumber: string;
+	trackNumber: string;
 }
 
 @Component({
@@ -24,25 +24,28 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 
 	private backup: string;
 
-	constructor(private ts: TrackService) {
+	constructor(private ts: TrackService,
+				private zone: NgZone) {
 		this.subscription = ts.getTracks().subscribe(tracks => this.populateGrid(tracks));
 	}
 
 	ngOnInit() {
-		// this.ts.setTracks(this.dummyValues());
+		this.ts.setTracks(this.dummyValues());
 	}
 
 	ngOnDestroy() {
 		this.subscription.unsubscribe();
 	}
 
-	populateGrid(tracks: any[]) {
-		this.tracks = tracks.map(t => {
-			t.filename = `${t.artist} [${t.album} ${t.tracknumber}] - ${t.title}`;
-			return t;
+	populateGrid(trackList: any[]) {
+		this.zone.run(() => {
+			this.tracks = trackList.map(t => {
+				// t.filename = `${t.artist} [${t.album} ${t.trackNumber}] - ${t.title}`;
+				return t;
+			});
+			this.tracks.forEach(t => console.log(t.filename, t.artist));
+			this.editing = Array(this.tracks.length + 1).fill(false);
 		});
-		this.tracks.forEach(t => console.log(t.filename, t.artist));
-		this.editing = Array(this.tracks.length + 1).fill(false);
 	}
 
 	dummyValues(): any[] {
@@ -51,73 +54,73 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 			filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
 			title: 'For Those About To Rock (We Salute You)',
 			artist: 'AC/DC',
-			tracknumber: '01'
+			trackNumber: '01'
 		});
 		tracks.push({
 			filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
 			title: 'Put the Finger on You',
 			artist: 'AC/DC',
-			tracknumber: '02'
+			trackNumber: '02'
 		});
 		tracks.push({
 			filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
 			title: 'For Those About To Rock (We Salute You)',
 			artist: 'AC/DC',
-			tracknumber: '03'
+			trackNumber: '03'
 		});
 		tracks.push({
 			filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
 			title: 'Put the Finger on You',
 			artist: 'AC/DC',
-			tracknumber: '04'
+			trackNumber: '04'
 		});
 		tracks.push({
 			filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
 			title: 'For Those About To Rock (We Salute You)',
 			artist: 'AC/DC',
-			tracknumber: '05'
+			trackNumber: '05'
 		});
 		tracks.push({
 			filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
 			title: 'Put the Finger on You',
 			artist: 'AC/DC',
-			tracknumber: '06'
+			trackNumber: '06'
 		});
 		tracks.push({
 			filename: 'ACDC [For Those About to Rock (We Salute You) 07] - C.O.D..mp3',
 			title: 'C.O.D.',
 			artist: 'AC/DC',
-			tracknumber: '07'
+			trackNumber: '07'
 		});
 		tracks.push({
 			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
-			tracknumber: '08'
+			trackNumber: '08'
 		});
 		tracks.push({
 			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
-			tracknumber: '09'
+			trackNumber: '09'
 		});
 		tracks.push({
 			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
-			tracknumber: '10'
+			trackNumber: '10'
 		});
 		tracks.push({
 			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
-			tracknumber: '10'
+			trackNumber: '10'
 		});
 		tracks.push({
 			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
-			tracknumber: '10'
+			trackNumber: '10'
 		});
 		return tracks;
 	}
