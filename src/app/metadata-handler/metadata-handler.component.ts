@@ -1,9 +1,7 @@
 
 import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
-import { Http, Response } from '@angular/http';
 import { MusicbrainzService } from '../services/musicbrainz.service';
-import { map, catchError } from 'rxjs/operators';
 import { TrackService } from '../services/track.service';
 
 @Component({
@@ -15,8 +13,7 @@ export class MetadataHandlerComponent implements OnInit {
 	private data: any[] = [];
 	private errorMessage: any = '';
 
-	constructor(private http: Http,
-				private mb: MusicbrainzService,
+	constructor(private mb: MusicbrainzService,
 				private ts: TrackService) { }
 
 	ngOnInit() {
