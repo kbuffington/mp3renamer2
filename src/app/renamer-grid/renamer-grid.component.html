@@ -12,11 +12,11 @@
 
 		<clr-dg-row *clrDgItems="let track of tracks; let i = index" [clrDgItem]="track">
 			<clr-dg-cell class="ellipsis" [ngClass]="{'editing': editing[i]}"
-					[attr.data-title]="track.filename" (click)="edit(track, 'filename', i)">
-				<span *ngIf="!editing[i]" class="text">{{ track.filename }}</span>
+					[attr.data-title]="track.meta.filename" (click)="edit(track, 'filename', i, true)">
+				<span *ngIf="!editing[i]" class="text">{{ track.meta.filename }}</span>
 				<input *ngIf="editing[i]" type="text" (focus)="gotFocus($event, i)"
-					(keydown)="keypressHandler($event.key, 'filename', i)"
-					[(ngModel)]="track.filename" [autofocus]="editing[i]">
+					(keydown)="keypressHandler($event.key, 'filename', i, true)"
+					[(ngModel)]="track.meta.filename" [autofocus]="editing[i]">
 			</clr-dg-cell>
 			<clr-dg-cell class="ellipsis">{{ track.artist }}</clr-dg-cell>
 			<clr-dg-cell class="ellipsis">{{ track.title }}</clr-dg-cell>

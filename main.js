@@ -9,7 +9,7 @@ let mainWindow
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 1200, height: 800 });
+    mainWindow = new BrowserWindow({ width: 1400, height: 1024 });
 
     // and load the index.html of the app.
     // mainWindow.loadFile('dist/mp3renamer2/index.html')
@@ -39,7 +39,9 @@ function getFiles() {
             const tracks = [];
             filePaths.forEach(f => {
                 tags = NodeID3.read(f);
-                tags.filename = f.replace(/^.*[\\\/]/, '');
+                tags.meta = {
+                    filename: f.replace(/^.*[\\\/]/, '')
+                };
                 tracks.push(tags);
                 console.log(tags);
                 // tags.title = tags.title + 's';

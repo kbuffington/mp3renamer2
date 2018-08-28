@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MetadataHandlerComponent } from '../metadata-handler/metadata-handler.component';
 
-describe('MetadataHandlerComponent', () => {
+import { MetadataHandlerComponent } from './metadata-handler.component';
+
+describe('XmlHandlerComponent', () => {
 	let component: MetadataHandlerComponent;
 	let fixture: ComponentFixture<MetadataHandlerComponent>;
 

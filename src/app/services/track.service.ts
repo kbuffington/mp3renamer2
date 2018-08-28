@@ -22,4 +22,8 @@ export class TrackService {
 		this._trackList.next([]);
 	}
 
+	getCurrentTracks(): Track[] {
+		return this._trackList.getValue();
+	}
+
 }

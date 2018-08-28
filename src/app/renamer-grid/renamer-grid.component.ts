@@ -3,7 +3,9 @@ import { TrackService } from '../services/track.service';
 import { Subscription } from 'rxjs';
 
 export class TrackObj {
-	filename: string;
+	meta: {
+		filename: string;
+	}
 	title: string;
 	artist: string;
 	trackNumber: string;
@@ -40,9 +42,10 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 	populateGrid(trackList: any[]) {
 		this.zone.run(() => {
 			this.tracks = trackList.map(t => {
-				// t.filename = `${t.artist} [${t.album} ${t.trackNumber}] - ${t.title}`;
+				t.meta.originalFilename = t.meta.filename;
 				return t;
 			});
+			this.selected = this.tracks;
 			this.tracks.forEach(t => console.log(t.filename, t.artist));
 			this.editing = Array(this.tracks.length + 1).fill(false);
 		});
@@ -51,73 +54,97 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 	dummyValues(): any[] {
 		const tracks = [];
 		tracks.push({
-			filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+			meta: {
+				filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+			},
 			title: 'For Those About To Rock (We Salute You)',
 			artist: 'AC/DC',
 			trackNumber: '01'
 		});
 		tracks.push({
-			filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+			meta: {
+				filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+			},
 			title: 'Put the Finger on You',
 			artist: 'AC/DC',
 			trackNumber: '02'
 		});
 		tracks.push({
-			filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+			meta: {
+				filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+			},
 			title: 'For Those About To Rock (We Salute You)',
 			artist: 'AC/DC',
 			trackNumber: '03'
 		});
 		tracks.push({
-			filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+			meta: {
+				filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+			},
 			title: 'Put the Finger on You',
 			artist: 'AC/DC',
 			trackNumber: '04'
 		});
 		tracks.push({
-			filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+			meta: {
+				filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+			},
 			title: 'For Those About To Rock (We Salute You)',
 			artist: 'AC/DC',
 			trackNumber: '05'
 		});
 		tracks.push({
-			filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+			meta: {
+				filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+			},
 			title: 'Put the Finger on You',
 			artist: 'AC/DC',
 			trackNumber: '06'
 		});
 		tracks.push({
-			filename: 'ACDC [For Those About to Rock (We Salute You) 07] - C.O.D..mp3',
+			meta: {
+				filename: 'ACDC [For Those About to Rock (We Salute You) 07] - C.O.D..mp3',
+			},
 			title: 'C.O.D.',
 			artist: 'AC/DC',
 			trackNumber: '07'
 		});
 		tracks.push({
-			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			meta: {
+				filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			},
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
 			trackNumber: '08'
 		});
 		tracks.push({
-			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			meta: {
+				filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			},
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
 			trackNumber: '09'
 		});
 		tracks.push({
-			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			meta: {
+				filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			},
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
 			trackNumber: '10'
 		});
 		tracks.push({
-			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			meta: {
+				filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			},
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
 			trackNumber: '10'
 		});
 		tracks.push({
-			filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			meta: {
+				filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+			},
 			title: 'Where Greater Men Have Fallen',
 			artist: 'Primordial',
 			trackNumber: '10'
@@ -125,20 +152,23 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 		return tracks;
 	}
 
-	edit(track: TrackObj, col: string, index: number) {
+	edit(track: TrackObj, col: string, index: number, meta: boolean) {
 		// console.log(index, track);
 		// track.filename = 'test';
 		this.editing.fill(false);
 		this.editing[index] = true;
-		this.backup = track[col];
+		this.backup = meta ? track.meta[col] : track[col];
 	}
 
-	keypressHandler(keyCode: string, col: string, index: number) {
+	keypressHandler(keyCode: string, col: string, index: number, meta: boolean) {
 		switch (keyCode) {
 			case 'Escape':
 				this.editing[index] = false;
-				this.tracks[index][col] = this.backup;
-				// this.
+				if (meta) {
+					this.tracks[index].meta[col] = this.backup
+				} else {
+					this.tracks[index][col] = this.backup;
+				}
 				break;
 			case 'Enter':
 				this.editing[index] = false;

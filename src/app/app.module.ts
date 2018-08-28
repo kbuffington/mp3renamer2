@@ -6,10 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { NgxElectronModule } from 'ngx-electron';
 
 import { AppComponent } from './app.component';
-import { HttpStreamerComponent } from './http-streamer/http-streamer.component';
 import { RenamerGridComponent } from './renamer-grid/renamer-grid.component';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
-import { XmlHandlerComponent } from './xml-handler/xml-handler.component';
+import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.component';
 import { RequestFilesComponent } from './request-files/request-files.component';
 import { MusicbrainzService } from './services/musicbrainz.service';
 import { TrackService } from './services/track.service';
@@ -17,10 +16,9 @@ import { TrackService } from './services/track.service';
 @NgModule({
 	declarations: [
 		AppComponent,
-		HttpStreamerComponent,
 		RenamerGridComponent,
 		AutoFocusDirective,
-		XmlHandlerComponent,
+		MetadataHandlerComponent,
 		RequestFilesComponent
 	],
 	imports: [

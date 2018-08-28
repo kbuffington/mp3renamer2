@@ -1,11 +1,6 @@
-$trackColWidth: 40px;
+$trackColWidth: 48px;
 
 .grid-container {
-	width: 700px;
-	// height: 300px;
-	// border: 1px solid rgba(0,0,0,0.2);
-	// overflow-y: scroll;
-
 	clr-datagrid {
 		height: 300px;
 	}
@@ -88,6 +83,11 @@ $trackColWidth: 40px;
 		.datagrid-column .datagrid-column-separator {
 			left: 5px;
 		}
+
+		.datagrid-body .datagrid-row.datagrid-selected {
+			background-color: initial;
+		}
 	}
+
 }
 
