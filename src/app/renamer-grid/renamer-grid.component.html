@@ -11,20 +11,52 @@
 		<clr-dg-column class="tracknum">Track#</clr-dg-column>
 
 		<clr-dg-row *clrDgItems="let track of tracks; let i = index" [clrDgItem]="track">
-			<clr-dg-cell class="ellipsis" [ngClass]="{'editing': editing[i]}"
-					[attr.data-title]="track.meta.filename" (click)="edit(track, 'filename', i, true)">
-				<span *ngIf="!editing[i]" class="text">{{ track.meta.filename }}</span>
-				<input *ngIf="editing[i]" type="text" (focus)="gotFocus($event, i)"
-					(keydown)="keypressHandler($event.key, 'filename', i, true)"
-					[(ngModel)]="track.meta.filename" [autofocus]="editing[i]">
+			<clr-dg-cell class="ellipsis"
+					[ngClass]="{'editing': editing[i][0]}"
+					[attr.data-title]="track.meta.filename"
+					(click)="startEditing(i, 0)">
+				<editable-cell [(value)]="track.meta.filename"
+					[(editing)]="editing[i][0]"
+					[dontSelect]="4">
+				</editable-cell>
+				<!-- <span *ngIf="!editing[i][0]" class="text">{{ track.meta.filename }}</span>
+				<input *ngIf="editing[i][0]" type="text" (focus)="gotFocus($event, 0)"
+					(keydown)="keypressHandler($event.key, 'filename', i, 0, true)"
+					[(ngModel)]="track.meta.filename" [autofocus]="editing[i][0]"> -->
 			</clr-dg-cell>
-			<clr-dg-cell class="ellipsis">{{ track.artist }}</clr-dg-cell>
-			<clr-dg-cell class="ellipsis">{{ track.title }}</clr-dg-cell>
-			<clr-dg-cell class="tracknum">{{ track.trackNumber }}</clr-dg-cell>
+			<clr-dg-cell class="ellipsis"
+					[ngClass]="{'editing': editing[i][1]}"
+					[attr.data-title]="track.artist"
+					(click)="startEditing(i, 1)">
+				<editable-cell [(value)]="track.artist"
+					[(editing)]="editing[i][1]">
+				</editable-cell>
+			</clr-dg-cell>
+			<clr-dg-cell class="ellipsis"
+					[ngClass]="{'editing': editing[i][2]}"
+					[attr.data-title]="track.title"
+					(click)="startEditing(i, 2)">
+				<editable-cell [(value)]="track.title"
+					[(editing)]="editing[i][2]">
+				</editable-cell>
+			</clr-dg-cell>
+			<!-- <clr-dg-cell class="ellipsis" >
+				<editable-cell [(value)]="track.title" (isEditing)="editing[i][2] = $event" [attr.data-title]="track.title" [ngClass]="{'editing': editing[i][2]}"></editable-cell>
+			</clr-dg-cell> -->
+			<clr-dg-cell class="tracknum"
+					[ngClass]="{'editing': editing[i][3]}"
+					[attr.data-title]="track.trackNumber"
+					(click)="startEditing(i, 3)">
+				<editable-cell [(value)]="track.trackNumber"
+					[(editing)]="editing[i][3]">
+				</editable-cell>
+			</clr-dg-cell>
+			<!-- <clr-dg-cell class="tracknum">{{ track.trackNumber }}</clr-dg-cell> -->
 		</clr-dg-row>
 
 		<clr-dg-footer>{{ tracks.length }} tracks</clr-dg-footer>
 	</clr-datagrid>
 
+	<!-- {{ tracks[0].meta.filename }} -->
 	<!-- Selected tracks: <span *ngFor="let track of selected">{{ track.trackNumber }}, </span> -->
 </div>

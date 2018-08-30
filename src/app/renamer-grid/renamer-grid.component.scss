@@ -21,31 +21,30 @@ $trackColWidth: 48px;
 			min-width: 27px;
 		}
 
-		clr-dg-cell.ellipsis {
+		clr-dg-cell {
 			overflow: hidden;
-			text-overflow: ellipsis;
 			white-space: nowrap;
+		}
+
+		clr-dg-cell.ellipsis {
+			text-overflow: ellipsis;
 
 			&[data-title]:not(.editing):hover {
 				overflow: initial;
 				color: rgba(0,0,0,0);
 			}
 
-
 			&[data-title]:not(.editing):hover:before {
 				content: attr(data-title);
-				padding: 3px 5px 3px 0px;
+				padding: 3px 4px 3px 3px;
 				color: #333;
 				position: relative;
 				left: 0px;
 				top: 0px;
+				margin-left: -4px;
 				pointer-events: none;
 				background: #eee;
-				border-right: 1px solid #dddddd;
-			}
-
-			span.text {
-				pointer-events: none;
+				border: 1px solid #dddddd;
 			}
 
 			&.editing {
@@ -56,26 +55,33 @@ $trackColWidth: 48px;
 				width: 100%;
 				min-width: 50px;
 				padding: 0;
+				height: calc(1rem - 1px);
 			}
 		}
 
-		.tracknum {
+		clr-dg-cell.tracknum,
+		clr-dg-column.tracknum {
 			max-width: $trackColWidth;
 			min-width: $trackColWidth;
 			width: $trackColWidth !important;
 			text-align: center;
-		}
 
-		.tracknum-ie {
-			text-align: left;
-			&.datagrid-cell {
-				padding-left: 10px;
+			&.editing {
+				padding: 0px;
+			}
+
+			input[type=text] {
+				width: 100%;
+				min-width: 50px;
+				padding: 0;
+				height: calc(1rem - 1px);
+				text-align: center;
+				margin-left: -1px;
 			}
 		}
 
 		.datagrid-column,
 		.datagrid-cell {
-			// min-width: 25px;
 			padding: 5px 5px 5px 5px;
 			font-size: 12px;
 		}

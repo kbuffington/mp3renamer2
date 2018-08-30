@@ -1,15 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule, Http } from '@angular/http';
+import { HttpModule } from '@angular/http';
 import { ClarityModule } from '@clr/angular';
 import { FormsModule } from '@angular/forms';
 import { NgxElectronModule } from 'ngx-electron';
 
+/* Components */
 import { AppComponent } from './app.component';
 import { RenamerGridComponent } from './renamer-grid/renamer-grid.component';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.component';
 import { RequestFilesComponent } from './request-files/request-files.component';
+import { EditableCellComponent } from './editable-cell/editable-cell.component';
+
+/* Services */
 import { MusicbrainzService } from './services/musicbrainz.service';
 import { TrackService } from './services/track.service';
 
@@ -19,7 +23,8 @@ import { TrackService } from './services/track.service';
 		RenamerGridComponent,
 		AutoFocusDirective,
 		MetadataHandlerComponent,
-		RequestFilesComponent
+		RequestFilesComponent,
+		EditableCellComponent
 	],
 	imports: [
 		BrowserModule,

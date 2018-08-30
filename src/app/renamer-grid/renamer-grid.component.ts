@@ -24,8 +24,6 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 	public selected: any[] = [];
 	public subscription: Subscription;
 
-	private backup: string;
-
 	constructor(private ts: TrackService,
 				private zone: NgZone) {
 		this.subscription = ts.getTracks().subscribe(tracks => this.populateGrid(tracks));
@@ -46,9 +44,22 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 				return t;
 			});
 			this.selected = this.tracks;
-			this.tracks.forEach(t => console.log(t.filename, t.artist));
-			this.editing = Array(this.tracks.length + 1).fill(false);
+			this.tracks.forEach(t => console.log(t.meta.filename, t.artist));
+			this.clearEditing();
 		});
+	}
+
+	clearEditing() {
+		const numRows = this.tracks.length + 1;
+		const numCols = 4;
+		const editingGrid = [];
+		for (let i = 0; i < numRows; i++) {
+			editingGrid[i] = [];
+			for (let j = 0; j < numCols; j++) {
+				editingGrid[i][j] = false;
+			}
+		}
+		this.editing = editingGrid;
 	}
 
 	dummyValues(): any[] {
@@ -111,10 +122,10 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 		});
 		tracks.push({
 			meta: {
-				filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+				filename: 'ASIWYFA [Gangs 08] Gangs',
 			},
-			title: 'Where Greater Men Have Fallen',
-			artist: 'Primordial',
+			title: 'Gangs of the modern era which is now dumbass',
+			artist: 'And So I Watch You From Afar',
 			trackNumber: '08'
 		});
 		tracks.push({
@@ -152,37 +163,8 @@ export class RenamerGridComponent implements OnInit, OnDestroy {
 		return tracks;
 	}
 
-	edit(track: TrackObj, col: string, index: number, meta: boolean) {
-		// console.log(index, track);
-		// track.filename = 'test';
-		this.editing.fill(false);
-		this.editing[index] = true;
-		this.backup = meta ? track.meta[col] : track[col];
-	}
-
-	keypressHandler(keyCode: string, col: string, index: number, meta: boolean) {
-		switch (keyCode) {
-			case 'Escape':
-				this.editing[index] = false;
-				if (meta) {
-					this.tracks[index].meta[col] = this.backup
-				} else {
-					this.tracks[index][col] = this.backup;
-				}
-				break;
-			case 'Enter':
-				this.editing[index] = false;
-				break;
-			default:
-				break;
-		}
-	}
-
-	gotFocus(event: any, index: number) {
-		// console.log(index, event);
-		setTimeout(() => {
-			event.target.selectionStart = 0;
-			event.target.selectionEnd = event.target.selectionEnd - 4;
-		});
+	startEditing(index: number, col: number) {
+		this.clearEditing();
+		this.editing[index][col] = true;
 	}
 }
