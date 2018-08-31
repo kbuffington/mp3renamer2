@@ -1,6 +1,9 @@
 <div class="app-wrapper">
 	<div class="clr-row">
-		<renamer-grid [showArtist]="showArtist" class="clr-col-12"></renamer-grid>
+		<renamer-grid [showArtist]="showArtist" class="clr-col-12" [tracks]="tracks"></renamer-grid>
+	</div>
+	<div class="clr-row">
+		<left-panel [tracks]="tracks"></left-panel>
 	</div>
 	<request-files></request-files>
 	<metadata-handler></metadata-handler>

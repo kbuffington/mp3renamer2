@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 export class EditableCellComponent implements OnChanges {
 	@Input() value: string;
 	@Input() editing: boolean;
-	@Input() dontSelect: number = 0;	// number of characters to not select from end
+	@Input() dontSelect = 0;	// number of characters to not select from end
 
 	@Output() valueChange = new EventEmitter();
 	@Output() editingChange = new EventEmitter();

@@ -1,0 +1,20 @@
+clr-checkbox {
+    display: inline-block;
+
+    label {
+        padding: 0;
+        min-width: 100px;
+
+        clr-icon {
+            margin-top: -2px;
+        }
+    }
+}
+
+.data-field {
+    display: inline-block;
+
+    input {
+        width: 250px;
+    }
+}

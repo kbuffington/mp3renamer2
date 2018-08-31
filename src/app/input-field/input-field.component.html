@@ -1,0 +1,14 @@
+<div>
+	<clr-checkbox [ngModel]="true">
+		<label>
+			<clr-icon shape="info-circle" size="20"></clr-icon>
+			{{ label }}
+		</label>
+	</clr-checkbox>
+	<div class="data-field">
+		<input clrInput
+			[value]="value"
+			(focus)="$event.target.select()"
+			(input)="valChanged($event.target.value)">
+	</div>
+</div>
