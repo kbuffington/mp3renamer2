@@ -12,8 +12,8 @@ export class RequestFilesComponent implements OnInit {
 				private ts: TrackService) { }
 
 	ngOnInit() {
-		this.electronService.ipcRenderer.on('files', (event, message) => {
-			this.ts.setTracks(message);
+		this.electronService.ipcRenderer.on('files', (event, json) => {
+			this.ts.setTracks(json);
 		});
 	}
 
@@ -22,11 +22,15 @@ export class RequestFilesComponent implements OnInit {
 			const mainProcess = this.electronService.remote.require('./main.js');
 			mainProcess.getFiles();
 		} else {
-			// we'll need ot use mocked file data here
+			// we'll need to use mocked file data here
 		}
 	}
 
 	clearFiles() {
 		this.ts.clearTracks();
+	}
+
+	reloadTags() {
+		this.ts.resetTrackData();
 	}
 }

@@ -1,5 +1,5 @@
 <div class="left-wrapper">
-	<div class="clr-col-12">
+	<div class="clr-col-12" *ngIf="tracks[0]">
 		<input-field label="Artist:" [(value)]="tracks[0].artist"></input-field>
 		<input-field label="Album:" [(value)]="tracks[0].album"></input-field>
 	</div>

@@ -1,5 +1,4 @@
 import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { TrackService } from '../services/track.service';
 
 export class TrackObj {
@@ -23,40 +22,19 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
 	// public tracks: any[] = [];
 	public editing: boolean[] = [];
 	public selected: any[] = [];
-	public subscription: Subscription;
 
-	constructor(private ts: TrackService,
-				private zone: NgZone) {
-		// this.subscription = ts.getTracks().subscribe(tracks => this.populateGrid(tracks));
-	}
+	constructor(private ts: TrackService) {}
 
-	ngOnInit() {
-		// this.ts.setTracks(this.dummyValues());
-	}
+	ngOnInit() {}
 
-	ngOnDestroy() {
-		this.subscription.unsubscribe();
-	}
+	ngOnDestroy() {}
 
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes.tracks && changes.tracks.currentValue) {
-			// this.tracks = changes.tracks.currentValue;
-			this.selected = this.tracks;
+			this.selected = changes.tracks.currentValue.map(t => t);
 			this.clearEditing();
 		}
 	}
-
-	// populateGrid(trackList: any[]) {
-	// 	this.zone.run(() => {
-	// 		this.tracks = trackList.map(t => {
-	// 			t.meta.originalFilename = t.meta.filename;
-	// 			return t;
-	// 		});
-	// 		this.selected = this.tracks;
-	// 		this.tracks.forEach(t => console.log(t.meta.filename, t.artist));
-	// 		this.clearEditing();
-	// 	});
-	// }
 
 	clearEditing() {
 		const numRows = this.tracks.length + 1;

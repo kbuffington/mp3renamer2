@@ -7,6 +7,7 @@ export type Track = any;
 export class TrackService {
 
 	private _trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
+	private trackDataBackup: any;
 
 	constructor() { }
 
@@ -15,7 +16,16 @@ export class TrackService {
 	}
 
 	setTracks(tracks: any) {
-		this._trackList.next(tracks);
+		this.trackDataBackup = JSON.parse(JSON.stringify(tracks));
+		const trackList = tracks.map(t => {
+			t.meta.originalFilename = t.meta.filename;
+			return t;
+		});
+		this._trackList.next(trackList);
+	}
+
+	resetTrackData() {
+		this.setTracks(this.trackDataBackup);
 	}
 
 	clearTracks() {

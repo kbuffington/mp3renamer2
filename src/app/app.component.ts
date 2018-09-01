@@ -22,6 +22,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.ts.setTracks(TrackServiceMocks.mockTracks());
+		// setInterval(() => {
+		// 	console.log(this.tracks[0].meta.filename, this.selected[0].meta.filename);
+		// }, 1000);
 	}
 
 	ngOnDestroy() {
@@ -30,12 +33,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	setupTracks(trackList: any[]) {
 		this.zone.run(() => {
-			this.tracks = trackList.map(t => {
-				t.meta.originalFilename = t.meta.filename;
-				return t;
-			});
+			this.tracks = trackList;
+			// this.selected = JSON.parse(JSON.stringify(this.tracks));
 			// this.selected = this.tracks;
-			this.tracks.forEach(t => console.log(t.meta.filename, t.artist));
+			// this.tracks.forEach(t => console.log(t.meta.filename, t.artist));
 			// this.clearEditing();
 		});
 	}

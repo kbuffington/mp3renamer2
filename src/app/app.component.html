@@ -1,6 +1,9 @@
 <div class="app-wrapper">
 	<div class="clr-row">
-		<renamer-grid [showArtist]="showArtist" class="clr-col-12" [tracks]="tracks"></renamer-grid>
+		<renamer-grid class="clr-col-12"
+			[showArtist]="showArtist"
+			[tracks]="tracks">
+		</renamer-grid>
 	</div>
 	<div class="clr-row">
 		<left-panel [tracks]="tracks"></left-panel>
@@ -10,9 +13,9 @@
 
 	<div class="container">
 		<clr-checkbox
-			name="showArtistToggle"
-			id="showArtistToggle"
-			[(ngModel)]="showArtist">
+				name="showArtistToggle"
+				id="showArtistToggle"
+				[(ngModel)]="showArtist">
 			Toggle Track Artists
 		</clr-checkbox>
 	</div>
