@@ -22,9 +22,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.ts.setTracks(TrackServiceMocks.mockTracks());
-		// setInterval(() => {
-		// 	console.log(this.tracks[0].meta.filename, this.selected[0].meta.filename);
-		// }, 1000);
 	}
 
 	ngOnDestroy() {

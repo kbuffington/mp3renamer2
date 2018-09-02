@@ -1,22 +1,35 @@
 <div class="app-wrapper">
-	<div class="clr-row">
-		<renamer-grid class="clr-col-12"
-			[showArtist]="showArtist"
-			[tracks]="tracks">
-		</renamer-grid>
-	</div>
-	<div class="clr-row">
-		<left-panel [tracks]="tracks"></left-panel>
-	</div>
-	<request-files></request-files>
-	<metadata-handler></metadata-handler>
+	<header class="header header-5">
+		<div class="branding">
+			<a href="#" class="nav-link">
+				<clr-icon shape="library"></clr-icon>
+				<span class="title">MP3 Renamer2</span>
+			</a>
+		</div>
+	</header>
+	<div class="content">
+		<div class="clr-row">
+			<renamer-grid class="clr-col-12"
+				[showArtist]="showArtist"
+				[tracks]="tracks">
+			</renamer-grid>
+		</div>
+		<request-files></request-files>
+		<div class="clr-row">
+			<left-panel [tracks]="tracks"></left-panel>
+		</div>
+		<metadata-handler></metadata-handler>
 
-	<div class="container">
-		<clr-checkbox
-				name="showArtistToggle"
-				id="showArtistToggle"
-				[(ngModel)]="showArtist">
-			Toggle Track Artists
-		</clr-checkbox>
+		<div class="container">
+			<clr-checkbox
+					name="showArtistToggle"
+					id="showArtistToggle"
+					[(ngModel)]="showArtist">
+				Toggle Track Artists
+			</clr-checkbox>
+		</div>
 	</div>
+	<footer>
+		<button class="btn btn-outline">Preview Names</button>
+	</footer>
 </div>

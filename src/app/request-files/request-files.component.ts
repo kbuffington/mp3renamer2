@@ -29,8 +29,4 @@ export class RequestFilesComponent implements OnInit {
 	clearFiles() {
 		this.ts.clearTracks();
 	}
-
-	reloadTags() {
-		this.ts.resetTrackData();
-	}
 }

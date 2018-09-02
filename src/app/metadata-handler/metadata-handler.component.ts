@@ -1,6 +1,6 @@
 
-import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { Observable, throwError as observableThrowError } from 'rxjs';
 import { MusicbrainzService } from '../services/musicbrainz.service';
 import { TrackService } from '../services/track.service';
 
@@ -37,5 +37,9 @@ export class MetadataHandlerComponent implements OnInit {
 			error.status ? `${error.status} - ${error.statusText}` : 'Server error';
 		console.error(errMsg); // log to console instead
 		return observableThrowError(errMsg);
+	}
+
+	reloadTags() {
+		this.ts.resetTrackData();
 	}
 }

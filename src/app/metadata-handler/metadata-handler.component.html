@@ -1,7 +1,13 @@
 <div class="container">
 	<div class="row">
-		<button class="btn btn-primary" (click)="requestMetadata()">
-			Request Metadata
+		<button class="btn btn-outline" (click)="requestMetadata()">
+			Get Metadata
+		</button>
+		<button class="btn btn-outline" (click)="reloadTags()">
+			Reload Tags
+		</button>
+		<button class="btn btn-outline" [disabled]="true" (click)="reloadTags()">
+			Set Tags
 		</button>
 	</div>
 </div>

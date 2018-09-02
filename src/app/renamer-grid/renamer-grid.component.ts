@@ -19,7 +19,6 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
 	@Input() showArtist = false;
 	@Input() tracks: any[] = [];
 
-	// public tracks: any[] = [];
 	public editing: boolean[] = [];
 	public selected: any[] = [];
 
