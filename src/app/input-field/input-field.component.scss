@@ -1,20 +1,56 @@
-clr-checkbox {
-    display: inline-block;
+.input-field {
+    position: relative;
 
-    label {
-        padding: 0;
-        min-width: 100px;
+    clr-checkbox {
+        display: inline-block;
 
-        clr-icon {
-            margin-top: -2px;
+        label {
+            padding: 0;
+            min-width: 100px;
+            cursor: default;
+
+            clr-icon {
+                margin-top: -2px;
+                cursor: pointer;
+            }
         }
     }
-}
 
-.data-field {
-    display: inline-block;
+    .data-field {
+        display: inline-block;
 
-    input {
-        width: 250px;
+        input {
+            width: 250px;
+        }
+    }
+
+    .list {
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            line-height: 3em;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(0,0,0,.2);
+
+            .close-btn {
+                margin: 0;
+                width: 20px;
+                min-width: 20px;
+            }
+        }
+
+        .property-list {
+            padding: 5px 0;
+        }
+
+        display: block;
+        position: absolute;
+        background: white;
+        border: 1px solid;
+        left: 0px;
+        width: 350px;
+        top: 1px;
+        z-index: 100;
+        padding: 0px 10px;
     }
 }
