@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TrackService } from '../services/track.service';
 
 @Component({
@@ -6,12 +7,24 @@ import { TrackService } from '../services/track.service';
 	templateUrl: './left-panel.component.html',
 	styleUrls: ['./left-panel.component.scss'],
 })
-export class LeftPanelComponent implements OnInit {
+export class LeftPanelComponent implements OnInit, OnDestroy {
 	@Input() tracks: any[] = [];
 
-	constructor(private ts: TrackService) { }
+	metadata: any;
+	public metadataSubscription: Subscription;
+
+	constructor(private ts: TrackService) {
+	}
 
 	ngOnInit() {
+		this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
+			console.log(m);
+			this.metadata = m;
+		});
+	}
+
+	ngOnDestroy() {
+		this.metadataSubscription.unsubscribe();
 	}
 
 }
