@@ -54,20 +54,49 @@ export class TrackService {
 		this.processField(metaData, tracks, 'genre');
 		this.processField(metaData, tracks, 'albumSortOrder');
 		this.processField(metaData, tracks, 'date');
+		this.processField(metaData, tracks, 'comment');
+		this.processField(metaData, tracks, 'discnumber');
+		this.processField(metaData, tracks, 'totaldiscs');
+		this.processField(metaData, tracks, 'originalArtist');
+		this.processField(metaData, tracks, 'partOfSet');
+		this.processField(metaData, tracks, 'originalArtist');
+		this.processField(metaData, tracks, 'encodedBy');
+		this.processField(metaData, tracks, 'copyright');
+		this.processField(metaData, tracks, 'RELEASETYPE', true);
+		this.processField(metaData, tracks, 'EDITION', true);
+		this.processField(metaData, tracks, 'LABEL', true);
+		this.processField(metaData, tracks, 'ARTISTCOUNTRY', true);
+		this.processField(metaData, tracks, 'ARTISTFILTER', true);
+		this.processField(metaData, tracks, 'MUSICBRAINZ_ARTISTID', true);
+		this.processField(metaData, tracks, 'MUSICBRAINZ_RELEASEGROUPID', true);
+		this.processField(metaData, tracks, 'CATALOGNUMBER', true);
+		this.processField(metaData, tracks, 'DISCSUBTITLE', true);
+		this.processField(metaData, tracks, 'replaygain_album_gain', true);
 
 		this.trackMetaData.next(metaData);
 	}
 
-	processField(metadata, tracks, property: string) {
+	processField(metadata, tracks, property: string, userDefined: boolean = false) {
 		const metaProp = new MetadataProperty();
 		tracks.forEach(t => {
-			if (t[property]) {
-				if (!metaProp.default) {
-					metaProp.default = t[property];
+			if (!userDefined) {
+				if (t[property]) {
+					if (!metaProp.default) {
+						metaProp.default = t[property];
+					}
+					metaProp.values.push(t[property]);
+				} else {
+					metaProp.values.push('');
 				}
-				metaProp.values.push(t[property]);
 			} else {
-				metaProp.values.push('');
+				if (t.userDefined && t.userDefined[property]) {
+					if (!metaProp.default) {
+						metaProp.default = t.userDefined[property];
+					}
+					metaProp.values.push(t.userDefined[property]);
+				} else {
+					metaProp.values.push('');
+				}
 			}
 		});
 		metadata[property] = metaProp;

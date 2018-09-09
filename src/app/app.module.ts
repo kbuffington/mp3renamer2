@@ -14,6 +14,7 @@ import { LeftPanelComponent } from './left-panel/left-panel.component';
 import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.component';
 import { RenamerGridComponent } from './renamer-grid/renamer-grid.component';
 import { RequestFilesComponent } from './request-files/request-files.component';
+import { RightPanelComponent } from './right-panel/right-panel.component';
 
 /* Services */
 import { MusicbrainzService } from './services/musicbrainz.service';
@@ -29,6 +30,7 @@ import { TrackService } from './services/track.service';
 		EditableCellComponent,
 		LeftPanelComponent,
 		InputFieldComponent,
+		RightPanelComponent,
 	],
 	imports: [
 		BrowserModule,

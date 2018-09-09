@@ -1,12 +1,16 @@
 .input-field {
     position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-flow: nowrap;
 
     clr-checkbox {
         display: inline-block;
 
         label {
             padding: 0;
-            min-width: 100px;
+            min-width: 125px;
             cursor: default;
 
             clr-icon {
@@ -17,10 +21,11 @@
     }
 
     .data-field {
-        display: inline-block;
+        display: flex;
+        flex: 1;
 
         input {
-            width: 250px;
+            flex-grow: 1;
         }
     }
 
@@ -47,10 +52,11 @@
         position: absolute;
         background: white;
         border: 1px solid;
-        left: 0px;
+        left: 25px;
         width: 350px;
         top: 1px;
         z-index: 100;
         padding: 0px 10px;
+        pointer-events: all;
     }
 }

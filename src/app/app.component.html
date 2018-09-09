@@ -21,9 +21,9 @@
 		</div>
 		<request-files></request-files>
 		<div class="clr-row">
-			<left-panel [tracks]="tracks"></left-panel>
+			<left-panel class="clr-col-6" [tracks]="tracks"></left-panel>
+			<right-panel class="clr-col-6" [tracks]="tracks"></right-panel>
 		</div>
-		<metadata-handler></metadata-handler>
 
 		<div class="container">
 			<clr-checkbox
@@ -35,8 +35,8 @@
 		</div>
 	</div>
 	<footer>
-		<button class="btn btn-outline">Preview Names</button>
-		<button class="btn btn-outline">Revert Names</button>
+		<button class="btn btn-outline" (click)="previewRename()">Preview Names</button>
+		<button class="btn btn-outline" (click)="revertRename()">Revert Names</button>
 		<button class="btn btn-outline">Set Names</button>
 	</footer>
 </div>

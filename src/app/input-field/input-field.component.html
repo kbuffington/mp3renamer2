@@ -2,23 +2,24 @@
 	<clr-checkbox [ngModel]="true">
 		<label>
 			<ng-container *ngIf="different">
-				<clr-icon shape="info-circle" size="20" (click)="showValueList()"></clr-icon>
-				<div class="list" *ngIf="showValues">
-					<div class="header-row">
-						<span class="property">{{ label }}</span>
-						<button class="btn btn-link close-btn" (click)="hideValueList()">
-							<clr-icon shape="window-close" size="16"></clr-icon>
-						</button>
-					</div>
-					<ul class="property-list">
-						<li *ngFor="let val of value.values">{{ val }}</li>
-					</ul>
-				</div>
+				<clr-icon shape="info-circle" size="20" (click)="showValues = true"></clr-icon>
 			</ng-container>
 			<clr-icon shape="check" size="20" *ngIf="!different"></clr-icon>
 			{{ label }}
 		</label>
 	</clr-checkbox>
+	<div class="list" *ngIf="showValues">
+		<div class="header-row">
+			<span class="property">{{ label }}</span>
+			<button class="btn btn-link close-btn" (click)="showValues = false">
+				<clr-icon shape="window-close" size="16"></clr-icon>
+			</button>
+		</div>
+		<ul class="property-list">
+			<li *ngFor="let val of value.values">{{ val }}</li>
+			<!-- <input *ngFor="let val of value.values" [value]="val"> -->
+		</ul>
+	</div>
 	<div class="data-field">
 		<input clrInput
 			[value]="value.default"

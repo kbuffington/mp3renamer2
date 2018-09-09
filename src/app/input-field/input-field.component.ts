@@ -37,17 +37,4 @@ export class InputFieldComponent implements OnChanges {
 		this.alteredDefault = true;	// doesn't check if default is actually different
 		this.valueChange.emit(this.value);
 	}
-
-	showValueList() {
-		setTimeout(() => {
-			this.showValues = true;
-		});
-	}
-
-	hideValueList() {
-		setTimeout(() => {
-			this.showValues = false;
-		});
-	}
-
 }
