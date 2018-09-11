@@ -1,7 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject,  Observable, Subject } from 'rxjs';
 
-export type Track = any;
+export interface Track {
+	artist: string;
+	album: string;
+	title: string;
+	trackNumber: string;
+	userDefined: any;
+	meta: {
+		originalFilename: string;
+		filename: string;
+		extension: string;
+	};
+}
 
 export class MetadataProperty {
 	default = '';
@@ -27,10 +38,12 @@ export class TrackService {
 
 	setTracks(tracks: any) {
 		this.trackDataBackup = JSON.parse(JSON.stringify(tracks));
-		const trackList = tracks.map(t => {
+		const trackList = tracks.map((t: Track) => {
 			t.meta.originalFilename = t.meta.filename;
+			t.meta.extension = t.meta.filename.substring(t.meta.filename.lastIndexOf('.'));
 			return t;
 		});
+		this.trackCount = trackList.length;
 		this.processTracks(tracks);
 		this.trackList.next(trackList);
 	}
@@ -102,4 +115,20 @@ export class TrackService {
 		metadata[property] = metaProp;
 	}
 
+	previewFilenames(pattern: string) {
+		const trackList = this.trackList.getValue();
+		const metadata = this.trackMetaData.getValue();
+		trackList.map(t => {
+			t.meta.filename = metadata.artist.default + ' [' + metadata.album.default + ' ' + t.trackNumber + '] - ' + t.title + t.meta.extension;
+		});
+		this.trackList.next(trackList);
+	}
+
+	revertFilenames() {
+		const trackList = this.trackList.getValue();
+		trackList.map(t => {
+			t.meta.filename = t.meta.originalFilename;
+		});
+		this.trackList.next(trackList);
+	}
 }

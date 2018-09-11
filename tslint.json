@@ -46,6 +46,7 @@
 			"always"
 		],
 		"trailing-comma": false,
+		"interface-name": false,
 		"interface-over-type-literal": true,
 		"label-position": true,
 		"max-classes-per-file": false,

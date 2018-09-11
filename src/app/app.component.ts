@@ -37,4 +37,12 @@ export class AppComponent implements OnInit, OnDestroy {
 			// this.clearEditing();
 		});
 	}
+
+	previewRename() {
+		this.ts.previewFilenames('');
+	}
+
+	revertRename() {
+		this.ts.revertFilenames();
+	}
 }
