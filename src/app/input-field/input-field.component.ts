@@ -14,7 +14,6 @@ export class InputFieldComponent implements OnChanges {
 
 	public different = false;
 	public showValues = false;
-	private alteredDefault = false;
 
 	constructor() {}
 
@@ -23,7 +22,6 @@ export class InputFieldComponent implements OnChanges {
 			const val: MetadataProperty = changes.value.currentValue;
 			this.different = false;
 			this.showValues = false;
-			this.alteredDefault = false;
 			val.values.forEach(t => {
 				if (t !== val.default && val.default !== undefined) {
 					this.different = true;
@@ -34,7 +32,11 @@ export class InputFieldComponent implements OnChanges {
 
 	defaultValChanged(value: string) {
 		this.value.default = value;
-		this.alteredDefault = true;	// doesn't check if default is actually different
+		if (value !== this.value.origValue) {
+			this.value.changed = true;
+		} else {
+			this.value.changed = false;
+		}
 		this.valueChange.emit(this.value);
 	}
 }

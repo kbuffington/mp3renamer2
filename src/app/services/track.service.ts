@@ -15,7 +15,12 @@ export interface Track {
 }
 
 export class MetadataProperty {
+	changed = false;
 	default = '';
+	multiValue = false;
+	origValue = '';
+	overwrite = true;
+	userDefined = false;
 	values: string[] = [];
 }
 
@@ -25,6 +30,7 @@ export class TrackService {
 	private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
 	private trackMetaData: BehaviorSubject<any> = new BehaviorSubject({});
 	private trackDataBackup: any;
+	private trackCount: number;
 
 	constructor() { }
 
@@ -62,19 +68,21 @@ export class TrackService {
 
 	processTracks(tracks: any) {
 		const metaData = {};
-		this.processField(metaData, tracks, 'artist');
-		this.processField(metaData, tracks, 'album');
+		this.processField(metaData, tracks, 'artist', false, false);
+		this.processField(metaData, tracks, 'album', false, false);
+		// this.processField(metaData, tracks, 'title');		// not needed?
+		// this.processField(metaData, tracks, 'trackNumber');	// not needed?
 		this.processField(metaData, tracks, 'genre');
-		this.processField(metaData, tracks, 'albumSortOrder');
-		this.processField(metaData, tracks, 'date');
-		this.processField(metaData, tracks, 'comment');
-		this.processField(metaData, tracks, 'discnumber');
-		this.processField(metaData, tracks, 'totaldiscs');
-		this.processField(metaData, tracks, 'originalArtist');
-		this.processField(metaData, tracks, 'partOfSet');
-		this.processField(metaData, tracks, 'originalArtist');
-		this.processField(metaData, tracks, 'encodedBy');
+		this.processField(metaData, tracks, 'albumSortOrder', false, false);
+		this.processField(metaData, tracks, 'artistSortOrder', false, false);
+		this.processField(metaData, tracks, 'comment', false, false);
+		this.processField(metaData, tracks, 'composer');
 		this.processField(metaData, tracks, 'copyright');
+		this.processField(metaData, tracks, 'date');
+		this.processField(metaData, tracks, 'encodedBy');
+		this.processField(metaData, tracks, 'originalArtist');
+		this.processField(metaData, tracks, 'partOfSet', false, false);
+		this.processField(metaData, tracks, 'performerInfo');
 		this.processField(metaData, tracks, 'RELEASETYPE', true);
 		this.processField(metaData, tracks, 'EDITION', true);
 		this.processField(metaData, tracks, 'LABEL', true);
@@ -85,34 +93,44 @@ export class TrackService {
 		this.processField(metaData, tracks, 'CATALOGNUMBER', true);
 		this.processField(metaData, tracks, 'DISCSUBTITLE', true);
 		this.processField(metaData, tracks, 'replaygain_album_gain', true);
+		this.processField(metaData, tracks, 'replaygain_album_peak', true);
+		this.processField(metaData, tracks, 'replaygain_track_gain', true);
+		this.processField(metaData, tracks, 'replaygain_track_peak', true);
 
 		this.trackMetaData.next(metaData);
 	}
 
-	processField(metadata, tracks, property: string, userDefined: boolean = false) {
+	processField(metadata, tracks, property: string, userDefined: boolean = false, multiValue: boolean = true) {
 		const metaProp = new MetadataProperty();
+		metaProp.multiValue = multiValue;
 		tracks.forEach(t => {
 			if (!userDefined) {
 				if (t[property]) {
-					if (!metaProp.default) {
-						metaProp.default = t[property];
-					}
-					metaProp.values.push(t[property]);
+					this.setMetadataValue(metaProp, t[property]);
 				} else {
 					metaProp.values.push('');
 				}
 			} else {
+				metaProp.userDefined = true;
 				if (t.userDefined && t.userDefined[property]) {
-					if (!metaProp.default) {
-						metaProp.default = t.userDefined[property];
-					}
-					metaProp.values.push(t.userDefined[property]);
+					this.setMetadataValue(metaProp, t.userDefined[property]);
 				} else {
 					metaProp.values.push('');
 				}
 			}
+			metaProp.origValue = metaProp.default;
 		});
 		metadata[property] = metaProp;
+	}
+
+	setMetadataValue(metaProp: MetadataProperty, value: string) {
+		if (Array.isArray(value)) {
+			value = value.join('; ');
+		}
+		if (!metaProp.default) {
+			metaProp.default = value;
+		}
+		metaProp.values.push(value);
 	}
 
 	previewFilenames(pattern: string) {
@@ -130,5 +148,40 @@ export class TrackService {
 			t.meta.filename = t.meta.originalFilename;
 		});
 		this.trackList.next(trackList);
+	}
+
+	setTagData() {
+		const trackList = this.trackList.getValue();
+		const metadata = this.trackMetaData.getValue();
+		const trackTagFields = Array(this.trackCount).fill({});
+		trackTagFields.forEach((t, i) => {
+			t.artist = trackList[i].artist;
+			t.title = trackList[i].title;
+			t.trackNumber = trackList[i].trackNumber;
+		});
+		Object.keys(metadata).forEach(key => {
+			const obj: MetadataProperty = metadata[key];
+			let value: any;
+
+			for (let i = 0; i < this.trackCount; i++) {
+				if (obj.changed && obj.overwrite) {
+					value = obj.default;
+				} else {
+					value = obj.values[i];
+				}
+				if (value) {
+					if (obj.multiValue && value.includes('; ')) {
+						value = value.split('; ');
+					}
+					if (!obj.userDefined) {
+						trackTagFields[i][key] = value;
+					} else {
+						trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
+						trackTagFields[i].userDefined[key] = value;
+					}
+				}
+			}
+		});
+		console.log(trackTagFields);
 	}
 }

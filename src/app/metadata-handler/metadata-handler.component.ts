@@ -42,4 +42,8 @@ export class MetadataHandlerComponent implements OnInit {
 	reloadTags() {
 		this.ts.resetTrackData();
 	}
+
+	setTags() {
+		this.ts.setTagData();
+	}
 }

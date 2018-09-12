@@ -1,5 +1,5 @@
 <div class="input-field">
-	<clr-checkbox [ngModel]="true">
+	<clr-checkbox [(ngModel)]="value.overwrite">
 		<label>
 			<ng-container *ngIf="different">
 				<clr-icon shape="info-circle" size="20" (click)="showValues = true"></clr-icon>
