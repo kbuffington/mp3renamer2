@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject,  Observable, Subject } from 'rxjs';
+import { knownProperties } from './known-properties';
 
 export interface Track {
 	artist: string;
@@ -68,39 +69,25 @@ export class TrackService {
 
 	processTracks(tracks: any) {
 		const metaData = {};
-		this.processField(metaData, tracks, 'artist', false, false);
-		this.processField(metaData, tracks, 'album', false, false);
-		// this.processField(metaData, tracks, 'title');		// not needed?
-		// this.processField(metaData, tracks, 'trackNumber');	// not needed?
-		this.processField(metaData, tracks, 'genre');
-		this.processField(metaData, tracks, 'albumSortOrder', false, false);
-		this.processField(metaData, tracks, 'artistSortOrder', false, false);
-		this.processField(metaData, tracks, 'comment', false, false);
-		this.processField(metaData, tracks, 'composer');
-		this.processField(metaData, tracks, 'copyright');
-		this.processField(metaData, tracks, 'date');
-		this.processField(metaData, tracks, 'encodedBy');
-		this.processField(metaData, tracks, 'originalArtist');
-		this.processField(metaData, tracks, 'partOfSet', false, false);
-		this.processField(metaData, tracks, 'performerInfo');
-		this.processField(metaData, tracks, 'RELEASETYPE', true);
-		this.processField(metaData, tracks, 'EDITION', true);
-		this.processField(metaData, tracks, 'LABEL', true);
-		this.processField(metaData, tracks, 'ARTISTCOUNTRY', true);
-		this.processField(metaData, tracks, 'ARTISTFILTER', true);
-		this.processField(metaData, tracks, 'MUSICBRAINZ_ARTISTID', true);
-		this.processField(metaData, tracks, 'MUSICBRAINZ_RELEASEGROUPID', true);
-		this.processField(metaData, tracks, 'CATALOGNUMBER', true);
-		this.processField(metaData, tracks, 'DISCSUBTITLE', true);
-		this.processField(metaData, tracks, 'replaygain_album_gain', true);
-		this.processField(metaData, tracks, 'replaygain_album_peak', true);
-		this.processField(metaData, tracks, 'replaygain_track_gain', true);
-		this.processField(metaData, tracks, 'replaygain_track_peak', true);
+		const unknownProperties = {};
+		knownProperties.forEach((prop, name) => {
+			this.processField(metaData, tracks, name, prop.userDefined, prop.multiValue);
+		});
+		tracks.forEach(t => {
+			if (t.userDefined) {
+				Object.keys(t.userDefined).forEach(prop => {
+					if (!knownProperties.has(prop) && !unknownProperties[prop]) {
+						this.processField(metaData, tracks, prop, true, true);
+						unknownProperties[prop] = true;
+					}
+				});
+			}
+		});
 
 		this.trackMetaData.next(metaData);
 	}
 
-	processField(metadata, tracks, property: string, userDefined: boolean = false, multiValue: boolean = true) {
+	processField(metadata, tracks, property: string, userDefined: boolean, multiValue: boolean) {
 		const metaProp = new MetadataProperty();
 		metaProp.multiValue = multiValue;
 		tracks.forEach(t => {
