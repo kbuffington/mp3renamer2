@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog, ipcMain } = require('electron')
+const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const fs = require('fs');
 const NodeID3 = require('../node-id3');
 // const taglib = require('../node-taglib');
 
@@ -28,39 +29,57 @@ function createWindow() {
 }
 
 function getFiles() {
-    const filePaths = ['~/Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test.mp3'];
-
     dialog.showOpenDialog({
             defaultPath: '~/Desktop/Ghost - 2013 - If You Have Ghost/',
             properties: ['openFile', 'multiSelections']
         },
         (filePaths, bookmarks) => {
             console.log(filePaths);
-            const tracks = [];
-            filePaths.forEach(f => {
-                tags = NodeID3.read(f);
-                tags.meta = {
-                    filename: f.replace(/^.*[\\\/]/, '')
-                };
-                tracks.push(tags);
-                console.log(tags);
-                // tags.title = tags.title + 's';
-                // tags.userDefined.ARTISTFILTER.push('Esq.');
-                // delete(tags.userDefined.genre);
-                // NodeID3.update(tags, f);
-            });
+            const tracks = processFiles(filePaths);
             mainWindow.webContents.send('files', tracks);
-
-            // console.log(NodeID3.createTextFrame('TPE1', 'abc'));
-            // console.log(NodeID3.createTextFrame('TPE1', ['a','b','c']));
-            // console.log(NodeID3.createUserDefinedFrame({'test': ['a','b','c']}));
-            // app.quit();
         });
+}
+
+function processFiles(files) {
+    let imageWritten = false;
+    const tracks = [];
+
+    files.forEach(f => {
+        tags = NodeID3.read(f);
+        tags.meta = {
+            filename: f.replace(/^.*[\\\/]/, '')
+        };
+        tracks.push(tags);
+        if (tags.image && !imageWritten) {
+            if (tags.image.imageBuffer.length === 0) {
+                delete tags.image;
+            } else {
+                console.log('writing image');
+                imageWritten = true;
+                fs.writeFileSync('./temp/embeddedArtwork.jpg', tags.image.imageBuffer, 'binary');
+            }
+        }
+        console.log(tags);
+        // tags.title = tags.title + 's';
+        // tags.userDefined.ARTISTFILTER.push('Esq.');
+        // delete(tags.userDefined.genre);
+        // tags = { date: '2019' };
+        // NodeID3.write(tags, f);
+    });
+    return tracks;
+}
+
+function openHardCoded() {
+    const filePaths = ['/Users/kevinbuffington/Desktop/Ghost - 2013 - If You Have Ghost/id3v2.3 image.mp3'];
+    // const filePaths = ['/Users/kevinbuffington/Desktop/Ghost - 2013 - If You Have Ghost/id3v2.4 image.mp3'];
+
+    processFiles(filePaths);
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+// app.on('ready', openHardCoded);
 app.on('ready', createWindow);
 
 // Quit when all windows are closed.

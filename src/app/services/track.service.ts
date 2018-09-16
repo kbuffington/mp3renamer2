@@ -70,6 +70,8 @@ export class TrackService {
 	processTracks(tracks: any) {
 		const metaData = {};
 		const unknownProperties = {};
+		let imageLoaded = false;
+
 		knownProperties.forEach((prop, name) => {
 			this.processField(metaData, tracks, name, prop.userDefined, prop.multiValue);
 		});
@@ -81,6 +83,10 @@ export class TrackService {
 						unknownProperties[prop] = true;
 					}
 				});
+			}
+			if (!imageLoaded && t.image) {
+				imageLoaded = true;
+				metaData['showArtwork'] = true;	// this seems like a bad idea
 			}
 		});
 
