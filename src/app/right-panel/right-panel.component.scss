@@ -1,0 +1,17 @@
+.row .inline:not(:last-of-type) {
+    padding-right: 0;
+}
+
+.row .inline:not(:first-of-type) {
+    padding-left: .25rem;
+}
+
+::ng-deep input-field {
+    input {
+        width: 0%;
+    }
+}
+
+.input-fields {
+    padding-left: 0px;
+}

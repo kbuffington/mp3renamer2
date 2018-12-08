@@ -1,6 +1,6 @@
 <div class="input-field">
 	<clr-checkbox [(ngModel)]="value.overwrite">
-		<label>
+		<label [ngStyle]="labelStyle">
 			<ng-container *ngIf="different">
 				<clr-icon shape="info-circle" size="20" (click)="showValues = true"></clr-icon>
 			</ng-container>
@@ -22,8 +22,14 @@
 	</div>
 	<div class="data-field">
 		<input clrInput
+			*ngIf="!selectOptions"
 			[value]="value.default"
 			(focus)="$event.target.select()"
 			(input)="defaultValChanged($event.target.value)">
+		<select *ngIf="selectOptions" [ngModel]="value.default" (input)="defaultValChanged($event.target.value)">
+			<option *ngFor="let option of selectOptions" [value]="option">
+				{{ option }}
+			</option>
+		</select>
 	</div>
 </div>

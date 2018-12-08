@@ -7,14 +7,16 @@
 
     clr-checkbox {
         display: inline-block;
+        margin-top: 2px;
 
         label {
             padding: 0;
-            min-width: 125px;
+            min-width: 115px;
             cursor: default;
+            font-size: 13px;
 
             clr-icon {
-                margin-top: -2px;
+                margin: -2px -1px 0 -2px;
                 cursor: pointer;
             }
         }
@@ -24,39 +26,9 @@
         display: flex;
         flex: 1;
 
-        input {
+        input,
+        select {
             flex-grow: 1;
         }
-    }
-
-    .list {
-        .header-row {
-            display: flex;
-            justify-content: space-between;
-            line-height: 3em;
-            font-weight: 500;
-            border-bottom: 1px solid rgba(0,0,0,.2);
-
-            .close-btn {
-                margin: 0;
-                width: 20px;
-                min-width: 20px;
-            }
-        }
-
-        .property-list {
-            padding: 5px 0;
-        }
-
-        display: block;
-        position: absolute;
-        background: white;
-        border: 1px solid;
-        left: 25px;
-        width: 350px;
-        top: 1px;
-        z-index: 100;
-        padding: 0px 10px;
-        pointer-events: all;
     }
 }

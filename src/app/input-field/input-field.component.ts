@@ -8,7 +8,9 @@ import { MetadataProperty } from '../services/track.service';
 })
 export class InputFieldComponent implements OnChanges {
 	@Input() label: string;
+	@Input() labelStyle = '';
 	@Input() value: MetadataProperty;
+	@Input() selectOptions: string[] = undefined;
 
 	@Output() valueChange = new EventEmitter();
 

@@ -68,8 +68,8 @@ export class TrackService {
 	}
 
 	processTracks(tracks: any) {
-		const metaData = {};
-		const unknownProperties = {};
+		const metaData: any = {};
+		const unknownProperties: any = {};
 		let imageLoaded = false;
 
 		knownProperties.forEach((prop, name) => {
@@ -86,7 +86,7 @@ export class TrackService {
 			}
 			if (!imageLoaded && t.image) {
 				imageLoaded = true;
-				metaData['showArtwork'] = true;	// this seems like a bad idea
+				metaData.showArtwork = true;	// this seems like a bad idea
 			}
 		});
 

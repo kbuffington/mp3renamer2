@@ -12,6 +12,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
 	metadata: any;
 	public metadataSubscription: Subscription;
+	public releaseTypes = [];
 
 	constructor(private ts: TrackService) {
 	}
@@ -21,6 +22,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 			console.log(m);
 			this.metadata = m;
 		});
+		this.releaseTypes = ['Album', 'EP', 'Compilation', 'Soundtrack'];
 	}
 
 	ngOnDestroy() {
