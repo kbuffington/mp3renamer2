@@ -70,8 +70,9 @@ function processFiles(files) {
 }
 
 function openHardCoded() {
-    const filePaths = ['/Users/kevinbuffington/Desktop/Ghost - 2013 - If You Have Ghost/id3v2.3 image.mp3'];
-    // const filePaths = ['/Users/kevinbuffington/Desktop/Ghost - 2013 - If You Have Ghost/id3v2.4 image.mp3'];
+    // const filePaths = ['../../../Desktop/Ghost - 2013 - If You Have Ghost/Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3'];
+    const filePaths = ['../../../Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test copy.mp3'];
+    // const filePaths = ['../../../Desktop/Ghost - 2013 - If You Have Ghost/id3v2.4 image.mp3'];
 
     processFiles(filePaths);
 }

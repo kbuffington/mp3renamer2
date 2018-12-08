@@ -16,6 +16,9 @@ cd mp3renamer2
 npm install
 # Run the app
 npm start
+
+# To run electron host
+electron .
 ```
 
 ## Renaming and Tagging files
