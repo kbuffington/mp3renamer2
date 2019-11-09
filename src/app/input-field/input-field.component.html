@@ -2,23 +2,31 @@
 	<clr-checkbox [(ngModel)]="value.overwrite">
 		<label [ngStyle]="labelStyle">
 			<ng-container *ngIf="different">
-				<clr-icon shape="info-circle" size="20" (click)="showValues = true"></clr-icon>
+				<clr-icon shape="info-circle" class="is-error" size="20" (click)="showValues = true"></clr-icon>
 			</ng-container>
 			<clr-icon shape="check" size="20" *ngIf="!different"></clr-icon>
 			{{ label }}
 		</label>
 	</clr-checkbox>
-	<div class="list" *ngIf="showValues">
+	<div class="conflict-list" *ngIf="showValues">
 		<div class="header-row">
 			<span class="property">{{ label }}</span>
-			<button class="btn btn-link close-btn" (click)="showValues = false">
+			<button class="btn btn-link btn-sm edit-btn" (click)="editValues = !editValues">
+				{{ editValues ? 'Select' : 'Edit' }}
+			</button>
+			<button class="btn btn-link btn-sm close-btn" (click)="showValues = false">
 				<clr-icon shape="window-close" size="16"></clr-icon>
 			</button>
 		</div>
-		<ul class="property-list">
-			<li *ngFor="let val of value.values">{{ val }}</li>
-			<!-- <input *ngFor="let val of value.values" [value]="val"> -->
-		</ul>
+		<ol class="property-list" *ngIf="!editValues">
+			<li *ngFor="let val of value.values" class="conflict-item" (click)="selectValue(val)">{{ val }}</li>
+		</ol>
+		<ol class="editable-list" *ngIf="editValues">
+			<li *ngFor="let val of value.values" class="edit-item">
+				<!-- ngModel?? -->
+				<input [value]="val" (input)="">
+			</li>
+		</ol>
 	</div>
 	<div class="data-field">
 		<input clrInput

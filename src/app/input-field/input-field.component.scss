@@ -32,3 +32,56 @@
         }
     }
 }
+
+.conflict-list {
+    position: absolute;
+    left: 42px;
+    top: -9px;
+    background-color: white;
+    border: 1px solid lightgrey;
+    padding: 0px 10px 5px;
+    z-index: 1000;
+
+    .header-row {
+        .close-btn {
+            position: absolute;
+            right: 2px;
+            top: -3px;
+            padding: 0;
+            min-width: 30px;
+        }
+    }
+
+    ol {
+        counter-reset: item;
+
+        li {
+            list-style: none;
+
+            &:before {
+                content: counter(item)". ";
+                counter-increment: item;
+                width: 1.5em;
+                display: inline-block;
+            }
+        }
+
+        .conflict-item {
+            &:hover {
+                color: black;
+                cursor: pointer;
+            }
+
+            &:hover:before {
+                color: black;
+                content: "→";
+            }
+        }
+
+        .edit-item {
+            input {
+                width: calc(100% - 1.5em);
+            }
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { TrackService } from './services/track.service';
 import { TrackServiceMocks } from './services/track.service.mock';
@@ -15,13 +16,20 @@ export class AppComponent implements OnInit, OnDestroy {
 	public tracks: any[] = [];
 	public trackSubscription: Subscription;
 
-	constructor(private ts: TrackService,
+	constructor(private electronService: ElectronService,
+				private ts: TrackService,
 				private zone: NgZone) {
 		this.trackSubscription = ts.getTracks().subscribe(tracks => this.setupTracks(tracks));
 	}
 
 	ngOnInit() {
-		this.ts.setTracks(TrackServiceMocks.mockTracks());
+		if (this.electronService.isElectronApp) {
+			const mainProcess = this.electronService.remote.require('./main.js');
+			mainProcess.loadHardCoded();
+		} else {
+			// we'll need to use mocked file data here
+			this.ts.setTracks(TrackServiceMocks.mockTracks());
+		}
 	}
 
 	ngOnDestroy() {

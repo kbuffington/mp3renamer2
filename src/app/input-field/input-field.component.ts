@@ -41,4 +41,9 @@ export class InputFieldComponent implements OnChanges {
 		}
 		this.valueChange.emit(this.value);
 	}
+
+	selectValue(value: string) {
+		this.defaultValChanged(value);
+		this.showValues = false;
+	}
 }

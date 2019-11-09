@@ -19,6 +19,7 @@ import { RightPanelComponent } from './right-panel/right-panel.component';
 /* Services */
 import { MusicbrainzService } from './services/musicbrainz.service';
 import { TrackService } from './services/track.service';
+import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.component';
 
 @NgModule({
 	declarations: [
@@ -31,6 +32,7 @@ import { TrackService } from './services/track.service';
 		LeftPanelComponent,
 		InputFieldComponent,
 		RightPanelComponent,
+		UpperButtonBarComponent,
 	],
 	imports: [
 		BrowserModule,
