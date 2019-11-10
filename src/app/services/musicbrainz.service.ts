@@ -1,9 +1,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import { Observable,  throwError as observableThrowError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { throwError as observableThrowError } from 'rxjs';
 
 const MB_BASE = 'https://musicbrainz.org/ws/2/';
 
@@ -30,12 +28,5 @@ export class MusicbrainzService {
 	getArtist(artistMBID: string) {
 		const uri = `${MB_BASE}artist/?query=arid:${artistMBID}`;
 		return this.get(uri);
-	}
-
-	private handleError(error: any) {
-		const errMsg = (error.message) ? error.message :
-			error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-		console.error(errMsg);
-		return observableThrowError(errMsg);
 	}
 }
