@@ -22,7 +22,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 			console.log(m);
 			this.metadata = m;
 		});
-		this.releaseTypes = ['Album', 'EP', 'Compilation', 'Soundtrack'];
+		this.releaseTypes = ['Album', 'EP', 'Single', 'Live', 'Compilation', 'Soundtrack', 'Anthology', 'Bootleg', 'Remix', 'Demo', 'Comedy'];
 	}
 
 	ngOnDestroy() {

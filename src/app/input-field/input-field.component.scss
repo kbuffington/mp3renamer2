@@ -11,7 +11,7 @@
 
         label {
             padding: 0;
-            min-width: 115px;
+            min-width: 130px;
             cursor: default;
             font-size: 13px;
             overflow: visible;
@@ -19,6 +19,20 @@
             clr-icon {
                 margin: -2px -1px 0 19px;
                 cursor: pointer;
+            }
+        }
+    }
+
+    ::ng-deep {
+        clr-input-container.clr-form-control {
+            margin-top: 0;
+            flex-grow: 1;
+        }
+        .clr-control-container {
+            width: 100%;
+
+            .clr-input-wrapper {
+                display: flex;
             }
         }
     }
