@@ -27,6 +27,7 @@ export class RequestFilesComponent implements OnInit {
 	}
 
 	clearFiles() {
+		// Can probably remove this
 		this.ts.clearTracks();
 	}
 }

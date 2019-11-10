@@ -10,7 +10,7 @@ import { TrackService } from '../services/track.service';
 	styleUrls: ['./metadata-handler.component.scss']
 })
 export class MetadataHandlerComponent implements OnInit {
-	private data: any[] = [];
+	private data: any;
 	private errorMessage: any = '';
 
 	constructor(private mb: MusicbrainzService,
@@ -24,7 +24,8 @@ export class MetadataHandlerComponent implements OnInit {
 		const artist = tracks[0].artist;
 		const album = tracks[0].album;
 		const artistMBID = tracks[0].userDefined.MUSICBRAINZ_ARTISTID;
-		this.mb.getArtist(artistMBID)
+		this.mb.getReleaseInfo(artist, album)
+		// this.mb.getArtist(artistMBID)
 			.subscribe(
 				data => this.data = data,
 				error => this.handleError(error));

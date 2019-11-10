@@ -5,7 +5,7 @@
     justify-content: flex-start;
     flex-flow: nowrap;
 
-    clr-checkbox {
+    clr-checkbox-container {
         display: inline-block;
         margin-top: 2px;
 
@@ -14,9 +14,10 @@
             min-width: 115px;
             cursor: default;
             font-size: 13px;
+            overflow: visible;
 
             clr-icon {
-                margin: -2px -1px 0 -2px;
+                margin: -2px -1px 0 19px;
                 cursor: pointer;
             }
         }

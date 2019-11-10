@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -37,9 +38,10 @@ import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.com
 	imports: [
 		BrowserModule,
 		HttpModule,
+		HttpClientModule,
 		FormsModule,
 		NgxElectronModule,
-		ClarityModule.forRoot(),
+		ClarityModule,
 	],
 	providers: [
 		MusicbrainzService,

@@ -1,14 +1,15 @@
 
-import { throwError as observableThrowError,  Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
-import { map, catchError } from 'rxjs/operators';
+import { Observable,  throwError as observableThrowError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 const MB_BASE = 'https://musicbrainz.org/ws/2/';
 
 @Injectable()
 export class MusicbrainzService {
-	constructor(private http: Http) { }
+	constructor(private http: HttpClient) { }
 
 	/**
 	 * Queries MB with URI provided
@@ -18,8 +19,7 @@ export class MusicbrainzService {
 	get(url: string) {
 		const uri = encodeURI(url);
 		console.log(uri);
-		return this.http.get(uri)
-				.pipe(map(r => r.json()), catchError(this.handleError.bind(this)));
+		return this.http.get(uri);
 	}
 
 	getReleaseInfo(artist: string, album: string) {

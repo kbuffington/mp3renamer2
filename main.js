@@ -70,11 +70,24 @@ function processFiles(files) {
 }
 
 function openHardCoded() {
-    // const filePaths = ['../../../Desktop/Ghost - 2013 - If You Have Ghost/Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3'];
-    const filePaths = ['../../../Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test copy.mp3'];
-    // const filePaths = ['../../../Desktop/Ghost - 2013 - If You Have Ghost/id3v2.4 image.mp3'];
+    let filePaths = [];
+    filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3');
+    // filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test copy.mp3');
+    // filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/id3v2.4 image.mp3');
 
-    processFiles(filePaths);
+    const tracks = processFiles(filePaths);
+    // mainWindow.webContents.send('files', tracks);
+}
+
+function loadHardCoded() {
+    let filePaths = [];
+    filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3');
+    filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test copy.mp3');
+    filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Juarez [Juarez-Junius 01] - 01-Juarez-Old River, Dry River.mp3');
+    // filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/id3v2.4 image.mp3');
+
+    const tracks = processFiles(filePaths);
+    mainWindow.webContents.send('files', tracks);
 }
 
 // This method will be called when Electron has finished
@@ -101,6 +114,7 @@ app.on('activate', function() {
 })
 
 exports.getFiles = getFiles;
+exports.loadHardCoded = loadHardCoded;  // for testing purposes open files on reload
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
