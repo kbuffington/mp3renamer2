@@ -2,7 +2,9 @@
 	<input type="checkbox" clrCheckbox [(ngModel)]="value.overwrite">
 	<label [ngStyle]="labelStyle">
 		<ng-container *ngIf="different">
-			<clr-icon shape="info-circle" class="is-error" size="20" (click)="showValues = !showValues"></clr-icon>
+			<clr-icon shape="info-circle" size="20"
+				[ngClass]="{ 'is-error': !value.changed }"
+				(click)="showValues = !showValues"></clr-icon>
 		</ng-container>
 		<clr-icon shape="check" size="20" *ngIf="!different"></clr-icon>
 		{{ label }}

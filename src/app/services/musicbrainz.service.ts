@@ -1,7 +1,5 @@
-
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { throwError as observableThrowError } from 'rxjs';
 
 const MB_BASE = 'https://musicbrainz.org/ws/2/';
 

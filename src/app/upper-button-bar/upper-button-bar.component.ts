@@ -28,7 +28,7 @@ export class UpperButtonBarComponent implements OnInit {
 	}
 
 	guessTitles() {
-		console.log('write guessTitles()');
+		console.log('write guessTitles() method');
 	}
 
 	renumberTracks() {

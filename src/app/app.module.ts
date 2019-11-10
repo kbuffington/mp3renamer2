@@ -13,7 +13,6 @@ import { InputFieldComponent } from './input-field/input-field.component';
 import { LeftPanelComponent } from './left-panel/left-panel.component';
 import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.component';
 import { RenamerGridComponent } from './renamer-grid/renamer-grid.component';
-import { RequestFilesComponent } from './request-files/request-files.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 
 /* Services */
@@ -27,7 +26,6 @@ import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.com
 		RenamerGridComponent,
 		AutoFocusDirective,
 		MetadataHandlerComponent,
-		RequestFilesComponent,
 		EditableCellComponent,
 		LeftPanelComponent,
 		InputFieldComponent,

@@ -1,8 +1,11 @@
 <div class="left-wrapper">
 	<div class="clr-col-12">
-		<input-field label="Artist:" [(value)]="metadata.artist"></input-field>
-		<input-field label="Album:" [(value)]="metadata.album"></input-field>
+		<input-field label="Artist:" [(value)]="metadata.artist"
+			[labelStyle]="{ 'max-width': '80px', 'min-width': '80px' }"></input-field>
+		<input-field label="Album:" [(value)]="metadata.album"
+			[labelStyle]="{ 'max-width': '80px', 'min-width': '80px' }"></input-field>
 	</div>
+	<metadata-handler></metadata-handler>
 	<img id="coverArt" *ngIf="metadata.showArtwork"
 		src="../../temp/embeddedArtwork.jpg"
 		style="width:300px; height: 300px; margin-top: 12px; border: none;">
