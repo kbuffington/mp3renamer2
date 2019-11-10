@@ -4,22 +4,22 @@
     flex-direction: row;
     justify-content: flex-start;
     flex-flow: nowrap;
+    margin-bottom: 2px;
 
-    clr-checkbox-container {
+    input[type="checkbox"] {
         display: inline-block;
         margin-top: 2px;
+    }
+    label {
+        padding: 0;
+        min-width: 115px;
+        cursor: default;
+        font-size: 13px;
+        overflow: visible;
 
-        label {
-            padding: 0;
-            min-width: 130px;
-            cursor: default;
-            font-size: 13px;
-            overflow: visible;
-
-            clr-icon {
-                margin: -2px -1px 0 19px;
-                cursor: pointer;
-            }
+        clr-icon {
+            margin: -2px -1px 0 -2px;
+            cursor: pointer;
         }
     }
 
@@ -44,6 +44,7 @@
         input,
         select {
             flex-grow: 1;
+            padding-top: 1px;
         }
     }
 }

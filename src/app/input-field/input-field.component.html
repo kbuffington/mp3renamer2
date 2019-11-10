@@ -1,16 +1,12 @@
 <div class="input-field" *ngIf="value">
-	<clr-checkbox-container>
-		<clr-checkbox-wrapper>
-			<input type="checkbox" clrCheckbox [(ngModel)]="value.overwrite">
-			<label [ngStyle]="labelStyle">
-				<ng-container *ngIf="different">
-					<clr-icon shape="info-circle" class="is-error" size="20" (click)="showValues = true"></clr-icon>
-				</ng-container>
-				<clr-icon shape="check" size="20" *ngIf="!different"></clr-icon>
-				{{ label }}
-			</label>
-		</clr-checkbox-wrapper>
-	</clr-checkbox-container>
+	<input type="checkbox" clrCheckbox [(ngModel)]="value.overwrite">
+	<label [ngStyle]="labelStyle">
+		<ng-container *ngIf="different">
+			<clr-icon shape="info-circle" class="is-error" size="20" (click)="showValues = !showValues"></clr-icon>
+		</ng-container>
+		<clr-icon shape="check" size="20" *ngIf="!different"></clr-icon>
+		{{ label }}
+	</label>
 	<div class="conflict-list" *ngIf="showValues">
 		<div class="header-row">
 			<span class="property">{{ label }}</span>
