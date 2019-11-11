@@ -19,10 +19,6 @@
 					[(editing)]="editing[i][0]"
 					[dontSelect]="4">
 				</editable-cell>
-				<!-- <span *ngIf="!editing[i][0]" class="text">{{ track.meta.filename }}</span>
-				<input *ngIf="editing[i][0]" type="text" (focus)="gotFocus($event, 0)"
-					(keydown)="keypressHandler($event.key, 'filename', i, 0, true)"
-					[(ngModel)]="track.meta.filename" [autofocus]="editing[i][0]"> -->
 			</clr-dg-cell>
 			<clr-dg-cell class="ellipsis"
 					[ngClass]="{'editing': editing[i][1]}"
@@ -40,9 +36,6 @@
 					[(editing)]="editing[i][2]">
 				</editable-cell>
 			</clr-dg-cell>
-			<!-- <clr-dg-cell class="ellipsis" >
-				<editable-cell [(value)]="track.title" (isEditing)="editing[i][2] = $event" [attr.data-title]="track.title" [ngClass]="{'editing': editing[i][2]}"></editable-cell>
-			</clr-dg-cell> -->
 			<clr-dg-cell class="tracknum"
 					[ngClass]="{'editing': editing[i][3]}"
 					[attr.data-title]="track.trackNumber"
@@ -51,7 +44,6 @@
 					[(editing)]="editing[i][3]">
 				</editable-cell>
 			</clr-dg-cell>
-			<!-- <clr-dg-cell class="tracknum">{{ track.trackNumber }}</clr-dg-cell> -->
 		</clr-dg-row>
 
 		<clr-dg-footer>{{ tracks.length }} tracks</clr-dg-footer>

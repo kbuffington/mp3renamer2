@@ -7,12 +7,7 @@ $trackColWidth: 48px;
 
 	::ng-deep .datagrid {
 		margin: 0;
-		overflow: hidden;
 		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-		.datagrid-body {
-			overflow-x: hidden;
-		}
 
 		.datagrid-fixed-column:first-of-type {
 			-ms-flex: 0 0 27px;
@@ -94,6 +89,4 @@ $trackColWidth: 48px;
 			background-color: initial;
 		}
 	}
-
 }
-

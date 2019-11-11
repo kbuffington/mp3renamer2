@@ -25,6 +25,12 @@ export class MetadataProperty {
 	values: string[] = [];
 }
 
+export class CommentStruct {
+	language: string;
+	shortText: string;
+	text: string;
+}
+
 @Injectable()
 export class TrackService {
 
@@ -116,21 +122,22 @@ export class TrackService {
 		metadata[property] = metaProp;
 	}
 
-	setMetadataValue(metaProp: MetadataProperty, value: string) {
+	setMetadataValue(metaProp: MetadataProperty, value: string | CommentStruct) {
 		if (Array.isArray(value)) {
 			value = value.join('; ');
 		}
 		if (!metaProp.default) {
-			metaProp.default = value;
+			metaProp.default = value.hasOwnProperty('text') ? value['text'] : value;
 		}
-		metaProp.values.push(value);
+		metaProp.values.push(value.hasOwnProperty('text') ? value['text'] : value);
 	}
 
 	previewFilenames(pattern: string) {
 		const trackList = this.trackList.getValue();
 		const metadata = this.trackMetaData.getValue();
 		trackList.map(t => {
-			t.meta.filename = metadata.artist.default + ' [' + metadata.album.default + ' ' + t.trackNumber + '] - ' + t.title + t.meta.extension;
+			t.meta.filename =
+				`${metadata.artist.default} [${metadata.album.default} ${t.trackNumber}] - ${t.title}${t.meta.extension}`;
 		});
 		this.trackList.next(trackList);
 	}
