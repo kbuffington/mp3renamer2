@@ -95,7 +95,6 @@ export class TrackService {
 				metaData.showArtwork = true;	// this seems like a bad idea
 			}
 		});
-
 		this.trackMetaData.next(metaData);
 	}
 

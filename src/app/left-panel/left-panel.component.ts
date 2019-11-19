@@ -18,7 +18,6 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
-			console.log(m);
 			this.metadata = m;
 		});
 	}

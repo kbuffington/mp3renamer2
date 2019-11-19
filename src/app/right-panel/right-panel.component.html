@@ -32,11 +32,28 @@
 			<input-field label="Release Type:" [(value)]="metadata.RELEASETYPE" [selectOptions]="releaseTypes"></input-field>
 			<input-field label="Album Artist:" [(value)]="metadata.performerInfo"></input-field>
 			<input-field label="Artist Filter:" [(value)]="metadata.ARTISTFILTER"></input-field>
+			<input-field label="Orig. Artist:" [(value)]="metadata.originalArtist"></input-field>
 			<input-field label="Copyright:" [(value)]="metadata.copyright"></input-field>
 			<input-field label="Encoded By:" [(value)]="metadata.encodedBy"></input-field>
-			<input-field label="Orig. Artist:" [(value)]="metadata.originalArtist"></input-field>
-			<input-field label="Album Sort:" [(value)]="metadata.albumSortOrder"></input-field>
-			<input-field label="Artist Sort:" [(value)]="metadata.artistSortOrder"></input-field>
+			<div class="clr-row">
+				<div class="clr-col-12 inline">
+					<div class="flex-container">
+						<input-field label="Artist Sort:" [(value)]="metadata.artistSortOrder"></input-field>
+						<button class="btn btn-outline btn-sm" (click)="guessArtistSortOrder()">Guess</button>
+					</div>
+				</div>
+			</div>
+			<div class="clr-row">
+				<div class="clr-col-7 inline">
+					<input-field label="Album Sort:" [(value)]="metadata.albumSortOrder"></input-field>
+				</div>
+				<div class="clr-col-5 inline">
+					<input-field label="Replay Gain:"
+							[(value)]="metadata.replaygain_album_gain"
+							[readOnly]="true"
+							[labelStyle]="{ 'max-width': '110px', 'min-width': '110px' }"></input-field>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

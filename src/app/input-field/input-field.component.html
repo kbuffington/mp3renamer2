@@ -1,5 +1,5 @@
 <div class="input-field" *ngIf="value">
-	<input type="checkbox" clrCheckbox [(ngModel)]="value.overwrite">
+	<input type="checkbox" clrCheckbox *ngIf="!readOnly" [(ngModel)]="value.overwrite">
 	<label [ngStyle]="labelStyle">
 		<ng-container *ngIf="different">
 			<clr-icon shape="info-circle" size="20"
@@ -11,8 +11,8 @@
 	</label>
 	<div class="conflict-list" *ngIf="showValues">
 		<div class="header-row">
-			<span class="property">{{ label }}</span>
-			<button class="btn btn-link btn-sm edit-btn" (click)="editValues = !editValues">
+			<span class="property">{{ displayLabel }}</span>
+			<button class="btn btn-link btn-sm edit-btn" (click)="editValues = !editValues" *ngIf="!readOnly">
 				{{ editValues ? 'Select' : 'Edit' }}
 			</button>
 			<button class="btn btn-link btn-sm close-btn" (click)="showValues = false">
@@ -20,7 +20,11 @@
 			</button>
 		</div>
 		<ol class="property-list" *ngIf="!editValues">
-			<li *ngFor="let val of value.values" class="conflict-item" (click)="selectValue(val)">{{ val }}</li>
+			<li *ngFor="let val of value.values" class="conflict-item"
+					[ngClass]="{'disabled': readOnly}"
+					(click)="selectValue(val)">
+				{{ val }}
+			</li>
 		</ol>
 		<ol class="editable-list" *ngIf="editValues">
 			<li *ngFor="let val of value.values" class="edit-item">
@@ -34,6 +38,7 @@
 			*ngIf="!selectOptions"
 			[value]="value.default"
 			(focus)="$event.target.select()"
+			[disabled]="readOnly"
 			(input)="defaultValChanged($event.target.value)">
 		<select *ngIf="selectOptions" [ngModel]="value.default" (input)="defaultValChanged($event.target.value)">
 			<option *ngFor="let option of selectOptions" [value]="option">

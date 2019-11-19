@@ -6,18 +6,24 @@ import { MetadataProperty } from '../services/track.service';
 	templateUrl: './input-field.component.html',
 	styleUrls: ['./input-field.component.scss']
 })
-export class InputFieldComponent implements OnChanges {
+export class InputFieldComponent implements OnInit, OnChanges {
 	@Input() label: string;
 	@Input() labelStyle = '';
 	@Input() value: MetadataProperty;
+	@Input() readOnly = false;
 	@Input() selectOptions: string[] = undefined;
 
 	@Output() valueChange = new EventEmitter();
 
+	public displayLabel = '';
 	public different = false;
 	public showValues = false;
 
 	constructor() {}
+
+	ngOnInit() {
+		this.displayLabel = this.label.substring(0, this.label.length - 1);
+	}
 
 	ngOnChanges(changes: SimpleChanges) {
 		if (changes.value && changes.value.currentValue) {
@@ -43,7 +49,9 @@ export class InputFieldComponent implements OnChanges {
 	}
 
 	selectValue(value: string) {
-		this.defaultValChanged(value);
+		if (!this.readOnly) {
+			this.defaultValChanged(value);
+		}
 		this.showValues = false;
 	}
 }

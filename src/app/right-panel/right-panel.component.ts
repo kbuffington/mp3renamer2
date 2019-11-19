@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { TrackService } from '../services/track.service';
+import { MetadataProperty, TrackService } from '../services/track.service';
 
 @Component({
 	selector: 'right-panel',
@@ -10,7 +10,7 @@ import { TrackService } from '../services/track.service';
 export class RightPanelComponent implements OnInit, OnDestroy {
 	@Input() tracks: any[] = [];
 
-	metadata: any;
+	metadata: { [key: string]: MetadataProperty; };
 	public metadataSubscription: Subscription;
 	public releaseTypes = [];
 
@@ -29,4 +29,24 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 		this.metadataSubscription.unsubscribe();
 	}
 
+	guessArtistSortOrder() {
+		const artist: string = this.metadata.artist.default;
+		let sortOrder = '';
+		if (artist.toLowerCase().indexOf('the ') === 0) {
+			sortOrder = artist.substr(4) + ', The';
+		} else {
+			if (artist.trim().indexOf(' ') !== -1) {
+				const artistParts = artist.split(' ');
+				sortOrder = artistParts.pop() + ', ';
+				sortOrder += artistParts.join(' ');
+			}
+		}
+		this.updateValue('artistSortOrder', sortOrder);
+	}
+
+	updateValue(fieldname: string, value: string) {
+		const metaField = this.metadata[fieldname];
+		metaField.default = value;
+		metaField.changed = true;
+	}
 }
