@@ -38,6 +38,7 @@ export class TrackService {
 	private trackMetaData: BehaviorSubject<any> = new BehaviorSubject({});
 	private trackDataBackup: any;
 	private trackCount: number;
+	private selectedTracks: number[];
 
 	constructor() { }
 
@@ -182,5 +183,19 @@ export class TrackService {
 			}
 		});
 		console.log(trackTagFields);
+	}
+
+	renumberTracks(startNumber: number) {
+		let count = 0;
+		this.getCurrentTracks().forEach((t: Track, index: number) => {
+			if (this.selectedTracks.includes(index)) {
+				t.trackNumber = (startNumber + count + '').padStart(2, '0');
+				count++;
+			}
+		});
+	}
+
+	updateSelectedTracks(selectedTracks: number[]) {
+		this.selectedTracks = selectedTracks;
 	}
 }
