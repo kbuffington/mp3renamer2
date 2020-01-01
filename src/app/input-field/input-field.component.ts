@@ -12,8 +12,10 @@ export class InputFieldComponent implements OnInit, OnChanges {
 	@Input() value: MetadataProperty;
 	@Input() readOnly = false;
 	@Input() selectOptions: string[] = undefined;
+	@Input() hideConflicts: number;
 
 	@Output() valueChange = new EventEmitter();
+	@Output() showingConflicts = new EventEmitter();
 
 	public displayLabel = '';
 	public different = false;
@@ -36,6 +38,9 @@ export class InputFieldComponent implements OnInit, OnChanges {
 				}
 			});
 		}
+		if (changes.hideConflicts) {
+			this.showValues = false;
+		}
 	}
 
 	defaultValChanged(value: string) {
@@ -53,5 +58,16 @@ export class InputFieldComponent implements OnInit, OnChanges {
 			this.defaultValChanged(value);
 		}
 		this.showValues = false;
+	}
+
+	showConflictValues() {
+		if (!this.showValues) {
+			this.showingConflicts.emit();
+			setTimeout(() => {
+				this.showValues = true;
+			});
+		} else {
+			this.showValues = false;
+		}
 	}
 }

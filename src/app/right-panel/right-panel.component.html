@@ -1,57 +1,70 @@
 <div class="right-wrapper">
 	<div class="clr-row">
 		<div class="clr-col-12 input-fields">
-			<input-field label="Genre:" [(value)]="metadata.genre"></input-field>
-			<input-field label="Comment:" [(value)]="metadata.comment"></input-field>
-			<input-field label="Label:" [(value)]="metadata.LABEL"></input-field>
-			<input-field label="Edition:" [(value)]="metadata.EDITION"></input-field>
+			<input-field label="Genre:" [(value)]="metadata.genre" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Comment:" [(value)]="metadata.comment" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Label:" [(value)]="metadata.LABEL" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Edition:" [(value)]="metadata.EDITION" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<div class="clr-row">
 				<div class="clr-col-7 inline">
-					<input-field label="Date:" [(value)]="metadata.date"></input-field>
+					<input-field label="Date:" [(value)]="metadata.date" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 				</div>
 				<div class="clr-col-5 inline">
 					<input-field label="Orig Date:"
 							[(value)]="metadata.originalReleaseDate"
+							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
 							[labelStyle]="{ 'max-width': '90px', 'min-width': '90px' }">
 					</input-field>
 				</div>
 			</div>
 			<div class="clr-row">
 				<div class="clr-col-7 inline">
-					<input-field label="Catalog #:" [(value)]="metadata.CATALOGNUMBER"></input-field>
+					<input-field label="Catalog #:" [(value)]="metadata.CATALOGNUMBER" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 				</div>
 				<div class="clr-col-5 inline">
 					<input-field label="Disc Num:"
 							[(value)]="metadata.partOfSet"
+							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
 							[labelStyle]="{ 'max-width': '90px', 'min-width': '90px' }">
 					</input-field>
 				</div>
 			</div>
-			<input-field label="Disc Subtitle:" [(value)]="metadata.DISCSUBTITLE"></input-field>
-			<input-field label="Art. Country:" [(value)]="metadata.ARTISTCOUNTRY"></input-field>
-			<input-field label="Release Type:" [(value)]="metadata.RELEASETYPE" [selectOptions]="releaseTypes"></input-field>
-			<input-field label="Album Artist:" [(value)]="metadata.performerInfo"></input-field>
-			<input-field label="Artist Filter:" [(value)]="metadata.ARTISTFILTER"></input-field>
-			<input-field label="Orig. Artist:" [(value)]="metadata.originalArtist"></input-field>
-			<input-field label="Copyright:" [(value)]="metadata.copyright"></input-field>
-			<input-field label="Encoded By:" [(value)]="metadata.encodedBy"></input-field>
+			<input-field label="Disc Subtitle:" [(value)]="metadata.DISCSUBTITLE" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Art. Country:" [(value)]="metadata.ARTISTCOUNTRY" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Release Type:"
+					[(value)]="metadata.RELEASETYPE"
+					[selectOptions]="releaseTypes"
+					[hideConflicts]="hideConflicts"
+					(showingConflicts)="sendHide()">
+			</input-field>
+			<input-field label="Album Artist:" [(value)]="metadata.performerInfo" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Artist Filter:" [(value)]="metadata.ARTISTFILTER" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Orig. Artist:" [(value)]="metadata.originalArtist" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Copyright:" [(value)]="metadata.copyright" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Encoded By:" [(value)]="metadata.encodedBy" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<div class="clr-row">
 				<div class="clr-col-12 inline">
 					<div class="flex-container">
-						<input-field label="Artist Sort:" [(value)]="metadata.artistSortOrder"></input-field>
+						<input-field label="Artist Sort:"
+								[(value)]="metadata.artistSortOrder"
+								[hideConflicts]="hideConflicts"
+								(showingConflicts)="sendHide()">
+						</input-field>
 						<button class="btn btn-outline btn-sm" (click)="guessArtistSortOrder()">Guess</button>
 					</div>
 				</div>
 			</div>
 			<div class="clr-row">
 				<div class="clr-col-7 inline">
-					<input-field label="Album Sort:" [(value)]="metadata.albumSortOrder"></input-field>
+					<input-field label="Album Sort:" [(value)]="metadata.albumSortOrder" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 				</div>
 				<div class="clr-col-5 inline">
 					<input-field label="Replay Gain:"
 							[(value)]="metadata.replaygain_album_gain"
 							[readOnly]="true"
-							[labelStyle]="{ 'max-width': '110px', 'min-width': '110px' }"></input-field>
+							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
+							[labelStyle]="{ 'max-width': '110px', 'min-width': '110px' }">
+					</input-field>
 				</div>
 			</div>
 		</div>

@@ -10,6 +10,7 @@ import { MetadataProperty, TrackService } from '../services/track.service';
 export class RightPanelComponent implements OnInit, OnDestroy {
 	@Input() tracks: any[] = [];
 
+	hideConflicts = 0;
 	metadata: { [key: string]: MetadataProperty; };
 	public metadataSubscription: Subscription;
 	public releaseTypes = [];
@@ -48,5 +49,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 		const metaField = this.metadata[fieldname];
 		metaField.default = value;
 		metaField.changed = true;
+	}
+
+	sendHide() {
+		this.hideConflicts++;
 	}
 }

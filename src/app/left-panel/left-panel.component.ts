@@ -10,6 +10,7 @@ import { TrackService } from '../services/track.service';
 export class LeftPanelComponent implements OnInit, OnDestroy {
 	@Input() tracks: any[] = [];
 
+	hideConflicts = 0;
 	metadata: any;
 	public metadataSubscription: Subscription;
 
@@ -26,4 +27,7 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 		this.metadataSubscription.unsubscribe();
 	}
 
+	sendHide() {
+		this.hideConflicts++;
+	}
 }
