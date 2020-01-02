@@ -160,7 +160,7 @@ export class TrackService {
 		const metadata = this.trackMetaData.getValue();
 		trackList.map(t => {
 			t.meta.filename =
-				`${metadata.artist.default} [${metadata.album.default} ${t.trackNumber}] - ${t.title}${t.meta.extension}`;
+				`${metadata.artist.default.trim()} [${metadata.album.default.trim()} ${t.trackNumber.trim()}] - ${t.title.trim()}${t.meta.extension}`;
 		});
 		this.trackList.next(trackList);
 	}

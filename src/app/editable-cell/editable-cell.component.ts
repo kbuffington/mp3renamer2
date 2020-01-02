@@ -36,6 +36,7 @@ export class EditableCellComponent implements OnChanges {
 				break;
 			case 'Enter':
 				this.editing = false;
+				this.value = this.value.trim();	// TODO: maybe just trimRight?
 				this.editingChange.emit(this.editing);
 				break;
 			default:
