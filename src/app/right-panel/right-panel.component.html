@@ -7,7 +7,15 @@
 			<input-field label="Edition:" [(value)]="metadata.EDITION" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<div class="clr-row">
 				<div class="clr-col-7 inline">
-					<input-field label="Date:" [(value)]="metadata.date" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+					<div class="flex-container">
+						<input-field
+							label="Date:"
+							[(value)]="metadata.date"
+							[hideConflicts]="hideConflicts"
+							(showingConflicts)="sendHide()">
+						</input-field>
+						<clr-icon shape="switch" class="inline-button" (click)="swapDates()"></clr-icon>
+					</div>
 				</div>
 				<div class="clr-col-5 inline">
 					<input-field label="Orig Date:"
@@ -40,6 +48,7 @@
 			<input-field label="Album Artist:" [(value)]="metadata.performerInfo" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Artist Filter:" [(value)]="metadata.ARTISTFILTER" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Orig. Artist:" [(value)]="metadata.originalArtist" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Composer:" [(value)]="metadata.composer" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Copyright:" [(value)]="metadata.copyright" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Encoded By:" [(value)]="metadata.encodedBy" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<div class="clr-row">

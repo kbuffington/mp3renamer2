@@ -25,6 +25,14 @@ export class MetadataProperty {
 	values: string[] = [];
 }
 
+export class MetadataObj {
+	[key: string]: MetadataProperty;
+}
+
+export class TrackOptions {
+	showArtwork?: boolean;
+}
+
 export class CommentStruct {
 	language: string;
 	shortText: string;
@@ -35,7 +43,8 @@ export class CommentStruct {
 export class TrackService {
 
 	private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
-	private trackMetaData: BehaviorSubject<any> = new BehaviorSubject({});
+	private trackMetaData: BehaviorSubject<MetadataObj> = new BehaviorSubject({});
+	private trackOptions: BehaviorSubject<TrackOptions> = new BehaviorSubject({});
 	private trackDataBackup: any;
 	private trackCount: number;
 	private selectedTracks: number[];
@@ -46,8 +55,12 @@ export class TrackService {
 		return this.trackList.asObservable();
 	}
 
-	getMetadata(): Observable<any> {
+	getMetadata(): Observable<MetadataObj> {
 		return this.trackMetaData.asObservable();
+	}
+
+	getTrackOptions(): Observable<TrackOptions> {
+		return this.trackOptions.asObservable();
 	}
 
 	setTracks(tracks: any) {
@@ -74,8 +87,13 @@ export class TrackService {
 		return this.trackList.getValue();
 	}
 
-	processTracks(tracks: any) {
-		const metaData: any = {};
+	getCurrentMetadata(): MetadataObj {
+		return this.trackMetaData.getValue();
+	}
+
+	private processTracks(tracks: any) {
+		const metaData: MetadataObj = {};
+		const trackOptions: TrackOptions = {};
 		const unknownProperties: any = {};
 		let imageLoaded = false;
 
@@ -93,13 +111,18 @@ export class TrackService {
 			}
 			if (!imageLoaded && t.image) {
 				imageLoaded = true;
-				metaData.showArtwork = true;	// this seems like a bad idea
+				trackOptions.showArtwork = true;
 			}
 		});
 		this.trackMetaData.next(metaData);
+		this.trackOptions.next(trackOptions);
 	}
 
-	processField(metadata, tracks, property: string, userDefined: boolean, multiValue: boolean) {
+	setMetadata(updatedMetadata: MetadataObj) {
+		this.trackMetaData.next(updatedMetadata);
+	}
+
+	private processField(metadata, tracks, property: string, userDefined: boolean, multiValue: boolean) {
 		const metaProp = new MetadataProperty();
 		metaProp.multiValue = multiValue;
 		tracks.forEach(t => {
@@ -122,7 +145,7 @@ export class TrackService {
 		metadata[property] = metaProp;
 	}
 
-	setMetadataValue(metaProp: MetadataProperty, value: string | CommentStruct) {
+	private setMetadataValue(metaProp: MetadataProperty, value: string | CommentStruct) {
 		if (Array.isArray(value)) {
 			value = value.join('; ');
 		}

@@ -54,4 +54,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 	sendHide() {
 		this.hideConflicts++;
 	}
+
+	swapDates() {
+		const metadata = this.ts.getCurrentMetadata();
+		const date = JSON.parse(JSON.stringify(metadata.date));
+		const originalDate = JSON.parse(JSON.stringify(metadata.originalReleaseDate));
+		metadata.date = originalDate;
+		metadata.originalReleaseDate = date;
+		this.ts.setMetadata(metadata);
+	}
 }

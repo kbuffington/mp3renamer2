@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { TrackService } from '../services/track.service';
+import { TrackOptions, TrackService } from '../services/track.service';
 
 @Component({
 	selector: 'left-panel',
@@ -12,7 +12,9 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 
 	hideConflicts = 0;
 	metadata: any;
+	trackOptions: TrackOptions;
 	public metadataSubscription: Subscription;
+	public trackOptionsSubscription: Subscription;
 
 	constructor(private ts: TrackService) {
 	}
@@ -21,10 +23,14 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 		this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
 			this.metadata = m;
 		});
+		this.trackOptionsSubscription = this.ts.getTrackOptions().subscribe(o => {
+			this.trackOptions = o;
+		});
 	}
 
 	ngOnDestroy() {
 		this.metadataSubscription.unsubscribe();
+		this.trackOptionsSubscription.unsubscribe();
 	}
 
 	sendHide() {
