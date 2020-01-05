@@ -1,3 +1,5 @@
+@import 'editable-datagrid';
+
 $trackColWidth: 48px;
 
 .grid-container {
@@ -6,54 +8,6 @@ $trackColWidth: 48px;
 	}
 
 	::ng-deep .datagrid {
-		margin: 0;
-		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
-		.datagrid-fixed-column:first-of-type {
-			-ms-flex: 0 0 27px;
-			flex: 0 0 27px;
-			max-width: 27px;
-			min-width: 27px;
-		}
-
-		clr-dg-cell {
-			overflow: hidden;
-			white-space: nowrap;
-		}
-
-		clr-dg-cell.ellipsis {
-			text-overflow: ellipsis;
-
-			&[data-title]:not(.editing):hover {
-				overflow: initial;
-				color: rgba(0,0,0,0);
-			}
-
-			&[data-title]:not(.editing):hover:before {
-				content: attr(data-title);
-				padding: 3px 4px 3px 3px;
-				color: #333;
-				position: relative;
-				left: 0px;
-				top: 0px;
-				margin-left: -4px;
-				pointer-events: none;
-				background: #eee;
-				border: 1px solid #dddddd;
-			}
-
-			&.editing {
-				padding: 0px 5px;
-			}
-
-			input[type=text] {
-				width: 100%;
-				min-width: 50px;
-				padding: 0;
-				height: calc(1rem - 1px);
-			}
-		}
-
 		clr-dg-cell.tracknum,
 		clr-dg-column.tracknum {
 			max-width: $trackColWidth;
@@ -73,20 +27,6 @@ $trackColWidth: 48px;
 				text-align: center;
 				margin-left: -1px;
 			}
-		}
-
-		.datagrid-column,
-		.datagrid-cell {
-			padding: 5px 5px 5px 5px;
-			font-size: 12px;
-		}
-
-		.datagrid-column .datagrid-column-separator {
-			left: 5px;
-		}
-
-		.datagrid-body .datagrid-row.datagrid-selected {
-			background-color: initial;
 		}
 	}
 }
