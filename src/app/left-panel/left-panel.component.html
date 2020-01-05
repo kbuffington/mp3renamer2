@@ -14,7 +14,18 @@
 		</input-field>
 	</div>
 	<metadata-handler></metadata-handler>
+	<unknown-properties [unknownProperties]="unknownProperties"></unknown-properties>
 	<img id="coverArt" *ngIf="trackOptions.showArtwork"
 		src="../../temp/embeddedArtwork.jpg"
 		style="width:300px; height: 300px; margin-top: 12px; border: none;">
+	<clr-checkbox-container>
+		<clr-checkbox-wrapper>
+			<input type="checkbox" clrCheckbox
+				name="showArtistToggle"
+				id="showArtistToggle"
+				[(ngModel)]="showArtist"
+				(ngModelChange)="showArtistChanged($event)">
+			<label>Toggle Track Artists</label>
+		</clr-checkbox-wrapper>
+	</clr-checkbox-container>
 </div>

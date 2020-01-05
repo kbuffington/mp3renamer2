@@ -1,0 +1,28 @@
+<div class="grid-container">
+	<clr-datagrid class="datagrid-compact" [(clrDgSelected)]="selected" (clrDgSelectedChange)="selectionChanged($event)">
+
+		<clr-dg-column class="prop">Property</clr-dg-column>
+		<clr-dg-column class="prop-val">Value</clr-dg-column>
+
+		<clr-dg-row *clrDgItems="let prop of unknownPropArray; let i = index" [clrDgItem]="prop">
+			<clr-dg-cell class="ellipsis"
+					[ngClass]="{'editing': editing[i][0]}"
+					[attr.data-title]="prop"
+                    (click)="startEditing(i, 0)">
+				<editable-cell [(value)]="prop"
+					[(editing)]="editing[i][0]">
+				</editable-cell>
+			</clr-dg-cell>
+			<clr-dg-cell class="ellipsis"
+					[ngClass]="{'editing': editing[i][1]}"
+					[attr.data-title]="unknownProperties[prop]"
+                    (click)="startEditing(i, 1)">
+				<editable-cell [(value)]="unknownProperties[prop]"
+					[(editing)]="editing[i][1]">
+				</editable-cell>
+			</clr-dg-cell>
+		</clr-dg-row>
+
+		<clr-dg-footer>{{ unknownPropArray.length }} Unknown Properties</clr-dg-footer>
+	</clr-datagrid>
+</div>

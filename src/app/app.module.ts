@@ -8,6 +8,7 @@ import { NgxElectronModule } from 'ngx-electron';
 
 /* Components */
 import { AppComponent } from './app.component';
+import { UnknownPropertiesComponent } from './components/unknown-properties/unknown-properties.component';
 import { AutoFocusDirective } from './directives/auto-focus.directive';
 import { EditableCellComponent } from './editable-cell/editable-cell.component';
 import { InputFieldComponent } from './input-field/input-field.component';
@@ -31,6 +32,7 @@ import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.com
 		LeftPanelComponent,
 		InputFieldComponent,
 		RightPanelComponent,
+		UnknownPropertiesComponent,
 		UpperButtonBarComponent,
 	],
 	imports: [

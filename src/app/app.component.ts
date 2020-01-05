@@ -53,4 +53,24 @@ export class AppComponent implements OnInit, OnDestroy {
 	revertRename() {
 		this.ts.revertFilenames();
 	}
+
+	setNames() {
+		console.log('TODO: setNames() in app.component');
+	}
+
+	renameFolder() {
+		console.log('TODO: renameFolder() in app.component');
+	}
+
+	getFanart() {
+		console.log('TODO: getFanart() in app.component');
+	}
+
+	downloadArt() {
+		console.log('TODO: downloadArt() in app.component');
+	}
+
+	quitApp() {
+		console.log('TODO: quitApp() in app.component');
+	}
 }

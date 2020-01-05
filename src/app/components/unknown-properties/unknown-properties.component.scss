@@ -1,0 +1,15 @@
+@import 'editable-datagrid';
+
+.prop {
+    width: 175px;
+}
+
+.prop-val {
+    width: 150px;
+}
+
+::ng-deep {
+    .datagrid {
+        overflow-x: hidden;
+    }
+}
