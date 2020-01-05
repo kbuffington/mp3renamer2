@@ -33,6 +33,10 @@ export class TrackOptions {
 	showArtwork?: boolean;
 }
 
+export class UnknownPropertiesObj {
+	[key: string]: string | string[];
+}
+
 export class CommentStruct {
 	language: string;
 	shortText: string;
@@ -45,6 +49,7 @@ export class TrackService {
 	private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
 	private trackMetaData: BehaviorSubject<MetadataObj> = new BehaviorSubject({});
 	private trackOptions: BehaviorSubject<TrackOptions> = new BehaviorSubject({});
+	private unknownProperties: UnknownPropertiesObj = {};
 	private trackDataBackup: any;
 	private trackCount: number;
 	private selectedTracks: number[];
@@ -94,18 +99,18 @@ export class TrackService {
 	private processTracks(tracks: any) {
 		const metaData: MetadataObj = {};
 		const trackOptions: TrackOptions = {};
-		const unknownProperties: any = {};
 		let imageLoaded = false;
 
+		this.unknownProperties = {};
 		knownProperties.forEach((prop, name) => {
-			this.processField(metaData, tracks, name, prop.userDefined, prop.multiValue);
+			this.processField(metaData, tracks, name, prop.userDefined, prop.multiValue, prop.alias);
 		});
 		tracks.forEach(t => {
 			if (t.userDefined) {
 				Object.keys(t.userDefined).forEach(prop => {
-					if (!knownProperties.has(prop) && !unknownProperties[prop]) {
+					if (!knownProperties.has(prop) && !this.unknownProperties[prop]) {
 						this.processField(metaData, tracks, prop, true, true);
-						unknownProperties[prop] = true;
+						this.unknownProperties[prop] = t.userDefined[prop];
 					}
 				});
 			}
@@ -122,7 +127,11 @@ export class TrackService {
 		this.trackMetaData.next(updatedMetadata);
 	}
 
-	private processField(metadata, tracks, property: string, userDefined: boolean, multiValue: boolean) {
+	getUnknownProperties(): UnknownPropertiesObj {
+		return this.unknownProperties;
+	}
+
+	private processField(metadata, tracks, property: string, userDefined: boolean, multiValue: boolean, alias?: string) {
 		const metaProp = new MetadataProperty();
 		metaProp.multiValue = multiValue;
 		tracks.forEach(t => {
@@ -134,8 +143,8 @@ export class TrackService {
 				}
 			} else {
 				metaProp.userDefined = true;
-				if (t.userDefined && t.userDefined[property]) {
-					this.setMetadataValue(metaProp, t.userDefined[property]);
+				if (t.userDefined && (t.userDefined[property] || t.userDefined[alias])) {
+					this.setMetadataValue(metaProp, t.userDefined[property] || t.userDefined[alias]);	// short-circuit eval
 				} else {
 					metaProp.values.push('');
 				}

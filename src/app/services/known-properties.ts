@@ -1,6 +1,7 @@
 export class PropertyInfo {
 	userDefined: boolean;
 	multiValue: boolean;
+	alias?: string;
 }
 
 export const knownProperties: Map<string, PropertyInfo> = new Map([
@@ -25,7 +26,7 @@ export const knownProperties: Map<string, PropertyInfo> = new Map([
 	['DISCSUBTITLE', 				{ userDefined: true, multiValue: true }],
 	['CATALOGNUMBER', 				{ userDefined: true, multiValue: true }],
 	['EDITION', 					{ userDefined: true, multiValue: true }],
-	['LABEL', 						{ userDefined: true, multiValue: true }],
+	['LABEL', 						{ userDefined: true, multiValue: true, alias: 'label'}],
 	['MUSICBRAINZ_ARTISTID', 		{ userDefined: true, multiValue: true }],
 	['MUSICBRAINZ_RELEASEGROUPID', 	{ userDefined: true, multiValue: true }],
 	['RELEASETYPE', 				{ userDefined: true, multiValue: true }],

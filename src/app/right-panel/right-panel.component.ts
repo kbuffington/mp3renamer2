@@ -57,10 +57,12 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
 	swapDates() {
 		const metadata = this.ts.getCurrentMetadata();
-		const date = JSON.parse(JSON.stringify(metadata.date));
-		const originalDate = JSON.parse(JSON.stringify(metadata.originalReleaseDate));
+		const date: MetadataProperty = JSON.parse(JSON.stringify(metadata.date));
+		const originalDate: MetadataProperty = JSON.parse(JSON.stringify(metadata.originalReleaseDate));
 		metadata.date = originalDate;
+		metadata.date.changed = true;
 		metadata.originalReleaseDate = date;
+		metadata.originalReleaseDate.changed = true;
 		this.ts.setMetadata(metadata);
 	}
 }
