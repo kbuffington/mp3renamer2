@@ -13,13 +13,14 @@ export class AppComponent implements OnInit, OnDestroy {
 	fileList: any[] = [];
 	showArtist = true;
 
-	public tracks: any[] = [];
+	// public tracks: any[] = [];
 	public trackSubscription: Subscription;
 
 	constructor(private electronService: ElectronService,
 				private ts: TrackService,
 				private zone: NgZone) {
-		this.trackSubscription = ts.getTracks().subscribe(tracks => this.setupTracks(tracks));
+		// we need to call zone.run() whenever the trackSubscription updates
+		this.trackSubscription = ts.getTracks().subscribe(tracks => zone.run(() => {}));
 	}
 
 	ngOnInit() {
@@ -36,41 +37,9 @@ export class AppComponent implements OnInit, OnDestroy {
 		this.trackSubscription.unsubscribe();
 	}
 
-	setupTracks(trackList: any[]) {
-		this.zone.run(() => {
-			this.tracks = trackList;
-			// this.selected = JSON.parse(JSON.stringify(this.tracks));
-			// this.selected = this.tracks;
-			// this.tracks.forEach(t => console.log(t.meta.filename, t.artist));
-			// this.clearEditing();
-		});
-	}
-
-	previewRename() {
-		this.ts.previewFilenames('');
-	}
-
-	revertRename() {
-		this.ts.revertFilenames();
-	}
-
-	setNames() {
-		console.log('TODO: setNames() in app.component');
-	}
-
-	renameFolder() {
-		console.log('TODO: renameFolder() in app.component');
-	}
-
-	getFanart() {
-		console.log('TODO: getFanart() in app.component');
-	}
-
-	downloadArt() {
-		console.log('TODO: downloadArt() in app.component');
-	}
-
-	quitApp() {
-		console.log('TODO: quitApp() in app.component');
-	}
+	// setupTracks(trackList: any[]) {
+	// 	this.zone.run(() => {
+	// 		this.tracks = trackList;
+	// 	});
+	// }
 }

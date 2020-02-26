@@ -1,7 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { GetMetadataComponent } from '@components/get-metadata/get-metadata.component';
+import { MainComponent } from '@components/main/main.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+	{ path: '', component: MainComponent },
+	{ path: 'metadata', component: GetMetadataComponent },
+];
 
 @NgModule({
 	imports: [RouterModule.forRoot(routes)],

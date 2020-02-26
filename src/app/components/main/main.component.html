@@ -1,0 +1,28 @@
+<div class="main-wrapper">
+    <div class="content">
+        <div class="clr-row">
+            <renamer-grid class="clr-col-12"
+                [showArtist]="showArtist"
+                [tracks]="tracks">
+            </renamer-grid>
+        </div>
+        <upper-button-bar></upper-button-bar>
+        <div class="clr-row">
+            <left-panel class="clr-col-6" [tracks]="tracks" [(showArtist)]="showArtist"></left-panel>
+            <right-panel class="clr-col-6" [tracks]="tracks"></right-panel>
+        </div>
+    </div>
+    <footer>
+        <div class="btn-container">
+            <button class="btn btn-outline" (click)="previewRename()">Preview Names</button>
+            <button class="btn btn-outline" (click)="revertRename()">Revert Names</button>
+            <button class="btn btn-outline" (click)="setNames()">Set Names</button>
+            <button class="btn btn-outline" (click)="renameFolder()">Rename Folder</button>
+        </div>
+        <div class="btn-container">
+            <button class="btn btn-outline" (click)="getFanart()">Get Fanart</button>
+            <button class="btn btn-outline" (click)="downloadArt()">Download Art</button>
+            <button class="btn btn-primary" (click)="quitApp()">Quit</button>
+        </div>
+    </footer>
+</div>

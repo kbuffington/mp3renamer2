@@ -1,0 +1,34 @@
+$headerHeight: 2.5rem;
+
+.main-wrapper {
+    height: calc(100vh - #{$headerHeight});
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 100%;
+    overflow-x: hidden;
+}
+
+.content {
+    padding: 0.5em;
+}
+
+footer {
+    padding: 0.5em;
+    display: flex;
+
+    .btn-container {
+        flex-grow: 1;
+
+        &:last-of-type {
+            flex-grow: 0;
+        }
+
+        button {
+            margin-right: .25rem;
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
+    }
+}
