@@ -9,7 +9,7 @@ import { throwError as observableThrowError } from 'rxjs';
 	styleUrls: ['./get-metadata.component.scss']
 })
 export class GetMetadataComponent implements OnInit {
-	private data: any;
+	public data: any;
 
 	constructor(private mb: MusicbrainzService,
 				private ts: TrackService) {}

@@ -11,7 +11,6 @@ import { TrackServiceMocks } from './services/track.service.mock';
 })
 export class AppComponent implements OnInit, OnDestroy {
 	fileList: any[] = [];
-	showArtist = true;
 
 	// public tracks: any[] = [];
 	public trackSubscription: Subscription;

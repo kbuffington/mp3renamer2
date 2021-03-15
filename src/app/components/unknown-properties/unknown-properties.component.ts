@@ -1,14 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { TrackService, UnknownPropertiesObj } from '../../services/track.service';
-
-export class TrackObj {
-	meta: {
-		filename: string;
-	};
-	title: string;
-	artist: string;
-	trackNumber: string;
-}
+import { TrackService, UnknownPropertiesObj } from '@services/track.service';
 
 @Component({
 	selector: 'unknown-properties',
@@ -54,8 +45,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
 		this.editing[index][col] = true;
 	}
 
-	// selectionChanged(selection: TrackObj[]) {
-	// 	const selectedTracks = selection.map((t: TrackObj) => this.tracks.indexOf(t));
-	// 	this.ts.updateSelectedTracks(selectedTracks.sort());
-	// }
+	selectionChanged(selection: any) {
+		console.log(selection);
+	}
 }

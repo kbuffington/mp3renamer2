@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 	styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit, OnDestroy {
+	public showArtist = true;
 	public tracks: any[] = [];
 	public trackSubscription: Subscription;
 
