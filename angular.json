@@ -10,13 +10,14 @@
 			"prefix": "",
 			"schematics": {
 				"@schematics/angular:component": {
-					"styleext": "scss"
+					"style": "scss"
 				}
 			},
 			"architect": {
 				"build": {
 					"builder": "@angular-devkit/build-angular:browser",
 					"options": {
+            "aot": true,
 						"outputPath": "dist/mp3renamer2",
 						"index": "src/index.html",
 						"main": "src/main.ts",
@@ -43,6 +44,12 @@
 					},
 					"configurations": {
 						"production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
 							"fileReplacements": [
 								{
 									"replace": "src/environments/environment.ts",
