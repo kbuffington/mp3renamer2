@@ -20,7 +20,7 @@
         "paths": {
             "@components/*": ["app/components/*"],
             "@directives/*": ["app/directives/*"],
-            "@services/*": ["app/services/*"],
+            "@services/*": ["app/services/*"]
         }
 	}
 }
