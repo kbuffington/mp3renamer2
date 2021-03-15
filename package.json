@@ -24,17 +24,16 @@
     "@angular/platform-browser-dynamic": "^10.2.4",
     "@angular/router": "^10.2.4",
     "@clr/angular": "^4.0.13",
+    "@clr/core": "^3.0.0",
     "@clr/icons": "^4.0.13",
     "@clr/ui": "^4.0.13",
-    "codelyzer": "^5.1.2",
+    "@webcomponents/webcomponentsjs": "^2.0.0",
     "core-js": "^2.6.12",
     "electron": "^2.0.18",
     "ngx-electron": "^1.0.4",
     "rxjs": "^6.6.6",
     "tslib": "^2.0.0",
-    "zone.js": "~0.10.2",
-    "@clr/core": "^3.0.0",
-    "@webcomponents/webcomponentsjs": "^2.0.0"
+    "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular/cli": "^10.2.3",
