@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { RenamerGridComponent } from './renamer-grid.component';
 
@@ -6,7 +6,7 @@ describe('RenamerGridComponent', () => {
 	let component: RenamerGridComponent;
 	let fixture: ComponentFixture<RenamerGridComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [ RenamerGridComponent ]
 		})

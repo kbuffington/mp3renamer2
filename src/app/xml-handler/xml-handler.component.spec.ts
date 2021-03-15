@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MetadataHandlerComponent } from '../metadata-handler/metadata-handler.component';
 
 describe('MetadataHandlerComponent', () => {
 	let component: MetadataHandlerComponent;
 	let fixture: ComponentFixture<MetadataHandlerComponent>;
 
-	beforeEach(async(() => {
+	beforeEach(waitForAsync(() => {
 		TestBed.configureTestingModule({
 			declarations: [ MetadataHandlerComponent ]
 		})
