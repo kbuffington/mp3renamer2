@@ -10,7 +10,7 @@
 					[ngClass]="{'editing': editing[i][0]}"
 					[attr.data-title]="prop"
                     (click)="startEditing(i, 0)">
-				<editable-cell [(value)]="prop"
+				<editable-cell [(value)]="unknownPropArray[i]"
 					[(editing)]="editing[i][0]">
 				</editable-cell>
 			</clr-dg-cell>
