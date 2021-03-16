@@ -24,6 +24,7 @@ import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.com
 /* Services */
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { TrackService } from '@services/track.service';
+import { DontAllowOnReload } from './dont-allow-on-reload.guard';
 
 @NgModule({
 	declarations: [
@@ -50,6 +51,7 @@ import { TrackService } from '@services/track.service';
 		NgxElectronModule,
 	],
 	providers: [
+		DontAllowOnReload,
 		MusicbrainzService,
 		TrackService,
 	],
