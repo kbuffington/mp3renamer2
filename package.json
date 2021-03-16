@@ -31,7 +31,7 @@
     "@webcomponents/custom-elements": "^1.4.3",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "core-js": "^2.6.12",
-    "electron": "^7.3.3",
+    "electron": "^9.4.0",
     "ngx-electron": "^2.2.0",
     "rxjs": "^6.6.6",
     "tslib": "^2.0.0",
