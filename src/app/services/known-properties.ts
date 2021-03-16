@@ -30,6 +30,7 @@ export const knownProperties: Map<string, PropertyInfo> = new Map([
 	['MUSICBRAINZ_ARTISTID', 		{ userDefined: true, multiValue: true }],
 	['MUSICBRAINZ_RELEASEGROUPID', 	{ userDefined: true, multiValue: true }],
 	['RELEASETYPE', 				{ userDefined: true, multiValue: true }],
+	['RELEASECOUNTRY', 				{ userDefined: true, multiValue: true }],
 	['replaygain_album_gain', 		{ userDefined: true, multiValue: true }],
 	['replaygain_album_peak', 		{ userDefined: true, multiValue: true }],
 	['replaygain_track_gain', 		{ userDefined: true, multiValue: true }],

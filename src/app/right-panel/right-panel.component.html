@@ -30,6 +30,18 @@
 					<input-field label="Catalog #:" [(value)]="metadata.CATALOGNUMBER" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 				</div>
 				<div class="clr-col-5 inline">
+					<input-field label="Rel. Cntry."
+							[(value)]="metadata.RELEASECOUNTRY"
+							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
+							[labelStyle]="{ 'max-width': '90px', 'min-width': '90px' }">
+					</input-field>
+				</div>
+			</div>
+			<div class="clr-row">
+				<div class="clr-col-7 inline">
+					<input-field label="Disc Subtitle:" [(value)]="metadata.DISCSUBTITLE" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+				</div>
+				<div class="clr-col-5 inline">
 					<input-field label="Disc Num:"
 							[(value)]="metadata.partOfSet"
 							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
@@ -37,7 +49,6 @@
 					</input-field>
 				</div>
 			</div>
-			<input-field label="Disc Subtitle:" [(value)]="metadata.DISCSUBTITLE" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Art. Country:" [(value)]="metadata.ARTISTCOUNTRY" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Release Type:"
 					[(value)]="metadata.RELEASETYPE"
