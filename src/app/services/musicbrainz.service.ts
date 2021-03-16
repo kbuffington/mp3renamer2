@@ -12,19 +12,19 @@ export class MusicbrainzService {
 	 *
 	 * @param url unencoded URL
 	 */
-	get(url: string) {
+	private get(url: string) {
 		const uri = encodeURI(url);
 		console.log(uri);
 		return this.http.get(uri);
 	}
 
 	getReleaseInfo(artist: string, album: string) {
-		const uri = `${MB_BASE}release/?limit=100&query=artist:"${artist}" AND release:"${album}"`;
+		const uri = `${MB_BASE}release/?limit=100&query=artist:"${artist.trim()}" AND release:"${album.trim()}"`;
 		return this.get(uri);
 	}
 
 	getArtist(artistMBID: string) {
-		const uri = `${MB_BASE}artist/?query=arid:${artistMBID}`;
+		const uri = `${MB_BASE}artist/?query=arid:${artistMBID.trim()}`;
 		return this.get(uri);
 	}
 }

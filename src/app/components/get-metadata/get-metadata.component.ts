@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ArtistCredit, Releases } from '@services/musicbrainz.classes';
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { TrackService } from '@services/track.service';
 import { throwError as observableThrowError } from 'rxjs';
@@ -9,7 +10,8 @@ import { throwError as observableThrowError } from 'rxjs';
 	styleUrls: ['./get-metadata.component.scss']
 })
 export class GetMetadataComponent implements OnInit {
-	public data: any;
+	public releaseData: any;
+	public releases: Releases[] = [];
 
 	constructor(private mb: MusicbrainzService,
 				private ts: TrackService) {}
@@ -19,15 +21,27 @@ export class GetMetadataComponent implements OnInit {
 	}
 
 	requestMetadata() {
-		const tracks = this.ts.getCurrentTracks();
-		const artist = tracks[0].artist;
-		const album = tracks[0].album;
-		const artistMBID = tracks[0].userDefined.MUSICBRAINZ_ARTISTID;
+		const metadata = this.ts.getCurrentMetadata();
+		const artist = metadata.artist.default;
+		const album = metadata.album.default;
+		const artistMBID = metadata.MUSICBRAINZ_ARTISTID.default;
 		this.mb.getReleaseInfo(artist, album)
 		// this.mb.getArtist(artistMBID)
 			.subscribe(
-				data => this.data = data,
+				(data: any) => {
+					this.releaseData = data;
+					this.releases = data?.releases ?? []
+				},
 				error => this.handleError(error));
+	}
+
+	public artistCredit(credits: ArtistCredit[]): string {
+		const artistString = credits.reduce((prevVal, artist: ArtistCredit, idx) => {
+			return idx == 0
+				? (artist.name + (artist.joinphrase ? artist.joinphrase : ''))
+				: prevVal + artist.name + (artist.joinphrase ? artist.joinphrase : '');
+		}, '');
+		return artistString;
 	}
 
 	private handleError(error: any) {
