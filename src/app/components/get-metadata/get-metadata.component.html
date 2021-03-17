@@ -4,17 +4,32 @@
         <clr-icon shape="angle" style="transform: rotate(270deg);"></clr-icon>
         Back
     </a>
-    <clr-datagrid class="datagrid-compact">
-        <clr-dg-column>Artist Credit</clr-dg-column>
+    <div class="clr-row">
+        <div class="input-field clr-col-5">
+            <label>Artist:</label>
+            <input clrInput [(ngModel)]="artist" />
+        </div>
+        <div class="input-field clr-col-5">
+            <label>Album:</label>
+            <input clrInput [(ngModel)]="album" />
+        </div>
+        <button class="btn btn-sm btn-primary search-btn" (click)="requestMetadata()">
+            <clr-icon shape="search"></clr-icon>
+        </button>
+    </div>
+    <clr-datagrid id="release-datagrid" class="datagrid-compact">
+        <clr-dg-column [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
         <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
-        <clr-dg-column [clrDgField]="'date'">Release</clr-dg-column>
+        <clr-dg-column [clrDgField]="'labelInfo.0.label.name'">Release</clr-dg-column>
+        <clr-dg-column [clrDgField]="'date'">Date</clr-dg-column>
         <clr-dg-column [clrDgField]="'media.0.format'">Media</clr-dg-column>
-        <clr-dg-column [clrDgField]="'track-count'"># Tracks</clr-dg-column>
+        <clr-dg-column [clrDgField]="'track-count'" class="num-tracks"># Tracks</clr-dg-column>
 
         <clr-dg-row *clrDgItems="let release of releases">
-            <clr-dg-cell>{{ artistCredit(release['artist-credit']) }}</clr-dg-cell>
+            <clr-dg-cell>{{ release.artistString }}</clr-dg-cell>
             <clr-dg-cell>{{ release.title }}</clr-dg-cell>
-            <clr-dg-cell>{{ release.date }} / {{ release.country }}</clr-dg-cell>
+            <clr-dg-cell>{{ release.labelInfo ? release.labelInfo[0]?.label.name : '' }} / {{ release.country }}</clr-dg-cell>
+            <clr-dg-cell>{{ release.date }}</clr-dg-cell>
             <clr-dg-cell>{{ release.media[0].format }}</clr-dg-cell>
             <clr-dg-cell>{{ release['track-count'] }}</clr-dg-cell>
         </clr-dg-row>

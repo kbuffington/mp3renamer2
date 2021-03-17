@@ -1,3 +1,53 @@
+.input-field {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-flow: nowrap;
+    margin-bottom: 2px;
+
+    label {
+        padding: 0;
+        margin-right: .5rem;
+        cursor: default;
+        font-size: 13px;
+        overflow: visible;
+
+        clr-icon {
+            margin: -2px -1px 0 -2px;
+            cursor: pointer;
+        }
+    }
+
+    ::ng-deep {
+        clr-input-container.clr-form-control {
+            margin-top: 0;
+            flex-grow: 1;
+        }
+        .clr-control-container {
+            width: 100%;
+
+            .clr-input-wrapper {
+                display: flex;
+
+                .clr-input {
+                    padding: 0 1px 0 3px;
+                }
+            }
+        }
+    }
+}
+
+.search-btn {
+    margin-top: 0;
+}
+
 .content {
     padding: 0.5rem;
+}
+
+#release-datagrid {
+    .num-tracks {
+        width: 3rem;
+    }
 }

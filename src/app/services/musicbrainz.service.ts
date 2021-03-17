@@ -18,8 +18,15 @@ export class MusicbrainzService {
 		return this.http.get(uri);
 	}
 
-	getReleaseInfo(artist: string, album: string) {
-		const uri = `${MB_BASE}release/?limit=100&query=artist:"${artist.trim()}" AND release:"${album.trim()}"`;
+	getReleaseInfo(queryParams: Object) {
+		// `${MB_BASE}release/?limit=100&query=artist:"${artist.trim()}" AND release:"${album.trim()}"`;
+		let uri = `${MB_BASE}release/?limit=100&query=`;
+		Object.keys(queryParams).forEach((key, idx) => {
+			if (queryParams[key].length) {
+				const and = idx > 0 ? ' AND ' : '';
+				uri += `${and}${key}:"${queryParams[key].trim()}"`;
+			}
+		});
 		return this.get(uri);
 	}
 
