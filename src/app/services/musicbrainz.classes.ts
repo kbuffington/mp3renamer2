@@ -43,13 +43,39 @@ export class LabelInfo {
 	}
 }
 
-export class Media {
-    'disc-count': number;
-    format: string;
-    'track-count': number;
+export class Track {
+	id: string;
+	position: number;
+	length: number;
+	title: string;
+
+	artistString: string;
+	time: string;
 
 	constructor(json: any) {
 		Object.assign(this, json);
+		const artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
+		this.artistString = artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
+			return idx == 0
+				? (artist.name + (artist.joinphrase ? artist.joinphrase : ''))
+				: prevVal + artist.name + (artist.joinphrase ? artist.joinphrase : '');
+		}, '');
+		const seconds = json.length / 1000;
+		this.time = `${Math.floor(seconds / 60)}:${("00" + Math.floor(seconds % 60)).slice(-2)}`;
+	}
+}
+export class Media {
+    'disc-count': number;
+    format: string;
+	position: number;
+	tracks: Track[];
+
+    trackCount: number;
+
+	constructor(json: any) {
+		Object.assign(this, json);
+		this.tracks = json.tracks ? json.tracks.map(t => new Track(t)) : [];
+		this.trackCount = json['track-count'];
 	}
 }
 
@@ -73,15 +99,15 @@ export class Release {
 	id: string;
     media: Media[];
     title: string;
-	'track-count': number;
 
 	artistString: string;
 	artistCredits: ArtistCredit[];
     releaseGroup: ReleaseGroup;
+	trackCount: number;
 	labelInfo?: LabelInfo;
 
 	constructor(json: any) {
-		Object.assign(this, json);
+		Object.assign(this, json);	// maybe assign all properties to avoid duplicates?
 		this.artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
 		this.artistString = this.artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
 			return idx == 0
@@ -91,5 +117,6 @@ export class Release {
 		this.media = json.media ? json.media.map(m => new Media(m)) : [];
 		this.releaseGroup = new ReleaseGroup(json['release-group']);
 		this.labelInfo = json['label-info'] ? new LabelInfo(json['label-info']) : undefined;
+		this.trackCount = json['track-count'];
 	}
 }
