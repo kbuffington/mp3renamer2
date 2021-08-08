@@ -17,7 +17,7 @@
             <clr-icon shape="search"></clr-icon>
         </button>
     </div>
-    <clr-datagrid id="release-datagrid" class="datagrid-compact">
+    <clr-datagrid id="releases-datagrid" class="datagrid-compact">
         <clr-dg-column [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
         <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
         <clr-dg-column [clrDgField]="'labelInfo.0.label.name'">Release</clr-dg-column>
@@ -25,13 +25,15 @@
         <clr-dg-column [clrDgField]="'media.0.format'">Media</clr-dg-column>
         <clr-dg-column [clrDgField]="'track-count'" class="num-tracks"># Tracks</clr-dg-column>
 
-        <clr-dg-row *clrDgItems="let release of releases">
+        <clr-dg-row *clrDgItems="let release of releases" (click)="getReleaseInfo(release)">
             <clr-dg-cell>{{ release.artistString }}</clr-dg-cell>
             <clr-dg-cell>{{ release.title }}</clr-dg-cell>
             <clr-dg-cell>{{ release.labelInfo ? release.labelInfo[0]?.label.name : '' }} / {{ release.country }}</clr-dg-cell>
             <clr-dg-cell>{{ release.date }}</clr-dg-cell>
             <clr-dg-cell>{{ release.media[0].format }}</clr-dg-cell>
-            <clr-dg-cell>{{ release['track-count'] }}</clr-dg-cell>
+            <clr-dg-cell [ngClass]="{'red': release['track-count'] !== numTracks}">
+                {{ release['track-count'] }}
+            </clr-dg-cell>
         </clr-dg-row>
         <clr-dg-footer>
             <clr-dg-pagination #pagination [clrDgPageSize]="10">
@@ -40,4 +42,20 @@
         </clr-dg-footer>
     </clr-datagrid>
 
+    <clr-datagrid id="release-datagrid" class="datagrid-compact" *ngIf="release">
+        <clr-dg-column class="track-num">Track</clr-dg-column>
+        <clr-dg-column [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
+        <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
+        <clr-dg-column class="time">Time</clr-dg-column>
+
+        <clr-dg-row *clrDgItems="let track of release.tracks">
+            <clr-dg-cell>
+                {{ release.media.length > 1 ? track.trackDisplay : track.position }}
+                <span *ngIf="track.position != track.number">({{ track.number }})</span>
+            </clr-dg-cell>
+            <clr-dg-cell>{{ track.artistString }}</clr-dg-cell>
+            <clr-dg-cell>{{ track.title }}</clr-dg-cell>
+            <clr-dg-cell class="time">{{ track.time }}</clr-dg-cell>
+        </clr-dg-row>
+    </clr-datagrid>
 </div>

@@ -46,8 +46,25 @@
     padding: 0.5rem;
 }
 
-#release-datagrid {
+#releases-datagrid {
     .num-tracks {
         width: 3rem;
     }
+}
+
+#release-datagrid {
+    .track-num {
+        width: 3rem;
+    }
+    .time {
+        min-width: 3rem;
+        width: 3rem;
+    }
+    clr-dg-cell.time {
+        text-align: right;
+    }
+}
+
+.red {
+    color: red;
 }

@@ -14,6 +14,8 @@ export class GetMetadataComponent implements OnInit {
 	public releases: Release[] = [];
 	public artist: string = '';
 	public album: string = '';
+	public numTracks: number;
+	public release: Release;
 
 	private metadata: MetadataObj;
 
@@ -24,17 +26,28 @@ export class GetMetadataComponent implements OnInit {
 		this.metadata = this.ts.getCurrentMetadata();
 		this.artist = this.metadata.artist.default;
 		this.album = this.metadata.album.default;
+		this.numTracks = this.ts.getNumTracks();
 		const artistMBID = this.metadata.MUSICBRAINZ_ARTISTID.default;
 		this.requestMetadata();
 	}
 
 	public requestMetadata() {
-		this.mb.getReleaseInfo({ artist: this.artist, release: this.album })
-		// this.mb.getArtist(artistMBID)
+		this.release = null;
+		this.mb.searchReleases({ artist: this.artist, release: this.album })
 			.subscribe(
 				(data: any) => {
 					this.releaseData = data;
 					this.releases = data.releases?.map(r => new Release(r)) ?? [];
+				},
+				error => this.handleError(error));
+	}
+
+	public getReleaseInfo(release: Release) {
+		this.mb.getReleaseInfo(release.id)
+			.subscribe(
+				(release: any) => {
+					this.release = new Release(release);
+					console.log(this.release);
 				},
 				error => this.handleError(error));
 	}

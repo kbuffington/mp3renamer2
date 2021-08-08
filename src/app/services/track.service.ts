@@ -92,6 +92,10 @@ export class TrackService {
 		return this.trackList.getValue();
 	}
 
+	getNumTracks(): number {
+		return this.trackList.getValue().length;
+	}
+
 	getCurrentMetadata(): MetadataObj {
 		return this.trackMetaData.getValue();
 	}
@@ -142,6 +146,7 @@ export class TrackService {
 					metaProp.values.push('');
 				}
 			} else {
+				// console.log(property);
 				metaProp.userDefined = true;
 				if (t.userDefined && (t.userDefined[property] || t.userDefined[alias])) {
 					this.setMetadataValue(metaProp, t.userDefined[property] || t.userDefined[alias]);	// short-circuit eval

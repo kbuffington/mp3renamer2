@@ -18,15 +18,20 @@ export class MusicbrainzService {
 		return this.http.get(uri);
 	}
 
-	getReleaseInfo(queryParams: Object) {
+	public searchReleases(queryParams: Object, fuzzy: boolean = true) {
 		// `${MB_BASE}release/?limit=100&query=artist:"${artist.trim()}" AND release:"${album.trim()}"`;
 		let uri = `${MB_BASE}release/?limit=100&query=`;
 		Object.keys(queryParams).forEach((key, idx) => {
 			if (queryParams[key].length) {
 				const and = idx > 0 ? ' AND ' : '';
-				uri += `${and}${key}:"${queryParams[key].trim()}"`;
+				uri += `${and}${key}:"${fuzzy ? '(' : ''}${queryParams[key].trim()}${fuzzy ? '*)' : ''}"`;
 			}
 		});
+		return this.get(uri);
+	}
+
+	public getReleaseInfo(releaseMbid: string) {
+		let uri = `${MB_BASE}release/${releaseMbid}?inc=artist-credits+labels+discids+recordings`;
 		return this.get(uri);
 	}
 
