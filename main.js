@@ -10,7 +10,16 @@ let mainWindow
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({ width: 1400, height: 1024 });
+    mainWindow = new BrowserWindow({
+        width: 1400,
+        height: 1024,
+        webPreferences: {
+            nodeIntegration: true,
+            nodeIntegrationInWorker: true,
+            backgroundThrottling: false,
+            enableRemoteModule: true
+        }
+    });
 
     // and load the index.html of the app.
     // mainWindow.loadFile('dist/mp3renamer2/index.html')
