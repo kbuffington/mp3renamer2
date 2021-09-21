@@ -39,14 +39,13 @@ function createWindow() {
 
 function getFiles() {
     dialog.showOpenDialog({
-            defaultPath: '~/Desktop/Ghost - 2013 - If You Have Ghost/',
-            properties: ['openFile', 'multiSelections']
-        },
-        (filePaths, bookmarks) => {
-            console.log(filePaths);
-            const tracks = processFiles(filePaths);
-            mainWindow.webContents.send('files', tracks);
-        });
+        defaultPath: '~/Desktop/Ghost - 2013 - If You Have Ghost/',
+        properties: ['openFile', 'multiSelections']
+    }).then(resp => {
+        console.log(resp.filePaths);
+        const tracks = processFiles(resp.filePaths);
+        mainWindow.webContents.send('files', tracks);
+    });
 }
 
 function processFiles(files) {
