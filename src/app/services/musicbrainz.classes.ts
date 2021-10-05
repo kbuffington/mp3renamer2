@@ -23,22 +23,43 @@ export class ArtistCredit {
 }
 
 export class Label {
+	catalogNum?: string;
 	id: string;
 	name: string;
+	disambiguation: string;
 
 	constructor(json: any) {
-		Object.assign(this, json);
+		this.catalogNum = json["catalog-number"];
+		if (json.label) {
+			this.id = json.label.id;
+			this.name = json.label.name;
+			this.disambiguation = json.label.disambiguation;
+		}
 	}
 }
 
 export class LabelInfo {
-	'catalog-number'?: string;
 	label: Label[];
+	allLabels = '';	// semi-colon delimited list of labels
+	catalogNumbers = [];
+	selectedCatalog: string;
 
-	constructor(json: any) {
-		Object.assign(this, json);
-		if (json.label?.length) {
-			this.label = json.label.map(l => new Label(l));
+	constructor(labels: any[]) {
+		Object.assign(this, labels);
+		if (labels.length) {
+			this.label = labels.map(l => new Label(l));
+			this.label.forEach((l, idx) => {
+				this.allLabels += l.name;
+				if (idx < this.label.length - 1) {
+					this.allLabels += '; ';
+				}
+				if (l.catalogNum && !this.catalogNumbers.includes(l.catalogNum)) {
+					this.catalogNumbers.push(l.catalogNum);
+				}
+				if (this.catalogNumbers.length) {
+					this.selectedCatalog = this.catalogNumbers[0];
+				}
+			});
 		}
 	}
 }
@@ -48,11 +69,12 @@ export class Track {
 	position: number;
 	length: number;
 	title: string;
+	discNumber: number;
 
 	artistString: string;
 	time: string;
 
-	constructor(json: any) {
+	constructor(json: any, discNumber: number) {
 		Object.assign(this, json);
 		const artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
 		this.artistString = artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
@@ -62,6 +84,7 @@ export class Track {
 		}, '');
 		const seconds = json.length / 1000;
 		this.time = `${Math.floor(seconds / 60)}:${("00" + Math.floor(seconds % 60)).slice(-2)}`;
+		this.discNumber = discNumber;
 	}
 }
 export class Media {
@@ -74,7 +97,7 @@ export class Media {
 
 	constructor(json: any) {
 		Object.assign(this, json);
-		this.tracks = json.tracks ? json.tracks.map(t => new Track(t)) : [];
+		this.tracks = json.tracks ? json.tracks.map(t => new Track(t, this.position)) : [];
 		this.trackCount = json['track-count'];
 	}
 }
@@ -104,6 +127,7 @@ export class Release {
 	artistCredits: ArtistCredit[];
     releaseGroup: ReleaseGroup;
 	trackCount: number;
+	tracks: Track[] = [];
 	labelInfo?: LabelInfo;
 
 	constructor(json: any) {
@@ -115,6 +139,9 @@ export class Release {
 				: prevVal + artist.name + (artist.joinphrase ? artist.joinphrase : '');
 		}, '');
 		this.media = json.media ? json.media.map(m => new Media(m)) : [];
+		this.media.forEach(m => {
+			this.tracks.push(...m.tracks);
+		});
 		this.releaseGroup = new ReleaseGroup(json['release-group']);
 		this.labelInfo = json['label-info'] ? new LabelInfo(json['label-info']) : undefined;
 		this.trackCount = json['track-count'];

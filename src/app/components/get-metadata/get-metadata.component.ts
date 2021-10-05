@@ -15,7 +15,7 @@ export class GetMetadataComponent implements OnInit {
 	public artist: string = '';
 	public album: string = '';
 	public numTracks: number;
-	public release: Release;
+	public selectedRelease: Release;
 
 	private metadata: MetadataObj;
 
@@ -32,7 +32,7 @@ export class GetMetadataComponent implements OnInit {
 	}
 
 	public requestMetadata() {
-		this.release = null;
+		this.selectedRelease = null;
 		this.mb.searchReleases({ artist: this.artist, release: this.album })
 			.subscribe(
 				(data: any) => {
@@ -46,8 +46,8 @@ export class GetMetadataComponent implements OnInit {
 		this.mb.getReleaseInfo(release.id)
 			.subscribe(
 				(release: any) => {
-					this.release = new Release(release);
-					console.log(this.release);
+					this.selectedRelease = new Release(release);
+					console.log(this.selectedRelease);
 				},
 				error => this.handleError(error));
 	}
@@ -61,4 +61,7 @@ export class GetMetadataComponent implements OnInit {
 		return observableThrowError(errMsg);
 	}
 
+	public apply() {
+
+	}
 }

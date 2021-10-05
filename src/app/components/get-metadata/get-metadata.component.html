@@ -1,61 +1,109 @@
+<div class="main-wrapper">
+    <div class="content">
+        <div class="clr-row">
+            <div class="input-field clr-col-5">
+                <label>Artist:</label>
+                <input clrInput [(ngModel)]="artist" (keyup.enter)="requestMetadata()" />
+            </div>
+            <div class="input-field clr-col-5">
+                <label>Album:</label>
+                <input clrInput [(ngModel)]="album" (keyup.enter)="requestMetadata()" />
+            </div>
+            <button class="btn btn-sm btn-primary search-btn" (click)="requestMetadata()">
+                <clr-icon shape="search"></clr-icon> Search
+            </button>
+        </div>
+        <clr-datagrid id="releases-datagrid" class="datagrid-compact">
+            <clr-dg-column [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
+            <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
+            <clr-dg-column [clrDgField]="'labelInfo.0.label.name'">Release</clr-dg-column>
+            <clr-dg-column [clrDgField]="'date'" class="date">Date</clr-dg-column>
+            <clr-dg-column [clrDgField]="'media.0.format'" class="media">Media</clr-dg-column>
+            <clr-dg-column [clrDgField]="'track-count'" class="num-tracks"># Tracks</clr-dg-column>
 
-<div class="content">
-    <a [routerLink]="'/'" class="back">
-        <clr-icon shape="angle" style="transform: rotate(270deg);"></clr-icon>
-        Back
-    </a>
-    <div class="clr-row">
-        <div class="input-field clr-col-5">
-            <label>Artist:</label>
-            <input clrInput [(ngModel)]="artist" />
+            <clr-dg-row *clrDgItems="let release of releases" (click)="getReleaseInfo(release)">
+                <clr-dg-cell>{{ release.artistString }}</clr-dg-cell>
+                <clr-dg-cell>{{ release.title }}</clr-dg-cell>
+                <clr-dg-cell>{{ release.labelInfo ? release.labelInfo[0]?.label?.name : '' }} / {{ release.country }}</clr-dg-cell>
+                <clr-dg-cell class="date">{{ release.date }}</clr-dg-cell>
+                <clr-dg-cell class="media">{{ release.media[0].format }}</clr-dg-cell>
+                <clr-dg-cell class="num-tracks" [ngClass]="{'red': release['track-count'] !== numTracks}">
+                    <span *ngIf="release.media.length > 1">{{ release.media.length }} / </span>
+                    {{ release['track-count'] }}
+                </clr-dg-cell>
+            </clr-dg-row>
+            <clr-dg-footer>
+                <clr-dg-pagination #pagination [clrDgPageSize]="10">
+                    {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} releases
+                </clr-dg-pagination>
+            </clr-dg-footer>
+        </clr-datagrid>
+
+        <div class="selected-release" *ngIf="selectedRelease">
+            <div class="clr-row">
+                <div class="input-field clr-col-10">
+                    <label>Album Artist:</label>
+                    <input clrInput [(ngModel)]="selectedRelease.artistString" />
+                </div>
+            </div>
+            <div class="clr-row">
+                <div class="input-field clr-col-10">
+                    <label>Album:</label>
+                    <input clrInput [(ngModel)]="selectedRelease.title" />
+                </div>
+            </div>
+            <div class="clr-row">
+                <div class="input-field clr-col-3">
+                    <label>Release Date:</label>
+                    <input clrInput class="small" [(ngModel)]="selectedRelease.date" />
+                </div>
+                <div class="input-field clr-col-3">
+                    <label class="wide-label">Release Country:</label>
+                    <input clrInput class="xsmall" [(ngModel)]="selectedRelease.country" />
+                </div>
+                <div class="input-field clr-col-4">
+                    <label>Catalog #:</label>
+                    <clr-select-container>
+                        <select clrSelect [(ngModel)]="selectedRelease.labelInfo.selectedCatalog">
+                            <option *ngFor="let cat of selectedRelease.labelInfo.catalogNumbers" [ngValue]="cat">
+                                {{ cat }}
+                            </option>
+                        </select>
+                      </clr-select-container>
+                </div>
+            </div>
+            <div class="clr-row">
+                <div class="input-field clr-col-10">
+                    <label>Labels:</label>
+                    <input clrInput [(ngModel)]="selectedRelease.labelInfo.allLabels" />
+                </div>
+            </div>
+
+            <clr-datagrid id="release-datagrid" class="datagrid-compact" *ngIf="selectedRelease">
+                <clr-dg-column class="track-num">Track</clr-dg-column>
+                <clr-dg-column [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
+                <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
+                <clr-dg-column class="time">Time</clr-dg-column>
+
+                <clr-dg-row *clrDgItems="let track of selectedRelease.tracks">
+                    <clr-dg-cell class="track-num">
+                        {{ selectedRelease.tracks.length > 1 ? track.trackDisplay : track.position }}
+                        <span *ngIf="track.position != track.number; else showDiscTrack">{{ track.position }} ({{ track.number }})</span>
+                        <ng-template #showDiscTrack>
+                            <span *ngIf="track.media">{{ track.discNumber }}-</span>{{ track.number }}
+                        </ng-template>
+                    </clr-dg-cell>
+                    <clr-dg-cell>{{ track.artistString }}</clr-dg-cell>
+                    <clr-dg-cell>{{ track.title }}</clr-dg-cell>
+                    <clr-dg-cell class="time">{{ track.time }}</clr-dg-cell>
+                </clr-dg-row>
+            </clr-datagrid>
         </div>
-        <div class="input-field clr-col-5">
-            <label>Album:</label>
-            <input clrInput [(ngModel)]="album" />
-        </div>
-        <button class="btn btn-sm btn-primary search-btn" (click)="requestMetadata()">
-            <clr-icon shape="search"></clr-icon>
-        </button>
     </div>
-    <clr-datagrid id="releases-datagrid" class="datagrid-compact">
-        <clr-dg-column [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
-        <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
-        <clr-dg-column [clrDgField]="'labelInfo.0.label.name'">Release</clr-dg-column>
-        <clr-dg-column [clrDgField]="'date'">Date</clr-dg-column>
-        <clr-dg-column [clrDgField]="'media.0.format'">Media</clr-dg-column>
-        <clr-dg-column [clrDgField]="'track-count'" class="num-tracks"># Tracks</clr-dg-column>
-
-        <clr-dg-row *clrDgItems="let release of releases" (click)="getReleaseInfo(release)">
-            <clr-dg-cell>{{ release.artistString }}</clr-dg-cell>
-            <clr-dg-cell>{{ release.title }}</clr-dg-cell>
-            <clr-dg-cell>{{ release.labelInfo ? release.labelInfo[0]?.label.name : '' }} / {{ release.country }}</clr-dg-cell>
-            <clr-dg-cell>{{ release.date }}</clr-dg-cell>
-            <clr-dg-cell>{{ release.media[0].format }}</clr-dg-cell>
-            <clr-dg-cell [ngClass]="{'red': release['track-count'] !== numTracks}">
-                {{ release['track-count'] }}
-            </clr-dg-cell>
-        </clr-dg-row>
-        <clr-dg-footer>
-            <clr-dg-pagination #pagination [clrDgPageSize]="10">
-                {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} releases
-            </clr-dg-pagination>
-        </clr-dg-footer>
-    </clr-datagrid>
-
-    <clr-datagrid id="release-datagrid" class="datagrid-compact" *ngIf="release">
-        <clr-dg-column class="track-num">Track</clr-dg-column>
-        <clr-dg-column [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
-        <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
-        <clr-dg-column class="time">Time</clr-dg-column>
-
-        <clr-dg-row *clrDgItems="let track of release.tracks">
-            <clr-dg-cell>
-                {{ release.media.length > 1 ? track.trackDisplay : track.position }}
-                <span *ngIf="track.position != track.number">({{ track.number }})</span>
-            </clr-dg-cell>
-            <clr-dg-cell>{{ track.artistString }}</clr-dg-cell>
-            <clr-dg-cell>{{ track.title }}</clr-dg-cell>
-            <clr-dg-cell class="time">{{ track.time }}</clr-dg-cell>
-        </clr-dg-row>
-    </clr-datagrid>
+    <footer>
+        <div class="btn-container">
+            <a class="btn btn-primary" (click)="apply()">Apply to Files</a>
+            <a class="btn btn-outline" [routerLink]="'/'">Cancel</a>
+        </div>
+    </footer>
 </div>

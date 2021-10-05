@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+$headerHeight: 2.5rem;
+
+.main-wrapper {
+    height: calc(100vh - #{$headerHeight});
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 100%;
+    overflow-x: hidden;
+}
+
+.red {
+    color: red !important;
+}
