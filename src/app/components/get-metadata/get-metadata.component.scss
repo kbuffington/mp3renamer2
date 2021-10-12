@@ -103,6 +103,15 @@
     clr-dg-cell.time {
         text-align: right;
     }
+
+    .diff {
+        color: red;
+        font-style: italic;
+    }
+    .notfound {
+        background-color: #f0f0f0;
+        color: #888888;
+    }
 }
 
 .release-block {

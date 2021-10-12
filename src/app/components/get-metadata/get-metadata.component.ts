@@ -1,8 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { ArtistCredit, Release } from '@services/musicbrainz.classes';
+import { Release } from '@services/musicbrainz.classes';
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { MetadataObj, TrackService } from '@services/track.service';
 import { throwError as observableThrowError } from 'rxjs';
+
+export class ReleaseDisplay extends Release {
+	constructor (json: any, metadata: MetadataObj) {
+		super(json);
+		metadata.partOfSet.values.forEach((partOfSet: string, index) => {
+			const pos = partOfSet.split('/');
+			const disc = !!parseInt(pos[0]) ? parseInt(pos[0]) : 1;
+			const discTrackStr = `${disc}-${parseInt(metadata.trackNumber.values[index])}`;
+			console.log(discTrackStr);
+			const t = this.tracks.find(track => track.discTrackStr === discTrackStr);
+			if (t) {
+				t.metadataFound = true;
+				t.metadataTitle = metadata.title.values[index];
+				t.metadataDiffers = t.title !== t.metadataTitle;
+			}
+		});
+	}
+}
 
 @Component({
 	selector: 'get-metadata',
@@ -16,7 +34,7 @@ export class GetMetadataComponent implements OnInit {
 	public album: string = '';
 	public fetchingReleases = false;
 	public numTracks: number;
-	public selectedRelease: Release;
+	public selectedRelease: ReleaseDisplay;
 
 	private metadata: MetadataObj;
 
@@ -49,7 +67,7 @@ export class GetMetadataComponent implements OnInit {
 		this.mb.getReleaseInfo(release.id)
 			.subscribe(
 				(release: any) => {
-					this.selectedRelease = new Release(release);
+					this.selectedRelease = new ReleaseDisplay(release, this.metadata);
 					console.log(this.selectedRelease);
 				},
 				error => this.handleError(error));

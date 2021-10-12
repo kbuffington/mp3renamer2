@@ -102,7 +102,7 @@
                 <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
                 <clr-dg-column class="time">Time</clr-dg-column>
 
-                <clr-dg-row *clrDgItems="let track of selectedRelease.tracks">
+                <clr-dg-row *clrDgItems="let track of selectedRelease.tracks" [ngClass]="{ 'notfound': !track.metadataFound }">
                     <clr-dg-cell class="track-num">
                         {{ selectedRelease.tracks.length > 1 ? track.trackDisplay : track.position }}
                         <span *ngIf="track.position != track.number; else showDiscTrack">{{ track.position }} ({{ track.number }})</span>
@@ -111,7 +111,10 @@
                         </ng-template>
                     </clr-dg-cell>
                     <clr-dg-cell class="artist">{{ track.artistString }}</clr-dg-cell>
-                    <clr-dg-cell>{{ track.title }}</clr-dg-cell>
+                    <clr-dg-cell>
+                        {{ track.title }}
+                        <span *ngIf="track.metadataDiffers" class="diff">[{{track.metadataTitle}}]</span>
+                    </clr-dg-cell>
                     <clr-dg-cell class="time">{{ track.time }}</clr-dg-cell>
                 </clr-dg-row>
             </clr-datagrid>

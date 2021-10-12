@@ -72,7 +72,12 @@ export class Track {
 	discNumber: number;
 
 	artistString: string;
+	discTrackStr: string;
+	metadataDiffers = false; // does the title differ from the metadata?
+	metadataFound = false; // was the track found in the metadata (by discTrackStr)?
+	metadataTitle?: string; // title found in metadata
 	time: string;
+
 
 	constructor(json: any, discNumber: number) {
 		Object.assign(this, json);
@@ -85,6 +90,7 @@ export class Track {
 		const seconds = json.length / 1000;
 		this.time = `${Math.floor(seconds / 60)}:${("00" + Math.floor(seconds % 60)).slice(-2)}`;
 		this.discNumber = discNumber;
+		this.discTrackStr = `${discNumber}-${this.position}`;
 	}
 }
 export class Media {
