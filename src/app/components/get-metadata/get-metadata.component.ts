@@ -11,7 +11,6 @@ export class ReleaseDisplay extends Release {
 			const pos = partOfSet.split('/');
 			const disc = !!parseInt(pos[0]) ? parseInt(pos[0]) : 1;
 			const discTrackStr = `${disc}-${parseInt(metadata.trackNumber.values[index])}`;
-			console.log(discTrackStr);
 			const t = this.tracks.find(track => track.discTrackStr === discTrackStr);
 			if (t) {
 				t.metadataFound = true;
