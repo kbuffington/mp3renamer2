@@ -31,7 +31,7 @@ export class MusicbrainzService {
 	}
 
 	public getReleaseInfo(releaseMbid: string) {
-		let uri = `${MB_BASE}release/${releaseMbid}?inc=artist-credits+labels+discids+recordings`;
+		let uri = `${MB_BASE}release/${releaseMbid}?inc=artist-credits+labels+discids+recordings+release-groups`;
 		return this.get(uri);
 	}
 
