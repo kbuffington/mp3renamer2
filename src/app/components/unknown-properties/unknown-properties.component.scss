@@ -8,8 +8,10 @@
     width: 150px;
 }
 
-::ng-deep {
-    .datagrid {
-        overflow-x: hidden;
+.unknown-props-datagrid {
+    ::ng-deep {
+        .datagrid {
+            overflow-x: hidden;
+        }
     }
 }
