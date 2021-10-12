@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ElectronService } from 'ngx-electron';
+
 import { TrackService } from '@services/track.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 
@@ -12,7 +14,7 @@ export class MainComponent implements OnInit, OnDestroy {
 	public tracks: any[] = [];
 	public trackSubscription: Subscription;
 
-	constructor(private ts: TrackService) {
+	constructor(private electronService: ElectronService, private ts: TrackService) {
 	}
 
 	ngOnInit() {
@@ -49,6 +51,7 @@ export class MainComponent implements OnInit, OnDestroy {
 	}
 
 	quitApp() {
-		console.log('TODO: quitApp() in main.component');
+		const mainProcess = this.electronService.remote.require('./main.js');
+		mainProcess.quitApp();
 	}
 }

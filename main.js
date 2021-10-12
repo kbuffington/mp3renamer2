@@ -1,14 +1,16 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, session } = require('electron');
 const fs = require('fs');
 const NodeID3 = require('../node-id3');
 // const taglib = require('../node-taglib');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow;
 
 function createWindow() {
+    const ses = session.fromPartition('persist:name', { cache: true });
+
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 1400,
@@ -17,7 +19,10 @@ function createWindow() {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             backgroundThrottling: false,
-            enableRemoteModule: true
+            enableRemoteModule: true,
+            session: ses,   // not sure this is actually doing anything
+            worldSafeExecuteJavaScript: true,
+            contextIsolation: false, // true breaks electronService
         }
     });
 
@@ -98,6 +103,12 @@ function loadHardCoded() {
     mainWindow.webContents.send('files', tracks);
 }
 
+function quitApp() {
+    app.quit();
+}
+
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -123,6 +134,7 @@ app.on('activate', function() {
 
 exports.getFiles = getFiles;
 exports.loadHardCoded = loadHardCoded;  // for testing purposes open files on reload
+exports.quitApp = quitApp;
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
