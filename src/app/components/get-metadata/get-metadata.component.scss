@@ -52,24 +52,25 @@
     margin-top: 0;
 }
 
-.content {
-    padding: 0.5rem;
-}
-
 #releases-datagrid {
+    .artist {
+        min-width: 5.4rem;
+    }
     .num-tracks {
         width: 4.5rem;
         min-width: 4.5rem;
     }
-
     .date {
         width: 5rem;
         min-width: 5rem;
     }
-
     .media {
         width: 6rem;
         min-width: 6rem;
+    }
+    .edition {
+        color: #999;
+        font-style: italic;
     }
 
     clr-dg-cell {
@@ -77,12 +78,23 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+
+    clr-dg-column,
+    clr-dg-cell {
+        max-width: 500px;
+    }
 }
 
 #release-datagrid {
+    width: 100%;
+
     .track-num {
         width: 4rem;
         min-width: 4rem;
+    }
+    .artist {
+        // width: 5.2rem;
+        min-width: 5.4rem;
     }
     .time {
         min-width: 3rem;
@@ -93,7 +105,7 @@
     }
 }
 
-.selected-release {
+.release-block {
     margin-top: 1rem;
 
     .input-field {
@@ -117,6 +129,26 @@
             }
         }
     }
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    height: 88vh;
+    max-height: 88vh;
+    overflow-y: scroll;
+
+    .top-content {
+        flex-shrink: 1;
+    }
+
+    .selected-release {
+        display: inline-flex;
+        overflow: hidden;
+        margin-bottom: -10px;
+    }
+
 }
 
 footer {
