@@ -1,7 +1,29 @@
-$headerHeight: 2.5rem;
+$headerHeight: 2.75rem;
+
+@font-face {
+    font-family: "Roboto";
+    src: local("Roboto"), url(./assets/fonts/Roboto/Roboto-Regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Lato";
+    src: local("Lato"), url(./assets/fonts/Lato/Lato-Regular.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: "Open Sans";
+    src: local("Open Sans"), url(./assets/fonts/OpenSans/OpenSans-Regular.ttf) format("truetype");
+}
+
+body {
+    overflow: hidden;
+    // font-family: "Roboto", sans-serif !important;
+    font-family: "Open Sans", sans-serif !important;
+}
 
 .main-wrapper {
     height: calc(100vh - #{$headerHeight});
+    // max-height: calc(100vh - #{$headerHeight});
     display: grid;
     grid-template-rows: 1fr auto;
     grid-template-columns: 100%;
