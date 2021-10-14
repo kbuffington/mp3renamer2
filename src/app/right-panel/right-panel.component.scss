@@ -1,10 +1,25 @@
-.clr-row .inline:not(:last-of-type) {
-    padding-right: 0;
+.clr-row {
+    .inline:not(:last-of-type) {
+        padding-right: 0;
+    }
+    .inline:not(:first-of-type) {
+        padding-left: .25rem;
+    }
+
+    .clr-col-6dot5 {
+        flex: 0 0 54%;
+        max-width: 54%;
+        padding-left: .6rem;
+    }
+
+    .clr-col-5dot5 {
+        flex: 0 0 46%;
+        max-width: 46%;
+        padding-left: .6rem;
+        padding-right: .6rem;
+    }
 }
 
-.clr-row .inline:not(:first-of-type) {
-    padding-left: .25rem;
-}
 
 .flex-container {
     display: flex;

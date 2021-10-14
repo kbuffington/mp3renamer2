@@ -1,5 +1,18 @@
 .content {
     padding: 0.5em;
+
+    .panel {
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
+    }
+    left-panel {
+        flex: 0 0 48%;
+        max-width: 48%;
+    }
+    right-panel {
+        flex: 0 0 52%;
+        max-width: 52%;
+    }
 }
 
 footer {

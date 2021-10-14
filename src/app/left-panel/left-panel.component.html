@@ -1,5 +1,5 @@
 <div class="left-wrapper">
-	<div class="clr-col-12">
+	<div class="input-block clr-col-12">
 		<input-field label="Artist:"
 			[(value)]="metadata.artist"
 			[hideConflicts]="hideConflicts"
@@ -18,7 +18,7 @@
 	<img id="coverArt" *ngIf="trackOptions.showArtwork"
 		src="../../temp/embeddedArtwork.jpg"
 		style="width:300px; height: 300px; margin-top: 12px; border: none;">
-	<clr-checkbox-container>
+	<clr-checkbox-container class="options-block">
 		<clr-checkbox-wrapper>
 			<input type="checkbox" clrCheckbox
 				name="showArtistToggle"

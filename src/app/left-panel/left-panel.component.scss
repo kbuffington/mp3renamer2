@@ -1,14 +1,7 @@
-.input-wrapper {
-    clr-checkbox-container {
-        display: inline-block;
+.input-block {
+    padding-right: 0;
+}
 
-        label {
-            padding: 0;
-            min-width: 100px;
-        }
-    }
-
-    .data-field {
-        display: inline-block;
-    }
+.options-block {
+    padding-left: 0.6rem;
 }

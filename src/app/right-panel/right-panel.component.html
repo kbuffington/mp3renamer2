@@ -6,7 +6,7 @@
 			<input-field label="Label:" [(value)]="metadata.LABEL" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Edition:" [(value)]="metadata.EDITION" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<div class="clr-row">
-				<div class="clr-col-7 inline">
+				<div class="clr-col-6dot5 inline">
 					<div class="flex-container">
 						<input-field
 							label="Date:"
@@ -17,35 +17,35 @@
 						<clr-icon shape="switch" class="inline-button" (click)="swapDates()"></clr-icon>
 					</div>
 				</div>
-				<div class="clr-col-5 inline">
+				<div class="clr-col-5dot5 inline">
 					<input-field label="Orig Date:"
 							[(value)]="metadata.originalReleaseDate"
 							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
-							[labelStyle]="{ 'max-width': '90px', 'min-width': '90px' }">
+							[labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }">
 					</input-field>
 				</div>
 			</div>
 			<div class="clr-row">
-				<div class="clr-col-7 inline">
+				<div class="clr-col-6dot5 inline">
 					<input-field label="Catalog #:" [(value)]="metadata.CATALOGNUMBER" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 				</div>
-				<div class="clr-col-5 inline">
+				<div class="clr-col-5dot5 inline">
 					<input-field label="Rel. Cntry."
 							[(value)]="metadata.RELEASECOUNTRY"
 							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
-							[labelStyle]="{ 'max-width': '90px', 'min-width': '90px' }">
+							[labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }">
 					</input-field>
 				</div>
 			</div>
 			<div class="clr-row">
-				<div class="clr-col-7 inline">
+				<div class="clr-col-8 inline">
 					<input-field label="Disc Subtitle:" [(value)]="metadata.DISCSUBTITLE" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 				</div>
-				<div class="clr-col-5 inline">
+				<div class="clr-col-4 inline">
 					<input-field label="Disc Num:"
 							[(value)]="metadata.partOfSet"
 							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
-							[labelStyle]="{ 'max-width': '90px', 'min-width': '90px' }">
+							[labelStyle]="{ 'max-width': '80px', 'min-width': '80px', 'letter-spacing': '-.25px' }">
 					</input-field>
 				</div>
 			</div>
