@@ -7,10 +7,11 @@ import { throwError as observableThrowError } from 'rxjs';
 export class ReleaseDisplay extends Release {
 	constructor (json: any, metadata: MetadataObj) {
 		super(json);
-		metadata.partOfSet.values.forEach((partOfSet: string, index) => {
-			const pos = partOfSet.split('/');
+		const partOfSet = metadata.partOfSet;
+		metadata.trackNumber.values.forEach((trackNumber: string, index) => {
+			const pos = (partOfSet.changed ? partOfSet.default : partOfSet.values[index]).split('/');
 			const disc = !!parseInt(pos[0]) ? parseInt(pos[0]) : 1;
-			const discTrackStr = `${disc}-${parseInt(metadata.trackNumber.values[index])}`;
+			const discTrackStr = `${disc}-${parseInt(trackNumber)}`;
 			const t = this.tracks.find(track => track.discTrackStr === discTrackStr);
 			if (t) {
 				t.metadataFound = true;

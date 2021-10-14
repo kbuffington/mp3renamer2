@@ -16,13 +16,14 @@ export interface Track {
 }
 
 export class MetadataProperty {
-	changed = false;
+	changed = false;	// whether a new default has been set to apply to all tracks (overwriting individual values)
 	default = '';
 	multiValue = false;
 	origValue = '';
 	overwrite = true;
 	userDefined = false;
 	values: string[] = [];
+	origValues: string[] = []; // copy of values used for resetting
 }
 
 export class MetadataObj {
@@ -156,6 +157,7 @@ export class TrackService {
 			}
 			metaProp.origValue = metaProp.default;
 		});
+		metaProp.origValues = [...metaProp.values];
 		metadata[property] = metaProp;
 	}
 
@@ -190,21 +192,26 @@ export class TrackService {
 	setTagData() {
 		const trackList = this.trackList.getValue();
 		const metadata = this.trackMetaData.getValue();
-		const trackTagFields = Array(this.trackCount).fill({});
-		trackTagFields.forEach((t, i) => {
+		const trackTagFields = [];
+		for (let i=0; i < this.trackCount; i++) {
+			const t: any = trackTagFields[i] = {};
 			t.artist = trackList[i].artist;
 			t.title = trackList[i].title;
 			t.trackNumber = trackList[i].trackNumber;
-		});
+		}
 		Object.keys(metadata).forEach(key => {
 			const obj: MetadataProperty = metadata[key];
 			let value: any;
 
 			for (let i = 0; i < this.trackCount; i++) {
-				if (obj.changed && obj.overwrite) {
-					value = obj.default;
+				if (obj.overwrite) {
+					if (obj.changed) {
+						value = obj.default;
+					} else {
+						value = obj.values[i];
+					}
 				} else {
-					value = obj.values[i];
+					value = obj.origValues[i];
 				}
 				if (value) {
 					if (obj.multiValue && value.includes('; ')) {
@@ -224,9 +231,11 @@ export class TrackService {
 
 	renumberTracks(startNumber: number) {
 		let count = 0;
+		const metadata = this.getCurrentMetadata().trackNumber.values;
 		this.getCurrentTracks().forEach((t: Track, index: number) => {
 			if (this.selectedTracks.includes(index)) {
 				t.trackNumber = (startNumber + count + '').padStart(2, '0');
+				metadata[index] = (startNumber + count + '').padStart(2, '0');
 				count++;
 			}
 		});
