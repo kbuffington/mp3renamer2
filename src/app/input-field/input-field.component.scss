@@ -12,7 +12,7 @@
     }
     label {
         padding: 0;
-        min-width: 115px;
+        min-width: 107px;
         cursor: default;
         font-size: 13px;
         overflow: visible;
@@ -50,13 +50,17 @@
             flex-grow: 1;
             padding-top: 1px;
         }
+
+        .dont-overwrite {
+            color: #999;
+        }
     }
 }
 
 .conflict-list {
     position: absolute;
     left: 42px;
-    top: -9px;
+    top: -4px;
     background-color: white;
     border: 1px solid lightgrey;
     padding: 0px 10px 5px;

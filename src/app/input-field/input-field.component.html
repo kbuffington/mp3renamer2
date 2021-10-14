@@ -27,9 +27,8 @@
 			</li>
 		</ol>
 		<ol class="editable-list" *ngIf="editValues">
-			<li *ngFor="let val of value.values" class="edit-item">
-				<!-- ngModel?? -->
-				<input [value]="val">
+			<li *ngFor="let val of value.values; let i = index; trackBy: identify" class="edit-item">
+				<input [(ngModel)]="value.values[i]">
 			</li>
 		</ol>
 	</div>
@@ -39,8 +38,12 @@
 			[value]="value.default"
 			(focus)="$event.target.select()"
 			[disabled]="readOnly"
+			[ngClass]="{ 'dont-overwrite': !value.overwrite }"
 			(input)="defaultValChanged($event.target.value)">
-		<select *ngIf="selectOptions" [ngModel]="value.default" (input)="defaultValChanged($event.target.value)">
+		<select *ngIf="selectOptions"
+				[ngModel]="value.default"
+				[ngClass]="{ 'dont-overwrite': !value.overwrite }"
+				(input)="defaultValChanged($event.target.value)">
 			<option *ngFor="let option of selectOptions" [value]="option">
 				{{ option }}
 			</option>

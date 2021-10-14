@@ -70,4 +70,8 @@ export class InputFieldComponent implements OnInit, OnChanges {
 			this.showValues = false;
 		}
 	}
+
+	public identify(index: number, item: string) {
+		return index;
+	}
 }
