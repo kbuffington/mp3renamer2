@@ -19,6 +19,7 @@ export class InputFieldComponent implements OnInit, OnChanges {
 
 	public displayLabel = '';
 	public different = false;
+	public editValues = false;
 	public showValues = false;
 
 	constructor() {}
@@ -45,11 +46,11 @@ export class InputFieldComponent implements OnInit, OnChanges {
 
 	defaultValChanged(value: string) {
 		this.value.default = value;
-		if (value !== this.value.origValue) {
+		// if (value !== this.value.origValue) {
 			this.value.changed = true;
-		} else {
-			this.value.changed = false;
-		}
+		// } else {
+		//	this.value.changed = false;
+		// }
 		this.valueChange.emit(this.value);
 	}
 
@@ -58,6 +59,12 @@ export class InputFieldComponent implements OnInit, OnChanges {
 			this.defaultValChanged(value);
 		}
 		this.showValues = false;
+	}
+
+	public resetValues() {
+		this.value.changed = false;
+		this.value.default = this.value.origValue;
+		this.value.values = [...this.value.origValues];
 	}
 
 	showConflictValues() {
