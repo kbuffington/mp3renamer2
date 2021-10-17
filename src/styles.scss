@@ -37,3 +37,11 @@ body {
 .margin-top-none {
     margin-top: 0 !important;
 }
+
+.clr-combobox-options .clr-combobox-option {
+    padding: .15rem .75rem;
+
+    &.long-name {
+        letter-spacing: -0.3px;
+    }
+}

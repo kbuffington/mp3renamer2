@@ -8,8 +8,11 @@
             {{ selected?.name }}
         </ng-container>
         <clr-options>
-            <clr-option *clrOptionItems="let country of countryList; field:fieldName" [clrValue]="country">
-                <span *ngIf="useCode">({{ country.code }}) </span>{{ country.name }}
+            <clr-option *clrOptionItems="let country of countryList; field:fieldName"
+                    [clrValue]="country"
+                    [ngClass]="{'long-name': country.name.length > 20}">
+                <span *ngIf="useCode">({{ country.code }}) </span>
+                {{ country.name.length > 25 ? country.name.substr(0, 24) + '...' : country.name }}
             </clr-option>
         </clr-options>
     </clr-combobox>
