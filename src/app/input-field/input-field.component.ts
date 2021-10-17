@@ -1,18 +1,27 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MetadataProperty } from '../services/track.service';
 
+export enum InputTypes {
+	Input = 'INPUT',
+	Select = 'SELECT',
+	Country = 'COUNTRY',
+	CountryCode = 'COUNTRYCODE',
+}
+
 @Component({
 	selector: 'input-field',
 	templateUrl: './input-field.component.html',
 	styleUrls: ['./input-field.component.scss']
 })
 export class InputFieldComponent implements OnInit, OnChanges {
+	@Input() inputType: string = InputTypes.Input;
 	@Input() label: string;
 	@Input() labelStyle = '';
-	@Input() value: MetadataProperty;
+	@Input() hideConflicts: number;
+	@Input() countrySelect = false;
 	@Input() readOnly = false;
 	@Input() selectOptions: string[] = undefined;
-	@Input() hideConflicts: number;
+	@Input() value: MetadataProperty;
 
 	@Output() valueChange = new EventEmitter();
 	@Output() showingConflicts = new EventEmitter();
@@ -20,12 +29,16 @@ export class InputFieldComponent implements OnInit, OnChanges {
 	public displayLabel = '';
 	public different = false;
 	public editValues = false;
+	public inputTypes = InputTypes;
 	public showValues = false;
 
 	constructor() {}
 
 	ngOnInit() {
 		this.displayLabel = this.label.substring(0, this.label.length - 1);
+		if (this.selectOptions) {
+			this.inputType = InputTypes.Select;
+		}
 	}
 
 	ngOnChanges(changes: SimpleChanges) {

@@ -23,6 +23,11 @@
         }
     }
 
+    country-select {
+        width: 100%;
+        margin-bottom: -7px; // removes extra space due to "overflow-x: scroll"
+    }
+
     ::ng-deep {
         clr-input-container.clr-form-control {
             margin-top: 0;

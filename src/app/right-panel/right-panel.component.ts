@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { InputTypes } from 'app/input-field/input-field.component';
 import { Subscription } from 'rxjs';
 import { MetadataProperty, TrackService } from '../services/track.service';
 
@@ -10,8 +11,9 @@ import { MetadataProperty, TrackService } from '../services/track.service';
 export class RightPanelComponent implements OnInit, OnDestroy {
 	@Input() tracks: any[] = [];
 
-	hideConflicts = 0;
-	metadata: { [key: string]: MetadataProperty; };
+	public hideConflicts = 0;
+	public inputTypes = InputTypes;
+	public metadata: { [key: string]: MetadataProperty; };
 	public metadataSubscription: Subscription;
 	public releaseTypes = [];
 
@@ -55,7 +57,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 		this.hideConflicts++;
 	}
 
-	swapDates() {
+	public swapDates() {
 		const metadata = this.ts.getCurrentMetadata();
 		const date: MetadataProperty = JSON.parse(JSON.stringify(metadata.date));
 		const originalDate: MetadataProperty = JSON.parse(JSON.stringify(metadata.originalReleaseDate));
@@ -64,5 +66,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 		metadata.originalReleaseDate = date;
 		metadata.originalReleaseDate.changed = true;
 		this.ts.setMetadata(metadata);
+	}
+
+	public setReleaseCountry(country: string) {
 	}
 }

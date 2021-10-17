@@ -1,0 +1,16 @@
+<clr-combobox-container class="country-select margin-top-none">
+    <clr-combobox [ngClass]="{ 'country-code': useCode }"
+            [(ngModel)]="selectedCountries"
+            name="countrySelect"
+            [clrMulti]="multiSelect"
+            (ngModelChange)="updateSelection($event)">
+        <ng-container *clrOptionSelected="let selected">
+            {{ selected?.name }}
+        </ng-container>
+        <clr-options>
+            <clr-option *clrOptionItems="let country of countryList; field:fieldName" [clrValue]="country">
+                <span *ngIf="useCode">({{ country.code }}) </span>{{ country.name }}
+            </clr-option>
+        </clr-options>
+    </clr-combobox>
+</clr-combobox-container>

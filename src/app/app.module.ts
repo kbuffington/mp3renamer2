@@ -25,12 +25,14 @@ import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.com
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { TrackService } from '@services/track.service';
 import { DontAllowOnReload } from './dont-allow-on-reload.guard';
+import { CountrySelectComponent } from './right-panel/country-select/country-select.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
 		RenamerGridComponent,
 		AutoFocusDirective,
+		CountrySelectComponent,
 		MetadataHandlerComponent,
 		EditableCellComponent,
 		LeftPanelComponent,

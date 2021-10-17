@@ -36,20 +36,29 @@
 		</button>
 	</div>
 	<div class="data-field">
-		<input clrInput
-			*ngIf="!selectOptions"
-			[value]="value.default"
-			(focus)="$event.target.select()"
-			[disabled]="readOnly"
-			[ngClass]="{ 'dont-overwrite': !value.overwrite }"
-			(input)="defaultValChanged($event.target.value)">
-		<select *ngIf="selectOptions"
-				[ngModel]="value.default"
+		<ng-container [ngSwitch]="inputType">
+			<input *ngSwitchCase="inputTypes.Input"
+				clrInput
+				[value]="value.default"
+				(focus)="$event.target.select()"
+				[disabled]="readOnly"
 				[ngClass]="{ 'dont-overwrite': !value.overwrite }"
 				(input)="defaultValChanged($event.target.value)">
-			<option *ngFor="let option of selectOptions" [value]="option">
-				{{ option }}
-			</option>
-		</select>
+			<select *ngSwitchCase="inputTypes.Select"
+					[ngModel]="value.default"
+					[ngClass]="{ 'dont-overwrite': !value.overwrite }"
+					(input)="defaultValChanged($event.target.value)">
+				<option *ngFor="let option of selectOptions" [value]="option">
+					{{ option }}
+				</option>
+			</select>
+			<!-- multi value switch case: https://stackoverflow.com/a/62407528/911192 -->
+			<country-select *ngSwitchCase="[inputTypes.Country, inputTypes.CountryCode].includes(inputType) ? inputType : !inputType"
+				[countries]="value.default"
+				[multiSelect]="inputType === inputTypes.Country"
+				[useCode]="inputType === inputTypes.CountryCode"
+				(countrySelected)="defaultValChanged($event)">
+			</country-select>
+		</ng-container>
 	</div>
 </div>

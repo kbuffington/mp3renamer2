@@ -30,11 +30,17 @@
 					<input-field label="Catalog #:" [(value)]="metadata.CATALOGNUMBER" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 				</div>
 				<div class="clr-col-5dot5 inline">
-					<input-field label="Rel. Cntry."
-							[(value)]="metadata.RELEASECOUNTRY"
-							[hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"
-							[labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }">
-					</input-field>
+					<div class="flex-container">
+						<input-field label="Rel. Cntry."
+								[(value)]="metadata.RELEASECOUNTRY"
+								[inputType]="inputTypes.CountryCode"
+								[hideConflicts]="hideConflicts"
+								(showingConflicts)="sendHide()"
+								[labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }">
+						</input-field>
+						<button class="btn btn-outline btn-sm btn-xs" (click)="setReleaseCountry('US')">US</button>
+						<button class="btn btn-outline btn-sm btn-xs" (click)="setReleaseCountry('UK')">UK</button>
+					</div>
 				</div>
 			</div>
 			<div class="clr-row">
@@ -49,12 +55,18 @@
 					</input-field>
 				</div>
 			</div>
-			<input-field label="Art. Country:" [(value)]="metadata.ARTISTCOUNTRY" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<input-field label="Art. Country:"
+				[(value)]="metadata.ARTISTCOUNTRY"
+				[inputType]="inputTypes.Country"
+				[hideConflicts]="hideConflicts"
+				(showingConflicts)="sendHide()">
+			</input-field>
+			<!-- <input-field label="Art. Country:" [(value)]="metadata.ARTISTCOUNTRY" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field> -->
 			<input-field label="Release Type:"
-					[(value)]="metadata.RELEASETYPE"
-					[selectOptions]="releaseTypes"
-					[hideConflicts]="hideConflicts"
-					(showingConflicts)="sendHide()">
+				[(value)]="metadata.RELEASETYPE"
+				[selectOptions]="releaseTypes"
+				[hideConflicts]="hideConflicts"
+				(showingConflicts)="sendHide()">
 			</input-field>
 			<input-field label="Album Artist:" [(value)]="metadata.performerInfo" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Artist Filter:" [(value)]="metadata.ARTISTFILTER" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
