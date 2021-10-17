@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { countryCodes, CountryEntry } from '@services/countries';
 
 @Component({
@@ -6,7 +6,7 @@ import { countryCodes, CountryEntry } from '@services/countries';
 	templateUrl: './country-select.component.html',
 	styleUrls: ['./country-select.component.scss']
 })
-export class CountrySelectComponent implements OnInit {
+export class CountrySelectComponent implements OnInit, OnChanges {
     @Input() multiSelect: boolean = false;
     @Input() useCode: boolean = false;
     @Input() countries: string;
@@ -18,11 +18,19 @@ export class CountrySelectComponent implements OnInit {
     public selectedCountries: CountryEntry[] = [];
     public selection;
 
-    ngOnInit() {
-        const countryNames = this.countries.split(';').map(country => country.trim());
+    ngOnInit() {}
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.countries?.currentValue) {
+            this.selectedCountries = this.getSelectedCountryEntries(this.countries);
+        }
+    }
+
+    private getSelectedCountryEntries(countriesString: string) {
+        const countryNamesOrCodes = countriesString.split(';').map(country => country.trim());
         this.fieldName = this.useCode ? 'code' : 'name';
-        this.selectedCountries = countryNames.map(country => this.countryList
-            .find(c => country === (this.useCode ? c.code : c.name)))
+        return countryNamesOrCodes.map(country => this.countryList
+            .find(c => country === (country.length === 2 ? c.code : c.name)))
             .filter(c => !!c);
     }
 

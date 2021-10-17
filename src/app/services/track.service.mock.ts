@@ -8,7 +8,16 @@ export class TrackServiceMocks {
 			title: 'For Those About To Rock (We Salute You)',
 			artist: 'AC/DC',
 			album: 'For Those About to Rock (We Salute You)',
-			trackNumber: '01'
+			trackNumber: '01',
+			composer: 'Satan',
+			originalArtist: 'AC/DC',
+			userDefined: {
+				ARTISTCOUNTRY: 'United States; Germany; Sweden;',
+				ARTISTFILTER: 'AC/DC; Scott, Bon',
+				EDITION: 'Super Deluxe Remaster',
+				RELEASECOUNTRY: 'AU',
+				RELEASETYPE: 'Album',
+			}
 		});
 		tracks.push({
 			meta: {

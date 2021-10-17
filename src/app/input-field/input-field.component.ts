@@ -42,7 +42,7 @@ export class InputFieldComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
-		if (changes.value && changes.value.currentValue) {
+		if (changes.value?.currentValue) {
 			const val: MetadataProperty = changes.value.currentValue;
 			this.different = false;
 			this.showValues = false;

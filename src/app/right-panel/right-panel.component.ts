@@ -69,5 +69,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 	}
 
 	public setReleaseCountry(country: string) {
+		const metadata = this.ts.getCurrentMetadata();
+		metadata.RELEASECOUNTRY.default = country;
+		metadata.RELEASECOUNTRY.changed = true;
+		this.ts.setMetadata(metadata);
 	}
 }
