@@ -33,13 +33,23 @@
     }
 
     ::ng-deep {
-        clr-input-container.clr-form-control {
+        clr-input-container.clr-form-control,
+        clr-textarea-container.clr-form-control {
             margin-top: 0;
             flex-grow: 1;
         }
         .clr-control-container {
             width: 100%;
 
+            .clr-textarea-wrapper {
+                margin-top: .1rem;
+                width: calc(100% + 6px);
+            }
+            textarea {
+                padding: 4px;
+                width: 100%;
+                height: 2.75rem;
+            }
             .clr-input-wrapper {
                 display: flex;
 

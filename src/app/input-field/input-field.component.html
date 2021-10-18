@@ -52,6 +52,12 @@
 					{{ option }}
 				</option>
 			</select>
+			<textarea *ngSwitchCase="inputTypes.Textarea"
+				clrTextarea
+				[value]="value.default"
+				(focus)="$event.target.select()"
+				(input)="defaultValChanged($event.target.value)">
+			</textarea>
 			<genre-select *ngSwitchCase="inputTypes.Genre"
 				[genres]="value.default"
 				(genreSelected)="defaultValChanged($event)">

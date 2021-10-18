@@ -9,6 +9,7 @@ export class TrackServiceMocks {
 			artist: 'AC/DC',
 			album: 'For Those About to Rock (We Salute You)',
 			trackNumber: '01',
+			comment: 'This is a really long string of commented text that we can use to test out the comments section of the page.\nTrying some line breaks\n\nhere.',
 			composer: 'Satan',
 			originalArtist: 'AC/DC',
 			genre: 'Rock; Made-up-genre; Metal; Pop',

@@ -5,6 +5,7 @@ export enum InputTypes {
 	Input = 'INPUT',
 	Genre = 'GENRE',
 	Select = 'SELECT',
+	Textarea = 'TEXTAREA',
 	Country = 'COUNTRY',
 	CountryCode = 'COUNTRYCODE',
 }
