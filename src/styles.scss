@@ -38,10 +38,22 @@ body {
     margin-top: 0 !important;
 }
 
+.hidden {
+    display: none;
+}
+
 .clr-combobox-options .clr-combobox-option {
     padding: .15rem .75rem;
 
     &.long-name {
         letter-spacing: -0.3px;
+    }
+}
+
+.clr-combobox-wrapper .label-combobox-pill {
+    margin-right: .2rem;
+
+    .clr-combobox-pill-content {
+        padding-right: 2px;
     }
 }

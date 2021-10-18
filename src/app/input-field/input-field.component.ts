@@ -3,6 +3,7 @@ import { MetadataProperty } from '../services/track.service';
 
 export enum InputTypes {
 	Input = 'INPUT',
+	Genre = 'GENRE',
 	Select = 'SELECT',
 	Country = 'COUNTRY',
 	CountryCode = 'COUNTRYCODE',

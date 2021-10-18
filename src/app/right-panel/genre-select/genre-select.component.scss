@@ -1,18 +1,6 @@
-.country-select ::ng-deep {
+.genre-select ::ng-deep {
     clr-combobox {
         max-width: 100%;
-    }
-    &.country-code {
-        width: 2.5rem;
-        min-width: 2.5rem;
-
-        .clr-combobox-wrapper {
-            min-width: 100%;
-        }
-        input {
-            width: 1.5rem;
-            max-width: 1.5rem;
-        }
     }
 
     .clr-combobox-wrapper {
@@ -21,29 +9,26 @@
         border-top: none;
         border-left: none;
         border-right: none;
-        white-space: nowrap;
+        // white-space: nowrap;
 
         .clr-combobox-input {
-            padding-left: 0;
-            width: 0.5rem;
+            padding-left: 0px;
+            padding-right: 0px;
+            width: 0px;
 
             &:focus {
+                padding-left: 0.15rem;
                 width: 4.5rem;
             }
         }
 
         &.multi {
             // width: 100%;
-            width: 345px;
-            overflow-x: scroll;
+            // width: 345px;
+            // overflow-x: scroll;
             min-width: 100%;
             padding-bottom: 1px;
             padding-left: 0;
         }
-
-        .label-combobox-pill {
-            margin-top: 0;
-        }
     }
 }
-

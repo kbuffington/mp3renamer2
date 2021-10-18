@@ -28,6 +28,10 @@
         margin-bottom: -7px; // removes extra space due to "overflow-x: scroll"
     }
 
+    genre-select {
+        width: 100%;
+    }
+
     ::ng-deep {
         clr-input-container.clr-form-control {
             margin-top: 0;

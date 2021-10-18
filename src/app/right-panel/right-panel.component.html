@@ -1,7 +1,8 @@
 <div class="right-wrapper">
 	<div class="clr-row">
 		<div class="clr-col-12 input-fields">
-			<input-field label="Genre:" [(value)]="metadata.genre" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
+			<!-- <input-field label="Genre:" [(value)]="metadata.genre" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field> -->
+			<input-field label="Genre:" [inputType]="inputTypes.Genre" [(value)]="metadata.genre" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Comment:" [(value)]="metadata.comment" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Label:" [(value)]="metadata.LABEL" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>
 			<input-field label="Edition:" [(value)]="metadata.EDITION" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>

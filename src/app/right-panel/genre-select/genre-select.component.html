@@ -1,0 +1,19 @@
+<clr-combobox-container class="genre-select margin-top-none">
+    <clr-combobox
+            [(ngModel)]="selectedGenres"
+            name="countrySelect"
+            [clrMulti]="true"
+            (clrInputChange)="inputChanged($event)"
+            (ngModelChange)="updateSelection($event)">
+        <ng-container *clrOptionSelected="let selected">
+            {{ selected?.name }}
+        </ng-container>
+        <clr-options>
+            <clr-option *clrOptionItems="let genre of genreList; field:'name'"
+                    [clrValue]="genre"
+                    [ngClass]="{'hidden': genre.name === '```'}">
+                {{ genre.name }}
+            </clr-option>
+        </clr-options>
+    </clr-combobox>
+</clr-combobox-container>

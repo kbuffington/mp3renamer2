@@ -18,7 +18,9 @@ export class CountrySelectComponent implements OnInit, OnChanges {
     public selectedCountries: CountryEntry[] = [];
     public selection;
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.fieldName = this.useCode ? 'code' : 'name';
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.countries?.currentValue) {
@@ -28,7 +30,6 @@ export class CountrySelectComponent implements OnInit, OnChanges {
 
     private getSelectedCountryEntries(countriesString: string) {
         const countryNamesOrCodes = countriesString.split(';').map(country => country.trim());
-        this.fieldName = this.useCode ? 'code' : 'name';
         return countryNamesOrCodes.map(country => this.countryList
             .find(c => country === (country.length === 2 ? c.code : c.name)))
             .filter(c => !!c);

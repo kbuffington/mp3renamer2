@@ -11,6 +11,7 @@ export class TrackServiceMocks {
 			trackNumber: '01',
 			composer: 'Satan',
 			originalArtist: 'AC/DC',
+			genre: 'Rock; Made-up-genre; Metal; Pop',
 			userDefined: {
 				ARTISTCOUNTRY: 'United States; Germany; Sweden;',
 				ARTISTFILTER: 'AC/DC; Scott, Bon',

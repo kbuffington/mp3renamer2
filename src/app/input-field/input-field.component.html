@@ -52,6 +52,10 @@
 					{{ option }}
 				</option>
 			</select>
+			<genre-select *ngSwitchCase="inputTypes.Genre"
+				[genres]="value.default"
+				(genreSelected)="defaultValChanged($event)">
+			</genre-select>
 			<!-- multi value switch case: https://stackoverflow.com/a/62407528/911192 -->
 			<country-select *ngSwitchCase="[inputTypes.Country, inputTypes.CountryCode].includes(inputType) ? inputType : !inputType"
 				[countries]="value.default"

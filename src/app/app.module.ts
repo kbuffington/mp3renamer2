@@ -20,12 +20,13 @@ import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.co
 import { RenamerGridComponent } from './renamer-grid/renamer-grid.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.component';
+import { CountrySelectComponent } from './right-panel/country-select/country-select.component';
+import { GenreSelectComponent } from './right-panel/genre-select/genre-select.component';
 
 /* Services */
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { TrackService } from '@services/track.service';
 import { DontAllowOnReload } from './dont-allow-on-reload.guard';
-import { CountrySelectComponent } from './right-panel/country-select/country-select.component';
 
 @NgModule({
 	declarations: [
@@ -33,10 +34,11 @@ import { CountrySelectComponent } from './right-panel/country-select/country-sel
 		RenamerGridComponent,
 		AutoFocusDirective,
 		CountrySelectComponent,
-		MetadataHandlerComponent,
 		EditableCellComponent,
-		LeftPanelComponent,
+		GenreSelectComponent,
 		InputFieldComponent,
+		LeftPanelComponent,
+		MetadataHandlerComponent,
 		RightPanelComponent,
 		UnknownPropertiesComponent,
 		UpperButtonBarComponent,
