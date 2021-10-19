@@ -5,40 +5,34 @@ import { TrackService } from './services/track.service';
 import { TrackServiceMocks } from './services/track.service.mock';
 
 @Component({
-	selector: 'app-root',
-	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-	fileList: any[] = [];
+    fileList: any[] = [];
 
-	// public tracks: any[] = [];
-	public trackSubscription: Subscription;
+    public trackSubscription: Subscription;
 
-	constructor(private electronService: ElectronService,
-				private ts: TrackService,
-				private zone: NgZone) {
-		// we need to call zone.run() whenever the trackSubscription updates
-		this.trackSubscription = ts.getTracks().subscribe(tracks => zone.run(() => {}));
-	}
+    constructor(private electronService: ElectronService,
+                private ts: TrackService,
+                private zone: NgZone) {
+        // we need to call zone.run() whenever the trackSubscription updates
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        this.trackSubscription = ts.getTracks().subscribe(tracks => zone.run(() => {}));
+    }
 
-	ngOnInit() {
-		if (this.electronService.isElectronApp) {
-			const mainProcess = this.electronService.remote.require('./main.js');
-			mainProcess.loadHardCoded();
-		} else {
-			// we'll need to use mocked file data here
-			this.ts.setTracks(TrackServiceMocks.mockTracks());
-		}
-	}
+    ngOnInit() {
+        if (this.electronService.isElectronApp) {
+            const mainProcess = this.electronService.remote.require('./main.js');
+            mainProcess.loadHardCoded();
+        } else {
+            // we'll need to use mocked file data here
+            this.ts.setTracks(TrackServiceMocks.mockTracks());
+        }
+    }
 
-	ngOnDestroy() {
-		this.trackSubscription.unsubscribe();
-	}
-
-	// setupTracks(trackList: any[]) {
-	// 	this.zone.run(() => {
-	// 		this.tracks = trackList;
-	// 	});
-	// }
+    ngOnDestroy() {
+        this.trackSubscription.unsubscribe();
+    }
 }
