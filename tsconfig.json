@@ -6,6 +6,7 @@
 		"sourceMap": true,
 		"declaration": false,
 		"module": "es2020",
+		"downlevelIteration": true,
     "moduleResolution": "node",
 		"experimentalDecorators": true,
 		"target": "es5",

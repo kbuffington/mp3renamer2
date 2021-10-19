@@ -1,5 +1,5 @@
-import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -27,6 +27,9 @@ import { GenreSelectComponent } from './right-panel/genre-select/genre-select.co
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { TrackService } from '@services/track.service';
 import { DontAllowOnReload } from './dont-allow-on-reload.guard';
+import { PreloadFactory, PreloadService } from './app-preload.service';
+import { CacheService } from '@services/cache.service';
+import { CacheInterceptor } from '@services/http-interceptor.service';
 
 @NgModule({
 	declarations: [
@@ -55,9 +58,22 @@ import { DontAllowOnReload } from './dont-allow-on-reload.guard';
 		NgxElectronModule,
 	],
 	providers: [
+		CacheService,
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: CacheInterceptor,
+			multi: true,
+		},
 		DontAllowOnReload,
 		MusicbrainzService,
+		PreloadService,
 		TrackService,
+		{
+			provide: APP_INITIALIZER,
+			useFactory: PreloadFactory,
+			deps: [PreloadService],
+			multi: true,
+		}
 	],
 	bootstrap: [AppComponent],
 })
