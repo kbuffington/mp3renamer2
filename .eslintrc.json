@@ -17,10 +17,15 @@
     ],
     "rules": {
         "arrow-parens":"off",
-        "max-len": ["error", { "code": 120 }],
+        "max-len": ["error", { "code": 130 }],
         "object-curly-spacing": ["error", "always"],
         "indent": ["error", 4],
-        "new-cap":"off",
+        "no-undef": "off",
+        "no-unused-vars": "off",
+        "no-prototype-builtins": "off",
+        "@typescript-eslint/no-unused-vars": ["error"],
+        "@typescript-eslint/no-inferrable-types": ["error"],
+        "new-cap": ["error", { "capIsNewExceptions": ["Input", "Component", "Output", "Injectable"] }],
         "require-jsdoc":"off"
     }
 }

@@ -3,22 +3,21 @@ import { Component, OnInit } from '@angular/core';
 import { TrackService } from '@services/track.service';
 
 @Component({
-	selector: 'metadata-handler',
-	templateUrl: './metadata-handler.component.html',
-	styleUrls: ['./metadata-handler.component.scss']
+    selector: 'metadata-handler',
+    templateUrl: './metadata-handler.component.html',
+    styleUrls: ['./metadata-handler.component.scss'],
 })
 export class MetadataHandlerComponent implements OnInit {
+    constructor(private ts: TrackService) { }
 
-	constructor(private ts: TrackService) { }
+    ngOnInit() {
+    }
 
-	ngOnInit() {
-	}
+    reloadTags() {
+        this.ts.resetTrackData();
+    }
 
-	reloadTags() {
-		this.ts.resetTrackData();
-	}
-
-	setTags() {
-		this.ts.setTagData();
-	}
+    setTags() {
+        this.ts.setTagData();
+    }
 }

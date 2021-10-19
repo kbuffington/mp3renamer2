@@ -1,247 +1,248 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject,  Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { knownProperties } from './known-properties';
 
 export interface Track {
-	artist: string;
-	album: string;
-	title: string;
-	trackNumber: string;
-	userDefined: any;
-	meta: {
-		originalFilename: string;
-		filename: string;
-		extension: string;
-	};
+    artist: string;
+    album: string;
+    title: string;
+    trackNumber: string;
+    userDefined: any;
+    meta: {
+        originalFilename: string;
+        filename: string;
+        extension: string;
+    };
 }
 
 export class MetadataProperty {
-	changed = false;	// whether a new default has been set to apply to all tracks (overwriting individual values)
-	default = '';
-	multiValue = false;
-	origValue = '';
-	overwrite = true;
-	userDefined = false;
-	values: string[] = [];
-	origValues: string[] = []; // copy of values used for resetting
+    changed = false; // whether a new default has been set to apply to all tracks (overwriting individual values)
+    default = '';
+    multiValue = false;
+    origValue = '';
+    overwrite = true;
+    userDefined = false;
+    values: string[] = [];
+    origValues: string[] = []; // copy of values used for resetting
 }
 
 export class MetadataObj {
-	[key: string]: MetadataProperty;
+    [key: string]: MetadataProperty;
 }
 
 export class TrackOptions {
-	showArtwork?: boolean;
+    showArtwork?: boolean;
 }
 
 export class UnknownPropertiesObj {
-	[key: string]: string | string[];
+    [key: string]: string | string[];
 }
 
 export class CommentStruct {
-	language: string;
-	shortText: string;
-	text: string;
+    language: string;
+    shortText: string;
+    text: string;
 }
 
 @Injectable()
 export class TrackService {
+    private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
+    private trackMetaData: BehaviorSubject<MetadataObj> = new BehaviorSubject({});
+    private trackOptions: BehaviorSubject<TrackOptions> = new BehaviorSubject({});
+    private unknownProperties: UnknownPropertiesObj = {};
+    private trackDataBackup: any;
+    private trackCount: number;
+    private selectedTracks: number[];
 
-	private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
-	private trackMetaData: BehaviorSubject<MetadataObj> = new BehaviorSubject({});
-	private trackOptions: BehaviorSubject<TrackOptions> = new BehaviorSubject({});
-	private unknownProperties: UnknownPropertiesObj = {};
-	private trackDataBackup: any;
-	private trackCount: number;
-	private selectedTracks: number[];
+    constructor() { }
 
-	constructor() { }
+    getTracks(): Observable<Track[]> {
+        return this.trackList.asObservable();
+    }
 
-	getTracks(): Observable<Track[]> {
-		return this.trackList.asObservable();
-	}
+    getMetadata(): Observable<MetadataObj> {
+        return this.trackMetaData.asObservable();
+    }
 
-	getMetadata(): Observable<MetadataObj> {
-		return this.trackMetaData.asObservable();
-	}
+    getTrackOptions(): Observable<TrackOptions> {
+        return this.trackOptions.asObservable();
+    }
 
-	getTrackOptions(): Observable<TrackOptions> {
-		return this.trackOptions.asObservable();
-	}
+    setTracks(tracks: any) {
+        this.trackDataBackup = JSON.parse(JSON.stringify(tracks));
+        const trackList = tracks.map((t: Track) => {
+            t.meta.originalFilename = t.meta.filename;
+            t.meta.extension = t.meta.filename.substring(t.meta.filename.lastIndexOf('.'));
+            return t;
+        });
+        this.trackCount = trackList.length;
+        this.processTracks(tracks);
+        this.trackList.next(trackList);
+    }
 
-	setTracks(tracks: any) {
-		this.trackDataBackup = JSON.parse(JSON.stringify(tracks));
-		const trackList = tracks.map((t: Track) => {
-			t.meta.originalFilename = t.meta.filename;
-			t.meta.extension = t.meta.filename.substring(t.meta.filename.lastIndexOf('.'));
-			return t;
-		});
-		this.trackCount = trackList.length;
-		this.processTracks(tracks);
-		this.trackList.next(trackList);
-	}
+    resetTrackData() {
+        this.setTracks(this.trackDataBackup);
+    }
 
-	resetTrackData() {
-		this.setTracks(this.trackDataBackup);
-	}
+    clearTracks() {
+        this.trackList.next([]);
+    }
 
-	clearTracks() {
-		this.trackList.next([]);
-	}
+    getCurrentTracks(): Track[] {
+        return this.trackList.getValue();
+    }
 
-	getCurrentTracks(): Track[] {
-		return this.trackList.getValue();
-	}
+    getNumTracks(): number {
+        return this.trackList.getValue().length;
+    }
 
-	getNumTracks(): number {
-		return this.trackList.getValue().length;
-	}
+    getCurrentMetadata(): MetadataObj {
+        return this.trackMetaData.getValue();
+    }
 
-	getCurrentMetadata(): MetadataObj {
-		return this.trackMetaData.getValue();
-	}
+    private processTracks(tracks: any) {
+        const metaData: MetadataObj = {};
+        const trackOptions: TrackOptions = {};
+        let imageLoaded = false;
 
-	private processTracks(tracks: any) {
-		const metaData: MetadataObj = {};
-		const trackOptions: TrackOptions = {};
-		let imageLoaded = false;
+        this.unknownProperties = {};
+        knownProperties.forEach((prop, name) => {
+            this.processField(metaData, tracks, name, prop.userDefined, prop.multiValue, prop.alias);
+        });
+        tracks.forEach(t => {
+            if (t.userDefined) {
+                Object.keys(t.userDefined).forEach(prop => {
+                    if (!knownProperties.has(prop) && !this.unknownProperties[prop]) {
+                        this.processField(metaData, tracks, prop, true, true);
+                        this.unknownProperties[prop] = t.userDefined[prop];
+                    }
+                });
+            }
+            if (!imageLoaded && t.image) {
+                imageLoaded = true;
+                trackOptions.showArtwork = true;
+            }
+        });
+        this.trackMetaData.next(metaData);
+        this.trackOptions.next(trackOptions);
+    }
 
-		this.unknownProperties = {};
-		knownProperties.forEach((prop, name) => {
-			this.processField(metaData, tracks, name, prop.userDefined, prop.multiValue, prop.alias);
-		});
-		tracks.forEach(t => {
-			if (t.userDefined) {
-				Object.keys(t.userDefined).forEach(prop => {
-					if (!knownProperties.has(prop) && !this.unknownProperties[prop]) {
-						this.processField(metaData, tracks, prop, true, true);
-						this.unknownProperties[prop] = t.userDefined[prop];
-					}
-				});
-			}
-			if (!imageLoaded && t.image) {
-				imageLoaded = true;
-				trackOptions.showArtwork = true;
-			}
-		});
-		this.trackMetaData.next(metaData);
-		this.trackOptions.next(trackOptions);
-	}
+    setMetadata(updatedMetadata: MetadataObj) {
+        this.trackMetaData.next(updatedMetadata);
+    }
 
-	setMetadata(updatedMetadata: MetadataObj) {
-		this.trackMetaData.next(updatedMetadata);
-	}
+    getUnknownProperties(): UnknownPropertiesObj {
+        return this.unknownProperties;
+    }
 
-	getUnknownProperties(): UnknownPropertiesObj {
-		return this.unknownProperties;
-	}
+    private processField(metadata, tracks, property: string, userDefined: boolean, multiValue: boolean, alias?: string) {
+        const metaProp = new MetadataProperty();
+        metaProp.multiValue = multiValue;
+        tracks.forEach(t => {
+            if (!userDefined) {
+                if (t[property]) {
+                    this.setMetadataValue(metaProp, t[property]);
+                } else {
+                    metaProp.values.push('');
+                }
+            } else {
+                // console.log(property);
+                metaProp.userDefined = true;
+                if (t.userDefined && (t.userDefined[property] || t.userDefined[alias])) {
+                    this.setMetadataValue(metaProp, t.userDefined[property] || t.userDefined[alias]); // short-circuit eval
+                } else {
+                    metaProp.values.push('');
+                }
+            }
+            metaProp.origValue = metaProp.default;
+        });
+        metaProp.origValues = [...metaProp.values];
+        metadata[property] = metaProp;
+    }
 
-	private processField(metadata, tracks, property: string, userDefined: boolean, multiValue: boolean, alias?: string) {
-		const metaProp = new MetadataProperty();
-		metaProp.multiValue = multiValue;
-		tracks.forEach(t => {
-			if (!userDefined) {
-				if (t[property]) {
-					this.setMetadataValue(metaProp, t[property]);
-				} else {
-					metaProp.values.push('');
-				}
-			} else {
-				// console.log(property);
-				metaProp.userDefined = true;
-				if (t.userDefined && (t.userDefined[property] || t.userDefined[alias])) {
-					this.setMetadataValue(metaProp, t.userDefined[property] || t.userDefined[alias]);	// short-circuit eval
-				} else {
-					metaProp.values.push('');
-				}
-			}
-			metaProp.origValue = metaProp.default;
-		});
-		metaProp.origValues = [...metaProp.values];
-		metadata[property] = metaProp;
-	}
+    private setMetadataValue(metaProp: MetadataProperty, value: string | CommentStruct) {
+        if (Array.isArray(value)) {
+            value = value.join('; ');
+        }
+        if (!metaProp.default) {
+            metaProp.default = value.hasOwnProperty('text') ? value['text'] : value;
+        }
+        metaProp.values.push(value.hasOwnProperty('text') ? value['text'] : value);
+    }
 
-	private setMetadataValue(metaProp: MetadataProperty, value: string | CommentStruct) {
-		if (Array.isArray(value)) {
-			value = value.join('; ');
-		}
-		if (!metaProp.default) {
-			metaProp.default = value.hasOwnProperty('text') ? value['text'] : value;
-		}
-		metaProp.values.push(value.hasOwnProperty('text') ? value['text'] : value);
-	}
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    previewFilenames(pattern: string) {
+        const trackList = this.trackList.getValue();
+        const metadata = this.trackMetaData.getValue();
+        const artist = metadata.artist.default.trim();
+        trackList.map(t => {
+            t.meta.filename =
+                `${artist} [${metadata.album.default.trim()} ${t.trackNumber.trim()}] - ${t.title.trim()}${t.meta.extension}`;
+        });
+        this.trackList.next(trackList);
+    }
 
-	previewFilenames(pattern: string) {
-		const trackList = this.trackList.getValue();
-		const metadata = this.trackMetaData.getValue();
-		trackList.map(t => {
-			t.meta.filename =
-				`${metadata.artist.default.trim()} [${metadata.album.default.trim()} ${t.trackNumber.trim()}] - ${t.title.trim()}${t.meta.extension}`;
-		});
-		this.trackList.next(trackList);
-	}
+    revertFilenames() {
+        const trackList = this.trackList.getValue();
+        trackList.map(t => {
+            t.meta.filename = t.meta.originalFilename;
+        });
+        this.trackList.next(trackList);
+    }
 
-	revertFilenames() {
-		const trackList = this.trackList.getValue();
-		trackList.map(t => {
-			t.meta.filename = t.meta.originalFilename;
-		});
-		this.trackList.next(trackList);
-	}
+    setTagData() {
+        const trackList = this.trackList.getValue();
+        const metadata = this.trackMetaData.getValue();
+        const trackTagFields = [];
+        for (let i=0; i < this.trackCount; i++) {
+            const t: any = trackTagFields[i] = {};
+            t.artist = trackList[i].artist;
+            t.title = trackList[i].title;
+            t.trackNumber = trackList[i].trackNumber;
+        }
+        Object.keys(metadata).forEach(key => {
+            const obj: MetadataProperty = metadata[key];
+            let value: any;
 
-	setTagData() {
-		const trackList = this.trackList.getValue();
-		const metadata = this.trackMetaData.getValue();
-		const trackTagFields = [];
-		for (let i=0; i < this.trackCount; i++) {
-			const t: any = trackTagFields[i] = {};
-			t.artist = trackList[i].artist;
-			t.title = trackList[i].title;
-			t.trackNumber = trackList[i].trackNumber;
-		}
-		Object.keys(metadata).forEach(key => {
-			const obj: MetadataProperty = metadata[key];
-			let value: any;
+            for (let i = 0; i < this.trackCount; i++) {
+                if (obj.overwrite) {
+                    if (obj.changed) {
+                        value = obj.default;
+                    } else {
+                        value = obj.values[i];
+                    }
+                } else {
+                    value = obj.origValues[i];
+                }
+                if (value) {
+                    if (obj.multiValue && value.includes('; ')) {
+                        value = value.split('; ');
+                    }
+                    if (!obj.userDefined) {
+                        trackTagFields[i][key] = value;
+                    } else {
+                        trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
+                        trackTagFields[i].userDefined[key] = value;
+                    }
+                }
+            }
+        });
+        console.log(trackTagFields);
+    }
 
-			for (let i = 0; i < this.trackCount; i++) {
-				if (obj.overwrite) {
-					if (obj.changed) {
-						value = obj.default;
-					} else {
-						value = obj.values[i];
-					}
-				} else {
-					value = obj.origValues[i];
-				}
-				if (value) {
-					if (obj.multiValue && value.includes('; ')) {
-						value = value.split('; ');
-					}
-					if (!obj.userDefined) {
-						trackTagFields[i][key] = value;
-					} else {
-						trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
-						trackTagFields[i].userDefined[key] = value;
-					}
-				}
-			}
-		});
-		console.log(trackTagFields);
-	}
+    renumberTracks(startNumber: number) {
+        let count = 0;
+        const metadata = this.getCurrentMetadata().trackNumber.values;
+        this.getCurrentTracks().forEach((t: Track, index: number) => {
+            if (this.selectedTracks.includes(index)) {
+                t.trackNumber = (startNumber + count + '').padStart(2, '0');
+                metadata[index] = (startNumber + count + '').padStart(2, '0');
+                count++;
+            }
+        });
+    }
 
-	renumberTracks(startNumber: number) {
-		let count = 0;
-		const metadata = this.getCurrentMetadata().trackNumber.values;
-		this.getCurrentTracks().forEach((t: Track, index: number) => {
-			if (this.selectedTracks.includes(index)) {
-				t.trackNumber = (startNumber + count + '').padStart(2, '0');
-				metadata[index] = (startNumber + count + '').padStart(2, '0');
-				count++;
-			}
-		});
-	}
-
-	updateSelectedTracks(selectedTracks: number[]) {
-		this.selectedTracks = selectedTracks;
-	}
+    updateSelectedTracks(selectedTracks: number[]) {
+        this.selectedTracks = selectedTracks;
+    }
 }
