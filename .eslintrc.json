@@ -1,0 +1,25 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "google"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "max-len": ["error", { "code": 120 }],
+        "object-curly-spacing": ["error", "always"],
+        "indent": ["error", 4],
+        "new-cap":"off",
+        "require-jsdoc":"off"
+    }
+}
