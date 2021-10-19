@@ -4,9 +4,14 @@ import { Injectable } from '@angular/core';
 const LOCAL_CACHE_KEY = 'localCache';
 const STALE_TIME = 1000 * 60 * 60 * 12; // 12 hours
 
+class CacheEntry {
+    body: any;
+    addedTime: number;
+}
+
 @Injectable()
 export class CacheService {
-    cacheMap: Map<string, any>;
+    cacheMap: Map<string, CacheEntry>;
 
     constructor() {
         const start = Date.now();
@@ -17,30 +22,28 @@ export class CacheService {
             this.cacheMap = new Map(null);
         }
         this.cacheMap.forEach((value, key) => {
-            if (Date.now() - value.addedTime > STALE_TIME) {
+            if (start - value.addedTime > STALE_TIME) {
                 this.cacheMap.delete(key);
             }
         });
         this.saveCacheMap();
-        console.log('CacheService initialized in ' + (Date.now() - start) + 'ms');
+        console.log('CacheService initialized in:', (Date.now() - start) + 'ms');
+        console.log('localStorage Cache size:', Math.round(map.length*10 / 1024)/10 + 'KB');
     }
 
     get(req: HttpRequest<any>): HttpResponse<any> | undefined {
-        const url = req.urlWithParams;
-        const cached = this.cacheMap.get(url);
+        const cached = this.cacheMap.get(req.urlWithParams);
 
         if (!cached || Date.now() - cached.addedTime > STALE_TIME) {
             return undefined;
         }
-
-        return cached.data;
+        return cached.body;
     }
 
     set(req: HttpRequest<any>, response: HttpResponse<any>): void {
         if (response.status === 200) {
-            const url = req.urlWithParams;
-            const entry = { data: response.body, addedTime: Date.now() };
-            this.cacheMap.set(url, entry);
+            const entry: CacheEntry = { body: response.body, addedTime: Date.now() };
+            this.cacheMap.set(req.urlWithParams, entry);
             this.saveCacheMap();
         }
     }
