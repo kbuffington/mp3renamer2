@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GenreEntry, genreList } from '@services/genres';
 
 @Component({
-	selector: 'genre-select',
-	templateUrl: './genre-select.component.html',
-	styleUrls: ['./genre-select.component.scss']
+    selector: 'genre-select',
+    templateUrl: './genre-select.component.html',
+    styleUrls: ['./genre-select.component.scss'],
 })
 export class GenreSelectComponent implements OnInit {
     @Input() genres: string;
@@ -21,7 +21,7 @@ export class GenreSelectComponent implements OnInit {
     }
 
     private addDummyGenre() {
-        this.genreList.push({ name: '```' });   // dummy genre to be replaced
+        this.genreList.push({ name: '```' }); // dummy genre to be replaced
     }
 
     private getSelectedGenreEntries(genreString: string) {
@@ -37,7 +37,7 @@ export class GenreSelectComponent implements OnInit {
     }
 
     public updateSelection(genre: GenreEntry[]) {
-        let genreStrings = "";
+        let genreStrings = '';
         if (genre) {
             const genres = Array.isArray(genre) ? genre : [genre];
             if (genres.filter(g => g.name === this.genreList[this.genreList.length - 1].name)) {
