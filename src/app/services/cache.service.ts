@@ -29,7 +29,7 @@ export class CacheService {
         const url = req.urlWithParams;
         const cached = this.cacheMap.get(url);
 
-        if (!cached || Date.now() - cached.addedTime > 1000 * 60) {
+        if (!cached || Date.now() - cached.addedTime > STALE_TIME) {
             return undefined;
         }
 
