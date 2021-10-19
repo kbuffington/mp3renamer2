@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 
-import { TrackService } from '@services/track.service';
+import { MetadataObj, TrackService } from '@services/track.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
@@ -12,18 +12,22 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class MainComponent implements OnInit, OnDestroy {
     public showArtist = true;
     public tracks: any[] = [];
-    public trackSubscription: Subscription;
+    public metadata: MetadataObj;
+
+    private trackSubscription: Subscription;
+    private metadataSubscription: Subscription;
 
     constructor(private electronService: ElectronService, private ts: TrackService) {
     }
 
     ngOnInit() {
-        this.tracks = this.ts.getCurrentTracks();
         this.trackSubscription = this.ts.getTracks().subscribe(tracks => this.tracks = tracks);
+        this.metadataSubscription = this.ts.getMetadata().subscribe(metadata => this.metadata = metadata);
     }
 
     ngOnDestroy() {
         this.trackSubscription.unsubscribe();
+        this.metadataSubscription.unsubscribe();
     }
 
     previewRename() {
@@ -40,10 +44,6 @@ export class MainComponent implements OnInit, OnDestroy {
 
     renameFolder() {
         console.log('TODO: renameFolder() in main.component');
-    }
-
-    getFanart() {
-        console.log('TODO: getFanart() in main.component');
     }
 
     downloadArt() {
