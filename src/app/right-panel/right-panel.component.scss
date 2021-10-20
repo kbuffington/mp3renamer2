@@ -1,5 +1,9 @@
 clr-tabs {
     width: 100%;
+
+    ::ng-deep ul {
+        margin-bottom: 0.5rem;
+    }
 }
 
 .clr-row {
