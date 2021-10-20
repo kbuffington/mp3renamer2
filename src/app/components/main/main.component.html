@@ -20,7 +20,10 @@
             <button class="btn btn-outline" (click)="renameFolder()">Rename Folder</button>
         </div>
         <div class="btn-container">
-            <button class="btn btn-outline" [routerLink]="'/fanart'" [disabled]="!metadata.MUSICBRAINZ_ARTISTID?.default">
+            <button class="btn btn-outline"
+                    [routerLink]="'/fanart/'"
+                    [queryParams]="{artistId: metadata.MUSICBRAINZ_ARTISTID?.default, albumId: metadata.MUSICBRAINZ_RELEASEGROUPID?.default}"
+                    [disabled]="!metadata.MUSICBRAINZ_ARTISTID?.default">
                 Get Fanart
             </button>
             <button class="btn btn-outline" (click)="downloadArt()">Download Art</button>

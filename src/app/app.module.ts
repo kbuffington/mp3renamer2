@@ -30,6 +30,8 @@ import { DontAllowOnReload } from './dont-allow-on-reload.guard';
 import { PreloadFactory, PreloadService } from './app-preload.service';
 import { CacheService } from '@services/cache.service';
 import { CacheInterceptor } from '@services/http-interceptor.service';
+import { FanartComponent } from '@components/fanart/fanart.component';
+import { FanartService } from '@services/fanart.service';
 
 @NgModule({
     declarations: [
@@ -38,6 +40,7 @@ import { CacheInterceptor } from '@services/http-interceptor.service';
         AutoFocusDirective,
         CountrySelectComponent,
         EditableCellComponent,
+        FanartComponent,
         GenreSelectComponent,
         InputFieldComponent,
         LeftPanelComponent,
@@ -65,6 +68,7 @@ import { CacheInterceptor } from '@services/http-interceptor.service';
             multi: true,
         },
         DontAllowOnReload,
+        FanartService,
         MusicbrainzService,
         PreloadService,
         TrackService,

@@ -1,1 +1,27 @@
-FANART!
+<div class="main-wrapper">
+    <div class="content-wrapper">
+        <div class="top-content">
+            <div class="clr-row">
+                <h3 class="clr-col-12">HD Logos</h3>
+                <div class="img-container clr-col-4" *ngFor="let logo of artistData?.hdmusiclogos">
+                    <button class="btn btn-outline btn-img">
+                        <img [src]="logo.url" class="logo-img">
+                    </button>
+                </div>
+            </div>
+            <div class="clr-row">
+                <h3 class="clr-col-12">CD Art</h3>
+                <div class="img-container clr-col-4" *ngFor="let logo of albumData?.album.cdart">
+                    <button class="btn btn-outline btn-img">
+                        <img [src]="logo.url" class="logo-img">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="btn-container">
+            <button class="btn btn-outline" [routerLink]="'/'">Back</button>
+        </div>
+    </footer>
+</div>
