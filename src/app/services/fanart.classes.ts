@@ -19,6 +19,7 @@ export class AlbumCover extends FanartImg {
 export class CdArt extends FanartImg {
     disc: number;
     size: number;
+    saveIndex = 0;
 
     constructor(json) {
         super(json);
@@ -50,6 +51,8 @@ export class FanartAlbum {
 }
 
 export class HDMusicLogo extends FanartImg {
+    save = false;
+
     constructor(json) {
         super(json);
     }

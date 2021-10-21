@@ -1,17 +1,47 @@
+$button-down: #daecfc;
+
 .top-content {
     padding: 0 .5rem;
     overflow-y: auto;
+    height: calc(100vh - 6rem);
+}
+
+.logo-header {
+    display: flex;
+    margin-top: .6rem;
+    margin-bottom: .25rem;
+
+    .header-checkbox {
+        margin-top: 0;
+        margin-left: 1rem;
+    }
 }
 
 .img-container {
+    position: relative;
     .btn-img {
         height: auto;
         padding: 0;
         margin-right: 0;
 
-        .logo-img {
+        .logo-img,
+        .cdart-img {
             width: 100%;
         }
+
+        &.btn-selected {
+            background-color: $button-down;
+        }
+    }
+    .selected-index {
+        position: absolute;
+        right: 1rem;
+        bottom: .3rem;
+    }
+    .disc-index {
+        position: absolute;
+        left: 1rem;
+        top: .3rem;
     }
 }
 

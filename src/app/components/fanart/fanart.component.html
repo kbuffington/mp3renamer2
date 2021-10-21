@@ -2,25 +2,44 @@
     <div class="content-wrapper">
         <div class="top-content">
             <div class="clr-row">
-                <h3 class="clr-col-12">HD Logos</h3>
-                <div class="img-container clr-col-4" *ngFor="let logo of artistData?.hdmusiclogos">
-                    <button class="btn btn-outline btn-img">
+                <h3 class="clr-col-12 logo-header">HD Logos</h3>
+                <div class="img-container clr-col-4" *ngFor="let logo of artistData?.hdmusiclogos; let i = index">
+                    <button class="btn btn-outline btn-img"
+                            [ngClass]="{'btn-selected': logo.save }"
+                            (click)="logoButtonClicked(logo)">
                         <img [src]="logo.url" class="logo-img">
                     </button>
                 </div>
             </div>
             <div class="clr-row">
-                <h3 class="clr-col-12">CD Art</h3>
-                <div class="img-container clr-col-4" *ngFor="let logo of albumData?.album.cdart">
-                    <button class="btn btn-outline btn-img">
-                        <img [src]="logo.url" class="logo-img">
+                <h3 class="clr-col-12 logo-header">
+                    CD Art
+                    <clr-toggle-container class="header-checkbox">
+                        <clr-toggle-wrapper>
+                            <input type="checkbox" clrToggle required [(ngModel)]="multiDisc" />
+                            <label>Allow Multi-Disc</label>
+                        </clr-toggle-wrapper>
+                      </clr-toggle-container>
+                </h3>
+                <div class="img-container clr-col-4" *ngFor="let cdart of albumData?.album.cdart; let i = index">
+                    <button class="btn btn-outline btn-img"
+                            [ngClass]="{'btn-selected': cdart.saveIndex > 0 }"
+                            (click)="discButtonClicked(i)">
+                        <img [src]="cdart.url" class="cdart-img">
                     </button>
+                    <div class="disc-index">
+                        Disc: {{ cdart.disc }}
+                    </div>
+                    <div class="selected-index">
+                        {{ cdArtFilename(cdart.saveIndex) }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <footer>
         <div class="btn-container">
+            <button class="btn btn-primary" (click)="saveSelected()" [disabled]="isSaveDisabled()">Save</button>
             <button class="btn btn-outline" [routerLink]="'/'">Back</button>
         </div>
     </footer>
