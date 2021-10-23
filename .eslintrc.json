@@ -19,7 +19,7 @@
         "arrow-parens":"off",
         "max-len": ["error", { "code": 130 }],
         "object-curly-spacing": ["error", "always"],
-        "indent": ["error", 4],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "no-undef": "off",
         "no-unused-vars": "off",
         "no-prototype-builtins": "off",
