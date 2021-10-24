@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FanartAlbum, FanartArtist, HDMusicLogo } from '@services/fanart.classes';
+import { FanartAlbum, FanartArtist, FanartImg, HDMusicLogo } from '@services/fanart.classes';
 import { FanartService } from '@services/fanart.service';
 
 @Component({
@@ -12,10 +12,12 @@ export class FanartComponent implements OnInit {
     public artistData: FanartArtist;
     public artistId: string;
     public albumData: FanartAlbum;
-    public releaseGroupId: string;
-    // public logoButtons: boolean[] = [];
-    // public discArtButtons: number[] = [];
+    public popoverImage: FanartImg;
+    public popoverImageIndex: number;
     public multiDisc = false;
+    public releaseGroupId: string;
+
+    private hoverTimer: any;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
@@ -39,9 +41,6 @@ export class FanartComponent implements OnInit {
     private getAlbumArt() {
         this.fanartService.getAlbum(this.releaseGroupId).toPromise().then(album => {
             this.albumData = new FanartAlbum(album, this.releaseGroupId);
-            // for (let i = 0; i < this.albumData.album.cdart.length; i++) {
-            //     this.discArtButtons[i] = 0;
-            // }
             console.log(this.albumData);
         });
     }
@@ -84,7 +83,7 @@ export class FanartComponent implements OnInit {
         return index > 0 ? `cd${index}.png` : '';
     }
 
-    public isSaveDisabled():boolean {
+    public isSaveDisabled(): boolean {
         return !this.artistData?.hdmusiclogos.find(val => val.save) &&
             !this.albumData?.album.cdart.find(val => val.saveIndex);
     }
@@ -94,5 +93,26 @@ export class FanartComponent implements OnInit {
         const saveDiscs = this.albumData.album.cdart.filter(val => val.saveIndex);
         console.log(saveLogo, saveDiscs);
         this.router.navigate(['/']);
+    }
+
+    public mouseEnter(imageIndex: number, isCdArt: boolean) {
+        clearTimeout(this.hoverTimer);
+        this.hoverTimer = setTimeout(() => {
+            this.popoverImageIndex = !isCdArt ? imageIndex : imageIndex + this.artistData.hdmusiclogos.length;
+            this.setPopoverImage(this.popoverImageIndex);
+        }, 2000);
+    }
+
+    public mouseLeave() {
+        clearTimeout(this.hoverTimer);
+    }
+
+    private setPopoverImage(imageIndex: number) {
+        const numLogos = this.artistData.hdmusiclogos.length;
+        if (imageIndex < numLogos) {
+            this.popoverImage = this.artistData.hdmusiclogos[imageIndex];
+        } else {
+            this.popoverImage = this.albumData.album.cdart[imageIndex - numLogos];
+        }
     }
 }

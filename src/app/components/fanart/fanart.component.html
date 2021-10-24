@@ -1,4 +1,7 @@
 <div class="main-wrapper">
+    <div class="pop-over" [ngClass]="{'hide': !popoverImage}">
+        <img [src]="popoverImage?.url" class="logo-img">
+    </div>
     <div class="content-wrapper">
         <div class="top-content">
             <div class="clr-row">
@@ -6,6 +9,8 @@
                 <div class="img-container clr-col-4" *ngFor="let logo of artistData?.hdmusiclogos; let i = index">
                     <button class="btn btn-outline btn-img"
                             [ngClass]="{'btn-selected': logo.save }"
+                            (mouseenter)="mouseEnter(i, false)"
+                            (mouseleave)="mouseLeave()"
                             (click)="logoButtonClicked(logo)">
                         <img [src]="logo.url" class="logo-img">
                     </button>
@@ -24,6 +29,8 @@
                 <div class="img-container clr-col-4" *ngFor="let cdart of albumData?.album.cdart; let i = index">
                     <button class="btn btn-outline btn-img"
                             [ngClass]="{'btn-selected': cdart.saveIndex > 0 }"
+                            (mouseenter)="mouseEnter(i, true)"
+                            (mouseleave)="mouseLeave()"
                             (click)="discButtonClicked(i)">
                         <img [src]="cdart.url" class="cdart-img">
                     </button>
