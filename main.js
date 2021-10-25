@@ -20,10 +20,10 @@ function createWindow() {
             nodeIntegrationInWorker: true,
             backgroundThrottling: false,
             enableRemoteModule: true,
-            session: ses,   // not sure this is actually doing anything
+            session: ses, // not sure this is actually doing anything
             worldSafeExecuteJavaScript: true,
             contextIsolation: false, // true breaks electronService
-        }
+        },
     });
 
     // and load the index.html of the app.
@@ -38,14 +38,14 @@ function createWindow() {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        mainWindow = null
+        mainWindow = null;
     });
 }
 
 function getFiles() {
     dialog.showOpenDialog({
         defaultPath: '~/Desktop/Ghost - 2013 - If You Have Ghost/',
-        properties: ['openFile', 'multiSelections']
+        properties: ['openFile', 'multiSelections'],
     }).then(resp => {
         console.log(resp.filePaths);
         const tracks = processFiles(resp.filePaths);
@@ -60,7 +60,7 @@ function processFiles(files) {
     files.forEach(f => {
         tags = NodeID3.read(f);
         tags.meta = {
-            filename: f.replace(/^.*[\\\/]/, '')
+            filename: f.replace(/^.*[\\/]/, ''),
         };
         tracks.push(tags);
         if (tags.image && !imageWritten) {
@@ -82,18 +82,8 @@ function processFiles(files) {
     return tracks;
 }
 
-function openHardCoded() {
-    let filePaths = [];
-    filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3');
-    // filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test copy.mp3');
-    // filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/id3v2.4 image.mp3');
-
-    const tracks = processFiles(filePaths);
-    // mainWindow.webContents.send('files', tracks);
-}
-
 function loadHardCoded() {
-    let filePaths = [];
+    const filePaths = [];
     filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3');
     filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test copy.mp3');
     filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Juarez [Juarez-Junius 01] - 01-Juarez-Old River, Dry River.mp3');
@@ -112,7 +102,6 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-// app.on('ready', openHardCoded);
 app.on('ready', createWindow);
 
 // Quit when all windows are closed.
@@ -122,7 +111,7 @@ app.on('window-all-closed', function() {
     if (process.platform !== 'darwin') {
         app.quit();
     }
-})
+});
 
 app.on('activate', function() {
     // On OS X it's common to re-create a window in the app when the
@@ -130,10 +119,10 @@ app.on('activate', function() {
     if (mainWindow === null) {
         // createWindow()
     }
-})
+});
 
 exports.getFiles = getFiles;
-exports.loadHardCoded = loadHardCoded;  // for testing purposes open files on reload
+exports.loadHardCoded = loadHardCoded; // for testing purposes open files on reload
 exports.quitApp = quitApp;
 
 // In this file you can include the rest of your app's specific main process
