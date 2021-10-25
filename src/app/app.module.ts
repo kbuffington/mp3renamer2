@@ -17,6 +17,7 @@ import { EditableCellComponent } from './editable-cell/editable-cell.component';
 import { InputFieldComponent } from './input-field/input-field.component';
 import { LeftPanelComponent } from './left-panel/left-panel.component';
 import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.component';
+import { PreferencesComponent } from '@components/preferences/preferences.component';
 import { RenamerGridComponent } from './renamer-grid/renamer-grid.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.component';
@@ -45,6 +46,7 @@ import { FanartService } from '@services/fanart.service';
         InputFieldComponent,
         LeftPanelComponent,
         MetadataHandlerComponent,
+        PreferencesComponent,
         RightPanelComponent,
         UnknownPropertiesComponent,
         UpperButtonBarComponent,

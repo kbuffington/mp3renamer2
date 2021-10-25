@@ -1,0 +1,19 @@
+.top-content {
+    padding: 0 .5rem;
+    overflow-y: auto;
+    height: calc(100vh - 6rem);
+}
+
+footer {
+    padding: 0.5em 0.5em .75em 0.5em;
+    display: flex;
+
+    .btn-container {
+        flex-grow: 1;
+
+        .btn {
+            margin-right: .25rem;
+            float: right;
+        }
+    }
+}
