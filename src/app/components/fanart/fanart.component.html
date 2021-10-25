@@ -1,6 +1,12 @@
 <div class="main-wrapper">
-    <div class="pop-over" [ngClass]="{'hide': !popoverImage}">
+    <div #popOverContainer
+            class="pop-over"
+            [ngClass]="{'hide': !popoverImage}"
+            (keyup)="keypressed($event)"
+            (blur)="popoverImage = null"
+            tabindex="0">
         <img [src]="popoverImage?.url" class="logo-img">
+        <clr-icon class="close-icon" shape="close" size="30" (click)="popoverImage = null"></clr-icon>
     </div>
     <div class="content-wrapper">
         <div class="top-content">
@@ -13,6 +19,7 @@
                             (mouseleave)="mouseLeave()"
                             (click)="logoButtonClicked(logo)">
                         <img [src]="logo.url" class="logo-img">
+                        <clr-icon shape="zoom-in" size="18" class="zoom" (click)="zoom($event, i)"></clr-icon>
                     </button>
                 </div>
             </div>
@@ -29,10 +36,11 @@
                 <div class="img-container clr-col-4" *ngFor="let cdart of albumData?.album.cdart; let i = index">
                     <button class="btn btn-outline btn-img"
                             [ngClass]="{'btn-selected': cdart.saveIndex > 0 }"
-                            (mouseenter)="mouseEnter(i, true)"
+                            (mouseenter)="mouseEnter(i + numLogos)"
                             (mouseleave)="mouseLeave()"
                             (click)="discButtonClicked(i)">
                         <img [src]="cdart.url" class="cdart-img">
+                        <clr-icon shape="zoom-in" size="18" class="zoom" (click)="zoom($event, i + numLogos)"></clr-icon>
                     </button>
                     <div class="disc-index">
                         Disc: {{ cdart.disc }}

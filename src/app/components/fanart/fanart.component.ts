@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FanartAlbum, FanartArtist, FanartImg, HDMusicLogo } from '@services/fanart.classes';
 import { FanartService } from '@services/fanart.service';
@@ -15,9 +15,12 @@ export class FanartComponent implements OnInit {
     public popoverImage: FanartImg;
     public popoverImageIndex: number;
     public multiDisc = false;
+    public numLogos = 0;
     public releaseGroupId: string;
 
     private hoverTimer: any;
+
+    @ViewChild('popOverContainer') popOverContainer: ElementRef;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
@@ -34,6 +37,7 @@ export class FanartComponent implements OnInit {
     private getArtistArt() {
         this.fanartService.getArtist(this.artistId).toPromise().then(artist => {
             this.artistData = new FanartArtist(artist);
+            this.numLogos = this.artistData.hdmusiclogos.length;
             console.log(this.artistData);
         });
     }
@@ -95,10 +99,10 @@ export class FanartComponent implements OnInit {
         this.router.navigate(['/']);
     }
 
-    public mouseEnter(imageIndex: number, isCdArt: boolean) {
+    public mouseEnter(imageIndex: number) {
         clearTimeout(this.hoverTimer);
         this.hoverTimer = setTimeout(() => {
-            this.popoverImageIndex = !isCdArt ? imageIndex : imageIndex + this.artistData.hdmusiclogos.length;
+            this.popoverImageIndex = imageIndex;
             this.setPopoverImage(this.popoverImageIndex);
         }, 2000);
     }
@@ -108,11 +112,36 @@ export class FanartComponent implements OnInit {
     }
 
     private setPopoverImage(imageIndex: number) {
-        const numLogos = this.artistData.hdmusiclogos.length;
-        if (imageIndex < numLogos) {
+        setTimeout(() => this.popOverContainer.nativeElement.focus());
+        if (imageIndex < 0) {
+            imageIndex = this.numLogos + this.albumData.album.cdart.length - 1;
+        } else if (imageIndex >= this.numLogos + this.albumData.album.cdart.length) {
+            imageIndex = 0;
+        }
+        this.popoverImageIndex = imageIndex;
+        if (imageIndex < this.numLogos) {
             this.popoverImage = this.artistData.hdmusiclogos[imageIndex];
         } else {
-            this.popoverImage = this.albumData.album.cdart[imageIndex - numLogos];
+            this.popoverImage = this.albumData.album.cdart[imageIndex - this.numLogos];
+        }
+    }
+
+    public zoom(event, imageIndex: number) {
+        event.stopPropagation();
+        this.setPopoverImage(imageIndex);
+    }
+
+    public keypressed(event: KeyboardEvent) {
+        switch (event.key) {
+            case 'ArrowLeft':
+                this.setPopoverImage(this.popoverImageIndex - 1);
+                break;
+            case 'ArrowRight':
+                this.setPopoverImage(this.popoverImageIndex + 1);
+                break;
+            case 'Escape':
+                this.popoverImage = null;
+                break;
         }
     }
 }

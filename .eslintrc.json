@@ -25,7 +25,7 @@
         "no-prototype-builtins": "off",
         "@typescript-eslint/no-unused-vars": ["error"],
         "@typescript-eslint/no-inferrable-types": ["error"],
-        "new-cap": ["error", { "capIsNewExceptions": ["Input", "Component", "Output", "Injectable", "NgModule"] }],
+        "new-cap": ["error", { "capIsNewExceptions": ["Input", "Component", "Output", "Injectable", "NgModule", "ViewChild"] }],
         "require-jsdoc":"off"
     }
 }
