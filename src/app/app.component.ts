@@ -30,6 +30,9 @@ export class AppComponent implements OnInit, OnDestroy {
             // we'll need to use mocked file data here
             this.ts.setTracks(TrackServiceMocks.mockTracks());
         }
+        this.electronService.ipcRenderer.on('files', (event, json) => {
+            this.ts.setTracks(json);
+        });
     }
 
     ngOnDestroy() {

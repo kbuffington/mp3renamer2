@@ -9,13 +9,9 @@ import { TrackService } from '../services/track.service';
 })
 export class UpperButtonBarComponent implements OnInit {
     constructor(private electronService: ElectronService,
-        private ts: TrackService) { }
+                private ts: TrackService) {}
 
-    ngOnInit() {
-        this.electronService.ipcRenderer.on('files', (event, json) => {
-            this.ts.setTracks(json);
-        });
-    }
+    ngOnInit() {}
 
     requestFiles() {
         if (this.electronService.isElectronApp) {
