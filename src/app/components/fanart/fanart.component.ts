@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FanartAlbum, FanartArtist, FanartImg, HDMusicLogo } from '@services/fanart.classes';
 import { FanartService } from '@services/fanart.service';
+import { TrackService } from '@services/track.service';
+import { ElectronService } from 'ngx-electron';
 
 @Component({
     selector: 'fanart',
@@ -22,8 +24,10 @@ export class FanartComponent implements OnInit {
 
     @ViewChild('popOverContainer') popOverContainer: ElementRef;
 
-    constructor(private route: ActivatedRoute,
+    constructor(private electronService: ElectronService,
+                private route: ActivatedRoute,
                 private router: Router,
+                private ts: TrackService,
                 private fanartService: FanartService) {
         this.artistId = route.snapshot.queryParamMap.get('artistId');
         this.releaseGroupId = route.snapshot.queryParamMap.get('albumId');
@@ -84,7 +88,7 @@ export class FanartComponent implements OnInit {
     }
 
     public cdArtFilename(index: number): string {
-        return index > 0 ? `cd${index}.png` : '';
+        return index > 0 ? `cd${this.multiDisc ? index : ''}.png` : '';
     }
 
     public isSaveDisabled(): boolean {
@@ -95,6 +99,25 @@ export class FanartComponent implements OnInit {
     public saveSelected() {
         const saveLogo = this.artistData.hdmusiclogos.filter(val => val.save);
         const saveDiscs = this.albumData.album.cdart.filter(val => val.saveIndex);
+        saveLogo.forEach(logo => {
+            this.electronService.ipcRenderer.send('download', {
+                url: logo.url,
+                options: {
+                    filename: `${this.artistData.name}.png`,
+                    directory: '/Users/kevinbuffington',
+                },
+            });
+        });
+        saveDiscs.forEach(disc => {
+            console.log(this.ts.getCurrentFolder());
+            this.electronService.ipcRenderer.send('download', {
+                url: disc.url,
+                options: {
+                    filename: this.cdArtFilename(disc.saveIndex),
+                    directory: this.ts.getCurrentFolder(),
+                },
+            });
+        });
         console.log(saveLogo, saveDiscs);
         this.router.navigate(['/']);
     }

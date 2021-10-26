@@ -11,6 +11,7 @@ export interface Track {
     meta: {
         originalFilename: string;
         filename: string;
+        folder: string;
         extension: string;
     };
 }
@@ -90,6 +91,10 @@ export class TrackService {
 
     getCurrentTracks(): Track[] {
         return this.trackList.getValue();
+    }
+
+    public getCurrentFolder(): string {
+        return this.trackList.getValue()[0].meta.folder;
     }
 
     getNumTracks(): number {

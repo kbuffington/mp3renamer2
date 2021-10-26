@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog, session } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, session } = require('electron');
+const { download } = require('electron-dl');
 const fs = require('fs');
 const NodeID3 = require('../node-id3');
 // const taglib = require('../node-taglib');
@@ -61,6 +62,7 @@ function processFiles(files) {
         tags = NodeID3.read(f);
         tags.meta = {
             filename: f.replace(/^.*[\\/]/, ''),
+            folder: f.replace(/[^\\/]*$/, ''),
         };
         tracks.push(tags);
         if (tags.image && !imageWritten) {
@@ -72,7 +74,6 @@ function processFiles(files) {
                 fs.writeFileSync('./temp/embeddedArtwork.jpg', tags.image.imageBuffer, 'binary');
             }
         }
-        console.log(tags);
         // tags.title = tags.title + 's';
         // tags.userDefined.ARTISTFILTER.push('Esq.');
         // delete(tags.userDefined.genre);
@@ -84,10 +85,11 @@ function processFiles(files) {
 
 function loadHardCoded() {
     const filePaths = [];
-    filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3');
-    filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Multi Value Test copy.mp3');
-    filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/Juarez [Juarez-Junius 01] - 01-Juarez-Old River, Dry River.mp3');
-    // filePaths.push('../../../Desktop/Ghost - 2013 - If You Have Ghost/id3v2.4 image.mp3');
+    const dir = '../../../Desktop/Ghost - 2013 - If You Have Ghost/';
+    filePaths.push(`${dir}Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3`);
+    filePaths.push(`${dir}Multi Value Test copy.mp3`);
+    filePaths.push(`${dir}Juarez [Juarez-Junius 01] - 01-Juarez-Old River, Dry River.mp3`);
+    // filePaths.push(`${dir}id3v2.4 image.mp3`);
 
     const tracks = processFiles(filePaths);
     mainWindow.webContents.send('files', tracks);
@@ -119,6 +121,39 @@ app.on('activate', function() {
     if (mainWindow === null) {
         // createWindow()
     }
+});
+
+class DownloadQueue extends Array {
+    constructor(...args) {
+        super(...args);
+    }
+    push(item) {
+        const len = super.push(item);
+        if (this.length === 1) {
+            this.download(item);
+        }
+        return len;
+    }
+    shift() {
+        const item = super.shift();
+        if (this.length > 0) {
+            this.download(this[0]);
+        }
+        return item;
+    }
+    download(item) {
+        item.options.onCompleted = () => {
+            this.shift();
+        };
+        download(item.win, item.url, item.options);
+    }
+}
+
+const downloadQueue = new DownloadQueue();
+
+ipcMain.on('download', (event, info) => {
+    info.win = BrowserWindow.getFocusedWindow();
+    downloadQueue.push(info);
 });
 
 exports.getFiles = getFiles;
