@@ -7,8 +7,8 @@ import { countryCodes, CountryEntry } from '@services/countries';
     styleUrls: ['./country-select.component.scss'],
 })
 export class CountrySelectComponent implements OnInit, OnChanges {
-    @Input() multiSelect: boolean = false;
-    @Input() useCode: boolean = false;
+    @Input() multiSelect = false;
+    @Input() useCode = false;
     @Input() countries: string;
 
     @Output() countrySelected = new EventEmitter<string>();
@@ -23,13 +23,13 @@ export class CountrySelectComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.countries?.currentValue) {
+        if (changes.countries?.currentValue || changes.countries?.previousValue) {
             this.selectedCountries = this.getSelectedCountryEntries(this.countries);
         }
     }
 
     private getSelectedCountryEntries(countriesString: string) {
-        const countryNamesOrCodes = countriesString.split(';').map(country => country.trim());
+        const countryNamesOrCodes = countriesString.split(';').map(country => country.trim()).filter(c => c);
         return countryNamesOrCodes.map(country => this.countryList
             .find(c => country === (country.length === 2 ? c.code : c.name)))
             .filter(c => !!c);

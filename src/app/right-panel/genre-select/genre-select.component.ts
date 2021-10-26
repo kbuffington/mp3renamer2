@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import { GenreEntry, genreList } from '@services/genres';
 
 @Component({
@@ -6,7 +6,7 @@ import { GenreEntry, genreList } from '@services/genres';
     templateUrl: './genre-select.component.html',
     styleUrls: ['./genre-select.component.scss'],
 })
-export class GenreSelectComponent implements OnInit {
+export class GenreSelectComponent implements OnInit, OnChanges {
     @Input() genres: string;
 
     @Output() genreSelected = new EventEmitter<string>();
@@ -15,7 +15,9 @@ export class GenreSelectComponent implements OnInit {
     public selectedGenres: GenreEntry[] = [];
     public selection;
 
-    ngOnInit() {
+    ngOnInit() {}
+
+    ngOnChanges() {
         this.selectedGenres = this.getSelectedGenreEntries(this.genres);
         this.addDummyGenre();
     }
@@ -24,8 +26,8 @@ export class GenreSelectComponent implements OnInit {
         this.genreList.push({ name: '```' }); // dummy genre to be replaced
     }
 
-    private getSelectedGenreEntries(genreString: string) {
-        const genres = genreString.split(';').map(genre => genre.trim());
+    private getSelectedGenreEntries(genreString: string): GenreEntry[] {
+        const genres = genreString.split(';').map(genre => genre.trim()).filter(g => g);
         return genres.map(genre => {
             let foundGenre = this.genreList.find(g => genre === g.name);
             if (!foundGenre) {
