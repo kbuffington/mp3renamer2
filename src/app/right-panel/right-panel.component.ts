@@ -87,6 +87,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         this.ts.setMetadata(metadata);
     }
 
+    public tab2hasValues(): boolean {
+        return !!(this.metadata.copyright?.default ||
+            this.metadata.encodedBy?.default ||
+            this.metadata.MUISCBRAINZ_ARTISTID?.default ||
+            this.metadata.MUSICBRAINZ_RELEASEGROUPID?.default);
+    }
+
     public tab2Conflicts(): boolean {
         return (!this.metadata.copyright?.changed && this.metadata.copyright?.different) ||
             (!this.metadata.encodedBy?.changed && this.metadata.encodedBy?.different) ||
