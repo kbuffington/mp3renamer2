@@ -86,4 +86,11 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         metadata.RELEASECOUNTRY.changed = true;
         this.ts.setMetadata(metadata);
     }
+
+    public tab2Conflicts(): boolean {
+        return (!this.metadata.copyright?.changed && this.metadata.copyright?.different) ||
+            (!this.metadata.encodedBy?.changed && this.metadata.encodedBy?.different) ||
+            (!this.metadata.MUSICBRAINZ_ARTISTID?.changed && this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
+            (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.changed && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
+    }
 }

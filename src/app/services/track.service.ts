@@ -19,6 +19,7 @@ export interface Track {
 export class MetadataProperty {
     changed = false; // whether a new default has been set to apply to all tracks (overwriting individual values)
     default = '';
+    different = false; // whether not all values are the same
     multiValue = false;
     origValue = '';
     overwrite = true;
@@ -162,6 +163,11 @@ export class TrackService {
             metaProp.origValue = metaProp.default;
         });
         metaProp.origValues = [...metaProp.values];
+        metaProp.values.forEach(t => {
+            if (t !== metaProp.default && metaProp.default !== undefined) {
+                metaProp.different = true;
+            }
+        });
         metadata[property] = metaProp;
     }
 

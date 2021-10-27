@@ -1,12 +1,12 @@
 <div class="input-field" *ngIf="value">
 	<input type="checkbox" clrCheckbox *ngIf="!readOnly" [(ngModel)]="value.overwrite">
 	<label [ngStyle]="labelStyle">
-		<ng-container *ngIf="different">
+		<ng-container *ngIf="value.different">
 			<clr-icon shape="info-circle" size="20"
 				[ngClass]="{ 'is-error': !value.changed }"
 				(click)="showConflictValues()"></clr-icon>
 		</ng-container>
-		<clr-icon shape="check" size="20" *ngIf="!different"></clr-icon>
+		<clr-icon shape="check" size="20" *ngIf="!value.different"></clr-icon>
 		{{ label }}
 	</label>
 	<div class="conflict-list" *ngIf="showValues">

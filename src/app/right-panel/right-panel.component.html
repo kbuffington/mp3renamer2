@@ -105,7 +105,7 @@
 				</clr-tab-content>
 			</clr-tab>
 			<clr-tab>
-				<button clrTabLink>Extra Tags</button>
+				<button clrTabLink>Extra Tags <div class="tab-badge" [ngClass]="{'green': !tab2Conflicts()}"></div></button>
 				<clr-tab-content *clrIfActive>
 					<div class="clr-col-12 input-fields">
 						<input-field label="Copyright:" [(value)]="metadata.copyright" [hideConflicts]="hideConflicts" (showingConflicts)="sendHide()"></input-field>

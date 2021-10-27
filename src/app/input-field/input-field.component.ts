@@ -29,7 +29,6 @@ export class InputFieldComponent implements OnInit, OnChanges {
     @Output() showingConflicts = new EventEmitter();
 
     public displayLabel = '';
-    public different = false;
     public editValues = false;
     public inputTypes = InputTypes;
     public showValues = false;
@@ -45,14 +44,7 @@ export class InputFieldComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.value?.currentValue) {
-            const val: MetadataProperty = changes.value.currentValue;
-            this.different = false;
             this.showValues = false;
-            val.values.forEach(t => {
-                if (t !== val.default && val.default !== undefined) {
-                    this.different = true;
-                }
-            });
         }
         if (changes.hideConflicts) {
             this.showValues = false;
