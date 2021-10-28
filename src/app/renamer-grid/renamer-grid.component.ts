@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { TrackService } from '../services/track.service';
+import { MetadataObj, TrackService } from '../services/track.service';
 
 export class TrackObj {
     meta: {
@@ -18,6 +18,7 @@ export class TrackObj {
 export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
     @Input() showArtist = false;
     @Input() tracks: any[] = [];
+    @Input() metadata: MetadataObj;
 
     public editing: boolean[] = [];
     public selected: any[] = [];

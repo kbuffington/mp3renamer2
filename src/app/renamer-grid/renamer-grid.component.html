@@ -22,25 +22,25 @@
 			</clr-dg-cell>
 			<clr-dg-cell class="ellipsis"
 					[ngClass]="{'editing': editing[i][1]}"
-					[attr.data-title]="track.artist"
+					[attr.data-title]="metadata.artist.values[i]"
 					(click)="startEditing(i, 1)">
-				<editable-cell [(value)]="track.artist"
+				<editable-cell [(value)]="metadata.artist.values[i]"
 					[(editing)]="editing[i][1]">
 				</editable-cell>
 			</clr-dg-cell>
 			<clr-dg-cell class="ellipsis"
 					[ngClass]="{'editing': editing[i][2]}"
-					[attr.data-title]="track.title"
+					[attr.data-title]="metadata.title.values[i]"
 					(click)="startEditing(i, 2)">
-				<editable-cell [(value)]="track.title"
+				<editable-cell [(value)]="metadata.title.values[i]"
 					[(editing)]="editing[i][2]">
 				</editable-cell>
 			</clr-dg-cell>
 			<clr-dg-cell class="tracknum"
 					[ngClass]="{'editing': editing[i][3]}"
-					[attr.data-title]="track.trackNumber"
+					[attr.data-title]="metadata.trackNumber.values[i]"
 					(click)="startEditing(i, 3)">
-				<editable-cell [(value)]="track.trackNumber"
+				<editable-cell [(value)]="metadata.trackNumber.values[i]"
 					[(editing)]="editing[i][3]">
 				</editable-cell>
 			</clr-dg-cell>
