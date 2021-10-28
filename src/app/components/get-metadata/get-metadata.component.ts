@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Release } from '@services/musicbrainz.classes';
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { MetadataObj, TrackService } from '@services/track.service';
@@ -13,14 +14,16 @@ export class ReleaseDisplay extends Release {
             const disc = parseInt(pos[0]) ? parseInt(pos[0]) : 1;
             const discTrackStr = `${disc}-${parseInt(trackNumber)}`;
             const t = this.tracks.find(track => track.discTrackStr === discTrackStr);
-            if (t) {
-                t.metadataFound = true;
+            if (t && t.metadataFoundIndex === -1) {
+                t.metadataFoundIndex = index;
                 t.metadataTitle = metadata.title.values[index];
                 t.metadataDiffers = t.title !== t.metadataTitle;
             }
         });
     }
 }
+
+const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
 
 @Component({
     selector: 'get-metadata',
@@ -39,6 +42,7 @@ export class GetMetadataComponent implements OnInit {
     private metadata: MetadataObj;
 
     constructor(private mb: MusicbrainzService,
+                private router: Router,
                 private ts: TrackService) {}
 
     ngOnInit() {
@@ -46,7 +50,9 @@ export class GetMetadataComponent implements OnInit {
         this.artist = this.metadata.artist.default;
         this.album = this.metadata.album.default;
         this.numTracks = this.ts.getNumTracks();
-        this.requestMetadata();
+        if (this.artist || this.album) {
+            this.requestMetadata();
+        }
     }
 
     public requestMetadata() {
@@ -81,7 +87,48 @@ export class GetMetadataComponent implements OnInit {
         return observableThrowError(errMsg);
     }
 
-    public apply() {
+    private setMetadataVal(metadata: MetadataObj, key: string, val: string) {
+        // if (metadata[key].default !== val) {
+        metadata[key].changed = true;
+        // }
+        metadata[key].default = val;
+    }
 
+    private setNewDefault(metadata: MetadataObj, key: string) {
+        const firstVal = metadata[key].values.find(val => val) ?? '';
+        this.setMetadataVal(metadata, key, firstVal);
+    }
+
+    public apply(release: ReleaseDisplay) {
+        const metadata = this.ts.getCurrentMetadata();
+        this.setMetadataVal(metadata, 'artist', release.artistString);
+        this.setMetadataVal(metadata, 'album', release.title);
+        this.setMetadataVal(metadata, 'date', release.date);
+        this.setMetadataVal(metadata, 'performerInfo', release.artistString);
+        this.setMetadataVal(metadata, 'CATALOGNUMBER', release.labelInfo.selectedCatalog ?? '');
+        this.setMetadataVal(metadata, 'EDITION', release.disambiguation);
+        this.setMetadataVal(metadata, 'LABEL', release.labelInfo.allLabels);
+        this.setMetadataVal(metadata, 'RELEASECOUNTRY', release.country);
+        this.setMetadataVal(metadata, 'RELEASETYPE', release.releaseGroup.primaryType);
+        if (new Date(release.date).getTime() - new Date(release.releaseGroup.firstReleaseDate).getTime() > ONE_WEEK) {
+            this.setMetadataVal(metadata, 'originalReleaseDate', release.releaseGroup.firstReleaseDate);
+        } else {
+            this.setMetadataVal(metadata, 'originalReleaseDate', '');
+        }
+
+        release.tracks.forEach((track: any) => {
+            if (track.metadataFoundIndex >= 0) {
+                metadata.title.values[track.metadataFoundIndex] = track.title;
+                metadata.artist.values[track.metadataFoundIndex] = track.artistString;
+                metadata.partOfSet.values[track.metadataFoundIndex] = track.discSet;
+                metadata.DISCSUBTITLE.values[track.metadataFoundIndex] = release.media[track.discNumber - 1].title ?? '';
+            }
+        });
+        // these properties were changed in for each, so find and set new default
+        this.setNewDefault(metadata, 'partOfSet');
+        this.setNewDefault(metadata, 'DISCSUBTITLE');
+
+        this.ts.setMetadata(metadata);
+        this.router.navigate(['/']);
     }
 }

@@ -79,13 +79,27 @@
                 </div>
             </div>
             <div class="clr-row">
+                <div class="input-field clr-col-3">
+                    <label>Orig. Rel. Date:</label>
+                    <input clrInput class="small" [(ngModel)]="selectedRelease.releaseGroup.firstReleaseDate" />
+                </div>
+                <div class="input-field clr-col-3">
+                    <label class="wide-label">Release Type:</label>
+                    <input clrInput class="small" [(ngModel)]="selectedRelease.releaseGroup.primaryType" />
+                </div>
+                <div class="input-field clr-col-4">
+                    <label>Media:</label>
+                    <input clrInput [(ngModel)]="selectedRelease.media[0].format" />
+                </div>
+            </div>
+            <div class="clr-row">
                 <div class="input-field clr-col-6">
                     <label>Edition:</label>
                     <input clrInput [(ngModel)]="selectedRelease.disambiguation" />
                 </div>
                 <div class="input-field clr-col-4">
-                    <label>Media:</label>
-                    <input clrInput [(ngModel)]="selectedRelease.media[0].format" />
+                    <label>Status:</label>
+                    <input clrInput [(ngModel)]="selectedRelease.status" />
                 </div>
             </div>
             <div class="clr-row">
@@ -102,7 +116,7 @@
                 <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
                 <clr-dg-column class="time">Time</clr-dg-column>
 
-                <clr-dg-row *clrDgItems="let track of selectedRelease.tracks" [ngClass]="{ 'notfound': !track.metadataFound }">
+                <clr-dg-row *clrDgItems="let track of selectedRelease.tracks" [ngClass]="{ 'notfound': track.metadataFoundIndex === -1 }">
                     <clr-dg-cell class="track-num">
                         {{ selectedRelease.tracks.length > 1 ? track.trackDisplay : track.position }}
                         <span *ngIf="track.position != track.number; else showDiscTrack">{{ track.position }} ({{ track.number }})</span>
@@ -125,7 +139,7 @@
     </div>
     <footer>
         <div class="btn-container">
-            <a class="btn btn-primary" (click)="apply()">Apply to Files</a>
+            <button class="btn btn-primary" [disabled]="!selectedRelease" (click)="apply(selectedRelease)">Apply to Files</button>
             <a class="btn btn-outline" [routerLink]="'/'">Cancel</a>
         </div>
     </footer>
