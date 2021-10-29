@@ -28,7 +28,9 @@ export class CacheService {
         });
         this.saveCacheMap();
         console.log('CacheService initialized in:', (Date.now() - start) + 'ms');
-        console.log('localStorage Cache size:', Math.round(map.length*10 / 1024)/10 + 'KB');
+        if (map) {
+            console.log('localStorage Cache size:', Math.round(map.length*10 / 1024)/10 + 'KB');
+        }
     }
 
     get(req: HttpRequest<any>): HttpResponse<any> | undefined {
