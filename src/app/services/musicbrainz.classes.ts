@@ -2,10 +2,13 @@ export class Artist {
     disambiguation: string;
     id: string;
     name: string;
-    'sort-name': string;
+    sortName: string;
+    type: string;
 
     constructor(json: any) {
         Object.assign(this, json);
+        this.sortName = json['sort-name'];
+        delete this['sort-name'];
     }
 }
 
@@ -72,7 +75,9 @@ export class Track {
     discNumber: number;
 
     // added fields
+    artistCredits: ArtistCredit[];
     artistString: string;
+    artistFilter = ''; // sort-order style name used for artistFilter field
     discSet = ''; // if only one disc, this is empty, otherwise formatted like "1/3"
     discTrackStr: string;
     metadataDiffers = false; // does the title differ from the metadata?
@@ -82,14 +87,22 @@ export class Track {
     time: string;
 
 
-    constructor(json: any, discNumber: number, totalDiscs: number) {
+    constructor(json: any, discNumber: number, totalDiscs: number, albumArtist: string) {
         Object.assign(this, json);
-        const artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
-        this.artistString = artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
+        this.artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
+        delete this['artist-credit'];
+        this.artistString = this.artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
             return idx == 0 ?
                 (artist.name + (artist.joinphrase ? artist.joinphrase : '')) :
                 prevVal + artist.name + (artist.joinphrase ? artist.joinphrase : '');
         }, '');
+        if (this.artistString !== albumArtist) {
+            this.artistFilter = this.artistCredits.map(ac => ac.artist.sortName).join('; ');
+            if (albumArtist === 'Various Artists' || albumArtist === 'Soundtrack') {
+                this.artistFilter += '; ' + albumArtist;
+            }
+            console.log(this.artistString, '--', albumArtist, ':', this.artistFilter);
+        }
         const seconds = json.length / 1000;
         this.time = `${Math.floor(seconds / 60)}:${('00' + Math.floor(seconds % 60)).slice(-2)}`;
         this.discNumber = discNumber;
@@ -107,9 +120,9 @@ export class Media {
 
     trackCount: number;
 
-    constructor(json: any, totalMedia: number) {
+    constructor(json: any, totalMedia: number, albumArtist: string) {
         Object.assign(this, json);
-        this.tracks = json.tracks ? json.tracks.map(t => new Track(t, this.position, totalMedia)) : [];
+        this.tracks = json.tracks ? json.tracks.map(t => new Track(t, this.position, totalMedia, albumArtist)) : [];
         this.trackCount = json['track-count'];
     }
 }
@@ -157,7 +170,7 @@ export class Release {
                 (artist.name + (artist.joinphrase ? artist.joinphrase : '')) :
                 prevVal + artist.name + (artist.joinphrase ? artist.joinphrase : '');
         }, '');
-        this.media = json.media ? json.media.map(m => new Media(m, json.media.length)) : [];
+        this.media = json.media ? json.media.map(m => new Media(m, json.media.length, this.artistString)) : [];
         this.media.forEach(m => {
             this.tracks.push(...m.tracks);
         });

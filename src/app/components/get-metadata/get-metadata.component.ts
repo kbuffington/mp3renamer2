@@ -97,6 +97,7 @@ export class GetMetadataComponent implements OnInit {
     private setNewDefault(metadata: MetadataObj, key: string) {
         const firstVal = metadata[key].values.find(val => val) ?? '';
         this.setMetadataVal(metadata, key, firstVal);
+        // should we clear the changed flag?
     }
 
     public apply(release: ReleaseDisplay) {
@@ -122,11 +123,13 @@ export class GetMetadataComponent implements OnInit {
                 metadata.artist.values[track.metadataFoundIndex] = track.artistString;
                 metadata.partOfSet.values[track.metadataFoundIndex] = track.discSet;
                 metadata.DISCSUBTITLE.values[track.metadataFoundIndex] = release.media[track.discNumber - 1].title ?? '';
+                metadata.ARTISTFILTER.values[track.metadataFoundIndex] = track.artistFilter;
             }
         });
-        // these properties were changed in for each, so find and set new default
+        // these properties were changed in forEach, so find and set new default
         this.setNewDefault(metadata, 'partOfSet');
         this.setNewDefault(metadata, 'DISCSUBTITLE');
+        this.setNewDefault(metadata, 'ARTISTFILTER');
 
         this.ts.setMetadata(metadata);
         this.router.navigate(['/']);
