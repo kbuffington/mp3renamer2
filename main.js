@@ -154,6 +154,8 @@ const downloadQueue = new DownloadQueue();
 ipcMain.on('download', (event, info) => {
     info.win = BrowserWindow.getFocusedWindow();
     downloadQueue.push(info);
+    // await download(info.win, info.url, info.options);
+    // console.log('done with', info.options.filename);
 });
 
 exports.getFiles = getFiles;
