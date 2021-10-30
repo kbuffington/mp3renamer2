@@ -101,10 +101,9 @@ export class GetMetadataComponent implements OnInit {
 
     public apply(release: ReleaseDisplay) {
         const metadata = this.ts.getCurrentMetadata();
-        this.setMetadataVal(metadata, 'artist', release.artistString);
+        // this.setMetadataVal(metadata, 'artist', release.artistString);
         this.setMetadataVal(metadata, 'album', release.title);
         this.setMetadataVal(metadata, 'date', release.date);
-        this.setMetadataVal(metadata, 'performerInfo', release.artistString);
         this.setMetadataVal(metadata, 'CATALOGNUMBER', release.labelInfo.selectedCatalog ?? '');
         this.setMetadataVal(metadata, 'EDITION', release.disambiguation);
         this.setMetadataVal(metadata, 'LABEL', release.labelInfo.allLabels);
@@ -129,6 +128,9 @@ export class GetMetadataComponent implements OnInit {
         this.setNewDefault(metadata, 'partOfSet');
         this.setNewDefault(metadata, 'DISCSUBTITLE');
         this.setNewDefault(metadata, 'ARTISTFILTER');
+
+        const needsAlbumArtist = release.tracks.some(track => track.artistString !== release.artistString);
+        this.setMetadataVal(metadata, 'performerInfo', needsAlbumArtist ? release.artistString : '');
 
         this.ts.setMetadata(metadata);
         this.router.navigate(['/']);
