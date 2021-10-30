@@ -15,21 +15,26 @@ export class ConflictModalComponent implements OnInit {
     @Output() fieldChange = new EventEmitter<MetadataProperty>();
     @Output() showModalChange = new EventEmitter<boolean>();
 
-    // public editValues = false;
     public showValues = false;
+
     private origDefault: string;
     private origValues: string[];
     private origUseDefault: boolean;
+    private origDefaultChanged: boolean;
 
     constructor() { }
 
     ngOnInit(): void {
         this.origUseDefault = this.field.useDefault;
+        this.origDefaultChanged = this.field.defaultChanged;
         this.origDefault = this.field.default;
         this.origValues = [...this.field.values];
     }
 
     public modalClosed() {
+        const first = this.field.values[0];
+        this.field.different = this.field.values.some(v => v !== first);
+        this.fieldChange.emit(this.field);
         this.showModalChange.emit(false);
     }
 
@@ -40,9 +45,15 @@ export class ConflictModalComponent implements OnInit {
         this.showValues = false;
     }
 
+    // toggle is negated in the template
+    public toggledDefault(value: boolean) {
+        this.field.useDefault = value;
+        this.field.defaultChanged = value;
+    }
+
     public defaultValChanged(value: string) {
         this.field.default = value;
-        this.field.useDefault = true;
+        this.field.defaultChanged = true;
         this.fieldChange.emit(this.field);
     }
 
@@ -50,6 +61,7 @@ export class ConflictModalComponent implements OnInit {
         this.field.useDefault = this.origUseDefault;
         this.field.default = this.field.origValue;
         this.field.values = [...this.field.origValues];
+        this.field.defaultChanged = false;
     }
 
     public onCancel() {
@@ -57,6 +69,7 @@ export class ConflictModalComponent implements OnInit {
         this.field.useDefault = this.origUseDefault;
         this.field.default = this.origDefault;
         this.field.values = [...this.origValues];
+        this.field.defaultChanged = this.origDefaultChanged;
         this.modalClosed();
     }
 

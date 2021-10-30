@@ -66,7 +66,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     updateValue(fieldname: string, value: string) {
         const metaField = this.metadata[fieldname];
         metaField.default = value;
-        metaField.useDefault = true;
+        metaField.defaultChanged = true;
     }
 
     public showConflict(property: MetadataProperty, name: string, readOnly = false) {
@@ -93,7 +93,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     public setReleaseCountry(country: string) {
         const metadata = this.ts.getCurrentMetadata();
         metadata.RELEASECOUNTRY.default = country;
-        metadata.RELEASECOUNTRY.useDefault = true;
+        metadata.RELEASECOUNTRY.defaultChanged = true;
         this.ts.setMetadata(metadata);
     }
 
@@ -105,9 +105,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
 
     public tab2Conflicts(): boolean {
-        return (!this.metadata.copyright?.useDefault && this.metadata.copyright?.different) ||
-            (!this.metadata.encodedBy?.useDefault && this.metadata.encodedBy?.different) ||
-            (!this.metadata.MUSICBRAINZ_ARTISTID?.useDefault && this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
-            (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.useDefault && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
+        return (!this.metadata.copyright?.defaultChanged && this.metadata.copyright?.different) ||
+            (!this.metadata.encodedBy?.defaultChanged && this.metadata.encodedBy?.different) ||
+            (!this.metadata.MUSICBRAINZ_ARTISTID?.defaultChanged && this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
+            (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.defaultChanged && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
     }
 }

@@ -24,6 +24,7 @@ export class MetadataProperty {
     overwrite = true;
     userDefined = false;
     useDefault = false; // if true, the default value will be used instead of individual values for each track
+    defaultChanged = false; // has initial value of useDefault changed, or has default value changed?
     values: string[] = [];
     origValues: string[] = []; // copy of values used for resetting
 }

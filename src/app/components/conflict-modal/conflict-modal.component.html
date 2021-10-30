@@ -6,7 +6,7 @@
         </div>
         <clr-toggle-container class="edit-toggle" *ngIf="!readOnly">
             <clr-toggle-wrapper>
-                <input type="checkbox" clrToggle [ngModel]="!field.useDefault" (ngModelChange)="field.useDefault = !$event" />
+                <input type="checkbox" clrToggle [ngModel]="!field.useDefault" (ngModelChange)="toggledDefault(!$event)" />
                 <label>Edit individual values</label>
             </clr-toggle-wrapper>
         </clr-toggle-container>
@@ -30,6 +30,6 @@
             Reset Values
         </button>
         <button type="button" class="btn btn-outline" (click)="onCancel()">Cancel</button>
-        <button type="button" class="btn btn-primary" (click)="showModal = false">Ok</button>
+        <button type="button" class="btn btn-primary" (click)="modalClosed()">Ok</button>
     </div>
 </clr-modal>

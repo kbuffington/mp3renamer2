@@ -89,7 +89,7 @@ export class GetMetadataComponent implements OnInit {
 
     private setMetadataVal(metadata: MetadataObj, key: string, val: string) {
         // if (metadata[key].default !== val) {
-        metadata[key].useDefault = true;
+        metadata[key].defaultChanged = true;
         // }
         metadata[key].default = val;
     }
@@ -97,7 +97,6 @@ export class GetMetadataComponent implements OnInit {
     private setNewDefault(metadata: MetadataObj, key: string) {
         const firstVal = metadata[key].values.find(val => val) ?? '';
         this.setMetadataVal(metadata, key, firstVal);
-        // should we clear the useDefault flag?
     }
 
     public apply(release: ReleaseDisplay) {

@@ -3,7 +3,7 @@
 	<label [ngStyle]="labelStyle" (click)="showConflictValues()">
 		<ng-container *ngIf="value.different">
 			<clr-icon shape="info-circle" size="20"
-				[ngClass]="{ 'is-error': !value.useDefault }">
+				[ngClass]="{ 'is-error': !value.defaultChanged }">
 			</clr-icon>
 		</ng-container>
 		<clr-icon shape="check" size="20" *ngIf="!value.different"></clr-icon>
