@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MetadataProperty } from '../services/track.service';
 
 export enum InputTypes {
@@ -15,11 +15,10 @@ export enum InputTypes {
     templateUrl: './input-field.component.html',
     styleUrls: ['./input-field.component.scss'],
 })
-export class InputFieldComponent implements OnInit, OnChanges {
+export class InputFieldComponent implements OnInit {
     @Input() inputType: string = InputTypes.Input;
     @Input() label: string;
     @Input() labelStyle = '';
-    @Input() hideConflicts: number;
     @Input() countrySelect = false;
     @Input() readOnly = false;
     @Input() selectOptions: string[] = undefined;
@@ -31,7 +30,6 @@ export class InputFieldComponent implements OnInit, OnChanges {
     public displayLabel = '';
     public editValues = false;
     public inputTypes = InputTypes;
-    public showValues = false;
 
     constructor() {}
 
@@ -39,15 +37,6 @@ export class InputFieldComponent implements OnInit, OnChanges {
         this.displayLabel = this.label.substring(0, this.label.length - 1);
         if (this.selectOptions) {
             this.inputType = InputTypes.Select;
-        }
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes.value?.currentValue) {
-            this.showValues = false;
-        }
-        if (changes.hideConflicts) {
-            this.showValues = false;
         }
     }
 

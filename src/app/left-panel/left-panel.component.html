@@ -2,14 +2,12 @@
 	<div class="input-block clr-col-12">
 		<input-field label="Artist:"
 			[(value)]="metadata.artist"
-			[hideConflicts]="hideConflicts"
-			(showingConflicts)="sendHide()"
+			(showConflicts)="showConflict(metadata.artist, 'Artist')"
 			[labelStyle]="{ 'max-width': '80px', 'min-width': '80px' }">
 		</input-field>
 		<input-field label="Album:"
 			[(value)]="metadata.album"
-			[hideConflicts]="hideConflicts"
-			(showingConflicts)="sendHide()"
+			(showConflicts)="showConflict(metadata.album, 'Album')"
 			[labelStyle]="{ 'max-width': '80px', 'min-width': '80px' }">
 		</input-field>
 	</div>
@@ -29,3 +27,11 @@
 		</clr-checkbox-wrapper>
 	</clr-checkbox-container>
 </div>
+
+<conflict-modal
+	*ngIf="showModal"
+	[(field)]="conflictProperty"
+	[displayName]="conflictDisplayName"
+	[readOnly]="conflictReadOnly"
+	[(showModal)]="showModal">
+</conflict-modal>

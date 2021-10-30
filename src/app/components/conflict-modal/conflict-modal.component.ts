@@ -73,16 +73,6 @@ export class ConflictModalComponent implements OnInit {
         this.modalClosed();
     }
 
-    showConflictValues() {
-        if (!this.showValues) {
-            setTimeout(() => {
-                this.showValues = true;
-            });
-        } else {
-            this.showValues = false;
-        }
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public identify(index: number, item: string) {
         return index;

@@ -14,7 +14,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     public conflictProperty: MetadataProperty;
     public conflictDisplayName: string;
     public conflictReadOnly: boolean;
-    public hideConflicts = 0;
     public inputTypes = InputTypes;
     public metadata: { [key: string]: MetadataProperty; };
     public metadataSubscription: Subscription;
@@ -75,9 +74,6 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         this.conflictReadOnly = readOnly;
         this.showModal = true;
     }
-    // sendHide() {
-    //     this.hideConflicts++;
-    // }
 
     public swapDates() {
         const metadata = this.ts.getCurrentMetadata();
