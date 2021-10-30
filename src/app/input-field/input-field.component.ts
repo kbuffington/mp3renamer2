@@ -26,7 +26,7 @@ export class InputFieldComponent implements OnInit, OnChanges {
     @Input() value: MetadataProperty;
 
     @Output() valueChange = new EventEmitter();
-    @Output() showingConflicts = new EventEmitter();
+    @Output() showConflicts = new EventEmitter();
 
     public displayLabel = '';
     public editValues = false;
@@ -51,38 +51,13 @@ export class InputFieldComponent implements OnInit, OnChanges {
         }
     }
 
-    defaultValChanged(value: string) {
+    public defaultValChanged(value: string) {
         this.value.default = value;
-        this.value.changed = true;
+        this.value.useDefault = true;
         this.valueChange.emit(this.value);
     }
 
-    selectValue(value: string) {
-        if (!this.readOnly) {
-            this.defaultValChanged(value);
-        }
-        this.showValues = false;
-    }
-
-    public resetValues() {
-        this.value.changed = false;
-        this.value.default = this.value.origValue;
-        this.value.values = [...this.value.origValues];
-    }
-
-    showConflictValues() {
-        if (!this.showValues) {
-            this.showingConflicts.emit();
-            setTimeout(() => {
-                this.showValues = true;
-            });
-        } else {
-            this.showValues = false;
-        }
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    public identify(index: number, item: string) {
-        return index;
+    public showConflictValues() {
+        this.showConflicts.emit();
     }
 }

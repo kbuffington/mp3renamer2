@@ -33,6 +33,7 @@ import { CacheService } from '@services/cache.service';
 import { CacheInterceptor } from '@services/http-interceptor.service';
 import { FanartComponent } from '@components/fanart/fanart.component';
 import { FanartService } from '@services/fanart.service';
+import { ConflictModalComponent } from './components/conflict-modal/conflict-modal.component';
 
 @NgModule({
     declarations: [
@@ -52,6 +53,7 @@ import { FanartService } from '@services/fanart.service';
         UpperButtonBarComponent,
         MainComponent,
         GetMetadataComponent,
+        ConflictModalComponent,
     ],
     imports: [
         AppRoutingModule,

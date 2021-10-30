@@ -1,0 +1,35 @@
+<clr-modal [(clrModalOpen)]="showModal" (clrModalOpenChange)="modalClosed()">
+    <h3 class="modal-title">Field: {{ displayName }}</h3>
+    <div class="modal-body">
+        <div class="default-val">
+            <span class="key">Single Value:</span><input [(ngModel)]="field.default" [disabled]="!field.useDefault || readOnly">
+        </div>
+        <clr-toggle-container class="edit-toggle" *ngIf="!readOnly">
+            <clr-toggle-wrapper>
+                <input type="checkbox" clrToggle [ngModel]="!field.useDefault" (ngModelChange)="field.useDefault = !$event" />
+                <label>Edit individual values</label>
+            </clr-toggle-wrapper>
+        </clr-toggle-container>
+        <div class="conflict-list">
+            <ol class="property-list" *ngIf="field.useDefault || readOnly">
+                <li *ngFor="let val of field.values" class="conflict-item"
+                        [ngClass]="{'disabled': readOnly}"
+                        (click)="selectValue(val)">
+                    {{ val }}
+                </li>
+            </ol>
+            <ol class="editable-list" *ngIf="!field.useDefault && !readOnly">
+                <li *ngFor="let val of field.values; let i = index; trackBy: identify" class="edit-item">
+                    <input [(ngModel)]="field.values[i]">
+                </li>
+            </ol>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-link" (click)="resetValues()">
+            Reset Values
+        </button>
+        <button type="button" class="btn btn-outline" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="showModal = false">Ok</button>
+    </div>
+</clr-modal>

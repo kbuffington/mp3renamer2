@@ -1,40 +1,14 @@
 <div class="input-field" *ngIf="value">
 	<input type="checkbox" clrCheckbox *ngIf="!readOnly" [(ngModel)]="value.overwrite">
-	<label [ngStyle]="labelStyle">
+	<label [ngStyle]="labelStyle" (click)="showConflictValues()">
 		<ng-container *ngIf="value.different">
 			<clr-icon shape="info-circle" size="20"
-				[ngClass]="{ 'is-error': !value.changed }"
-				(click)="showConflictValues()"></clr-icon>
+				[ngClass]="{ 'is-error': !value.useDefault }">
+			</clr-icon>
 		</ng-container>
 		<clr-icon shape="check" size="20" *ngIf="!value.different"></clr-icon>
 		{{ label }}
 	</label>
-	<div class="conflict-list" *ngIf="showValues">
-		<div class="header-row">
-			<span class="property">{{ displayLabel }}</span>
-			<button class="btn btn-link btn-sm edit-btn" (click)="editValues = !editValues" *ngIf="!readOnly">
-				{{ editValues ? 'Select' : 'Edit' }}
-			</button>
-			<button class="btn btn-link btn-sm close-btn" (click)="showValues = false">
-				<clr-icon shape="window-close" size="16"></clr-icon>
-			</button>
-		</div>
-		<ol class="property-list" *ngIf="!editValues">
-			<li *ngFor="let val of value.values" class="conflict-item"
-					[ngClass]="{'disabled': readOnly}"
-					(click)="selectValue(val)">
-				{{ val }}
-			</li>
-		</ol>
-		<ol class="editable-list" *ngIf="editValues">
-			<li *ngFor="let val of value.values; let i = index; trackBy: identify" class="edit-item">
-				<input [(ngModel)]="value.values[i]">
-			</li>
-		</ol>
-		<button class="btn btn-link" (click)="resetValues()">
-			Reset Values
-		</button>
-	</div>
 	<div class="data-field">
 		<ng-container [ngSwitch]="inputType">
 			<input *ngSwitchCase="inputTypes.Input"

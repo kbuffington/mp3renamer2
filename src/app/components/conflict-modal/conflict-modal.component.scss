@@ -1,0 +1,61 @@
+.default-val {
+    display: flex;
+
+    .key {
+        font-weight: 600;
+        color: black;
+        padding-right: .5rem;
+    }
+    input {
+        border-radius: 2px;
+        border-width: 1px;
+        flex-grow: 1;
+    }
+}
+
+.edit-toggle {
+    margin-top: .5rem;
+}
+
+$index-width: 1.5rem;
+
+.conflict-list {
+    margin-top: .5rem;
+
+    ol {
+        counter-reset: item;
+
+        li {
+            list-style: none;
+
+            &:before {
+                content: counter(item)". ";
+                counter-increment: item;
+                width: $index-width;
+                line-height: 1.4rem;
+                display: inline-block;
+            }
+        }
+
+        .conflict-item:not(.disabled) {
+            &:hover {
+                color: black;
+                cursor: pointer;
+            }
+
+            &:hover:before {
+                color: black;
+                content: "→";
+            }
+        }
+
+        .edit-item {
+            input {
+                border-radius: 2px;
+                border-width: 1px;
+                width: calc(100% - #{$index-width});
+                padding-left: 2.75px;
+            }
+        }
+    }
+}

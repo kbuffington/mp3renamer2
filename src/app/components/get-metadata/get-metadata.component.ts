@@ -10,7 +10,7 @@ export class ReleaseDisplay extends Release {
         super(json);
         const partOfSet = metadata.partOfSet;
         metadata.trackNumber.values.forEach((trackNumber: string, index) => {
-            const pos = (partOfSet.changed ? partOfSet.default : partOfSet.values[index]).split('/');
+            const pos = (partOfSet.useDefault ? partOfSet.default : partOfSet.values[index]).split('/');
             const disc = parseInt(pos[0]) ? parseInt(pos[0]) : 1;
             const discTrackStr = `${disc}-${parseInt(trackNumber)}`;
             const t = this.tracks.find(track => track.discTrackStr === discTrackStr);
@@ -89,7 +89,7 @@ export class GetMetadataComponent implements OnInit {
 
     private setMetadataVal(metadata: MetadataObj, key: string, val: string) {
         // if (metadata[key].default !== val) {
-        metadata[key].changed = true;
+        metadata[key].useDefault = true;
         // }
         metadata[key].default = val;
     }
@@ -97,7 +97,7 @@ export class GetMetadataComponent implements OnInit {
     private setNewDefault(metadata: MetadataObj, key: string) {
         const firstVal = metadata[key].values.find(val => val) ?? '';
         this.setMetadataVal(metadata, key, firstVal);
-        // should we clear the changed flag?
+        // should we clear the useDefault flag?
     }
 
     public apply(release: ReleaseDisplay) {

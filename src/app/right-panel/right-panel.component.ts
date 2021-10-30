@@ -11,11 +11,15 @@ import { MetadataProperty, TrackService } from '../services/track.service';
 export class RightPanelComponent implements OnInit, OnDestroy {
     @Input() tracks: any[] = [];
 
+    public conflictProperty: MetadataProperty;
+    public conflictDisplayName: string;
+    public conflictReadOnly: boolean;
     public hideConflicts = 0;
     public inputTypes = InputTypes;
     public metadata: { [key: string]: MetadataProperty; };
     public metadataSubscription: Subscription;
     public releaseTypes = [];
+    public showModal = false;
 
     constructor(private ts: TrackService) {
     }
@@ -62,28 +66,34 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     updateValue(fieldname: string, value: string) {
         const metaField = this.metadata[fieldname];
         metaField.default = value;
-        metaField.changed = true;
+        metaField.useDefault = true;
     }
 
-    sendHide() {
-        this.hideConflicts++;
+    public showConflict(property: MetadataProperty, name: string, readOnly = false) {
+        this.conflictProperty = property;
+        this.conflictDisplayName = name;
+        this.conflictReadOnly = readOnly;
+        this.showModal = true;
     }
+    // sendHide() {
+    //     this.hideConflicts++;
+    // }
 
     public swapDates() {
         const metadata = this.ts.getCurrentMetadata();
         const date: MetadataProperty = JSON.parse(JSON.stringify(metadata.date));
         const originalDate: MetadataProperty = JSON.parse(JSON.stringify(metadata.originalReleaseDate));
         metadata.date = originalDate;
-        metadata.date.changed = true;
+        // metadata.date.changed = true;
         metadata.originalReleaseDate = date;
-        metadata.originalReleaseDate.changed = true;
+        // metadata.originalReleaseDate.changed = true;
         this.ts.setMetadata(metadata);
     }
 
     public setReleaseCountry(country: string) {
         const metadata = this.ts.getCurrentMetadata();
         metadata.RELEASECOUNTRY.default = country;
-        metadata.RELEASECOUNTRY.changed = true;
+        metadata.RELEASECOUNTRY.useDefault = true;
         this.ts.setMetadata(metadata);
     }
 
@@ -95,9 +105,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
 
     public tab2Conflicts(): boolean {
-        return (!this.metadata.copyright?.changed && this.metadata.copyright?.different) ||
-            (!this.metadata.encodedBy?.changed && this.metadata.encodedBy?.different) ||
-            (!this.metadata.MUSICBRAINZ_ARTISTID?.changed && this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
-            (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.changed && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
+        return (!this.metadata.copyright?.useDefault && this.metadata.copyright?.different) ||
+            (!this.metadata.encodedBy?.useDefault && this.metadata.encodedBy?.different) ||
+            (!this.metadata.MUSICBRAINZ_ARTISTID?.useDefault && this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
+            (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.useDefault && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
     }
 }

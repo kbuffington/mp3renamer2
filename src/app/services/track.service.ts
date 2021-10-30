@@ -17,13 +17,13 @@ export interface Track {
 }
 
 export class MetadataProperty {
-    changed = false; // whether a new default has been set to apply to all tracks (overwriting individual values)
     default = '';
     different = false; // whether not all values are the same
     multiValue = false;
     origValue = '';
     overwrite = true;
     userDefined = false;
+    useDefault = false; // if true, the default value will be used instead of individual values for each track
     values: string[] = [];
     origValues: string[] = []; // copy of values used for resetting
 }
@@ -113,7 +113,8 @@ export class TrackService {
 
         this.unknownProperties = {};
         knownProperties.forEach((prop, name) => {
-            this.processField(metaData, tracks, name, prop.userDefined, prop.multiValue, prop.alias);
+            this.processField(metaData, tracks, name, prop.userDefined,
+                prop.multiValue, prop.useDefault, prop.alias);
         });
         tracks.forEach(t => {
             if (t.userDefined) {
@@ -141,9 +142,11 @@ export class TrackService {
         return this.unknownProperties;
     }
 
-    private processField(metadata, tracks, property: string, userDefined: boolean, multiValue: boolean, alias?: string) {
+    private processField(metadata, tracks, property: string, userDefined: boolean,
+        multiValue: boolean, useDefault = false, alias?: string) {
         const metaProp = new MetadataProperty();
         metaProp.multiValue = multiValue;
+        metaProp.useDefault = useDefault;
         tracks.forEach(t => {
             if (!userDefined) {
                 if (t[property]) {
@@ -217,7 +220,7 @@ export class TrackService {
 
             for (let i = 0; i < this.trackCount; i++) {
                 if (obj.overwrite) {
-                    if (obj.changed) {
+                    if (obj.useDefault) {
                         value = obj.default;
                     } else {
                         value = obj.values[i];
