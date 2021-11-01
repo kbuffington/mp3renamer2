@@ -33,8 +33,8 @@ export class AlbumArt {
     cdart: CdArt[];
 
     constructor(json) {
-        this.albumcover = json.albumcover.map(img => new AlbumCover(img));
-        this.cdart = json.cdart.map(img => new CdArt(img));
+        this.albumcover = json.albumcover?.map(img => new AlbumCover(img)) ?? [];
+        this.cdart = json.cdart?.map(img => new CdArt(img)) ?? [];
     }
 }
 
@@ -66,6 +66,6 @@ export class FanartArtist {
     constructor(json) {
         this.name = json.name;
         this.mbid = json.mbid_id;
-        this.hdmusiclogos = json.hdmusiclogo.map(hdml => new HDMusicLogo(hdml));
+        this.hdmusiclogos = json.hdmusiclogo?.map(hdml => new HDMusicLogo(hdml)) ?? [];
     }
 }

@@ -39,17 +39,29 @@ export class FanartComponent implements OnInit {
     }
 
     private getArtistArt() {
-        this.fanartService.getArtist(this.artistId).toPromise().then(artist => {
+        this.fanartService.getArtist(this.artistId).then(artist => {
             this.artistData = new FanartArtist(artist);
             this.numLogos = this.artistData.hdmusiclogos.length;
             console.log(this.artistData);
+        }).catch((err) => {
+            if (err.status === 404) {
+                console.log('No artist found for', this.artistId);
+            } else {
+                console.log(err);
+            }
         });
     }
 
     private getAlbumArt() {
-        this.fanartService.getAlbum(this.releaseGroupId).toPromise().then(album => {
+        this.fanartService.getAlbum(this.releaseGroupId).then(album => {
             this.albumData = new FanartAlbum(album, this.releaseGroupId);
             console.log(this.albumData);
+        }).catch(err => {
+            if (err.status === 404) {
+                console.log('No album found for', this.releaseGroupId);
+            } else {
+                console.log(err);
+            }
         });
     }
 

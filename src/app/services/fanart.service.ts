@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 
 const FANART_BASE = 'http://webservice.fanart.tv/v3/music/';
 
@@ -24,13 +23,13 @@ export class FanartService {
         return this.http.get(uri);
     }
 
-    public getArtist(artistMBID: string): Observable<any> {
+    public getArtist(artistMBID: string): Promise<any> {
         const uri = `${FANART_BASE}${artistMBID.trim()}?api_key=${API_KEY}`;
-        return this.get(uri);
+        return this.get(uri).toPromise();
     }
 
-    public getAlbum(albumMBID: string): Observable<any> {
+    public getAlbum(albumMBID: string): Promise<any> {
         const uri = `${FANART_BASE}albums/${albumMBID.trim()}?api_key=${API_KEY}`;
-        return this.get(uri);
+        return this.get(uri).toPromise();
     }
 }

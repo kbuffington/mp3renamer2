@@ -22,6 +22,9 @@
                         <clr-icon shape="zoom-in" size="18" class="zoom" (click)="zoom($event, i)"></clr-icon>
                     </button>
                 </div>
+                <h4 class="clr-col-12" *ngIf="!artistData?.hdmusiclogos?.length">
+                    No HD Music Logos found for this artist.
+                </h4>
             </div>
             <div class="clr-row">
                 <h3 class="clr-col-12 logo-header">
@@ -49,6 +52,9 @@
                         {{ cdArtFilename(cdart.saveIndex) }}
                     </div>
                 </div>
+                <h4 class="clr-col-12" *ngIf="!albumData?.album?.cdart.length">
+                    No cdArt found for this album.
+                </h4>
             </div>
         </div>
     </div>
