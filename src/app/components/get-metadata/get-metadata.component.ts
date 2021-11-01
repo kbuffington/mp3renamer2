@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Release } from '@services/musicbrainz.classes';
+import { ArtistCacheService } from '@services/artist-cache.service';
+import { ArtistCredit, ArtistData, Release } from '@services/musicbrainz.classes';
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { MetadataObj, TrackService } from '@services/track.service';
 import { throwError as observableThrowError } from 'rxjs';
@@ -43,6 +44,7 @@ export class GetMetadataComponent implements OnInit {
 
     constructor(private mb: MusicbrainzService,
                 private router: Router,
+                private artistCache: ArtistCacheService,
                 private ts: TrackService) {}
 
     ngOnInit() {
@@ -74,8 +76,29 @@ export class GetMetadataComponent implements OnInit {
                 (release: any) => {
                     this.selectedRelease = new ReleaseDisplay(release, this.metadata);
                     console.log(this.selectedRelease);
+                    this.getArtistCountries(this.selectedRelease.artistCredits);
                 },
                 error => this.handleError(error));
+    }
+
+    private getArtistCountries(artists: ArtistCredit[]) {
+        const artistIds = artists.filter(a => {
+            return a.name !== 'Various Artists' && !this.artistCache.has(a.artist.id);
+        }).map(a => a.artist.id);
+        if (artistIds.length) {
+            this.mb.getArtists(artistIds).then(artistData => {
+                artistData.artists.forEach(artist => {
+                    if (artist.country) {
+                        this.artistCache.set(new ArtistData(artist));
+                    } else {
+                        this.mb.getCountry(artist.area.id).then(country => {
+                            artist.country = country;
+                            this.artistCache.set(new ArtistData(artist));
+                        });
+                    }
+                });
+            });
+        }
     }
 
     private handleError(error: any) {
@@ -88,15 +111,14 @@ export class GetMetadataComponent implements OnInit {
     }
 
     private setMetadataVal(metadata: MetadataObj, key: string, val: string) {
-        // if (metadata[key].default !== val) {
         metadata[key].defaultChanged = true;
-        // }
         metadata[key].default = val;
     }
 
     private setNewDefault(metadata: MetadataObj, key: string) {
         const firstVal = metadata[key].values.find(val => val) ?? '';
         this.setMetadataVal(metadata, key, firstVal);
+        metadata[key].different = this.metadata[key].values.some(v => v !== firstVal);
     }
 
     public apply(release: ReleaseDisplay) {
@@ -122,12 +144,21 @@ export class GetMetadataComponent implements OnInit {
                 metadata.partOfSet.values[track.metadataFoundIndex] = track.discSet;
                 metadata.DISCSUBTITLE.values[track.metadataFoundIndex] = release.media[track.discNumber - 1].title ?? '';
                 metadata.ARTISTFILTER.values[track.metadataFoundIndex] = track.artistFilter;
+                let countries = [];
+                track.artistIDs.forEach((artistId: string) => {
+                    if (this.artistCache.has(artistId)) {
+                        countries.push(this.artistCache.get(artistId).country);
+                    }
+                });
+                countries = [...new Set(countries)];
+                metadata.ARTISTCOUNTRY.values[track.metadataFoundIndex] = countries.join('; ');
             }
         });
         // these properties were changed in forEach, so find and set new default
         this.setNewDefault(metadata, 'partOfSet');
         this.setNewDefault(metadata, 'DISCSUBTITLE');
         this.setNewDefault(metadata, 'ARTISTFILTER');
+        this.setNewDefault(metadata, 'ARTISTCOUNTRY');
 
         const needsAlbumArtist = release.tracks.some(track => track.artistString !== release.artistString);
         this.setMetadataVal(metadata, 'performerInfo', needsAlbumArtist ? release.artistString : '');

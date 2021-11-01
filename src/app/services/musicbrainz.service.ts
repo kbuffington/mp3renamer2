@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Area } from './musicbrainz.classes';
 
 const MB_BASE = 'https://musicbrainz.org/ws/2/';
 
@@ -36,8 +37,38 @@ export class MusicbrainzService {
         return this.get(uri);
     }
 
-    public getArtist(artistMBID: string) {
-        const uri = `${MB_BASE}artist/?query=arid:${artistMBID.trim()}`;
-        return this.get(uri);
+    public getArtists(artistMBIDs: string[]): Promise<any> {
+        let uri = `${MB_BASE}artist/?query=`;
+        artistMBIDs.forEach((mbid, idx) => {
+            const and = idx > 0 ? ' OR ' : '';
+            uri += `${and}arid:${mbid.trim()}`;
+        });
+        return this.get(uri).toPromise();
+    }
+
+    public getArea(areaMBID: string): Promise<any> {
+        const uri = `${MB_BASE}area/?query=aid:${areaMBID}`;
+        return this.get(uri).toPromise();
+    }
+
+    // traverse through artist area, going up the relations until we find a country
+    public async getCountry(areaMBID: string): Promise<string> {
+        const resp = await this.getArea(areaMBID);
+        const areaObj = new Area(resp.areas[0]);
+        if (areaObj.type === 'Country') {
+            return areaObj.name;
+        } else {
+            const parentIds = areaObj.relations?.filter(rel => rel.direction === 'backward').map(a => a.area?.id);
+            if (parentIds) {
+                let country;
+                while (parentIds.length && !country) {
+                    const parentId = parentIds.pop();
+                    country = await this.getCountry(parentId);
+                }
+                return country;
+            } else {
+                return '';
+            }
+        }
     }
 }
