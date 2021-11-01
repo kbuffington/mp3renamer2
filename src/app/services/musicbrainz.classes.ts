@@ -1,3 +1,30 @@
+import { countryCodes } from './countries';
+
+export class ArtistTag {
+    count: number;
+    name: string;
+}
+
+// object from artist query
+export class ArtistData {
+    id: string;
+    name: string;
+    sortName: string;
+    country: string;
+    type: string;
+    tags: ArtistTag[];
+
+    constructor(json: any) {
+        this.id = json.id;
+        this.name = json.name;
+        this.sortName = json['sort-name'];
+        this.country = json.country?.length === 2 ? countryCodes.find(c => c.code === json.country).name : json.country;
+        this.type = json.type;
+        this.tags = json.tags;
+    }
+}
+
+// object as part of artist-credit in release query
 export class Artist {
     disambiguation: string;
     id: string;
@@ -75,6 +102,7 @@ export class Track {
     discNumber: number;
 
     // added fields
+    artistIDs: string[];
     artistCredits: ArtistCredit[];
     artistString: string;
     artistFilter = ''; // sort-order style name used for artistFilter field
@@ -91,6 +119,7 @@ export class Track {
         Object.assign(this, json);
         this.artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
         delete this['artist-credit'];
+        this.artistIDs = this.artistCredits.map(ac => ac.artist.id);
         this.artistString = this.artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
             return idx == 0 ?
                 (artist.name + (artist.joinphrase ? artist.joinphrase : '')) :
@@ -177,5 +206,34 @@ export class Release {
         this.releaseGroup = new ReleaseGroup(json['release-group']);
         this.labelInfo = json['label-info'] ? new LabelInfo(json['label-info']) : undefined;
         this.trackCount = json['track-count'];
+    }
+}
+
+export class AreaRelation {
+    direction: string;
+    type: string;
+    area: Area;
+
+    constructor(json: any) {
+        this.direction = json.direction;
+        this.type = json.type;
+        this.area = new Area(json.area);
+    }
+}
+
+export class Area {
+    id: string;
+    name: string;
+    type: string;
+    relations?: AreaRelation[];
+
+    constructor(json: any) {
+        this.id = json.id;
+        this.name = json.name;
+        this.type = json.type;
+        if (json['relation-list']?.length) {
+            // TODO: is it possible for relation-list to have more than one element?
+            this.relations = json['relation-list'][0].relations.map(r => new AreaRelation(r));
+        }
     }
 }

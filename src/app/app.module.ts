@@ -34,6 +34,7 @@ import { CacheInterceptor } from '@services/http-interceptor.service';
 import { FanartComponent } from '@components/fanart/fanart.component';
 import { FanartService } from '@services/fanart.service';
 import { ConflictModalComponent } from './components/conflict-modal/conflict-modal.component';
+import { ArtistCacheService } from '@services/artist-cache.service';
 
 @NgModule({
     declarations: [
@@ -65,6 +66,7 @@ import { ConflictModalComponent } from './components/conflict-modal/conflict-mod
         NgxElectronModule,
     ],
     providers: [
+        ArtistCacheService,
         CacheService,
         {
             provide: HTTP_INTERCEPTORS,
