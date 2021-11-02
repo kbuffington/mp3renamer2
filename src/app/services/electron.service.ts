@@ -1,5 +1,9 @@
+// taken from https://github.com/maximegris/angular-electron/blob/master/src/app/core/services/electron/electron.service.ts
+// based on a discussion found here: https://github.com/ThorstenHans/ngx-electron/issues/70
 import { Injectable } from '@angular/core';
 
+// If you import a module but never use any of the imported values other than as TypeScript types,
+// the resulting javascript file will look as if you never imported the module at all.
 import { ipcRenderer, webFrame } from 'electron';
 import * as remote from '@electron/remote';
 import * as childProcess from 'child_process';
