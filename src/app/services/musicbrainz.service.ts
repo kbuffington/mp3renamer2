@@ -15,18 +15,23 @@ export class MusicbrainzService {
      * @return {Observable<any>}
      */
     private get(url: string) {
-        const uri = encodeURI(url);
-        console.log(uri);
-        return this.http.get(uri);
+        // const uri = encodeURI(url);
+        console.log(url);
+        return this.http.get(url);
     }
 
     public searchReleases(queryParams: Object, fuzzy = true) {
         // `${MB_BASE}release/?limit=100&query=artist:"${artist.trim()}" AND release:"${album.trim()}"`;
         let uri = `${MB_BASE}release/?limit=100&query=`;
-        Object.keys(queryParams).forEach((key, idx) => {
+        let foundVals = 0;
+        Object.keys(queryParams).forEach(key => {
             if (queryParams[key].length) {
-                const and = idx > 0 ? ' AND ' : '';
-                uri += `${and}${key}:"${fuzzy ? '(' : ''}${queryParams[key].trim()}${fuzzy ? '*)' : ''}"`;
+                const and = foundVals > 0 ? ' AND ' : '';
+                const val = encodeURIComponent(queryParams[key].trim());
+                if (val.length) {
+                    uri += `${and}${key}:"${fuzzy ? '(' : ''}${val}${fuzzy ? '*)' : ''}"`;
+                    foundVals++;
+                }
             }
         });
         return this.get(uri);
