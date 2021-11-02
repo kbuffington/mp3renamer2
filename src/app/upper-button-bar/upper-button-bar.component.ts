@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '@services/electron.service';
 import { TrackService } from '../services/track.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class UpperButtonBarComponent implements OnInit {
     ngOnInit() {}
 
     requestFiles() {
-        if (this.electronService.isElectronApp) {
+        if (this.electronService.isElectron) {
             const mainProcess = this.electronService.remote.require('./main.js');
             mainProcess.getFiles();
         } else {

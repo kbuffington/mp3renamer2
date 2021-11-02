@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClarityModule } from '@clr/angular';
-import { NgxElectronModule } from 'ngx-electron';
 import { AppRoutingModule } from './app-routing.module';
 
 /* Components */
@@ -63,7 +62,6 @@ import { ArtistCacheService } from '@services/artist-cache.service';
         ClarityModule,
         FormsModule,
         HttpClientModule,
-        NgxElectronModule,
     ],
     providers: [
         ArtistCacheService,

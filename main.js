@@ -2,6 +2,8 @@
 const { app, BrowserWindow, dialog, ipcMain, session } = require('electron');
 const { download } = require('electron-dl');
 const fs = require('fs');
+require('@electron/remote/main').initialize();
+
 const NodeID3 = require('../node-id3');
 // const taglib = require('../node-taglib');
 

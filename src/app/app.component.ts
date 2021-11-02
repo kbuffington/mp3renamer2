@@ -1,5 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '@services/electron.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { TrackService } from './services/track.service';
 import { TrackServiceMocks } from './services/track.service.mock';
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if (this.electronService.isElectronApp) {
+        if (this.electronService.isElectron) {
             const mainProcess = this.electronService.remote.require('./main.js');
             mainProcess.loadHardCoded();
         } else {

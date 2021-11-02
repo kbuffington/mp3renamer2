@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FanartAlbum, FanartArtist, FanartImg, HDMusicLogo } from '@services/fanart.classes';
 import { FanartService } from '@services/fanart.service';
 import { TrackService } from '@services/track.service';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '@services/electron.service';
 
 @Component({
     selector: 'fanart',

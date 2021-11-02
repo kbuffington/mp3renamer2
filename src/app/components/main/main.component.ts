@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '@services/electron.service';
 
 import { MetadataObj, TrackService } from '@services/track.service';
 import { Subscription } from 'rxjs/internal/Subscription';
