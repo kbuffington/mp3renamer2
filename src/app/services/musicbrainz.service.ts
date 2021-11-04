@@ -3,10 +3,23 @@ import { Injectable } from '@angular/core';
 import { Area } from './musicbrainz.classes';
 
 const MB_BASE = 'https://musicbrainz.org/ws/2/';
+const RELEASE_INCLUDES = [
+    'artist-credits',
+    'labels',
+    'discids',
+    'recordings',
+    'release-groups',
+    'recording-level-rels',
+    'work-rels',
+    'work-level-rels',
+];
 
 @Injectable()
 export class MusicbrainzService {
-    constructor(private http: HttpClient) { }
+    private releaseIncludes: string;
+    constructor(private http: HttpClient) {
+        this.releaseIncludes = RELEASE_INCLUDES.join('+');
+    }
 
     /**
      * Queries MB with URI provided
@@ -38,7 +51,7 @@ export class MusicbrainzService {
     }
 
     public getReleaseInfo(releaseMbid: string) {
-        const uri = `${MB_BASE}release/${releaseMbid}?inc=artist-credits+labels+discids+recordings+release-groups`;
+        const uri = `${MB_BASE}release/${releaseMbid}?inc=${this.releaseIncludes}`;
         return this.get(uri);
     }
 
@@ -54,6 +67,19 @@ export class MusicbrainzService {
     public getArea(areaMBID: string): Promise<any> {
         const uri = `${MB_BASE}area/?query=aid:${areaMBID}`;
         return this.get(uri).toPromise();
+    }
+
+    public getWork(workID: string): Promise<any> {
+        const uri = `${MB_BASE}work/${workID}?inc=recording-rels+artist-credits+work-rels`;
+        return this.get(uri).toPromise();
+    }
+
+    public getWorks(workIDs: string[]): Promise<any> {
+        const promises = [];
+        workIDs.forEach(id => {
+            promises.push(this.getWork(id));
+        });
+        return Promise.all(promises);
     }
 
     // traverse through artist area, going up the relations until we find a country

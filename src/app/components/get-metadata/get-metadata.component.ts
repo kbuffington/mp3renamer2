@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArtistCacheService } from '@services/artist-cache.service';
-import { ArtistCredit, ArtistData, Release } from '@services/musicbrainz.classes';
+import { ArtistCredit, ArtistData, Release, Work } from '@services/musicbrainz.classes';
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { MetadataObj, TrackService } from '@services/track.service';
 import { throwError as observableThrowError } from 'rxjs';
@@ -37,6 +37,7 @@ export class GetMetadataComponent implements OnInit {
     public artist = '';
     public album = '';
     public fetchingReleases = false;
+    public hasCovers = false;
     public numTracks: number;
     public selectedRelease: ReleaseDisplay;
 
@@ -71,12 +72,28 @@ export class GetMetadataComponent implements OnInit {
     }
 
     public getReleaseInfo(release: Release) {
+        this.hasCovers = false;
+        this.selectedRelease = null;
         this.mb.getReleaseInfo(release.id)
             .subscribe(
                 (release: any) => {
                     this.selectedRelease = new ReleaseDisplay(release, this.metadata);
                     console.log(this.selectedRelease);
                     this.getArtistCountries(this.selectedRelease.artistCredits);
+                    this.selectedRelease.tracks.forEach(track => {
+                        track.relations.forEach(relation => {
+                            if (relation.attributes.includes('cover')) {
+                                this.hasCovers = true;
+                                this.mb.getWork(relation.work.id).then(work => {
+                                    const w = new Work(work);
+                                    const rel = w.relations.find(r => r.attributes.length === 0);
+                                    if (rel?.artistString) {
+                                        track.originalArtist = rel.artistString;
+                                    }
+                                });
+                            }
+                        });
+                    });
                 },
                 error => this.handleError(error));
     }
@@ -146,6 +163,9 @@ export class GetMetadataComponent implements OnInit {
                 metadata.partOfSet.values[track.metadataFoundIndex] = track.discSet;
                 metadata.DISCSUBTITLE.values[track.metadataFoundIndex] = release.media[track.discNumber - 1].title ?? '';
                 metadata.ARTISTFILTER.values[track.metadataFoundIndex] = track.artistFilter;
+                if (track.originalArtist) {
+                    metadata.originalArtist.values[track.metadataFoundIndex] = track.originalArtist;
+                }
                 let countries = [];
                 track.artistIDs.forEach((artistId: string) => {
                     if (this.artistCache.has(artistId)) {
@@ -157,6 +177,7 @@ export class GetMetadataComponent implements OnInit {
             }
         });
         // these properties were changed in forEach, so find and set new default
+        this.setNewDefault(metadata, 'originalArtist');
         this.setNewDefault(metadata, 'partOfSet');
         this.setNewDefault(metadata, 'DISCSUBTITLE');
         this.setNewDefault(metadata, 'ARTISTFILTER');

@@ -114,6 +114,7 @@
                 <clr-dg-column class="track-num">Track</clr-dg-column>
                 <clr-dg-column class="artist" [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
                 <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
+                <clr-dg-column *ngIf="hasCovers">Original Artist</clr-dg-column>"
                 <clr-dg-column class="time">Time</clr-dg-column>
 
                 <clr-dg-row *clrDgItems="let track of selectedRelease.tracks" [ngClass]="{ 'notfound': track.metadataFoundIndex === -1 }">
@@ -128,6 +129,9 @@
                     <clr-dg-cell>
                         {{ track.title }}
                         <span *ngIf="track.metadataDiffers" class="diff">[{{track.metadataTitle}}]</span>
+                    </clr-dg-cell>
+                    <clr-dg-cell *ngIf="hasCovers">
+                        {{ track.originalArtist }}
                     </clr-dg-cell>
                     <clr-dg-cell class="time">{{ track.time }}</clr-dg-cell>
                 </clr-dg-row>

@@ -73,6 +73,7 @@ export class LabelInfo {
     allLabels = ''; // semi-colon delimited list of labels
     catalogNumbers = [];
     selectedCatalog: string;
+    labelIds: string[] = [];
 
     constructor(labels: any[]) {
         Object.assign(this, labels);
@@ -89,6 +90,9 @@ export class LabelInfo {
                 if (this.catalogNumbers.length) {
                     this.selectedCatalog = this.catalogNumbers[0];
                 }
+                if (l.id) {
+                    this.labelIds.push(l.id);
+                }
             });
         }
     }
@@ -100,6 +104,7 @@ export class Track {
     length: number;
     title: string;
     discNumber: number;
+    relations: WorkRelation[] = [];
 
     // added fields
     artistIDs: string[];
@@ -112,11 +117,12 @@ export class Track {
     metadataFound = false; // was the track found in the metadata (by discTrackStr)?
     metadataFoundIndex = -1; // index into tracklist of found item
     metadataTitle?: string; // title found in metadata
+    originalArtist?: string;
     time: string;
-
 
     constructor(json: any, discNumber: number, totalDiscs: number, albumArtist: string) {
         Object.assign(this, json);
+        // this.title = this.title.replace(/’/g, '\'');
         this.artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
         delete this['artist-credit'];
         this.artistIDs = this.artistCredits.map(ac => ac.artist.id);
@@ -139,6 +145,7 @@ export class Track {
             this.discSet = `${discNumber}/${totalDiscs}`;
         }
         this.discTrackStr = `${discNumber}-${this.position}`;
+        this.relations = json.recording.relations?.map(r => new WorkRelation(r));
     }
 }
 export class Media {
@@ -234,6 +241,47 @@ export class Area {
         if (json['relation-list']?.length) {
             // TODO: is it possible for relation-list to have more than one element?
             this.relations = json['relation-list'][0].relations.map(r => new AreaRelation(r));
+        }
+    }
+}
+
+export class WorkRelation {
+    direction: string;
+    attributes: string[];
+    targetType: string;
+    type: string;
+    artistCredits?: ArtistCredit[];
+    artistString?: string;
+    work?: Work;
+
+    constructor(json: any) {
+        this.direction = json.direction;
+        this.attributes = json.attributes;
+        this.targetType = json.targetType;
+        this.type = json.type;
+        if (json.recording?.['artist-credit']) {
+            this.artistCredits = json.recording['artist-credit']?.map(ac => new ArtistCredit(ac));
+            this.artistString = this.artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
+                return idx == 0 ?
+                    (artist.name + (artist.joinphrase ? artist.joinphrase : '')) :
+                    prevVal + artist.name + (artist.joinphrase ? artist.joinphrase : '');
+            }, '');
+        }
+        if (json.work) {
+            this.work = new Work(json.work);
+        }
+    }
+}
+export class Work {
+    id: string;
+    title: string;
+    relations?: WorkRelation[];
+
+    constructor(json: any) {
+        this.id = json.id;
+        this.title = json.title;
+        if (json['relations']) {
+            this.relations = json['relations']?.map(r => new WorkRelation(r)) ?? [];
         }
     }
 }
