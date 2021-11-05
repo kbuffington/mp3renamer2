@@ -34,6 +34,7 @@ import { FanartComponent } from '@components/fanart/fanart.component';
 import { FanartService } from '@services/fanart.service';
 import { ConflictModalComponent } from './components/conflict-modal/conflict-modal.component';
 import { ArtistCacheService } from '@services/artist-cache.service';
+import { ThrottleService } from '@services/throttle.service';
 
 @NgModule({
     declarations: [
@@ -75,6 +76,7 @@ import { ArtistCacheService } from '@services/artist-cache.service';
         FanartService,
         MusicbrainzService,
         PreloadService,
+        ThrottleService,
         TrackService,
         {
             provide: APP_INITIALIZER,

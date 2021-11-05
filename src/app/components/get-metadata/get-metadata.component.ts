@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ArtistCacheService } from '@services/artist-cache.service';
 import { ArtistCredit, ArtistData, Release, Work } from '@services/musicbrainz.classes';
 import { MusicbrainzService } from '@services/musicbrainz.service';
+import { ThrottleService } from '@services/throttle.service';
 import { MetadataObj, TrackService } from '@services/track.service';
 import { throwError as observableThrowError } from 'rxjs';
 
@@ -46,6 +47,7 @@ export class GetMetadataComponent implements OnInit {
     constructor(private mb: MusicbrainzService,
                 private router: Router,
                 private artistCache: ArtistCacheService,
+                private throttleService: ThrottleService,
                 private ts: TrackService) {}
 
     ngOnInit() {
@@ -61,6 +63,7 @@ export class GetMetadataComponent implements OnInit {
     public requestMetadata() {
         this.selectedRelease = null;
         this.fetchingReleases = true;
+        this.throttleService.clearQueuedRequests();
         this.mb.searchReleases({ artist: this.artist, release: this.album })
             .subscribe(
                 (data: any) => {
@@ -74,6 +77,7 @@ export class GetMetadataComponent implements OnInit {
     public getReleaseInfo(release: Release) {
         this.hasCovers = false;
         this.selectedRelease = null;
+        this.throttleService.clearQueuedRequests();
         this.mb.getReleaseInfo(release.id)
             .subscribe(
                 (release: any) => {
@@ -90,7 +94,7 @@ export class GetMetadataComponent implements OnInit {
                                     if (rel?.artistString) {
                                         track.originalArtist = rel.artistString;
                                     }
-                                });
+                                }).catch(err => err);
                             }
                         });
                     });
