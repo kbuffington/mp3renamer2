@@ -19,6 +19,7 @@
 				[ngClass]="{ 'dont-overwrite': !value.overwrite }"
 				(input)="defaultValChanged($event.target.value)">
 			<select *ngSwitchCase="inputTypes.Select"
+					clrSelect
 					[ngModel]="value.default"
 					[ngClass]="{ 'dont-overwrite': !value.overwrite }"
 					(input)="defaultValChanged($event.target.value)">

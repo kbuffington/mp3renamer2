@@ -34,6 +34,7 @@
 
     ::ng-deep {
         clr-input-container.clr-form-control,
+        clr-select-container.clr-form-control,
         clr-textarea-container.clr-form-control {
             margin-top: 0;
             flex-grow: 1;
@@ -55,6 +56,13 @@
 
                 .clr-input {
                     padding: 0 1px 0 3px;
+                }
+            }
+            .clr-select-wrapper {
+                width: 100%;
+
+                select {
+                    width: 100%;
                 }
             }
         }
