@@ -23,6 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.ts.setTracks([]);
         if (this.electronService.isElectron) {
             const mainProcess = this.electronService.remote.require('./main.js');
             mainProcess.loadHardCoded();
