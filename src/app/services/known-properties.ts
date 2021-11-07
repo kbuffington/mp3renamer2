@@ -3,6 +3,7 @@ export class PropertyInfo {
     multiValue: boolean; // true if the property is a multi-value property
     useDefault?: boolean; // true if all files should share the same default value
     alias?: string;
+    write? = true;
 }
 
 /* eslint-disable no-multi-spaces */
@@ -31,6 +32,7 @@ export const knownProperties: Map<string, PropertyInfo> = new Map([
     ['LABEL',                       { userDefined: true, multiValue: true, alias: 'label', useDefault: true }],
     ['MUSICBRAINZ_ARTISTID',        { userDefined: true, multiValue: true, useDefault: true }],
     ['MUSICBRAINZ_RELEASEGROUPID',  { userDefined: true, multiValue: true, useDefault: true }],
+    ['MUSICBRAINZ_LABELID',         { userDefined: true, multiValue: true, write: false }],
     ['RELEASETYPE',                 { userDefined: true, multiValue: true, useDefault: true }],
     ['RELEASECOUNTRY',              { userDefined: true, multiValue: true, useDefault: true }],
     ['replaygain_album_gain',       { userDefined: true, multiValue: true, useDefault: true }],

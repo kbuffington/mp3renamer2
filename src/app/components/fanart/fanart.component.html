@@ -22,7 +22,7 @@
                         <clr-icon shape="zoom-in" size="18" class="zoom" (click)="zoom($event, i)"></clr-icon>
                     </button>
                 </div>
-                <h4 class="clr-col-12" *ngIf="!artistData?.hdmusiclogos?.length">
+                <h4 class="clr-col-12 no-logos-header" *ngIf="!artistData?.hdmusiclogos?.length">
                     No HD Music Logos found for this artist.
                 </h4>
             </div>
@@ -34,7 +34,7 @@
                             <input type="checkbox" clrToggle required [(ngModel)]="multiDisc" />
                             <label>Allow Multi-Disc</label>
                         </clr-toggle-wrapper>
-                      </clr-toggle-container>
+                    </clr-toggle-container>
                 </h3>
                 <div class="img-container clr-col-4" *ngFor="let cdart of albumData?.album.cdart; let i = index">
                     <button class="btn btn-outline btn-img"
@@ -52,9 +52,32 @@
                         {{ cdArtFilename(cdart.saveIndex) }}
                     </div>
                 </div>
-                <h4 class="clr-col-12" *ngIf="!albumData?.album?.cdart.length">
+                <h4 class="clr-col-12 no-logos-header" *ngIf="!albumData?.album?.cdart.length">
                     No cdArt found for this album.
                 </h4>
+            </div>
+            <div class="clr-row" *ngIf="musicLabels.length">
+                <h3 class="clr-col-12 logo-header">
+                    Record Labels
+                </h3>
+                <ng-container *ngFor="let label of musicLabels">
+                    <div class="clr-col-12">
+                        <h4 class="label-header">{{ label.name }}</h4>
+                    </div>
+                    <div class="img-container clr-col-4" *ngFor="let logo of label.musiclabels; let i = index">
+                        <button class="btn btn-outline btn-img"
+                                [ngClass]="{'btn-selected': logo.save }"
+                                (mouseenter)="mouseEnter(i, label)"
+                                (mouseleave)="mouseLeave()"
+                                (click)="labelButtonClicked(logo, label)">
+                            <img [src]="logo.url" class="logo-img">
+                            <clr-icon shape="zoom-in" size="18" class="zoom" (click)="zoom($event, i, label)"></clr-icon>
+                        </button>
+                    </div>
+                    <h4 class="clr-col-12 no-logos-header" *ngIf="!label.musiclabels.length">
+                        No logos found for this recordlabel.
+                    </h4>
+                </ng-container>
             </div>
         </div>
     </div>

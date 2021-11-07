@@ -69,3 +69,24 @@ export class FanartArtist {
         this.hdmusiclogos = json.hdmusiclogo?.map(hdml => new HDMusicLogo(hdml)) ?? [];
     }
 }
+
+export class LabelLogo extends FanartImg {
+    save = false;
+    color: string;
+
+    constructor(json) {
+        super(json);
+        this.color = json.colour;
+    }
+}
+export class FanartMusicLabel {
+    name: string;
+    labelId: string;
+    musiclabels: LabelLogo[] = [];
+
+    constructor(json) {
+        this.name = json.name;
+        this.labelId = json.id;
+        this.musiclabels = json.musiclabel?.map(ml => new LabelLogo(ml)) ?? [];
+    }
+}

@@ -136,7 +136,6 @@ export class Track {
             if (albumArtist === 'Various Artists' || albumArtist === 'Soundtrack') {
                 this.artistFilter += '; ' + albumArtist;
             }
-            console.log(this.artistString, '--', albumArtist, ':', this.artistFilter);
         }
         const seconds = json.length / 1000;
         this.time = `${Math.floor(seconds / 60)}:${('00' + Math.floor(seconds % 60)).slice(-2)}`;

@@ -27,6 +27,7 @@ export class MetadataProperty {
     defaultChanged = false; // has initial value of useDefault changed, or has default value changed?
     values: string[] = [];
     origValues: string[] = []; // copy of values used for resetting
+    write = false; // whether to write this property to the file
 }
 
 export class MetadataObj {
@@ -116,6 +117,7 @@ export class TrackService {
         knownProperties.forEach((prop, name) => {
             this.processField(metaData, tracks, name, prop.userDefined,
                 prop.multiValue, prop.useDefault, prop.alias);
+            metaData[name].write = prop.write;
         });
         tracks.forEach(t => {
             if (t.userDefined) {
@@ -215,8 +217,8 @@ export class TrackService {
             t.title = trackList[i].title;
             t.trackNumber = trackList[i].trackNumber;
         }
-        Object.keys(metadata).forEach(key => {
-            const obj: MetadataProperty = metadata[key];
+        Object.entries(metadata).forEach(([key, obj]) => {
+            if (!obj.write) return;
             let value: any;
 
             for (let i = 0; i < this.trackCount; i++) {

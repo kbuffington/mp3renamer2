@@ -23,7 +23,9 @@
         <div class="btn-container">
             <button class="btn btn-outline"
                     [routerLink]="'/fanart/'"
-                    [queryParams]="{artistId: metadata.MUSICBRAINZ_ARTISTID?.default, albumId: metadata.MUSICBRAINZ_RELEASEGROUPID?.default}"
+                    [queryParams]="{artistId: metadata.MUSICBRAINZ_ARTISTID?.default,
+                                    albumId: metadata.MUSICBRAINZ_RELEASEGROUPID?.default,
+                                    labelIds: metadata.MUSICBRAINZ_LABELID?.default}"
                     [disabled]="!metadata.MUSICBRAINZ_ARTISTID?.default">
                 Get Fanart
             </button>

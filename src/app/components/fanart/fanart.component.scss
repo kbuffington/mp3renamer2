@@ -29,6 +29,16 @@ $button-down: #daecfc;
     padding: 0 .5rem;
     overflow-y: auto;
     height: calc(100vh - 6rem);
+
+    .no-logos-header {
+        margin-top: .5rem;
+        margin-left: .25rem;
+        margin-bottom: .25rem;
+    }
+
+    .label-header {
+        margin-top: .75rem;
+    }
 }
 
 .logo-header {

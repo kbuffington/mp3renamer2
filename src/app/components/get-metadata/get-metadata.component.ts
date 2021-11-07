@@ -154,6 +154,7 @@ export class GetMetadataComponent implements OnInit {
         this.setMetadataVal(metadata, 'RELEASETYPE', release.releaseGroup.primaryType);
         this.setMetadataVal(metadata, 'MUSICBRAINZ_RELEASEGROUPID', release.releaseGroup.id);
         this.setMetadataVal(metadata, 'MUSICBRAINZ_ARTISTID', release.artistCredits[0].artist.id);
+        this.setMetadataVal(metadata, 'MUSICBRAINZ_LABELID', release.labelInfo.labelIds.join('; '));
         if (new Date(release.date).getTime() - new Date(release.releaseGroup.firstReleaseDate).getTime() > ONE_WEEK) {
             this.setMetadataVal(metadata, 'originalReleaseDate', release.releaseGroup.firstReleaseDate);
         } else {

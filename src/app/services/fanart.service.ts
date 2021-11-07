@@ -32,4 +32,9 @@ export class FanartService {
         const uri = `${FANART_BASE}albums/${albumMBID.trim()}?api_key=${API_KEY}`;
         return this.get(uri).toPromise();
     }
+
+    public getLogo(logoMBID: string): Promise<any> {
+        const uri = `${FANART_BASE}labels/${logoMBID.trim()}?api_key=${API_KEY}`;
+        return this.get(uri).toPromise();
+    }
 }
