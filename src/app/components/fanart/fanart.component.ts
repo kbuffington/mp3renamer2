@@ -141,12 +141,14 @@ export class FanartComponent implements OnInit {
 
     public isSaveDisabled(): boolean {
         return !this.artistData?.hdmusiclogos.find(val => val.save) &&
-            !this.albumData?.album.cdart.find(val => val.saveIndex);
+            !this.albumData?.album.cdart.find(val => val.saveIndex) &&
+            !this.musicLabels.find(val => val.musiclabels.find(val => val.save));
     }
 
     public saveSelected() {
         const saveLogo = this.artistData.hdmusiclogos.filter(val => val.save);
         const saveDiscs = this.albumData.album.cdart.filter(val => val.saveIndex);
+        const saveLabels = this.musicLabels.filter(val => val.musiclabels.filter(l => l.save).length > 0);
         saveLogo.forEach(logo => {
             this.electronService.ipcRenderer.send('download', {
                 url: logo.url,
@@ -157,7 +159,6 @@ export class FanartComponent implements OnInit {
             });
         });
         saveDiscs.forEach(disc => {
-            console.log(this.ts.getCurrentFolder());
             this.electronService.ipcRenderer.send('download', {
                 url: disc.url,
                 options: {
@@ -166,7 +167,17 @@ export class FanartComponent implements OnInit {
                 },
             });
         });
-        console.log(saveLogo, saveDiscs);
+        saveLabels.forEach(label => {
+            const img = label.musiclabels.find(l => l.save);
+            const saveName = label.name.replace(/ Records$/, '').replace(/ Recordings$/, '').replace(/ Music$/, '');
+            this.electronService.ipcRenderer.send('download', {
+                url: img.url,
+                options: {
+                    filename: `${saveName}.png`,
+                    directory: '/Users/kevinbuffington',
+                },
+            });
+        });
         this.router.navigate(['/']);
     }
 
