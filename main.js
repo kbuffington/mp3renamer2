@@ -161,6 +161,15 @@ ipcMain.on('download', (event, info) => {
     // console.log('done with', info.options.filename);
 });
 
+ipcMain.on('select-dirs', async (event, properties) => {
+    const result = await dialog.showOpenDialog(mainWindow, {
+        defaultPath: properties.directory ? properties.directory : app.getPath('downloads'),
+        properties: ['openDirectory'],
+    });
+    console.log('directory selected:', result.filePaths);
+    mainWindow.webContents.send('selected-dirs', { prop: properties.prop, dir: result.filePaths[0] });
+});
+
 exports.getFiles = getFiles;
 exports.loadHardCoded = loadHardCoded; // for testing purposes open files on reload
 exports.quitApp = quitApp;

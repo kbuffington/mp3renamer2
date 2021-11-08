@@ -16,7 +16,7 @@ import { EditableCellComponent } from './editable-cell/editable-cell.component';
 import { InputFieldComponent } from './input-field/input-field.component';
 import { LeftPanelComponent } from './left-panel/left-panel.component';
 import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.component';
-import { PreferencesComponent } from '@components/preferences/preferences.component';
+import { ConfigComponent } from '@components/config/config.component';
 import { RenamerGridComponent } from './renamer-grid/renamer-grid.component';
 import { RightPanelComponent } from './right-panel/right-panel.component';
 import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.component';
@@ -35,6 +35,7 @@ import { FanartService } from '@services/fanart.service';
 import { ConflictModalComponent } from './components/conflict-modal/conflict-modal.component';
 import { ArtistCacheService } from '@services/artist-cache.service';
 import { ThrottleService } from '@services/throttle.service';
+import { ConfigService } from '@services/config.service';
 
 @NgModule({
     declarations: [
@@ -48,7 +49,7 @@ import { ThrottleService } from '@services/throttle.service';
         InputFieldComponent,
         LeftPanelComponent,
         MetadataHandlerComponent,
-        PreferencesComponent,
+        ConfigComponent,
         RightPanelComponent,
         UnknownPropertiesComponent,
         UpperButtonBarComponent,
@@ -72,6 +73,7 @@ import { ThrottleService } from '@services/throttle.service';
             useClass: CacheInterceptor,
             multi: true,
         },
+        ConfigService,
         DontAllowOnReload,
         FanartService,
         MusicbrainzService,

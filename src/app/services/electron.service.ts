@@ -8,7 +8,6 @@ import { ipcRenderer, webFrame } from 'electron';
 import * as remote from '@electron/remote';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
-
 @Injectable({
     providedIn: 'root',
 })

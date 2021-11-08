@@ -1,4 +1,5 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ConfigService } from '@services/config.service';
 import { ElectronService } from '@services/electron.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { TrackService } from './services/track.service';
@@ -15,8 +16,10 @@ export class AppComponent implements OnInit, OnDestroy {
     public trackSubscription: Subscription;
 
     constructor(private electronService: ElectronService,
+                private configService: ConfigService,
                 private ts: TrackService,
                 private zone: NgZone) {
+        configService.loadConfig();
         // we need to call zone.run() whenever the trackSubscription updates
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.trackSubscription = ts.getTracks().subscribe(tracks => zone.run(() => {}));

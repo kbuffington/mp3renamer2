@@ -2,6 +2,16 @@
     padding: 0 .5rem;
     overflow-y: auto;
     height: calc(100vh - 6rem);
+
+    ::ng-deep {
+        .clr-control-container {
+            width: 100%;
+
+            input {
+                width: 100%;
+            }
+        }
+    }
 }
 
 footer {

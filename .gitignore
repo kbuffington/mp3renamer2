@@ -40,3 +40,6 @@ testem.log
 Thumbs.db
 /temp/*
 !/temp/.placeholder
+
+# Config files
+config.json
