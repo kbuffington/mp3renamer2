@@ -30,12 +30,25 @@ export class ConfigService {
     public loadConfig(): void {
         this.electronService.fs.readFile(`${this.path}/${CONFIG_FILE_NAME}`, (err, data) => {
             if (err) {
-                console.error(err);
+                // config file does not exist so create default
+                const defaultConfig = this.defaultConfig();
+                this.saveConfig(defaultConfig);
+                this.configuration.next(defaultConfig);
             } else {
                 const json = JSON.parse(data.toString());
                 this.configuration.next(new ConfigSettingsObject(json));
             }
         });
+    }
+
+    private defaultConfig(): ConfigSettingsObject {
+        const defaultConfig = new ConfigSettingsObject({
+            homeDir: this.electronService.remote.app.getAppPath(),
+            artistLogoDir: this.electronService.remote.app.getPath('downloads'),
+            labelLogoDir: this.electronService.remote.app.getPath('downloads'),
+        });
+
+        return defaultConfig;
     }
 
     public saveConfig(config: ConfigSettingsObject): void {
