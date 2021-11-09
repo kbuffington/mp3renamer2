@@ -5,22 +5,22 @@
                 <label>Home Directory ("Load Files" will start from here)</label>
                 <input clrInput placeholder="Choose a directory" [(ngModel)]="config.homeDir" />
             </clr-input-container>
-            <button class="btn btn-primary btn-sm" (click)="browseDirectory('homeDir')">Browse</button>
+            <button class="btn btn-primary btn-sm directory-select-btn" (click)="browseDirectory('homeDir')">Browse</button>
             <clr-input-container>
                 <label>Artist Logos Directory</label>
                 <input clrInput placeholder="Choose a directory" [(ngModel)]="config.artistLogoDir" />
             </clr-input-container>
-            <button class="btn btn-primary" (click)="browseDirectory('artistLogoDir')">Browse</button>
+            <button class="btn btn-primary btn-sm directory-select-btn" (click)="browseDirectory('artistLogoDir')">Browse</button>
             <clr-input-container>
                 <label>Label Logos Directory</label>
                 <input clrInput placeholder="Choose a directory" [(ngModel)]="config.labelLogoDir" />
             </clr-input-container>
-            <button class="btn btn-primary" (click)="browseDirectory('labelLogoDir')">Browse</button>
+            <button class="btn btn-primary btn-sm directory-select-btn" (click)="browseDirectory('labelLogoDir')">Browse</button>
         </div>
     </div>
     <footer>
         <div class="btn-container">
-            <button class="btn btn-primary" (click)="saveConfig()">Save</button>
+            <button class="btn btn-primary" (click)="saveConfig()" [disabled]="saveDisabled()">Save</button>
             <button class="btn btn-outline" [routerLink]="'/'">Back</button>
         </div>
     </footer>

@@ -15,6 +15,7 @@ export class ConfigComponent implements OnInit {
 
     private configSubscription: Subscription;
     private mainWindow: Electron.BrowserWindow;
+    private configBackup: ConfigSettingsObject;
 
     constructor(private electronService: ElectronService,
                 private configService: ConfigService,
@@ -22,6 +23,7 @@ export class ConfigComponent implements OnInit {
                 private zone: NgZone) {
         this.configSubscription = configService.getConfig().subscribe((config) => {
             this.config = config;
+            this.configBackup = { ...this.config };
             this.zone.run(() => {});
         });
     }
@@ -44,5 +46,11 @@ export class ConfigComponent implements OnInit {
 
     public saveConfig() {
         this.configService.saveConfig(this.config);
+        this.configBackup = { ...this.config };
+    }
+
+    public saveDisabled() {
+        const props = Object.keys(this.config);
+        return !props.some(prop => this.config[prop] !== this.configBackup[prop]);
     }
 }

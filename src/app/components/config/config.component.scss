@@ -5,12 +5,19 @@
 
     ::ng-deep {
         .clr-control-container {
-            width: 100%;
+            width: calc(100% - 5rem);
 
             input {
                 width: 100%;
             }
         }
+    }
+
+    .directory-select-btn {
+        margin-top: -1.2rem;
+        right: 0px;
+        width: 4.25rem;
+        position: absolute;
     }
 }
 
