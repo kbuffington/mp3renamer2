@@ -52,6 +52,6 @@ export class ConfigService {
     }
 
     public saveConfig(config: ConfigSettingsObject): void {
-        this.electronService.fs.writeFile(`${this.path}/${CONFIG_FILE_NAME}`, JSON.stringify(config), () => {});
+        this.electronService.fs.writeFile(`${this.path}/${CONFIG_FILE_NAME}`, JSON.stringify(config, null, 4), () => {});
     }
 }
