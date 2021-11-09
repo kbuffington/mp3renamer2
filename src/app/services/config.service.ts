@@ -52,7 +52,6 @@ export class ConfigService {
     }
 
     public saveConfig(config: ConfigSettingsObject): void {
-        // this.electronService.ipcRenderer.send('save-config', config);
         this.electronService.fs.writeFile(`${this.path}/${CONFIG_FILE_NAME}`, JSON.stringify(config), () => {});
     }
 }

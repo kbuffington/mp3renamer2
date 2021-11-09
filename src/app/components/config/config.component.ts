@@ -14,6 +14,7 @@ export class ConfigComponent implements OnInit {
     public config: ConfigSettingsObject;
 
     private configSubscription: Subscription;
+    private mainWindow: Electron.BrowserWindow;
 
     constructor(private electronService: ElectronService,
                 private configService: ConfigService,
@@ -26,21 +27,19 @@ export class ConfigComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.electronService.ipcRenderer.on('selected-dirs', (event, arg) => {
-            this.zone.run(() => {
-                console.log(arg);
-                this.config[arg.prop] = arg.dir;
-                console.log(this.config);
-            });
-        });
+        this.mainWindow = this.electronService.remote.getCurrentWindow();
     }
 
-    public browseDirectory(prop: string) {
+    public async browseDirectory(prop: string) {
         const dir = this.config[prop];
-        this.electronService.ipcRenderer.send('select-dirs', {
-            directory: dir,
-            prop: prop,
+        const result = await this.electronService.remote.dialog.showOpenDialog(this.mainWindow, {
+            defaultPath: dir ? dir : this.electronService.remote.app.getPath('downloads'),
+            properties: ['openDirectory'],
         });
+        // if canceled just ignore
+        if (!result.canceled) {
+            this.config[prop] = result.filePaths[0];
+        }
     }
 
     public saveConfig() {
