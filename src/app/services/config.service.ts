@@ -27,6 +27,10 @@ export class ConfigService {
         return this.configuration.asObservable();
     }
 
+    public getCurrentConfig(): ConfigSettingsObject {
+        return this.configuration.getValue();
+    }
+
     public loadConfig(): void {
         this.electronService.fs.readFile(`${this.path}/${CONFIG_FILE_NAME}`, (err, data) => {
             if (err) {

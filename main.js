@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, dialog, ipcMain, session } = require('electron');
 const { download } = require('electron-dl');
+const path = require('path');
 const fs = require('fs');
 require('@electron/remote/main').initialize();
 
@@ -45,9 +46,9 @@ function createWindow() {
     });
 }
 
-function getFiles() {
+function getFiles(directory) {
     dialog.showOpenDialog({
-        defaultPath: '~/Desktop/Ghost - 2013 - If You Have Ghost/',
+        defaultPath: directory,
         properties: ['openFile', 'multiSelections'],
     }).then(resp => {
         console.log(resp.filePaths);
@@ -156,6 +157,9 @@ const downloadQueue = new DownloadQueue();
 
 ipcMain.on('download', (event, info) => {
     info.win = BrowserWindow.getFocusedWindow();
+    if (info.options.directory) {
+        info.options.directory = path.resolve(info.options.directory);
+    }
     downloadQueue.push(info);
     // await download(info.win, info.url, info.options);
     // console.log('done with', info.options.filename);

@@ -4,6 +4,7 @@ import { FanartAlbum, FanartArtist, FanartImg, FanartMusicLabel, HDMusicLogo, La
 import { FanartService } from '@services/fanart.service';
 import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
+import { ConfigService, ConfigSettingsObject } from '@services/config.service';
 
 @Component({
     selector: 'fanart',
@@ -25,10 +26,12 @@ export class FanartComponent implements OnInit {
     private labelIds: string[] = [];
     private hoverTimer: any;
     private releaseGroupId: string;
+    private configSettings: ConfigSettingsObject;
 
     @ViewChild('popOverContainer') popOverContainer: ElementRef;
 
     constructor(private electronService: ElectronService,
+                private configService: ConfigService,
                 private route: ActivatedRoute,
                 private router: Router,
                 private ts: TrackService,
@@ -45,6 +48,7 @@ export class FanartComponent implements OnInit {
         this.getArtistArt();
         this.getAlbumArt();
         this.getLabelLogos();
+        this.configSettings = this.configService.getCurrentConfig();
     }
 
     private getArtistArt() {
@@ -154,7 +158,7 @@ export class FanartComponent implements OnInit {
                 url: logo.url,
                 options: {
                     filename: `${this.artistData.name}.png`,
-                    directory: '/Users/kevinbuffington',
+                    directory: this.configSettings.artistLogoDir,
                 },
             });
         });
@@ -174,7 +178,7 @@ export class FanartComponent implements OnInit {
                 url: img.url,
                 options: {
                     filename: `${saveName}.png`,
-                    directory: '/Users/kevinbuffington',
+                    directory: this.configSettings.labelLogoDir,
                 },
             });
         });

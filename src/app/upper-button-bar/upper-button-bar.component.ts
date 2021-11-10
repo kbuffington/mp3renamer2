@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfigService } from '@services/config.service';
 import { ElectronService } from '@services/electron.service';
 import { TrackService } from '../services/track.service';
 
@@ -9,14 +10,16 @@ import { TrackService } from '../services/track.service';
 })
 export class UpperButtonBarComponent implements OnInit {
     constructor(private electronService: ElectronService,
+                private configService: ConfigService,
                 private ts: TrackService) {}
 
     ngOnInit() {}
 
-    requestFiles() {
+    public requestFiles() {
+        const config = this.configService.getCurrentConfig();
         if (this.electronService.isElectron) {
             const mainProcess = this.electronService.remote.require('./main.js');
-            mainProcess.getFiles();
+            mainProcess.getFiles(config.homeDir);
         } else {
             // we'll need to use mocked file data here
         }
