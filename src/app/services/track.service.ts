@@ -3,17 +3,27 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { knownProperties } from './known-properties';
 
 export interface Track {
-    artist: string;
-    album: string;
-    title: string;
-    trackNumber: string;
-    userDefined: any;
+    artist?: string | string[];
+    album?: string;
+    composer?: string | string[];
+    genre?: string | string[];
+    image?: any;
+    partOfSet?: string;
+    performerInfo?: string | string[];
+    title?: string;
+    trackNumber?: string;
+    userDefined?: {
+        // non-standard properties (typically stored in TXXX frame)
+        [key: string]: any;
+    };
     meta: {
+        // information about the physical file
         originalFilename: string;
         filename: string;
         folder: string;
         extension: string;
     };
+    raw: any; // raw frames from the file
 }
 
 export class MetadataProperty {
@@ -39,7 +49,7 @@ export class TrackOptions {
 }
 
 export class UnknownPropertiesObj {
-    [key: string]: string | string[];
+    [key: string]: MetadataProperty;
 }
 
 export class CommentStruct {
@@ -72,7 +82,7 @@ export class TrackService {
         return this.trackOptions.asObservable();
     }
 
-    setTracks(tracks: any) {
+    setTracks(tracks: Track[]) {
         this.trackDataBackup = JSON.parse(JSON.stringify(tracks));
         const trackList = tracks.map((t: Track) => {
             t.meta.originalFilename = t.meta.filename;
@@ -108,23 +118,28 @@ export class TrackService {
         return this.trackMetaData.getValue();
     }
 
-    private processTracks(tracks: any) {
+    private processTracks(tracks: Track[]) {
         const metaData: MetadataObj = {};
         const trackOptions: TrackOptions = {};
         let imageLoaded = false;
 
         this.unknownProperties = {};
+        const aliases = [];
         knownProperties.forEach((prop, name) => {
             this.processField(metaData, tracks, name, prop.userDefined,
                 prop.multiValue, prop.useDefault, prop.alias);
-            metaData[name].write = prop.write;
+            metaData[name].write = prop.write ?? true;
+            if (prop.alias) {
+                aliases.push(prop.alias); // save all aliases for filtering out of unknownProperties
+            }
         });
         tracks.forEach(t => {
             if (t.userDefined) {
                 Object.keys(t.userDefined).forEach(prop => {
-                    if (!knownProperties.has(prop) && !this.unknownProperties[prop]) {
-                        this.processField(metaData, tracks, prop, true, true);
-                        this.unknownProperties[prop] = t.userDefined[prop];
+                    if (!knownProperties.has(prop) &&
+                            !aliases.includes(prop) &&
+                            !this.unknownProperties[prop]) {
+                        this.processField(this.unknownProperties, tracks, prop, true, true);
                     }
                 });
             }
@@ -141,7 +156,7 @@ export class TrackService {
         this.trackMetaData.next(updatedMetadata);
     }
 
-    getUnknownProperties(): UnknownPropertiesObj {
+    public getUnknownProperties(): UnknownPropertiesObj {
         return this.unknownProperties;
     }
 
@@ -217,29 +232,31 @@ export class TrackService {
             t.title = trackList[i].title;
             t.trackNumber = trackList[i].trackNumber;
         }
+        // TODO: Also write undefined properties
         Object.entries(metadata).forEach(([key, obj]) => {
-            if (!obj.write) return;
-            let value: any;
+            if (obj.write) {
+                let value: any;
 
-            for (let i = 0; i < this.trackCount; i++) {
-                if (obj.overwrite) {
-                    if (obj.useDefault) {
-                        value = obj.default;
+                for (let i = 0; i < this.trackCount; i++) {
+                    if (obj.overwrite) {
+                        if (obj.useDefault) {
+                            value = obj.default;
+                        } else {
+                            value = obj.values[i];
+                        }
                     } else {
-                        value = obj.values[i];
+                        value = obj.origValues[i];
                     }
-                } else {
-                    value = obj.origValues[i];
-                }
-                if (value) {
-                    if (obj.multiValue && value.includes('; ')) {
-                        value = value.split('; ');
-                    }
-                    if (!obj.userDefined) {
-                        trackTagFields[i][key] = value;
-                    } else {
-                        trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
-                        trackTagFields[i].userDefined[key] = value;
+                    if (value) {
+                        if (obj.multiValue && value.includes('; ')) {
+                            value = value.split('; ');
+                        }
+                        if (!obj.userDefined) {
+                            trackTagFields[i][key] = value;
+                        } else {
+                            trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
+                            trackTagFields[i].userDefined[key] = value;
+                        }
                     }
                 }
             }

@@ -29,9 +29,9 @@ export class EditableCellComponent implements OnChanges {
         switch (keyCode) {
             case 'Escape':
                 this.editing = false;
-                this.editingChange.emit(this.editing);
                 this.value = this.backup;
                 this.valChanged(this.value);
+                this.editingChange.emit(this.editing);
                 break;
             case 'Enter':
                 this.editing = false;

@@ -1,5 +1,5 @@
 export class PropertyInfo {
-    userDefined: boolean;
+    userDefined: boolean; // if this is a non-standard (not in ID3 spec) property. Usually a custom TXXX frame
     multiValue: boolean; // true if the property is a multi-value property
     useDefault?: boolean; // true if all files should share the same default value
     alias?: string;

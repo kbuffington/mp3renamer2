@@ -1,6 +1,6 @@
 <div class="grid-container">
 	<div class="p6">Will move to another tab, so don't worry about layout/padding/margins</div>
-	<button class="btn btn-outline">Add Property</button>
+	<button class="btn btn-outline" (click)="addProperty()">Add Property</button>
 	<clr-datagrid class="datagrid-compact unknown-props-datagrid"
 			[(clrDgSelected)]="selected"
 			(clrDgSelectedChange)="selectionChanged($event)">
@@ -8,20 +8,21 @@
 		<clr-dg-column class="prop">Property</clr-dg-column>
 		<clr-dg-column class="prop-val">Value</clr-dg-column>
 
-		<clr-dg-row *clrDgItems="let prop of unknownPropArray; let i = index" [clrDgItem]="prop">
+		<clr-dg-row *clrDgItems="let prop of unknownPropArray; let i = index; trackBy: indexTrackBy" [clrDgItem]="prop">
 			<clr-dg-cell class="ellipsis"
 					[ngClass]="{'editing': editing[i][0]}"
-					[attr.data-title]="prop"
+					[attr.data-title]="unknownPropCopy[i]"
                     (click)="startEditing(i, 0)">
-				<editable-cell [(value)]="unknownPropArray[i]"
+				<editable-cell [(value)]="unknownPropCopy[i]"
+					(editingChange)="updatePropertyName(i, $event)"
 					[(editing)]="editing[i][0]">
 				</editable-cell>
 			</clr-dg-cell>
 			<clr-dg-cell class="ellipsis"
 					[ngClass]="{'editing': editing[i][1]}"
-					[attr.data-title]="unknownProperties[prop]"
+					[attr.data-title]="unknownProperties[prop].default"
                     (click)="startEditing(i, 1)">
-				<editable-cell [(value)]="unknownProperties[prop]"
+				<editable-cell [(value)]="unknownProperties[prop].default"
 					[(editing)]="editing[i][1]">
 				</editable-cell>
 			</clr-dg-cell>

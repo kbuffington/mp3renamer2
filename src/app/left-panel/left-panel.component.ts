@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { MetadataProperty, TrackOptions, TrackService, UnknownPropertiesObj } from '../services/track.service';
+import { MetadataObj, MetadataProperty, TrackOptions, TrackService, UnknownPropertiesObj } from '../services/track.service';
 
 @Component({
     selector: 'left-panel',
@@ -13,16 +13,15 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 
     @Output() showArtistChange = new EventEmitter();
 
-    metadata: any;
-    unknownProperties: UnknownPropertiesObj;
-
     public conflictProperty: MetadataProperty;
     public conflictDisplayName: string;
     public conflictReadOnly: boolean;
+    public metadata: MetadataObj;
     public metadataSubscription: Subscription;
     public showModal = false;
     public trackOptions: TrackOptions;
     public trackOptionsSubscription: Subscription;
+    public unknownProperties: UnknownPropertiesObj;
 
     constructor(private ts: TrackService) {
     }

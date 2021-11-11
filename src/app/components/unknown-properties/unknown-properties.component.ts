@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { TrackService, UnknownPropertiesObj } from '@services/track.service';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { MetadataProperty, TrackService, UnknownPropertiesObj } from '@services/track.service';
 
 @Component({
     selector: 'unknown-properties',
@@ -9,7 +9,10 @@ import { TrackService, UnknownPropertiesObj } from '@services/track.service';
 export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges {
     @Input() unknownProperties: UnknownPropertiesObj;
 
-    unknownPropArray = [];
+    @Output() unknownPropertiesChange = new EventEmitter<UnknownPropertiesObj[]>();
+
+    public unknownPropArray = [];
+    public unknownPropCopy = [];
     public editing: boolean[] = [];
     public selected: any[] = [];
 
@@ -22,16 +25,19 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.unknownProperties && changes.unknownProperties.currentValue) {
             this.unknownPropArray = Object.keys(changes.unknownProperties.currentValue);
-            // this.selected = changes.unknownProperties.currentValue.map(t => t);
+            this.unknownPropCopy = [...this.unknownPropArray];
+            console.log(this.unknownProperties, this.unknownPropArray);
+
+            this.selected = [...this.unknownPropArray];
             this.clearEditing();
         }
     }
 
-    clearEditing() {
-        const numRows = this.unknownPropArray.length + 1;
+    public clearEditing() {
+        const numRows = this.unknownPropArray.length;
         const numCols = 2;
         const editingGrid = [];
-        for (let i = 0; i < numRows; i++) {
+        for (let i = 0; i <= numRows; i++) {
             editingGrid[i] = [];
             for (let j = 0; j < numCols; j++) {
                 editingGrid[i][j] = false;
@@ -40,12 +46,40 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         this.editing = editingGrid;
     }
 
-    startEditing(index: number, col: number) {
+    public startEditing(index: number, col: number) {
         this.clearEditing();
         this.editing[index][col] = true;
     }
 
-    selectionChanged(selection: any) {
+    public selectionChanged(selection: any) {
         console.log(selection);
+    }
+
+    public updatePropertyName(index: number, editing: boolean) {
+        const newName = this.unknownPropCopy[index];
+        const origPropertyName = this.unknownPropArray[index];
+        if (!editing && newName !== origPropertyName) {
+            console.log(`Renaming property ${origPropertyName} to ${newName}`);
+            this.unknownProperties[newName] = this.unknownProperties[origPropertyName];
+            delete this.unknownProperties[origPropertyName];
+            this.unknownPropArray[index] = newName;
+        }
+    }
+
+    public addProperty() {
+        const newProp = new MetadataProperty();
+        const name = 'NEW_PROPERTY';
+        newProp.different = false;
+        newProp.useDefault = true;
+        newProp.userDefined = true;
+        this.unknownProperties[name] = newProp;
+        this.unknownPropArray.push(name);
+        this.unknownPropCopy.push(name);
+        this.selected.push(name);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public indexTrackBy(index: number, item: string) {
+        return index;
     }
 }
