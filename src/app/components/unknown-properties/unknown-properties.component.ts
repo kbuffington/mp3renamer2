@@ -63,6 +63,14 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
             this.unknownProperties[newName] = this.unknownProperties[origPropertyName];
             delete this.unknownProperties[origPropertyName];
             this.unknownPropArray[index] = newName;
+            this.ts.setUnknownProperties(this.unknownProperties);
+        }
+    }
+
+    public editedPropertyValue(property: MetadataProperty, editing: boolean) {
+        if (!editing && property.origValue !== property.default) {
+            // updated value so always use default
+            property.useDefault = true;
         }
     }
 

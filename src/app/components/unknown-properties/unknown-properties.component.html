@@ -23,6 +23,7 @@
 					[attr.data-title]="unknownProperties[prop].default"
                     (click)="startEditing(i, 1)">
 				<editable-cell [(value)]="unknownProperties[prop].default"
+					(editingChange)="editedPropertyValue(unknownProperties[prop], $event)"
 					[(editing)]="editing[i][1]">
 				</editable-cell>
 			</clr-dg-cell>

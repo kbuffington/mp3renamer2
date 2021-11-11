@@ -160,6 +160,10 @@ export class TrackService {
         return this.unknownProperties;
     }
 
+    public setUnknownProperties(unknownProperties: UnknownPropertiesObj) {
+        this.unknownProperties = unknownProperties;
+    }
+
     private processField(metadata, tracks, property: string, userDefined: boolean,
         multiValue: boolean, useDefault = false, alias?: string) {
         const metaProp = new MetadataProperty();
@@ -232,6 +236,7 @@ export class TrackService {
             t.title = trackList[i].title;
             t.trackNumber = trackList[i].trackNumber;
         }
+        console.log(this.unknownProperties);
         // TODO: Also write undefined properties
         Object.entries(metadata).forEach(([key, obj]) => {
             if (obj.write) {
