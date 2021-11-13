@@ -4,7 +4,8 @@ import { ArtistCacheService } from '@services/artist-cache.service';
 import { ArtistCredit, ArtistData, Release, Work } from '@services/musicbrainz.classes';
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { ThrottleService } from '@services/throttle.service';
-import { MetadataObj, TrackService } from '@services/track.service';
+import { TrackService } from '@services/track.service';
+import { MetadataObj } from '@services/track.classes';
 import { throwError as observableThrowError } from 'rxjs';
 
 export class ReleaseDisplay extends Release {

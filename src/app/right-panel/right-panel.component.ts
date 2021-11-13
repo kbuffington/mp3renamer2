@@ -1,7 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { InputTypes } from 'app/input-field/input-field.component';
 import { Subscription } from 'rxjs';
-import { MetadataProperty, TrackService } from '../services/track.service';
+import { TrackService } from '../services/track.service';
+import { MetadataProperty } from '../services/track.classes';
 
 @Component({
     selector: 'right-panel',

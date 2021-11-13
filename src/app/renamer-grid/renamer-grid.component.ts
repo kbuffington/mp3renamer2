@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { MetadataObj, TrackService } from '../services/track.service';
+import { TrackService } from '../services/track.service';
+import { MetadataObj } from '../services/track.classes';
 
 export class TrackObj {
     meta: {

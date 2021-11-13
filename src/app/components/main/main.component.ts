@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ElectronService } from '@services/electron.service';
 
-import { MetadataObj, TrackService } from '@services/track.service';
+import { TrackService } from '@services/track.service';
+import { MetadataObj } from '@services/track.classes';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({

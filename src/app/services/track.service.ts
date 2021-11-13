@@ -1,62 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { knownProperties } from './known-properties';
-
-export interface Track {
-    artist?: string | string[];
-    album?: string;
-    composer?: string | string[];
-    genre?: string | string[];
-    image?: any;
-    partOfSet?: string;
-    performerInfo?: string | string[];
-    title?: string;
-    trackNumber?: string;
-    userDefined?: {
-        // non-standard properties (typically stored in TXXX frame)
-        [key: string]: any;
-    };
-    meta: {
-        // information about the physical file
-        originalFilename: string;
-        filename: string;
-        folder: string;
-        extension: string;
-    };
-    raw: any; // raw frames from the file
-}
-
-export class MetadataProperty {
-    default = '';
-    different = false; // whether not all values are the same
-    multiValue = false;
-    origValue = '';
-    overwrite = true;
-    userDefined = false;
-    useDefault = false; // if true, the default value will be used instead of individual values for each track
-    defaultChanged = false; // has initial value of useDefault changed, or has default value changed?
-    values: string[] = [];
-    origValues: string[] = []; // copy of values used for resetting
-    write = false; // whether to write this property to the file
-}
-
-export class MetadataObj {
-    [key: string]: MetadataProperty;
-}
-
-export class TrackOptions {
-    showArtwork?: boolean;
-}
-
-export class UnknownPropertiesObj {
-    [key: string]: MetadataProperty;
-}
-
-export class CommentStruct {
-    language: string;
-    shortText: string;
-    text: string;
-}
+import {
+    alwaysLowerCaseWords,
+    CommentStruct,
+    lowerCaseWords,
+    MetadataObj,
+    MetadataProperty,
+    Track,
+    TrackOptions,
+    UnknownPropertiesObj,
+    upperCaseWords,
+} from './track.classes';
 
 @Injectable()
 export class TrackService {
@@ -269,6 +224,10 @@ export class TrackService {
         console.log(trackTagFields);
     }
 
+    public getSelectedTracks(): Track[] {
+        return this.trackList.getValue().filter((t, index) => this.selectedTracks.includes(index));
+    }
+
     renumberTracks(startNumber: number) {
         let count = 0;
         const metadata = this.getCurrentMetadata().trackNumber.values;
@@ -283,5 +242,105 @@ export class TrackService {
 
     updateSelectedTracks(selectedTracks: number[]) {
         this.selectedTracks = selectedTracks;
+    }
+
+    /**
+     * Given a word which is just alpha-numeric characters, capitalize the first letter (if required)
+     * and lowercase the rest. Also test if the word is an Acronym and ensure each letter is capitalized.
+     * @param {string} word
+     * @param {boolean} capitalizeFirstLetter
+     * @return {string}
+     */
+    private titleCaseWord(word: string, capitalizeFirstLetter: boolean): string {
+        let capWord = '';
+        if (word.length) {
+            const isAcronym = /^([a-zA-Z]\.)+(s)?$/;
+            if (isAcronym.test(word)) {
+                capWord = word.toLocaleUpperCase();
+                if (capWord[capWord.length - 1] === 's') {
+                    // plural acronyms like 'M.O.A.B.s'
+                    capWord = capWord.slice(0, -1) + 's';
+                }
+            } else if (upperCaseWords.includes(word.toLocaleUpperCase())) {
+                // acronyms like 'DOA'
+                capWord = word.toLocaleUpperCase();
+            } else if (alwaysLowerCaseWords.includes(word.toLocaleLowerCase())) {
+                // words like 'remix'
+                capWord = word.toLocaleLowerCase();
+            } else if (capitalizeFirstLetter) {
+                capWord = word[0].toUpperCase() + word.substr(1).toLocaleLowerCase();
+            } else {
+                capWord = word.toLocaleLowerCase();
+            }
+        }
+        return capWord;
+    }
+
+    private titleCaseString(str: string): string {
+        let title = str;
+        const hyphenIndexes = [];
+        let blankStart = false;
+        let blankEnd = false;
+        title.split('').forEach((c, i) => {
+            if (c === '-') {
+                hyphenIndexes.push(i);
+            }
+        });
+        const words = title.split(/[ -]/);
+        if (words[0] === '') {
+            blankStart = true;
+            words.shift();
+        }
+        if (words[words.length - 1] === '') {
+            blankEnd = true;
+            words.pop();
+        }
+        const titleCaseWords = words.map((word, index) => {
+            const wordStart = word.match(/^[^a-zA-Z\d.]*/)[0];
+            const wordEnd = word.match(/[^a-zA-Z\d.]*$/)[0];
+            word = word.slice(wordStart.length, wordEnd.length ? 0 - wordEnd.length : undefined); // strip non alphanum chars
+            if (index === 0 || index === words.length - 1 || wordStart === '(' || wordEnd === ')' ||
+                !lowerCaseWords.includes(word.toLocaleLowerCase())) {
+                return wordStart + this.titleCaseWord(word, true) + wordEnd;
+            }
+            return wordStart + this.titleCaseWord(word, false) + wordEnd;
+        });
+        title = titleCaseWords.join(' ');
+        hyphenIndexes.forEach(i => {
+            title = title.slice(0, i) + '-' + title.slice(i+1);
+        });
+        return (blankStart ? ' ' : '') + title + (blankEnd ? ' ' : '');
+    }
+
+    public guessTitles() {
+        let tracks = this.getCurrentTracks();
+        const selectedCopy = [...this.selectedTracks];
+        tracks = tracks.map((track, index) => {
+            if (this.selectedTracks.includes(index)) {
+                const parensRegex = /\((.*?)\)/g;
+                const matches = track.title.matchAll(parensRegex);
+                let offset = 0;
+                const titleSections = [];
+                for (const match of matches) {
+                    if (match.index > offset) {
+                        titleSections.push(track.title.substring(offset, match.index));
+                    }
+                    titleSections.push(match[0]);
+                    offset = match.index + match[0].length;
+                }
+                if (offset < track.title.length) {
+                    titleSections.push(track.title.substring(offset));
+                }
+                console.log(titleSections);
+                track.title = titleSections.map((section) => {
+                    return this.titleCaseString(section);
+                }).join('');
+                // track.title = this.titleCaseString(track.title);
+                console.log(track.title);
+            }
+            return track;
+        });
+        this.setTracks(tracks);
+        this.selectedTracks = selectedCopy;
     }
 }

@@ -25,8 +25,8 @@ export class UpperButtonBarComponent implements OnInit {
         }
     }
 
-    guessTitles() {
-        console.log('write guessTitles() method');
+    public guessTitles() {
+        this.ts.guessTitles();
     }
 
     renumberTracks() {

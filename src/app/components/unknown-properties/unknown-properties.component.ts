@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { MetadataProperty, TrackService, UnknownPropertiesObj } from '@services/track.service';
+import { TrackService } from '@services/track.service';
+import { MetadataProperty, UnknownPropertiesObj } from '@services/track.classes';
 
 @Component({
     selector: 'unknown-properties',

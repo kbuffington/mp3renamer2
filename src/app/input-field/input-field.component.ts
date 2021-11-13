@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MetadataProperty } from '../services/track.service';
+import { MetadataProperty } from '../services/track.classes';
 
 export enum InputTypes {
     Input = 'INPUT',

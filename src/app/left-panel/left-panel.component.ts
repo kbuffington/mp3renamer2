@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { TrackService } from '@services/track.service';
 import { Subscription } from 'rxjs';
-import { MetadataObj, MetadataProperty, TrackOptions, TrackService, UnknownPropertiesObj } from '../services/track.service';
+import { MetadataObj, MetadataProperty, TrackOptions, UnknownPropertiesObj } from '../services/track.classes';
 
 @Component({
     selector: 'left-panel',
