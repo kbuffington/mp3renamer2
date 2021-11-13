@@ -1,12 +1,27 @@
 @import 'editable-datagrid';
 
-.prop {
-    width: 175px;
+.grid-container {
+    margin-top: .75rem;
+    padding-right: .5rem;
+
+    .title {
+        text-transform: uppercase;
+    }
+
+    .unknown-props-datagrid {
+        height: 150px;
+    }
+
+    .prop {
+        width: 175px;
+    }
+
+    .prop-val {
+        width: 150px;
+    }
 }
 
-.prop-val {
-    width: 150px;
-}
+
 
 .unknown-props-datagrid {
     ::ng-deep {

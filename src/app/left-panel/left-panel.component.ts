@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { TrackService } from '@services/track.service';
 import { Subscription } from 'rxjs';
-import { MetadataObj, MetadataProperty, TrackOptions, UnknownPropertiesObj } from '../classes/track.classes';
+import { MetadataObj, MetadataProperty, TrackOptions } from '../classes/track.classes';
 
 @Component({
     selector: 'left-panel',
@@ -22,7 +22,6 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     public showModal = false;
     public trackOptions: TrackOptions;
     public trackOptionsSubscription: Subscription;
-    public unknownProperties: UnknownPropertiesObj;
 
     constructor(private ts: TrackService) {
     }
@@ -30,7 +29,6 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
             this.metadata = m;
-            this.unknownProperties = this.ts.getUnknownProperties();
         });
         this.trackOptionsSubscription = this.ts.getTrackOptions().subscribe(o => {
             this.trackOptions = o;

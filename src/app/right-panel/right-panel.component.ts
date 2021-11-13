@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { InputTypes } from 'app/input-field/input-field.component';
 import { Subscription } from 'rxjs';
 import { TrackService } from '../services/track.service';
-import { MetadataProperty } from '../classes/track.classes';
+import { MetadataProperty, UnknownPropertiesObj } from '../classes/track.classes';
 
 @Component({
     selector: 'right-panel',
@@ -20,6 +20,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     public metadataSubscription: Subscription;
     public releaseTypes = [];
     public showModal = false;
+    public unknownProperties: UnknownPropertiesObj;
+
+    private hasUnknownProps: boolean;
 
     constructor(private ts: TrackService) {
     }
@@ -28,6 +31,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
             console.log(m);
             this.metadata = m;
+            this.unknownProperties = this.ts.getUnknownProperties();
+            this.hasUnknownProps = Object.keys(this.unknownProperties).length !== 0;
         });
         this.releaseTypes = [
             'Album',
@@ -95,7 +100,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
 
     public tab2hasValues(): boolean {
-        return !!(this.metadata.copyright?.default ||
+        return !!(this.hasUnknownProps ||
+            this.metadata.copyright?.default ||
             this.metadata.encodedBy?.default ||
             this.metadata.MUISCBRAINZ_ARTISTID?.default ||
             this.metadata.MUSICBRAINZ_RELEASEGROUPID?.default);

@@ -1,6 +1,5 @@
 <div class="grid-container">
-	<div class="p6">Will move to another tab, so don't worry about layout/padding/margins</div>
-	<button class="btn btn-outline" (click)="addProperty()">Add Property</button>
+	<h6 class="title">Unknown Properties</h6>
 	<clr-datagrid class="datagrid-compact unknown-props-datagrid"
 			[(clrDgSelected)]="selected"
 			(clrDgSelectedChange)="selectionChanged($event)">
@@ -31,4 +30,5 @@
 
 		<clr-dg-footer>{{ unknownPropArray.length }} Unknown Properties</clr-dg-footer>
 	</clr-datagrid>
+	<button class="btn btn-outline" (click)="addProperty()">Add Property</button>
 </div>

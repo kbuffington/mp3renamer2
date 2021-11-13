@@ -110,6 +110,7 @@
 						<input-field label="MB ArtistID:" [(value)]="metadata.MUSICBRAINZ_ARTISTID" (showConflicts)="showConflict(metadata.MUSICBRAINZ_ARTISTID, 'MB Artist ID')"></input-field>
 						<input-field label="MB RGID:" [(value)]="metadata.MUSICBRAINZ_RELEASEGROUPID" (showConflicts)="showConflict(metadata.MUSICBRAINZ_RELEASEGROUPID, 'MB Release Group ID')"></input-field>
 					</div>
+					<unknown-properties [(unknownProperties)]="unknownProperties"></unknown-properties>
 				</clr-tab-content>
 			</clr-tab>
 		</clr-tabs>
