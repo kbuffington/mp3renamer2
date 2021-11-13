@@ -11,7 +11,7 @@ import {
     TrackOptions,
     UnknownPropertiesObj,
     upperCaseWords,
-} from './track.classes';
+} from '../classes/track.classes';
 
 @Injectable()
 export class TrackService {

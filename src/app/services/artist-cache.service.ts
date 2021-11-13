@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ArtistData } from './musicbrainz.classes';
+import { ArtistData } from '../classes/musicbrainz.classes';
 
 const ARTIST_CACHE_KEY = 'artistCache';
 const STALE_TIME = 1000 * 60 * 60 * 24 * 365; // one year

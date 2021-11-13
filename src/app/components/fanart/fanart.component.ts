@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FanartAlbum, FanartArtist, FanartImg, FanartMusicLabel, HDMusicLogo, LabelLogo } from '@services/fanart.classes';
+import { FanartAlbum, FanartArtist, FanartImg, FanartMusicLabel, HDMusicLogo, LabelLogo } from '@classes/fanart.classes';
 import { FanartService } from '@services/fanart.service';
 import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';

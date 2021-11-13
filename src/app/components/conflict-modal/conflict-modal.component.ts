@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MetadataProperty } from '@services/track.classes';
+import { MetadataProperty } from '@classes/track.classes';
 
 @Component({
     selector: 'conflict-modal',

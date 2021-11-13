@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Area } from './musicbrainz.classes';
+import { Area } from '../classes/musicbrainz.classes';
 
 const MB_BASE = 'https://musicbrainz.org/ws/2/';
 const RELEASE_INCLUDES = [

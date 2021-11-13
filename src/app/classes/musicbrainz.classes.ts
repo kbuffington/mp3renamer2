@@ -1,4 +1,4 @@
-import { countryCodes } from './countries';
+import { countryCodes } from '../services/countries';
 
 export class ArtistTag {
     count: number;
