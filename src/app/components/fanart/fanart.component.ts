@@ -256,6 +256,7 @@ export class FanartComponent implements OnInit {
                 break;
             case 'Escape':
                 this.popoverImage = null;
+                setTimeout(() => clearTimeout(this.hoverTimer), 100);
                 break;
         }
     }
