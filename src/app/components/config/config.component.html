@@ -16,6 +16,10 @@
                 <input clrInput placeholder="Choose a directory" [(ngModel)]="config.labelLogoDir" />
             </clr-input-container>
             <button class="btn btn-primary btn-sm directory-select-btn" (click)="browseDirectory('labelLogoDir')">Browse</button>
+            <clr-input-container>
+                <label>Fanart.tv API Key</label>
+                <input clrInput placeholder="Enter API Key" [(ngModel)]="config.fanartApiKey" />
+            </clr-input-container>
         </div>
     </div>
     <footer>

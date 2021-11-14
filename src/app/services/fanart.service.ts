@@ -1,15 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ConfigService, ConfigSettingsObject } from './config.service';
 
 const FANART_BASE = 'http://webservice.fanart.tv/v3/music/';
 
-const API_KEY = 'e98c81989fa12e8171f86068c8b9989a';
+// const API_KEY = 'e98c81989fa12e8171f86068c8b9989a';
 // const CLIENT_KEY = '62c1ba6dcd7701667d97cd7ea384206f';
 // http://webservice.fanart.tv/v3/music/f4a31f0a-51dd-4fa7-986d-3095c40c5ed9?api_key=e98c81989fa12e8171f86068c8b9989a
 
 @Injectable()
 export class FanartService {
-    constructor(private http: HttpClient) { }
+    apiKey: string;
+
+    constructor(private http: HttpClient,
+                private cs: ConfigService) {
+        this.apiKey = cs.getCurrentConfig().fanartApiKey;
+    }
 
     /**
      * Queries MB with URI provided
@@ -24,17 +30,17 @@ export class FanartService {
     }
 
     public getArtist(artistMBID: string): Promise<any> {
-        const uri = `${FANART_BASE}${artistMBID.trim()}?api_key=${API_KEY}`;
+        const uri = `${FANART_BASE}${artistMBID.trim()}?api_key=${this.apiKey}`;
         return this.get(uri).toPromise();
     }
 
     public getAlbum(albumMBID: string): Promise<any> {
-        const uri = `${FANART_BASE}albums/${albumMBID.trim()}?api_key=${API_KEY}`;
+        const uri = `${FANART_BASE}albums/${albumMBID.trim()}?api_key=${this.apiKey}`;
         return this.get(uri).toPromise();
     }
 
     public getLogo(logoMBID: string): Promise<any> {
-        const uri = `${FANART_BASE}labels/${logoMBID.trim()}?api_key=${API_KEY}`;
+        const uri = `${FANART_BASE}labels/${logoMBID.trim()}?api_key=${this.apiKey}`;
         return this.get(uri).toPromise();
     }
 }
