@@ -79,6 +79,20 @@ clr-tabs {
         width: auto;
         min-width: 20px;
         font-size: 9px;
+
+        &.icon-btn {
+            padding: 0 2px;
+        }
+
+        .mb-icon {
+            width: 20px;
+            height: 20px;
+            margin-top: -3px;
+        }
+    }
+
+    .btn-spacer {
+        min-width: 27px;
     }
 }
 

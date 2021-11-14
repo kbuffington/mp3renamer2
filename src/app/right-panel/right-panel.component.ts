@@ -3,6 +3,7 @@ import { InputTypes } from 'app/input-field/input-field.component';
 import { Subscription } from 'rxjs';
 import { TrackService } from '../services/track.service';
 import { MetadataProperty, UnknownPropertiesObj } from '../classes/track.classes';
+import { ElectronService } from '@services/electron.service';
 
 @Component({
     selector: 'right-panel',
@@ -24,8 +25,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     private hasUnknownProps: boolean;
 
-    constructor(private ts: TrackService) {
-    }
+    constructor(private ts: TrackService,
+                private electronService: ElectronService) {}
 
     ngOnInit() {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
@@ -112,5 +113,25 @@ export class RightPanelComponent implements OnInit, OnDestroy {
             (!this.metadata.encodedBy?.defaultChanged && this.metadata.encodedBy?.different) ||
             (!this.metadata.MUSICBRAINZ_ARTISTID?.defaultChanged && this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
             (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.defaultChanged && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
+    }
+
+    public openMusicBrainz(prop: string) {
+        let mbid;
+        let urlBase;
+        if (prop === 'MUSICBRAINZ_ARTISTID') {
+            mbid = this.metadata.MUSICBRAINZ_ARTISTID.default;
+            urlBase = 'artist';
+        } else if (prop === 'MUSICBRAINZ_RELEASEGROUPID') {
+            urlBase = 'release-group';
+            mbid = this.metadata.MUSICBRAINZ_RELEASEGROUPID.default;
+        }
+        const url = `https://musicbrainz.org/${urlBase}/${mbid}`;
+        this.electronService.remote.shell.openExternal(url);
+    }
+
+    public openFanart() {
+        const artistId = this.metadata.MUSICBRAINZ_ARTISTID.default;
+        const url = `http://fanart.tv/artist/${artistId}`;
+        this.electronService.remote.shell.openExternal(url);
     }
 }

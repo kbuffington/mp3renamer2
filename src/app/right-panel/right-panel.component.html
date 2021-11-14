@@ -107,8 +107,42 @@
 					<div class="clr-col-12 input-fields">
 						<input-field label="Copyright:" [(value)]="metadata.copyright" (showConflicts)="showConflict(metadata.copyright, 'Copyright')"></input-field>
 						<input-field label="Encoded By:" [(value)]="metadata.encodedBy" (showConflicts)="showConflict(metadata.encodedBy, 'Encoded By')"></input-field>
-						<input-field label="MB ArtistID:" [(value)]="metadata.MUSICBRAINZ_ARTISTID" (showConflicts)="showConflict(metadata.MUSICBRAINZ_ARTISTID, 'MB Artist ID')"></input-field>
-						<input-field label="MB RGID:" [(value)]="metadata.MUSICBRAINZ_RELEASEGROUPID" (showConflicts)="showConflict(metadata.MUSICBRAINZ_RELEASEGROUPID, 'MB Release Group ID')"></input-field>
+						<div class="clr-row">
+							<div class="clr-col-12">
+								<div class="flex-container">
+									<input-field label="MB ArtistID:"
+										[(value)]="metadata.MUSICBRAINZ_ARTISTID"
+										(showConflicts)="showConflict(metadata.MUSICBRAINZ_ARTISTID, 'MB Artist ID')">
+									</input-field>
+									<button class="btn btn-outline btn-sm btn-xs icon-btn"
+											[disabled]="!metadata.MUSICBRAINZ_ARTISTID.default"
+											title="MusicBrainz"
+											(click)="openMusicBrainz('MUSICBRAINZ_ARTISTID')">
+										<img class="mb-icon" src="../../assets/images/musicbrainz.png">
+									</button>
+									<button class="btn btn-outline btn-sm btn-xs icon-btn"
+											[disabled]="!metadata.MUSICBRAINZ_ARTISTID.default"
+											title="Fanart.tv"
+											(click)="openFanart()">
+										<img class="mb-icon" src="../../assets/images/fanart.png">
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="clr-row">
+							<div class="clr-col-12 inline">
+								<div class="flex-container">
+									<input-field label="MB RGID:" [(value)]="metadata.MUSICBRAINZ_RELEASEGROUPID" (showConflicts)="showConflict(metadata.MUSICBRAINZ_RELEASEGROUPID, 'MB Release Group ID')"></input-field>
+									<button class="btn btn-outline btn-sm btn-xs icon-btn"
+											[disabled]="!metadata.MUSICBRAINZ_RELEASEGROUPID.default"
+											title="MusicBrainz"
+											(click)="openMusicBrainz('MUSICBRAINZ_RELEASEGROUPID')">
+										<img class="mb-icon" src="../../assets/images/musicbrainz.png">
+									</button>
+									<div class="btn-spacer"></div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<unknown-properties [(unknownProperties)]="unknownProperties"></unknown-properties>
 				</clr-tab-content>
