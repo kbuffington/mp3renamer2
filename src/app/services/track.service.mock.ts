@@ -20,6 +20,8 @@ export class TrackServiceMocks {
                 EDITION: 'Super Deluxe Remaster',
                 RELEASECOUNTRY: 'AU',
                 RELEASETYPE: 'Album',
+                MUSICBRAINZ_ARTISTID: '66c662b6-6e2f-4930-8610-912e24c63ed1',
+                MUSICBRAINZ_RELEASEGROUPID: '331084ff-497b-3e3a-958e-0fefdae80cb6',
             },
         });
         tracks.push({
