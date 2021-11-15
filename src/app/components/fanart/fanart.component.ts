@@ -167,7 +167,7 @@ export class FanartComponent implements OnInit {
                 url: disc.url,
                 options: {
                     filename: this.cdArtFilename(disc.saveIndex),
-                    directory: this.ts.getCurrentFolder(),
+                    directory: this.ts.getCurrentPath(),
                 },
             });
         });

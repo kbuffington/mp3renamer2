@@ -44,7 +44,7 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     renameFolder() {
-        console.log('TODO: renameFolder() in main.component');
+        this.ts.renameFolder();
     }
 
     downloadArt() {

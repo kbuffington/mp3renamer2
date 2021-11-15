@@ -62,8 +62,18 @@ export class TrackService {
         return this.trackList.getValue();
     }
 
-    public getCurrentFolder(): string {
+    public getCurrentPath(): string {
         return this.trackList.getValue()[0].meta.folder;
+    }
+
+    /**
+     * @return {string} just the current directory without the full path and without trailing slash
+     */
+    public getCurrentDirectory(): string {
+        const path = this.getCurrentPath();
+        // full path without current folder, but with trailing slash
+        const folder = path.substr(path.substr(0, path.length - 2).lastIndexOf('/') + 1);
+        return folder.substr(0, folder.length - 1);
     }
 
     getNumTracks(): number {
@@ -193,7 +203,7 @@ export class TrackService {
                             t.meta.originalFilename = t.meta.filename;
                         } else {
                             console.log(stats);
-                            console.warn('File already exists: "' + path + t.meta.filename + '"');
+                            console.warn(`File already exists: "${path}${t.meta.filename}"`);
                         }
                     });
                 }
@@ -201,12 +211,33 @@ export class TrackService {
         });
     }
 
-    revertFilenames() {
-        const trackList = this.trackList.getValue();
+    public revertFilenames() {
+        const trackList = this.getCurrentTracks();
         trackList.map(t => {
             t.meta.filename = t.meta.originalFilename;
         });
         this.trackList.next(trackList);
+    }
+
+    public renameFolder() {
+        const metadata = this.getCurrentMetadata();
+        const path = this.getCurrentPath();
+        // full path without current folder, but with trailing slash
+        const basePath = path.substr(0, path.substr(0, path.length - 2).lastIndexOf('/') + 1);
+        const year = metadata.date.default.substr(0, 4);
+        const newDir = `${metadata.artist.default.trim()} - ${year ? year + ' - ' : ''}${metadata.album.default.trim()}/`;
+        const newPath = basePath + newDir;
+        this.electronService.fs.stat(newPath, (err, stats) => {
+            if (err) {
+                console.log(`Renamed directory ${this.getCurrentDirectory()} to ${newDir}`);
+                this.electronService.fs.rename(path, newPath, () => {
+                    this.getCurrentTracks().map(t => t.meta.folder = newPath);
+                });
+            } else {
+                console.log(stats);
+                console.warn(`Directory already exists: "${newDir}"`);
+            }
+        });
     }
 
     setTagData() {
