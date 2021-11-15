@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ConfigService, ConfigSettingsObject } from './config.service';
+import { ConfigService } from './config.service';
 
 const FANART_BASE = 'http://webservice.fanart.tv/v3/music/';
 
