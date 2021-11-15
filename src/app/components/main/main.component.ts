@@ -40,7 +40,7 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     setNames() {
-        console.log('TODO: setNames() in main.component');
+        this.ts.setFilenames();
     }
 
     renameFolder() {

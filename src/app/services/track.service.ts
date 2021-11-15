@@ -12,6 +12,7 @@ import {
     UnknownPropertiesObj,
     upperCaseWords,
 } from '../classes/track.classes';
+import { ElectronService } from './electron.service';
 
 @Injectable()
 export class TrackService {
@@ -23,7 +24,7 @@ export class TrackService {
     private trackCount: number;
     private selectedTracks: number[];
 
-    constructor() { }
+    constructor(private electronService: ElectronService) { }
 
     getTracks(): Observable<Track[]> {
         return this.trackList.asObservable();
@@ -163,14 +164,41 @@ export class TrackService {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     previewFilenames(pattern: string) {
-        const trackList = this.trackList.getValue();
+        const trackList = this.getCurrentTracks();
         const metadata = this.trackMetaData.getValue();
         const artist = metadata.artist.default.trim();
-        trackList.map(t => {
-            t.meta.filename =
-                `${artist} [${metadata.album.default.trim()} ${t.trackNumber.trim()}] - ${t.title.trim()}${t.meta.extension}`;
+        trackList.forEach((t: Track, index: number) => {
+            if (this.selectedTracks.includes(index)) {
+                t.meta.filename =
+                    `${artist} [${metadata.album.default.trim()} ${t.trackNumber.trim()}] - ${t.title.trim()}${t.meta.extension}`;
+            }
         });
         this.trackList.next(trackList);
+    }
+
+    /**
+     * Renames files (if needed) to the currently set filename in the metadata grid. Should be called
+     * only after doing previewFilenames() at least once.
+     */
+    public setFilenames() {
+        this.getCurrentTracks().forEach((t: Track, index: number) => {
+            if (this.selectedTracks.includes(index) && t.meta.filename !== t.meta.originalFilename) {
+                const path = t.meta.folder;
+                // check if we are using mocked files
+                if (path) {
+                    this.electronService.fs.stat(path + t.meta.filename, (err, stats) => {
+                        if (err) {
+                            this.electronService.fs.rename(path + t.meta.originalFilename, path + t.meta.filename,
+                                () => {});
+                            t.meta.originalFilename = t.meta.filename;
+                        } else {
+                            console.log(stats);
+                            console.warn('File already exists: "' + path + t.meta.filename + '"');
+                        }
+                    });
+                }
+            }
+        });
     }
 
     revertFilenames() {
