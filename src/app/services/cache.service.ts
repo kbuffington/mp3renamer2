@@ -53,4 +53,9 @@ export class CacheService {
     private saveCacheMap(): void {
         localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify([...this.cacheMap]));
     }
+
+    public clearAll(): void {
+        this.cacheMap.clear();
+        this.saveCacheMap();
+    }
 }

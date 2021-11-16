@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ElectronService } from '@services/electron.service';
 import { ConfigSettingsObject, ConfigService } from '@services/config.service';
 import { Subscription } from 'rxjs';
+import { CacheService } from '@services/cache.service';
 
 
 @Component({
@@ -19,6 +20,7 @@ export class ConfigComponent implements OnInit {
 
     constructor(private electronService: ElectronService,
                 private configService: ConfigService,
+                private cacheService: CacheService,
                 private router: Router,
                 private zone: NgZone) {
         this.configSubscription = configService.getConfig().subscribe((config) => {
@@ -52,5 +54,10 @@ export class ConfigComponent implements OnInit {
     public saveDisabled() {
         const props = Object.keys(this.config);
         return !props.some(prop => this.config[prop] !== this.configBackup[prop]);
+    }
+
+    public clearCaches() {
+        console.log('Clearing caches due to config changes');
+        this.cacheService.clearAll();
     }
 }

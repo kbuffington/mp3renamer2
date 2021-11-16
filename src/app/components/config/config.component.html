@@ -24,15 +24,15 @@
             <h4>Tagging Options</h4>
             <clr-checkbox-container class="first-checkbox-block">
                 <clr-checkbox-wrapper>
-                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeApostrophe" />
+                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeApostrophe" (ngModelChange)="clearCaches()" />
                     <label>Replace Unicode Apostrophes/Single-Quotes</label>
                 </clr-checkbox-wrapper>
                 <clr-checkbox-wrapper>
-                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeQuotes" />
+                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeQuotes" (ngModelChange)="clearCaches()" />
                     <label>Replace Unicode Double-Quotes</label>
                 </clr-checkbox-wrapper>
                 <clr-checkbox-wrapper>
-                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeEllipsis" />
+                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeEllipsis" (ngModelChange)="clearCaches()" />
                     <label>Replace Unicode Ellipsis</label>
                 </clr-checkbox-wrapper>
             </clr-checkbox-container>
