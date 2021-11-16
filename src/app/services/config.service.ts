@@ -7,6 +7,9 @@ export class ConfigSettingsObject {
     artistLogoDir: string;
     labelLogoDir: string;
     fanartApiKey: string;
+    replaceUnicodeApostrophe: boolean;
+    replaceUnicodeEllipsis: boolean;
+    replaceUnicodeQuotes: boolean;
 
     constructor(json) {
         Object.assign(this, json);
@@ -52,6 +55,9 @@ export class ConfigService {
             artistLogoDir: this.electronService.remote.app.getPath('downloads'),
             labelLogoDir: this.electronService.remote.app.getPath('downloads'),
             fanartApiKey: 'e98c81989fa12e8171f86068c8b9989a',
+            replaceUnicodeApostrophe: true,
+            replaceUnicodeEllipsis: true,
+            replaceUnicodeQuotes: true,
         });
 
         return defaultConfig;
@@ -59,5 +65,6 @@ export class ConfigService {
 
     public saveConfig(config: ConfigSettingsObject): void {
         this.electronService.fs.writeFile(`${this.path}/${CONFIG_FILE_NAME}`, JSON.stringify(config, null, 4), () => {});
+        this.configuration.next(config);
     }
 }

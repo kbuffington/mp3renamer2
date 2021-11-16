@@ -20,6 +20,22 @@
                 <label>Fanart.tv API Key</label>
                 <input clrInput placeholder="Enter API Key" [(ngModel)]="config.fanartApiKey" />
             </clr-input-container>
+
+            <h4>Tagging Options</h4>
+            <clr-checkbox-container class="first-checkbox-block">
+                <clr-checkbox-wrapper>
+                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeApostrophe" />
+                    <label>Replace Unicode Apostrophes/Single-Quotes</label>
+                </clr-checkbox-wrapper>
+                <clr-checkbox-wrapper>
+                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeQuotes" />
+                    <label>Replace Unicode Double-Quotes</label>
+                </clr-checkbox-wrapper>
+                <clr-checkbox-wrapper>
+                    <input type="checkbox" clrCheckbox [(ngModel)]="config.replaceUnicodeEllipsis" />
+                    <label>Replace Unicode Ellipsis</label>
+                </clr-checkbox-wrapper>
+            </clr-checkbox-container>
         </div>
     </div>
     <footer>
