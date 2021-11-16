@@ -88,10 +88,17 @@ function processFiles(files) {
 
 function loadHardCoded() {
     const filePaths = [];
-    const dir = '../../../Desktop/Ghost - 2013 - If You Have Ghost/';
-    filePaths.push(`${dir}Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3`);
-    filePaths.push(`${dir}Ghost [If You Have Ghost 03] - Crucified.mp3`);
-    filePaths.push(`${dir}Multi Value Test copy.mp3`);
+    const dir = app.getPath('desktop')+ '/Graveyard - 2018 - Peace/';
+    fs.readdirSync(dir).forEach(file => {
+        if (file.match(/\.mp3$/)) {
+            filePaths.push(path.join(dir, file));
+        }
+    });
+    console.log(filePaths);
+    // const dir = '../../../Desktop/Ghost - 2013 - If You Have Ghost/';
+    // filePaths.push(`${dir}Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3`);
+    // filePaths.push(`${dir}Ghost [If You Have Ghost 03] - Crucified.mp3`);
+    // filePaths.push(`${dir}Multi Value Test copy.mp3`);
     // filePaths.push(`${dir}Juarez [Juarez-Junius 01] - 01-Juarez-Old River, Dry River.mp3`);
     // filePaths.push(`${dir}id3v2.4 image.mp3`);
 
