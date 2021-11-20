@@ -27,6 +27,7 @@ function createWindow() {
             session: ses, // not sure this is actually doing anything
             worldSafeExecuteJavaScript: true,
             contextIsolation: false, // true breaks electronService
+            webSecurity: false, // TODO: disabling this for dev so can load from file:// disable when using a prod build
         },
     });
 
@@ -88,7 +89,7 @@ function processFiles(files) {
 
 function loadHardCoded() {
     const filePaths = [];
-    const dir = app.getPath('desktop')+ '/Graveyard - 2018 - Peace/';
+    const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
     fs.readdirSync(dir).forEach(file => {
         if (file.match(/\.mp3$/)) {
             filePaths.push(path.join(dir, file));
