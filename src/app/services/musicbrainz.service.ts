@@ -28,7 +28,6 @@ export class MusicbrainzService {
      * @return {Observable<any>}
      */
     private get(url: string) {
-        // const uri = encodeURI(url);
         console.log(url);
         return this.http.get(url);
     }

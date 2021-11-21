@@ -2,11 +2,16 @@ export class FanartImg {
     id: number;
     likes: number;
     url: string;
+    local = false;
+    filename?: string;
 
     constructor(json) {
         this.id = json.id;
         this.likes = json.likes;
         this.url = json.url;
+        if (json.local) {
+            this.local = json.local;
+        }
     }
 }
 
@@ -55,6 +60,9 @@ export class HDMusicLogo extends FanartImg {
 
     constructor(json) {
         super(json);
+        if (json.save) {
+            this.save = json.save;
+        }
     }
 }
 
@@ -77,6 +85,9 @@ export class LabelLogo extends FanartImg {
     constructor(json) {
         super(json);
         this.color = json.colour;
+        if (json.save) {
+            this.save = json.save;
+        }
     }
 }
 export class FanartMusicLabel {

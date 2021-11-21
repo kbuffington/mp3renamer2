@@ -1,10 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FanartAlbum, FanartArtist, FanartImg, FanartMusicLabel, HDMusicLogo, LabelLogo } from '@classes/fanart.classes';
+import { CdArt, FanartAlbum, FanartArtist, FanartImg, FanartMusicLabel, HDMusicLogo, LabelLogo } from '@classes/fanart.classes';
 import { FanartService } from '@services/fanart.service';
 import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
 import { ConfigService, ConfigSettingsObject } from '@services/config.service';
+import { MetadataObj } from '@classes/track.classes';
 
 @Component({
     selector: 'fanart',
@@ -21,12 +22,14 @@ export class FanartComponent implements OnInit {
     public numLogos = 0;
     public numCds = 0;
     public numLabelLogos = 0;
+    public cds: CdArt[] = [];
 
     private artistId: string;
     private labelIds: string[] = [];
     private hoverTimer: any;
     private releaseGroupId: string;
     private configSettings: ConfigSettingsObject;
+    private metadata: MetadataObj;
 
     @ViewChild('popOverContainer') popOverContainer: ElementRef;
 
@@ -45,15 +48,29 @@ export class FanartComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.configSettings = this.configService.getCurrentConfig();
         this.getArtistArt();
         this.getAlbumArt();
         this.getLabelLogos();
-        this.configSettings = this.configService.getCurrentConfig();
     }
 
     private getArtistArt() {
+        let logo: HDMusicLogo = undefined;
+        this.metadata = this.ts.getCurrentMetadata();
+        const artist = this.metadata.artist.default;
+        const path = `${this.configSettings.artistLogoDir}/${artist}.png`;
+        if (this.electronService.fs.existsSync(path)) {
+            logo = new HDMusicLogo({
+                local: true,
+                save: true,
+                url: `file://${path}?cb=${Date.now()}`,
+            });
+        }
         this.fanartService.getArtist(this.artistId).then(artist => {
             this.artistData = new FanartArtist(artist);
+            if (logo) {
+                this.artistData.hdmusiclogos.unshift(logo);
+            }
             this.numLogos = this.artistData.hdmusiclogos.length;
             console.log(this.artistData);
         }).catch((err) => {
@@ -66,9 +83,30 @@ export class FanartComponent implements OnInit {
     }
 
     private getAlbumArt() {
+        this.numCds = 0;
+        const currentPath = this.ts.getCurrentPath();
+        this.electronService.fs.readdirSync(currentPath).forEach(file => {
+            const cdMatch = file.match(/^cd(\d?)\.png$/);
+            if (cdMatch) {
+                const cd = new CdArt({
+                    local: true,
+                    url: `file://${currentPath}${file}?cb=${Date.now()}`,
+                    disc: 1,
+                    size: 1000,
+                });
+                if (cdMatch[1]) {
+                    cd.disc = parseInt(cdMatch[1]);
+                    this.multiDisc = true;
+                }
+                cd.saveIndex = cd.disc;
+                cd.filename = file;
+                this.cds.push(cd);
+            }
+        });
         this.fanartService.getAlbum(this.releaseGroupId).then(album => {
             this.albumData = new FanartAlbum(album, this.releaseGroupId);
-            this.numCds = this.albumData.album.cdart.length;
+            this.albumData.album.cdart.unshift(...this.cds);
+            this.numCds += this.albumData.album.cdart.length;
             console.log(this.albumData);
         }).catch(err => {
             if (err.status === 404) {
@@ -83,6 +121,16 @@ export class FanartComponent implements OnInit {
         this.labelIds.forEach(labelId => {
             this.fanartService.getLogo(labelId).then(musiclabel => {
                 const label = new FanartMusicLabel(musiclabel);
+                const saveName = this.getLabelSaveName(label.name);
+                const path = `${this.configSettings.labelLogoDir}/${saveName}.png`;
+                if (this.electronService.fs.existsSync(path)) {
+                    const logo = new LabelLogo({
+                        local: true,
+                        save: true,
+                        url: `file://${path}?cb=${Date.now()}`,
+                    });
+                    label.musiclabels.unshift(logo);
+                }
                 this.musicLabels.push(label);
                 this.numLabelLogos += label.musiclabels.length;
                 console.log(label);
@@ -96,7 +144,12 @@ export class FanartComponent implements OnInit {
         });
     }
 
+    private getLabelSaveName(labelName: string): string {
+        return labelName.replace(/ Records$/, '').replace(/ Recordings$/, '').replace(/ Music$/, '');
+    }
+
     public logoButtonClicked(logo: HDMusicLogo) {
+        clearTimeout(this.hoverTimer);
         if (logo.save) {
             logo.save = false;
         } else {
@@ -106,6 +159,7 @@ export class FanartComponent implements OnInit {
     }
 
     public labelButtonClicked(logo: LabelLogo, label: FanartMusicLabel) {
+        clearTimeout(this.hoverTimer);
         if (logo.save) {
             logo.save = false;
         } else {
@@ -115,6 +169,7 @@ export class FanartComponent implements OnInit {
     }
 
     public discButtonClicked(index: number) {
+        clearTimeout(this.hoverTimer);
         const discs = this.albumData.album.cdart;
         if (this.multiDisc) {
             if (discs[index].saveIndex !== 0) {
@@ -150,8 +205,8 @@ export class FanartComponent implements OnInit {
     }
 
     public saveSelected() {
-        const saveLogo = this.artistData.hdmusiclogos.filter(val => val.save);
-        const saveDiscs = this.albumData.album.cdart.filter(val => val.saveIndex);
+        const saveLogo = this.artistData.hdmusiclogos.filter(val => val.save && !val.local);
+        const saveDiscs = this.albumData.album.cdart.filter(val => val.saveIndex && !val.local);
         const saveLabels = this.musicLabels.filter(val => val.musiclabels.filter(l => l.save).length > 0);
         saveLogo.forEach(logo => {
             this.electronService.ipcRenderer.send('download', {
@@ -172,15 +227,17 @@ export class FanartComponent implements OnInit {
             });
         });
         saveLabels.forEach(label => {
-            const img = label.musiclabels.find(l => l.save);
-            const saveName = label.name.replace(/ Records$/, '').replace(/ Recordings$/, '').replace(/ Music$/, '');
-            this.electronService.ipcRenderer.send('download', {
-                url: img.url,
-                options: {
-                    filename: `${saveName}.png`,
-                    directory: this.configSettings.labelLogoDir,
-                },
-            });
+            const img = label.musiclabels.find(l => l.save && !l.local);
+            if (img) {
+                const saveName = this.getLabelSaveName(label.name);
+                this.electronService.ipcRenderer.send('download', {
+                    url: img.url,
+                    options: {
+                        filename: `${saveName}.png`,
+                        directory: this.configSettings.labelLogoDir,
+                    },
+                });
+            }
         });
         this.router.navigate(['/']);
     }
