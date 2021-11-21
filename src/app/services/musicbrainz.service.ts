@@ -13,6 +13,9 @@ const RELEASE_INCLUDES = [
     'work-rels',
     'work-level-rels',
 ];
+const NON_FUZZY_FIELDS = [
+    'date',
+];
 
 @Injectable()
 export class MusicbrainzService {
@@ -33,15 +36,18 @@ export class MusicbrainzService {
     }
 
     public searchReleases(queryParams: Object, fuzzy = true) {
-        // `${MB_BASE}release/?limit=100&query=artist:"${artist.trim()}" AND release:"${album.trim()}"`;
+        // `${MB_BASE}release/?limit=100&query=artist:(${artist.trim()}*) AND release:(${album.trim()}*)`;
         let uri = `${MB_BASE}release/?limit=100&query=`;
         let foundVals = 0;
         Object.keys(queryParams).forEach(key => {
             if (queryParams[key].length) {
                 const and = foundVals > 0 ? ' AND ' : '';
                 const val = encodeURIComponent(queryParams[key].trim());
+                if (NON_FUZZY_FIELDS.includes(key)) {
+                    fuzzy = false;
+                }
                 if (val.length) {
-                    uri += `${and}${key}:"${fuzzy ? '(' : ''}${val}${fuzzy ? '*)' : ''}"`;
+                    uri += `${and}${key}:${fuzzy ? '(' : ''}${val}${fuzzy ? '*)' : ''}`;
                     foundVals++;
                 }
             }

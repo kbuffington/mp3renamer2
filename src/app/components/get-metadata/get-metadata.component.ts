@@ -38,6 +38,7 @@ export class GetMetadataComponent implements OnInit {
     public releases: Release[] = [];
     public artist = '';
     public album = '';
+    public date = '';
     public fetchingReleases = false;
     public hasCovers = false;
     public numTracks: number;
@@ -65,7 +66,7 @@ export class GetMetadataComponent implements OnInit {
         this.selectedRelease = null;
         this.fetchingReleases = true;
         this.throttleService.clearQueuedRequests();
-        this.mb.searchReleases({ artist: this.artist, release: this.album })
+        this.mb.searchReleases({ artist: this.artist, release: this.album, date: this.date })
             .subscribe(
                 (data: any) => {
                     this.fetchingReleases = false;

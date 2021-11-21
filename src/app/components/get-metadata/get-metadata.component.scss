@@ -5,7 +5,6 @@
     justify-content: flex-start;
     flex-flow: nowrap;
     margin-bottom: 2px;
-    width: 40rem;
 
     label {
         padding: 0;
@@ -20,12 +19,20 @@
         }
     }
 
+    &.sm-input ::ng-deep .clr-control-container {
+        input {
+            width: 4rem;
+            max-width: 4rem;
+        }
+    }
+
     ::ng-deep {
         clr-input-container.clr-form-control,
         clr-select-container.clr-form-control {
             margin-top: 0;
             flex-grow: 1;
         }
+
         .clr-control-container {
             width: 100%;
 
