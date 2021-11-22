@@ -17,6 +17,13 @@
                 <button class="btn btn-sm btn-primary search-btn" (click)="requestMetadata()">
                     <clr-icon shape="search"></clr-icon> Search
                 </button>
+                <clr-checkbox-wrapper class="clr-col-3">
+                    <input type="checkbox" clrCheckbox [(ngModel)]="fuzzySearch" />
+                    <label>Use fuzzy search</label>
+                </clr-checkbox-wrapper>
+                <button class="btn btn-sm btn-outline search-btn" (click)="clearCache()">
+                    Clear Cache
+                </button>
             </div>
             <clr-datagrid id="releases-datagrid" class="datagrid-compact" *ngIf="!fetchingReleases">
                 <clr-dg-column [clrDgField]="'artistString'" class="artist">Artist Credit</clr-dg-column>

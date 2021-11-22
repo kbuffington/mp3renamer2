@@ -7,6 +7,7 @@ import { ThrottleService } from '@services/throttle.service';
 import { TrackService } from '@services/track.service';
 import { MetadataObj } from '@classes/track.classes';
 import { throwError as observableThrowError } from 'rxjs';
+import { CacheService } from '@services/cache.service';
 
 export class ReleaseDisplay extends Release {
     constructor(json: any, metadata: MetadataObj) {
@@ -40,6 +41,7 @@ export class GetMetadataComponent implements OnInit {
     public album = '';
     public date = '';
     public fetchingReleases = false;
+    public fuzzySearch = false;
     public hasCovers = false;
     public numTracks: number;
     public selectedRelease: ReleaseDisplay;
@@ -50,6 +52,7 @@ export class GetMetadataComponent implements OnInit {
                 private router: Router,
                 private artistCache: ArtistCacheService,
                 private throttleService: ThrottleService,
+                private cs: CacheService,
                 private ts: TrackService) {}
 
     ngOnInit() {
@@ -66,7 +69,7 @@ export class GetMetadataComponent implements OnInit {
         this.selectedRelease = null;
         this.fetchingReleases = true;
         this.throttleService.clearQueuedRequests();
-        this.mb.searchReleases({ artist: this.artist, release: this.album, date: this.date })
+        this.mb.searchReleases({ artist: this.artist, release: this.album, date: this.date }, this.fuzzySearch)
             .subscribe(
                 (data: any) => {
                     this.fetchingReleases = false;
@@ -195,5 +198,10 @@ export class GetMetadataComponent implements OnInit {
 
         this.ts.setMetadata(metadata);
         this.router.navigate(['/']);
+    }
+
+    public clearCache() {
+        this.cs.clearAll();
+        this.requestMetadata();
     }
 }
