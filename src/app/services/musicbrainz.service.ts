@@ -35,7 +35,7 @@ export class MusicbrainzService {
         return this.http.get(url);
     }
 
-    public searchReleases(queryParams: Object, fuzzy = true) {
+    public searchReleases(queryParams: Object, fuzzy = true): Promise<any> {
         // `${MB_BASE}release/?limit=100&query=artist:(${artist.trim()}*) AND release:(${album.trim()}*)`;
         let uri = `${MB_BASE}release/?limit=100&query=`;
         let foundVals = 0;
@@ -52,7 +52,7 @@ export class MusicbrainzService {
                 }
             }
         });
-        return this.get(uri);
+        return this.get(uri).toPromise();
     }
 
     public getReleaseInfo(releaseMbid: string) {

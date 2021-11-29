@@ -61,22 +61,25 @@ export class GetMetadataComponent implements OnInit {
         this.album = this.metadata.album.default;
         this.numTracks = this.ts.getNumTracks();
         if (this.artist || this.album) {
-            this.requestMetadata();
+            this.requestMetadata().then(() => {
+                if (!this.releases.length) {
+                    this.fuzzySearch = true;
+                    this.requestMetadata();
+                }
+            });
         }
     }
 
-    public requestMetadata() {
+    public requestMetadata(): Promise<any> {
         this.selectedRelease = null;
         this.fetchingReleases = true;
         this.throttleService.clearQueuedRequests();
-        this.mb.searchReleases({ artist: this.artist, release: this.album, date: this.date }, this.fuzzySearch)
-            .subscribe(
-                (data: any) => {
-                    this.fetchingReleases = false;
-                    this.releaseData = data;
-                    this.releases = data.releases?.map(r => new Release(r)) ?? [];
-                },
-                error => this.handleError(error));
+        return this.mb.searchReleases({ artist: this.artist, release: this.album, date: this.date }, this.fuzzySearch)
+            .then(data => {
+                this.fetchingReleases = false;
+                this.releaseData = data;
+                this.releases = data.releases?.map(r => new Release(r)) ?? [];
+            });
     }
 
     public getReleaseInfo(release: Release) {
