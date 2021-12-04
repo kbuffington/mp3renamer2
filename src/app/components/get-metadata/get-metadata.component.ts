@@ -5,7 +5,7 @@ import { ArtistCredit, ArtistData, Release, Work } from '@classes/musicbrainz.cl
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { ThrottleService } from '@services/throttle.service';
 import { TrackService } from '@services/track.service';
-import { MetadataObj } from '@classes/track.classes';
+import { MetadataObj, MetadataProperty } from '@classes/track.classes';
 import { throwError as observableThrowError } from 'rxjs';
 import { CacheService } from '@services/cache.service';
 
@@ -147,12 +147,17 @@ export class GetMetadataComponent implements OnInit {
     private setNewDefault(metadata: MetadataObj, key: string) {
         const firstVal = metadata[key].values.find(val => val) ?? '';
         this.setMetadataVal(metadata, key, firstVal);
-        metadata[key].different = this.metadata[key].values.some(v => v !== firstVal);
+        this.setDifferentFlag(metadata[key]);
+    }
+
+    private setDifferentFlag(metaProp: MetadataProperty) {
+        const firstVal = metaProp.values.find(val => val) ?? undefined;
+        metaProp.different = metaProp.values.some(v => v !== firstVal && v !== undefined && v !== '');
     }
 
     public apply(release: ReleaseDisplay) {
         const metadata = this.ts.getCurrentMetadata();
-        // this.setMetadataVal(metadata, 'artist', release.artistString);
+        this.setMetadataVal(metadata, 'artist', release.artistString);
         this.setMetadataVal(metadata, 'album', release.title);
         this.setMetadataVal(metadata, 'date', release.date);
         this.setMetadataVal(metadata, 'CATALOGNUMBER', release.labelInfo.selectedCatalog ?? '');
@@ -189,6 +194,7 @@ export class GetMetadataComponent implements OnInit {
                 metadata.ARTISTCOUNTRY.values[track.metadataFoundIndex] = countries.join('; ');
             }
         });
+        this.setDifferentFlag(metadata.artist);
         // these properties were changed in forEach, so find and set new default
         this.setNewDefault(metadata, 'originalArtist');
         this.setNewDefault(metadata, 'partOfSet');
@@ -196,6 +202,7 @@ export class GetMetadataComponent implements OnInit {
         this.setNewDefault(metadata, 'ARTISTFILTER');
         this.setNewDefault(metadata, 'ARTISTCOUNTRY');
 
+        // album artist
         const needsAlbumArtist = release.tracks.some(track => track.artistString !== release.artistString);
         this.setMetadataVal(metadata, 'performerInfo', needsAlbumArtist ? release.artistString : '');
 

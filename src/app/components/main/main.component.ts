@@ -23,7 +23,10 @@ export class MainComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.trackSubscription = this.ts.getTracks().subscribe(tracks => this.tracks = tracks);
-        this.metadataSubscription = this.ts.getMetadata().subscribe(metadata => this.metadata = metadata);
+        this.metadataSubscription = this.ts.getMetadata().subscribe(metadata => {
+            this.metadata = metadata;
+            this.showArtist = this.metadata.artist.different;
+        });
     }
 
     ngOnDestroy() {
