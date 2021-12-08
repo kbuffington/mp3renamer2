@@ -376,33 +376,33 @@ export class TrackService {
 
     public guessTitles() {
         const metadata = this.getCurrentMetadata();
+        // const tracks = this.getCurrentTracks(); // used for guessing titles from filename
         const selectedCopy = [...this.selectedTracks];
         const titles = metadata.title.values.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {
                 const parensRegex = /\((.*?)\)/g;
-                const title = origTitle; // TODO: Guess title from filename
+                let title = origTitle.replace(this.deleteString, ''); // TODO: Guess title from filename
                 if (this.doTitleCase) {
                     const matches = title.matchAll(parensRegex);
                     let offset = 0;
                     const titleSections = [];
                     for (const match of matches) {
                         if (match.index > offset) {
-                            titleSections.push(origTitle.substring(offset, match.index));
+                            titleSections.push(title.substring(offset, match.index));
                         }
                         titleSections.push(match[0]);
                         offset = match.index + match[0].length;
                     }
-                    if (offset < origTitle.length) {
-                        titleSections.push(origTitle.substring(offset));
+                    if (offset < title.length) {
+                        titleSections.push(title.substring(offset));
                     }
                     // console.log(titleSections);
-                    origTitle = titleSections.map((section) => {
+                    title = titleSections.map((section) => {
                         return this.titleCaseString(section);
                     }).join('');
                     // console.log(track.title);
-                } else {
-                    origTitle = title;
                 }
+                return title;
             }
             return origTitle;
         });
