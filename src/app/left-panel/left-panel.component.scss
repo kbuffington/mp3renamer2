@@ -5,3 +5,34 @@
 .options-block {
     padding-left: 0.6rem;
 }
+
+.string-input {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-flow: nowrap;
+    margin-bottom: 2px;
+
+    label {
+        padding: 0;
+        min-width: 107px;
+        cursor: default;
+        font-size: 13px;
+        overflow: visible;
+        color: var(--clr-p1-color, #666666);
+
+        clr-icon {
+            margin: -2px -1px 0 -2px;
+            cursor: pointer;
+        }
+    }
+
+    ::ng-deep .clr-control-container {
+        flex-grow: 1;
+
+        input {
+            width: 100%;
+        }
+    }
+}

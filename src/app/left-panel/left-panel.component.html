@@ -15,6 +15,22 @@
 	<img id="coverArt" *ngIf="trackOptions.showArtwork"
 		src="../../temp/embeddedArtwork.jpg"
 		style="width:300px; height: 300px; margin-top: 12px; border: none;">
+	<div class="input-block clr-col-12">
+		<clr-input-container class="string-input">
+			<label>Delete String:</label>
+			<input clrInput [(ngModel)]="deleteString" (ngModelChange)="updateDeleteString($event)" />
+		</clr-input-container>
+	</div>
+	<clr-checkbox-container class="options-block">
+		<clr-checkbox-wrapper>
+			<input type="checkbox" clrCheckbox
+				id="doTitleCaseToggle"
+				[(ngModel)]="doTitleCase"
+				(ngModelChange)="updateDoTitleCase($event)">
+			<label>Title case titles when guessing</label>
+		</clr-checkbox-wrapper>
+	</clr-checkbox-container>
+
 	<clr-checkbox-container class="options-block">
 		<clr-checkbox-wrapper>
 			<input type="checkbox" clrCheckbox

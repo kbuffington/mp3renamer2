@@ -17,6 +17,8 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     public conflictProperty: MetadataProperty;
     public conflictDisplayName: string;
     public conflictReadOnly: boolean;
+    public deleteString: string;
+    public doTitleCase: boolean;
     public metadata: MetadataObj;
     public metadataSubscription: Subscription;
     public showModal = false;
@@ -24,6 +26,8 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     public trackOptionsSubscription: Subscription;
 
     constructor(private ts: TrackService) {
+        this.deleteString = ts.deleteString;
+        this.doTitleCase = ts.doTitleCase;
     }
 
     ngOnInit() {
@@ -49,5 +53,13 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 
     showArtistChanged(val) {
         this.showArtistChange.emit(val);
+    }
+
+    public updateDeleteString(val: string) {
+        this.ts.deleteString = val;
+    }
+
+    public updateDoTitleCase(val: boolean) {
+        this.ts.doTitleCase = val;
     }
 }
