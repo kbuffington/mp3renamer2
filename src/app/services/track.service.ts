@@ -24,6 +24,9 @@ export class TrackService {
     private trackCount: number;
     private selectedTracks: number[];
 
+    public deleteString = '';
+    public doTitleCase = true;
+
     constructor(private electronService: ElectronService) { }
 
     getTracks(): Observable<Track[]> {
@@ -173,7 +176,7 @@ export class TrackService {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    previewFilenames(pattern: string) {
+    public previewFilenames(pattern: string) {
         const trackList = this.getCurrentTracks();
         const metadata = this.trackMetaData.getValue();
         const artist = metadata.artist.default.trim();
@@ -287,7 +290,7 @@ export class TrackService {
         return this.trackList.getValue().filter((t, index) => this.selectedTracks.includes(index));
     }
 
-    renumberTracks(startNumber: number) {
+    public renumberTracks(startNumber: number) {
         let count = 0;
         const metadata = this.getCurrentMetadata().trackNumber.values;
         this.getCurrentTracks().forEach((t: Track, index: number) => {
@@ -372,34 +375,39 @@ export class TrackService {
     }
 
     public guessTitles() {
-        let tracks = this.getCurrentTracks();
+        const metadata = this.getCurrentMetadata();
         const selectedCopy = [...this.selectedTracks];
-        tracks = tracks.map((track, index) => {
+        const titles = metadata.title.values.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {
                 const parensRegex = /\((.*?)\)/g;
-                const matches = track.title.matchAll(parensRegex);
-                let offset = 0;
-                const titleSections = [];
-                for (const match of matches) {
-                    if (match.index > offset) {
-                        titleSections.push(track.title.substring(offset, match.index));
+                const title = origTitle; // TODO: Guess title from filename
+                if (this.doTitleCase) {
+                    const matches = title.matchAll(parensRegex);
+                    let offset = 0;
+                    const titleSections = [];
+                    for (const match of matches) {
+                        if (match.index > offset) {
+                            titleSections.push(origTitle.substring(offset, match.index));
+                        }
+                        titleSections.push(match[0]);
+                        offset = match.index + match[0].length;
                     }
-                    titleSections.push(match[0]);
-                    offset = match.index + match[0].length;
+                    if (offset < origTitle.length) {
+                        titleSections.push(origTitle.substring(offset));
+                    }
+                    // console.log(titleSections);
+                    origTitle = titleSections.map((section) => {
+                        return this.titleCaseString(section);
+                    }).join('');
+                    // console.log(track.title);
+                } else {
+                    origTitle = title;
                 }
-                if (offset < track.title.length) {
-                    titleSections.push(track.title.substring(offset));
-                }
-                console.log(titleSections);
-                track.title = titleSections.map((section) => {
-                    return this.titleCaseString(section);
-                }).join('');
-                // track.title = this.titleCaseString(track.title);
-                console.log(track.title);
             }
-            return track;
+            return origTitle;
         });
-        this.setTracks(tracks);
+        metadata.title.values = titles;
+        this.setMetadata(metadata);
         this.selectedTracks = selectedCopy;
     }
 }

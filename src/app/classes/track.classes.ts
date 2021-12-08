@@ -1,3 +1,7 @@
+/**
+ * Track data comes from NodeID3. Should not be used internally except when
+ * creating Metadata objects, or when preparing to write data to tags.
+ */
 export interface Track {
     artist?: string | string[];
     album?: string;
