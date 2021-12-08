@@ -8,6 +8,11 @@ $trackColWidth: 48px;
 	}
 
 	::ng-deep .datagrid {
+		// the tooltip
+		clr-dg-cell[data-title]:before {
+			white-space: pre;
+		}
+
 		clr-dg-cell.tracknum,
 		clr-dg-column.tracknum {
 			max-width: $trackColWidth;
