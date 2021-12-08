@@ -59,4 +59,8 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
         const selectedTracks = selection.map((t: TrackObj) => this.tracks.indexOf(t));
         this.ts.updateSelectedTracks(selectedTracks.sort());
     }
+
+    public updateMetadata() {
+        this.ts.setMetadata(this.metadata);
+    }
 }

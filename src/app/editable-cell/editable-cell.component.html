@@ -1,5 +1,5 @@
 <span *ngIf="!editing" class="text">{{ value }}</span>
 <input *ngIf="editing" type="text" (focus)="gotFocus($event)"
 	(keydown)="keypressHandler($event.key)"
-	(input)="valChanged($event.target.value)"
 	[(ngModel)]="value" [autofocus]="editing">
+	<!-- (input)="valChanged($event.target.value)" -->

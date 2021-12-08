@@ -25,6 +25,7 @@
 					[attr.data-title]="metadata.artist.values[i]"
 					(click)="startEditing(i, 1)">
 				<editable-cell [(value)]="metadata.artist.values[i]"
+					(valueChange)="updateMetadata()"
 					[(editing)]="editing[i][1]">
 				</editable-cell>
 			</clr-dg-cell>
@@ -33,6 +34,7 @@
 					[attr.data-title]="metadata.title.values[i]"
 					(click)="startEditing(i, 2)">
 				<editable-cell [(value)]="metadata.title.values[i]"
+					(valueChange)="updateMetadata()"
 					[(editing)]="editing[i][2]">
 				</editable-cell>
 			</clr-dg-cell>

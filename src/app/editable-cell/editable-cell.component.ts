@@ -18,14 +18,19 @@ export class EditableCellComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes.editing && changes.editing.currentValue === true) {
             this.backup = this.value;
+        } else {
+            this.valChanged(this.value);
         }
     }
 
-    valChanged(value) {
-        this.valueChange.emit(value);
+    private valChanged(value) {
+        setTimeout(() => {
+            this.value = this.value.trim(); // do we want to just trimRight?
+            this.valueChange.emit(value);
+        });
     }
 
-    keypressHandler(keyCode: string) {
+    public keypressHandler(keyCode: string) {
         switch (keyCode) {
             case 'Escape':
                 this.editing = false;
@@ -35,7 +40,7 @@ export class EditableCellComponent implements OnChanges {
                 break;
             case 'Enter':
                 this.editing = false;
-                this.value = this.value.trim(); // TODO: maybe just trimRight?
+                this.valChanged(this.value);
                 this.editingChange.emit(this.editing);
                 break;
             default:
