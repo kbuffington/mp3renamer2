@@ -57,15 +57,17 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     }
 
     public updatePropertyName(index: number, editing: boolean) {
-        const newName = this.unknownPropCopy[index];
-        const origPropertyName = this.unknownPropArray[index];
-        if (!editing && newName !== origPropertyName) {
-            console.log(`Renaming property ${origPropertyName} to ${newName}`);
-            this.unknownProperties[newName] = this.unknownProperties[origPropertyName];
-            delete this.unknownProperties[origPropertyName];
-            this.unknownPropArray[index] = newName;
-            this.ts.setUnknownProperties(this.unknownProperties);
-        }
+        setTimeout(() => {
+            const newName = this.unknownPropCopy[index];
+            const origPropertyName = this.unknownPropArray[index];
+            if (!editing && newName !== origPropertyName) {
+                console.log(`Renaming property ${origPropertyName} to ${newName}`);
+                this.unknownProperties[newName] = this.unknownProperties[origPropertyName];
+                delete this.unknownProperties[origPropertyName];
+                this.unknownPropArray[index] = newName;
+                this.ts.setUnknownProperties(this.unknownProperties);
+            }
+        }, 10); // needs to happen after update from inside editable-cell
     }
 
     public editedPropertyValue(property: MetadataProperty, editing: boolean) {
@@ -81,6 +83,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         newProp.different = false;
         newProp.useDefault = true;
         newProp.userDefined = true;
+        newProp.write = true;
         this.unknownProperties[name] = newProp;
         this.unknownPropArray.push(name);
         this.unknownPropCopy.push(name);
