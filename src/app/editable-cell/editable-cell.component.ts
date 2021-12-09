@@ -12,6 +12,7 @@ export class EditableCellComponent implements OnChanges {
 
     @Output() valueChange = new EventEmitter();
     @Output() editingChange = new EventEmitter();
+    @Output() tabHandler = new EventEmitter();
 
     private backup: string;
 
@@ -42,6 +43,13 @@ export class EditableCellComponent implements OnChanges {
                 this.editing = false;
                 this.valChanged(this.value);
                 this.editingChange.emit(this.editing);
+                break;
+            case 'Tab':
+                this.tabHandler.emit();
+                this.editing = false;
+                this.valChanged(this.value);
+                this.editingChange.emit(this.editing);
+                this.tabHandler.emit();
                 break;
             default:
                 break;

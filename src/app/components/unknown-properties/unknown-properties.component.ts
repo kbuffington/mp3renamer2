@@ -88,6 +88,27 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         this.unknownPropArray.push(name);
         this.unknownPropCopy.push(name);
         this.selected.push(name);
+        this.startEditing(this.unknownPropArray.length - 1, 0);
+        this.setFocusCell(this.unknownPropArray.length - 1, 0);
+    }
+
+    public tabPressed(row: number, column: number) {
+        if (column === 0) {
+            this.startEditing(row, 1);
+            this.setFocusCell(row, 1);
+        }
+    }
+
+    private setFocusCell(row: number, col: number) {
+        const colName = col === 0 ? 'key' : 'val';
+        // wait for element to be rendered
+        setTimeout(() => {
+            const cell = document.getElementById(`cell-${row}-${colName}`);
+            const input = cell.getElementsByTagName('input')[0];
+            if (input) {
+                input.focus();
+            }
+        }, 10);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

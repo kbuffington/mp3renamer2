@@ -13,7 +13,9 @@
 					[attr.data-title]="unknownPropCopy[i]"
                     (click)="startEditing(i, 0)">
 				<editable-cell [(value)]="unknownPropCopy[i]"
+					[attr.id]="'cell-' + i + '-key'"
 					(editingChange)="updatePropertyName(i, $event)"
+					(tabHandler)="tabPressed(i, 0)"
 					[(editing)]="editing[i][0]">
 				</editable-cell>
 			</clr-dg-cell>
@@ -22,6 +24,7 @@
 					[attr.data-title]="unknownProperties[prop].default"
                     (click)="startEditing(i, 1)">
 				<editable-cell [(value)]="unknownProperties[prop].default"
+					[attr.id]="'cell-' + i + '-val'"
 					(editingChange)="editedPropertyValue(unknownProperties[prop], $event)"
 					[(editing)]="editing[i][1]">
 				</editable-cell>
