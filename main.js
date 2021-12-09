@@ -87,6 +87,13 @@ function processFiles(files) {
     return tracks;
 }
 
+function writeTags(files, tags) {
+    console.log(files, tags);
+    // files.forEach((f, index) => {
+    //     NodeID3.write(tags[index], f);
+    // });
+}
+
 function loadHardCoded() {
     const filePaths = [];
     const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
@@ -176,6 +183,7 @@ ipcMain.on('download', (event, info) => {
 exports.getFiles = getFiles;
 exports.loadHardCoded = loadHardCoded; // for testing purposes open files on reload
 exports.quitApp = quitApp;
+exports.writeTags = writeTags;
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
