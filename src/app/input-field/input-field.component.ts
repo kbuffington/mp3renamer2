@@ -43,6 +43,7 @@ export class InputFieldComponent implements OnInit {
     public defaultValChanged(value: string) {
         this.value.default = value;
         this.value.defaultChanged = true;
+        this.value.useDefault = true;
         this.valueChange.emit(this.value);
     }
 
