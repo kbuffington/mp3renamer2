@@ -26,7 +26,7 @@ export class EditableCellComponent implements OnChanges {
 
     private valChanged(value) {
         setTimeout(() => {
-            this.value = this.value.trim(); // do we want to just trimRight?
+            this.value = this.value?.trim(); // do we want to just trimRight?
             this.valueChange.emit(value);
         });
     }
