@@ -6,7 +6,7 @@ const fs = require('fs');
 require('@electron/remote/main').initialize();
 
 const NodeID3tag = require('../node-id3tag');
-// const taglib = require('../node-taglib');
+// const NodeID3tag = require('node-id3');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -84,6 +84,7 @@ function processFiles(files) {
         // tags = { date: '2019' };
         // NodeID3.write(tags, f);
     });
+    console.log(tracks[0]);
     return tracks;
 }
 
@@ -92,6 +93,11 @@ function writeTags(files, tags) {
     files.forEach((f, index) => {
         NodeID3tag.write(tags[index], f);
     });
+}
+
+function loadFiles(filePaths) {
+    const tracks = processFiles(filePaths);
+    mainWindow.webContents.send('files', tracks);
 }
 
 function loadHardCoded() {
@@ -103,7 +109,7 @@ function loadHardCoded() {
             filePaths.push(path.join(dir, file));
         }
     });
-    console.log(filePaths);
+    // console.log(filePaths);
     // const dir = '../../../Desktop/Ghost - 2013 - If You Have Ghost/';
     // filePaths.push(`${dir}Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3`);
     // filePaths.push(`${dir}Ghost [If You Have Ghost 03] - Crucified.mp3`);
@@ -182,6 +188,7 @@ ipcMain.on('download', (event, info) => {
 });
 
 exports.getFiles = getFiles;
+exports.loadFiles = loadFiles;
 exports.loadHardCoded = loadHardCoded; // for testing purposes open files on reload
 exports.quitApp = quitApp;
 exports.writeTags = writeTags;

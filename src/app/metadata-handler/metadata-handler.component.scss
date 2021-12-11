@@ -1,6 +1,16 @@
 .metadata-handler {
     margin: 6px 0px;
 
+    .clr-col-12 {
+        padding-right: 0px;
+    }
+
+    button {
+        // margin-right: .25rem;
+        // padding-left: .5rem;
+        // padding-right: .5rem;
+    }
+
     button:last-of-type {
         margin-right: 0;
     }

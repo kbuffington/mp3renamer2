@@ -3,6 +3,9 @@
 		<button class="btn btn-primary" (click)="requestFiles()">
 			Load Files
 		</button>
+		<button class="btn btn-outline" (click)="reloadFiles()" [disabled]="!filesLoaded">
+			Reload Files
+		</button>
 	</div>
 	<div class="clr-col">
 		<div class="right">

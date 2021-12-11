@@ -13,11 +13,11 @@ export class MetadataHandlerComponent implements OnInit {
     ngOnInit() {
     }
 
-    reloadTags() {
+    public resetTags() {
         this.ts.resetTrackData();
     }
 
-    setTags() {
+    public setTags() {
         this.ts.setTagData();
     }
 }

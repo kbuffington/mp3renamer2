@@ -9,9 +9,15 @@ import { TrackService } from '../services/track.service';
     styleUrls: ['./upper-button-bar.component.scss'],
 })
 export class UpperButtonBarComponent implements OnInit {
+    public filesLoaded = false;
+
     constructor(private electronService: ElectronService,
                 private configService: ConfigService,
-                private ts: TrackService) {}
+                private ts: TrackService) {
+        ts.getTracks().subscribe(tracks => {
+            this.filesLoaded = tracks.length > 0;
+        });
+    }
 
     ngOnInit() {}
 
@@ -23,6 +29,12 @@ export class UpperButtonBarComponent implements OnInit {
         } else {
             // we'll need to use mocked file data here
         }
+    }
+
+    public reloadFiles() {
+        const fileList = this.ts.getCurrentTracks().map(t => t.meta.folder + t.meta.filename);
+        const mainProcess = this.electronService.remote.require('./main.js');
+        mainProcess.loadFiles(fileList);
     }
 
     public guessTitles() {

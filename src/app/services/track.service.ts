@@ -53,7 +53,7 @@ export class TrackService {
         this.trackList.next(trackList);
     }
 
-    resetTrackData() {
+    public resetTrackData() {
         this.setTracks(this.trackDataBackup);
     }
 
@@ -261,9 +261,6 @@ export class TrackService {
             metadata[key] = value;
         });
         Object.entries(metadata).forEach(([key, obj]) => {
-            if (key === 'originalArtist') {
-                console.log('here');
-            }
             if (obj.write) {
                 let value: any;
 
