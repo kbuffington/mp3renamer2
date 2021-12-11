@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 require('@electron/remote/main').initialize();
 
-const NodeID3 = require('../node-id3');
+const NodeID3tag = require('../node-id3tag');
 // const taglib = require('../node-taglib');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -63,7 +63,7 @@ function processFiles(files) {
     const tracks = [];
 
     files.forEach(f => {
-        tags = NodeID3.read(f);
+        tags = NodeID3tag.read(f);
         tags.meta = {
             filename: f.replace(/^.*[\\/]/, ''),
             folder: f.replace(/[^\\/]*$/, ''),
@@ -88,15 +88,16 @@ function processFiles(files) {
 }
 
 function writeTags(files, tags) {
-    console.log(files, tags);
-    // files.forEach((f, index) => {
-    //     NodeID3.write(tags[index], f);
-    // });
+    console.log(files[0], tags[0]);
+    files.forEach((f, index) => {
+        NodeID3tag.write(tags[index], f);
+    });
 }
 
 function loadHardCoded() {
     const filePaths = [];
-    const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
+    // const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
+    const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
     fs.readdirSync(dir).forEach(file => {
         if (file.match(/\.mp3$/)) {
             filePaths.push(path.join(dir, file));
