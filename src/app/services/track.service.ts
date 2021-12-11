@@ -246,44 +246,57 @@ export class TrackService {
     setTagData() {
         const trackList = this.trackList.getValue();
         const metadata = this.trackMetaData.getValue();
-        const trackTagFields = [];
-        for (let i=0; i < this.trackCount; i++) {
-            const t: any = trackTagFields[i] = {};
-            t.artist = trackList[i].artist;
-            t.title = trackList[i].title;
-            t.trackNumber = trackList[i].trackNumber;
-        }
-        console.log(this.unknownProperties);
+        let trackTagFields = [];
+        const files = [];
+
+        trackList.forEach((t: Track, index: number) => {
+            if (this.selectedTracks.includes(index)) {
+                files.push(t.meta.folder + t.meta.filename);
+                trackTagFields[index] = {};
+            }
+        });
         // TODO: Also write undefined properties
+        Object.entries(this.unknownProperties).forEach(([key, value]) => {
+            metadata[key] = value;
+        });
         Object.entries(metadata).forEach(([key, obj]) => {
+            if (key === 'originalArtist') {
+                console.log('here');
+            }
             if (obj.write) {
                 let value: any;
 
                 for (let i = 0; i < this.trackCount; i++) {
-                    if (obj.overwrite) {
-                        if (obj.useDefault) {
-                            value = obj.default;
+                    if (this.selectedTracks.includes(i)) {
+                        if (obj.overwrite) {
+                            if (obj.useDefault) {
+                                value = obj.default;
+                            } else {
+                                value = obj.values[i];
+                            }
                         } else {
-                            value = obj.values[i];
+                            value = obj.origValues[i];
                         }
-                    } else {
-                        value = obj.origValues[i];
-                    }
-                    if (value) {
-                        if (obj.multiValue && value.includes('; ')) {
-                            value = value.split('; ');
-                        }
-                        if (!obj.userDefined) {
-                            trackTagFields[i][key] = value;
-                        } else {
-                            trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
-                            trackTagFields[i].userDefined[key] = value;
+                        if (value) {
+                            if (obj.multiValue && value.includes('; ')) {
+                                value = value.split('; ');
+                            }
+                            if (!obj.userDefined) {
+                                trackTagFields[i][key] = value;
+                            } else {
+                                trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
+                                trackTagFields[i].userDefined[key] = value;
+                            }
                         }
                     }
                 }
             }
         });
+        trackTagFields = trackTagFields.filter(t => t); // remove empty objects
         console.log(trackTagFields);
+
+        const mainProcess = this.electronService.remote.require('./main.js');
+        mainProcess.writeTags(files, trackTagFields);
     }
 
     public getSelectedTracks(): Track[] {
