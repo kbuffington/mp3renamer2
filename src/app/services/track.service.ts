@@ -169,10 +169,11 @@ export class TrackService {
         if (Array.isArray(value)) {
             value = value.join('; ');
         }
+        const saveValue = value.hasOwnProperty('text') ? value['text'] : value;
         if (!metaProp.default) {
-            metaProp.default = value.hasOwnProperty('text') ? value['text'] : value;
+            metaProp.default = saveValue;
         }
-        metaProp.values.push(value.hasOwnProperty('text') ? value['text'] : value);
+        metaProp.values.push(saveValue);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -282,6 +283,13 @@ export class TrackService {
                                 value = value.split('; ');
                             }
                             if (!obj.userDefined) {
+                                if (key === 'comment') {
+                                    value = {
+                                        language: 'eng',
+                                        shortText: '',
+                                        text: value,
+                                    };
+                                }
                                 trackTagFields[i][key] = value;
                             } else {
                                 trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
