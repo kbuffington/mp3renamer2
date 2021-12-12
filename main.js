@@ -17,7 +17,7 @@ function createWindow() {
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 1400,
+        width: app.isPackaged ? 880 : 1400,
         height: 1024,
         webPreferences: {
             nodeIntegration: true,
@@ -31,12 +31,13 @@ function createWindow() {
         },
     });
 
-    // and load the index.html of the app.
-    // mainWindow.loadFile('dist/mp3renamer2/index.html')
-    mainWindow.loadURL('http://localhost:4200');
-
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (app.isPackaged) {
+        mainWindow.loadFile('dist/mp3renamer2/index.html');
+    } else {
+        mainWindow.loadURL('http://localhost:4200');
+        // Open the DevTools.
+        mainWindow.webContents.openDevTools();
+    }
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
