@@ -5,6 +5,9 @@
 /tmp
 /out-tsc
 
+# packaged output
+/mp3renamer2-*-*/
+
 # dependencies
 /node_modules
 

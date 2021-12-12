@@ -6,6 +6,8 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build",
+    "build:win": "npx electron-packager . --platform=win32 --arch=x64 --overwrite",
+    "build:osx": "npx electron-packager . --platform=darwin --arch=x64 --overwrite",
     "test": "ng test",
     "lint": "ng lint",
     "postinstall": "ngcc",

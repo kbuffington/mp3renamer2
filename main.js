@@ -5,7 +5,12 @@ const path = require('path');
 const fs = require('fs');
 require('@electron/remote/main').initialize();
 
-const NodeID3tag = require('../node-id3tag');
+let NodeID3tag;
+if (app.isPackaged) {
+    NodeID3tag = require('node-id3tag');
+} else {
+    NodeID3tag = require('../node-id3tag');
+}
 // const NodeID3tag = require('node-id3');
 
 // Keep a global reference of the window object, if you don't, the window will
