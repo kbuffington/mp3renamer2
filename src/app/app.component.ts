@@ -27,12 +27,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.ts.setTracks([]);
-        if (this.electronService.isElectron) {
-            const mainProcess = this.electronService.remote.require('./main.js');
-            mainProcess.loadHardCoded();
-        } else {
-            // we'll need to use mocked file data here
-            this.ts.setTracks(TrackServiceMocks.mockTracks());
+        if (!this.electronService.remote.app.isPackaged) {
+            if (this.electronService.isElectron) {
+                const mainProcess = this.electronService.remote.require('./main.js');
+                mainProcess.loadHardCoded();
+            } else {
+                // we'll need to use mocked file data here
+                this.ts.setTracks(TrackServiceMocks.mockTracks());
+            }
         }
         this.electronService.ipcRenderer.on('files', (event, json) => {
             this.ts.setTracks(json);

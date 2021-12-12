@@ -22,7 +22,7 @@ function createWindow() {
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: app.isPackaged ? 880 : 1400,
+        width: app.isPackaged ? 920 : 1400,
         height: 1024,
         webPreferences: {
             nodeIntegration: true,

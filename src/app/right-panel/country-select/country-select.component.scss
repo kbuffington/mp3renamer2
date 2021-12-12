@@ -27,21 +27,23 @@
         border-top: none;
         border-left: none;
         border-right: none;
-        white-space: nowrap;
+        // white-space: nowrap;
 
         .clr-combobox-input {
             padding-left: 0;
-            width: 0.5rem;
+            padding-right: 0;
+            width: 0px;
 
             &:focus {
+                padding-left: 0.15rem;
                 width: 4.5rem;
             }
         }
 
         &.multi {
-            width: 100%;
+            // width: 100%;
             // width: 345px;
-            overflow-x: scroll;
+            // overflow-x: scroll;
             min-width: 100%;
             padding-bottom: 1px;
             padding-left: 0;
