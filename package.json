@@ -6,8 +6,8 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "build:win": "npx electron-packager . --platform=win32 --arch=x64 --overwrite",
-    "build:osx": "npx electron-packager . --platform=darwin --arch=x64 --overwrite",
+    "build:win": "npx electron-packager . --platform=win32 --arch=x64 --ignore=\\e2e --overwrite",
+    "build:osx": "npx electron-packager . --platform=darwin --arch=x64 --ignore=\\e2e --overwrite",
     "test": "ng test",
     "lint": "ng lint",
     "postinstall": "ngcc",
@@ -16,6 +16,11 @@
   },
   "private": true,
   "dependencies": {
+    "@electron/remote": "^2.0.1",
+    "electron-dl": "^3.2.1",
+    "node-id3tag": "^0.9.0"
+  },
+  "devDependencies": {
     "@angular/animations": "^12.2.6",
     "@angular/common": "^12.2.6",
     "@angular/compiler": "^12.2.6",
@@ -28,17 +33,12 @@
     "@clr/angular": "^12.0.4",
     "@clr/icons": "^12.0.4",
     "@clr/ui": "^12.0.4",
-    "@electron/remote": "^2.0.1",
     "@webcomponents/custom-elements": "^1.4.3",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "core-js": "^2.6.12",
-    "electron-dl": "^3.2.1",
-    "node-id3": "^0.2.3",
     "rxjs": "^6.6.6",
     "tslib": "^2.0.0",
-    "zone.js": "~0.11.4"
-  },
-  "devDependencies": {
+    "zone.js": "~0.11.4",
     "@angular-devkit/build-angular": "~12.2.6",
     "@angular/cli": "^12.2.6",
     "@angular/compiler-cli": "^12.2.6",
@@ -60,6 +60,7 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "node-id3": "^0.2.3",
     "protractor": "~7.0.0",
     "ts-node": "~5.0.1",
     "typescript": "^4.3.5"
