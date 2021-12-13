@@ -58,7 +58,7 @@ function getFiles(directory) {
         defaultPath: directory,
         properties: ['openFile', 'multiSelections'],
     }).then(resp => {
-        console.log(resp.filePaths);
+        console.log('getFiles:', resp.filePaths);
         const tracks = processFiles(resp.filePaths);
         mainWindow.webContents.send('files', tracks);
     });
@@ -69,28 +69,30 @@ function processFiles(files) {
     const tracks = [];
 
     files.forEach(f => {
-        tags = NodeID3tag.read(f);
-        tags.meta = {
-            filename: f.replace(/^.*[\\/]/, ''),
-            folder: f.replace(/[^\\/]*$/, ''),
-        };
-        tracks.push(tags);
-        if (tags.image && !imageWritten) {
-            if (tags.image.imageBuffer.length === 0) {
-                delete tags.image;
-            } else {
-                console.log('writing image');
-                imageWritten = true;
-                fs.writeFileSync('./temp/embeddedArtwork.jpg', tags.image.imageBuffer, 'binary');
+        if (f.match(/.mp3$/)) {
+            tags = NodeID3tag.read(f);
+            tags.meta = {
+                filename: f.replace(/^.*[\\/]/, ''),
+                folder: f.replace(/[^\\/]*$/, ''),
+            };
+            tracks.push(tags);
+            if (tags.image && !imageWritten) {
+                if (tags.image.imageBuffer.length === 0) {
+                    delete tags.image;
+                } else {
+                    console.log('writing image');
+                    imageWritten = true;
+                    fs.writeFileSync('./temp/embeddedArtwork.jpg', tags.image.imageBuffer, 'binary');
+                }
             }
+            // tags.title = tags.title + 's';
+            // tags.userDefined.ARTISTFILTER.push('Esq.');
+            // delete(tags.userDefined.genre);
+            // tags = { date: '2019' };
+            // NodeID3.write(tags, f);
         }
-        // tags.title = tags.title + 's';
-        // tags.userDefined.ARTISTFILTER.push('Esq.');
-        // delete(tags.userDefined.genre);
-        // tags = { date: '2019' };
-        // NodeID3.write(tags, f);
     });
-    console.log(tracks[0]);
+    console.log('processFiles:', tracks[0]);
     return tracks;
 }
 
@@ -110,9 +112,14 @@ function loadHardCoded() {
     const filePaths = [];
     // const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
     const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
-    fs.readdirSync(dir).forEach(file => {
-        if (file.match(/\.mp3$/)) {
-            filePaths.push(path.join(dir, file));
+    fs.stat(dir, (err, stats) => {
+        if (stats) {
+            // folder exists
+            fs.readdirSync(dir).forEach(file => {
+                if (file.match(/\.mp3$/)) {
+                    filePaths.push(path.join(dir, file));
+                }
+            });
         }
     });
     // console.log(filePaths);
@@ -123,8 +130,10 @@ function loadHardCoded() {
     // filePaths.push(`${dir}Juarez [Juarez-Junius 01] - 01-Juarez-Old River, Dry River.mp3`);
     // filePaths.push(`${dir}id3v2.4 image.mp3`);
 
-    const tracks = processFiles(filePaths);
-    mainWindow.webContents.send('files', tracks);
+    if (filePaths.length) {
+        const tracks = processFiles(filePaths);
+        mainWindow.webContents.send('files', tracks);
+    }
 }
 
 function quitApp() {
@@ -198,6 +207,7 @@ exports.loadFiles = loadFiles;
 exports.loadHardCoded = loadHardCoded; // for testing purposes open files on reload
 exports.quitApp = quitApp;
 exports.writeTags = writeTags;
+exports.os = process.platform;
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
