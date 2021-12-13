@@ -24,6 +24,33 @@
         margin-top: .5rem;
         padding-left: .5rem;
     }
+
+    .inline-char-input {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        flex-flow: nowrap;
+        margin-bottom: 2px;
+        margin-left: 1.5rem;
+
+        label {
+            padding: 0;
+            min-width: 20px;
+            cursor: default;
+            font-size: 13px;
+            overflow: visible;
+            color: var(--clr-p1-color, #666666);
+            margin-top: .15rem;
+        }
+
+        ::ng-deep {
+            input {
+                width: 20px;
+                border: .05rem solid var(--clr-forms-border-color, #b3b3b3);
+            }
+        }
+    }
 }
 
 footer {

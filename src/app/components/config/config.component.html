@@ -36,6 +36,48 @@
                     <label>Replace Unicode Ellipsis</label>
                 </clr-checkbox-wrapper>
             </clr-checkbox-container>
+
+            <ng-container *ngIf="config.replacementFileNameChars">
+                <h4>Replacement for Unusable Filename Characters</h4>
+                <div class="clr-row">
+                    <clr-input-container class="inline-char-input">
+                        <label>\</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars['\\']" maxlength="1" />
+                    </clr-input-container>
+                    <clr-input-container class="inline-char-input">
+                        <label>/</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars['/']" maxlength="1" />
+                    </clr-input-container>
+                    <clr-input-container class="inline-char-input">
+                        <label>?</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars['?']" maxlength="1" />
+                    </clr-input-container>
+                    <clr-input-container class="inline-char-input">
+                        <label>:</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars[':']" maxlength="1" />
+                    </clr-input-container>
+                    <clr-input-container class="inline-char-input">
+                        <label>*</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars['*']" maxlength="1" />
+                    </clr-input-container>
+                    <clr-input-container class="inline-char-input">
+                        <label>"</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars[doubleQuotes]" maxlength="1" />
+                    </clr-input-container>
+                    <clr-input-container class="inline-char-input">
+                        <label>&lt;</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars['<']" maxlength="1" />
+                    </clr-input-container>
+                    <clr-input-container class="inline-char-input">
+                        <label>&gt;</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars['>']" maxlength="1" />
+                    </clr-input-container>
+                    <clr-input-container class="inline-char-input">
+                        <label>|</label>
+                        <input clrInput [(ngModel)]="config.replacementFileNameChars['|']" maxlength="1" />
+                    </clr-input-container>
+                </div>
+            </ng-container>
         </div>
     </div>
     <footer>

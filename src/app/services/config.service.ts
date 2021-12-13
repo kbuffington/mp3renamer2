@@ -10,6 +10,17 @@ export class ConfigSettingsObject {
     replaceUnicodeApostrophe: boolean;
     replaceUnicodeEllipsis: boolean;
     replaceUnicodeQuotes: boolean;
+    replacementFileNameChars: {
+        '\\': '-',
+        '/': '-',
+        ':': '-',
+        '*': '',
+        '?': '',
+        '"': '\'',
+        '<': '',
+        '>': '_',
+        '|': '',
+    }
 
     constructor(json) {
         Object.assign(this, json);
@@ -44,7 +55,7 @@ export class ConfigService {
                 this.configuration.next(defaultConfig);
             } else {
                 const json = JSON.parse(data.toString());
-                this.configuration.next(new ConfigSettingsObject(json));
+                this.configuration.next(new ConfigSettingsObject(Object.assign(this.defaultConfig(), json)));
             }
         });
     }
@@ -58,6 +69,17 @@ export class ConfigService {
             replaceUnicodeApostrophe: true,
             replaceUnicodeEllipsis: true,
             replaceUnicodeQuotes: true,
+            replacementFileNameChars: {
+                '\\': '-',
+                '/': '-',
+                ':': '-',
+                '*': '',
+                '?': '',
+                '"': '\'',
+                '<': '',
+                '>': '_',
+                '|': '',
+            },
         });
 
         return defaultConfig;

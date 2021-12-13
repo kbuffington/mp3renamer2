@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ElectronService } from '@services/electron.service';
 import { ConfigSettingsObject, ConfigService } from '@services/config.service';
@@ -11,8 +11,9 @@ import { CacheService } from '@services/cache.service';
     templateUrl: './config.component.html',
     styleUrls: ['./config.component.scss'],
 })
-export class ConfigComponent implements OnInit {
+export class ConfigComponent implements OnInit, OnDestroy {
     public config: ConfigSettingsObject;
+    public doubleQuotes = '"'; // needed for template so we can use " in a template variable
 
     private configSubscription: Subscription;
     private mainWindow: Electron.BrowserWindow;
@@ -25,13 +26,21 @@ export class ConfigComponent implements OnInit {
                 private zone: NgZone) {
         this.configSubscription = configService.getConfig().subscribe((config) => {
             this.config = config;
-            this.configBackup = { ...this.config };
+            this.backupConfig();
             this.zone.run(() => {});
         });
     }
 
     ngOnInit() {
         this.mainWindow = this.electronService.remote.getCurrentWindow();
+    }
+
+    ngOnDestroy() {
+        this.configSubscription.unsubscribe();
+    }
+
+    private backupConfig() {
+        this.configBackup = JSON.parse(JSON.stringify(this.config));
     }
 
     public async browseDirectory(prop: string) {
@@ -48,12 +57,16 @@ export class ConfigComponent implements OnInit {
 
     public saveConfig() {
         this.configService.saveConfig(this.config);
-        this.configBackup = { ...this.config };
+        this.backupConfig();
     }
 
     public saveDisabled() {
         const props = Object.keys(this.config);
-        return !props.some(prop => this.config[prop] !== this.configBackup[prop]);
+        const charProps = this.config.replacementFileNameChars ? Object.keys(this.config.replacementFileNameChars) : [];
+        return !props.some(prop => this.config[prop] !== this.configBackup[prop]) ||
+            !charProps.some(prop => {
+                return this.config.replacementFileNameChars[prop] !== this.configBackup.replacementFileNameChars[prop];
+            });
     }
 
     public clearCaches() {
