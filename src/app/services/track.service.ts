@@ -23,11 +23,17 @@ export class TrackService {
     private trackDataBackup: any;
     private trackCount: number;
     private selectedTracks: number[];
+    private pathDelimiter = '/';
 
     public deleteString = '';
     public doTitleCase = true;
 
-    constructor(private electronService: ElectronService) { }
+    constructor(private electronService: ElectronService) {
+        const platform = this.electronService.remote.require('./main.js').os;
+        if (platform === 'win32') {
+            this.pathDelimiter = '\\';
+        }
+    }
 
     getTracks(): Observable<Track[]> {
         return this.trackList.asObservable();
@@ -75,7 +81,7 @@ export class TrackService {
     public getCurrentDirectory(): string {
         const path = this.getCurrentPath();
         // full path without current folder, but with trailing slash
-        const folder = path.substr(path.substr(0, path.length - 2).lastIndexOf('/') + 1);
+        const folder = path.substr(path.substr(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
         return folder.substr(0, folder.length - 1);
     }
 
@@ -117,6 +123,7 @@ export class TrackService {
                 trackOptions.showArtwork = true;
             }
         });
+        console.log('processedTracks')
         this.trackMetaData.next(metaData);
         this.trackOptions.next(trackOptions);
     }
@@ -227,15 +234,19 @@ export class TrackService {
         const metadata = this.getCurrentMetadata();
         const path = this.getCurrentPath();
         // full path without current folder, but with trailing slash
-        const basePath = path.substr(0, path.substr(0, path.length - 2).lastIndexOf('/') + 1);
+        const basePath = path.substr(0, path.substr(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
         const year = metadata.date.default.substr(0, 4);
-        const newDir = `${metadata.artist.default.trim()} - ${year ? year + ' - ' : ''}${metadata.album.default.trim()}/`;
+        const newDir = `${metadata.artist.default.trim()} - ${year ? year + ' - ' : ''}${metadata.album.default.trim()}${this.pathDelimiter}`;
         const newPath = basePath + newDir;
         this.electronService.fs.stat(newPath, (err, stats) => {
             if (err) {
-                console.log(`Renamed directory ${this.getCurrentDirectory()} to ${newDir}`);
-                this.electronService.fs.rename(path, newPath, () => {
-                    this.getCurrentTracks().map(t => t.meta.folder = newPath);
+                this.electronService.fs.rename(path, newPath, (err) => {
+                    if (!err) {
+                        console.log(`Renamed directory ${this.getCurrentDirectory()} to ${newDir}`);
+                        this.getCurrentTracks().map(t => t.meta.folder = newPath);
+                    } else {
+                        console.error(err);
+                    }
                 });
             } else {
                 console.log(stats);
