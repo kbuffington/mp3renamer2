@@ -112,16 +112,15 @@ function loadHardCoded() {
     const filePaths = [];
     // const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
     const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
-    fs.stat(dir, (err, stats) => {
-        if (stats) {
-            // folder exists
-            fs.readdirSync(dir).forEach(file => {
-                if (file.match(/\.mp3$/)) {
-                    filePaths.push(path.join(dir, file));
-                }
-            });
-        }
-    });
+    const stats = fs.statSync(dir);
+    if (stats) {
+        // folder exists
+        fs.readdirSync(dir).forEach(file => {
+            if (file.match(/\.mp3$/)) {
+                filePaths.push(path.join(dir, file));
+            }
+        });
+    }
     // console.log(filePaths);
     // const dir = '../../../Desktop/Ghost - 2013 - If You Have Ghost/';
     // filePaths.push(`${dir}Ghost [If You Have Ghost 01] - If You Have Ghosts.mp3`);
