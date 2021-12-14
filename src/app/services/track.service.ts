@@ -13,6 +13,7 @@ import {
     upperCaseWords,
 } from '../classes/track.classes';
 import { ElectronService } from './electron.service';
+import { ConfigService } from './config.service';
 
 @Injectable()
 export class TrackService {
@@ -28,7 +29,8 @@ export class TrackService {
     public deleteString = '';
     public doTitleCase = true;
 
-    constructor(private electronService: ElectronService) {
+    constructor(private electronService: ElectronService,
+                private configService: ConfigService) {
         const platform = this.electronService.remote.require('./main.js').os;
         if (platform === 'win32') {
             this.pathDelimiter = '\\';
@@ -123,7 +125,6 @@ export class TrackService {
                 trackOptions.showArtwork = true;
             }
         });
-        console.log('processedTracks')
         this.trackMetaData.next(metaData);
         this.trackOptions.next(trackOptions);
     }
@@ -188,10 +189,18 @@ export class TrackService {
         const trackList = this.getCurrentTracks();
         const metadata = this.trackMetaData.getValue();
         const artist = metadata.artist.default.trim();
+        const config = this.configService.getCurrentConfig();
+        const replaceCharsStr = Object.keys(config.replacementFileNameChars).join();
+        const regex = new RegExp('[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']', 'g');
         trackList.forEach((t: Track, index: number) => {
             if (this.selectedTracks.includes(index)) {
-                t.meta.filename =
-                    `${artist} [${metadata.album.default.trim()} ${t.trackNumber.trim()}] - ${t.title.trim()}${t.meta.extension}`;
+                const title = metadata.title.values[index].trim();
+                const filename =
+                    `${artist} [${metadata.album.default.trim()} ${t.trackNumber.trim()}] - ${title}${t.meta.extension}`;
+                // https://stackoverflow.com/a/70343927/911192
+                t.meta.filename = filename.replace(regex, function(m) {
+                    return config.replacementFileNameChars[m];
+                });
             }
         });
         this.trackList.next(trackList);
@@ -236,7 +245,8 @@ export class TrackService {
         // full path without current folder, but with trailing slash
         const basePath = path.substr(0, path.substr(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
         const year = metadata.date.default.substr(0, 4);
-        const newDir = `${metadata.artist.default.trim()} - ${year ? year + ' - ' : ''}${metadata.album.default.trim()}${this.pathDelimiter}`;
+        const newDir = `${metadata.artist.default.trim()} - ${year ? year + ' - ' : ''}` +
+                `${metadata.album.default.trim()}${this.pathDelimiter}`;
         const newPath = basePath + newDir;
         this.electronService.fs.stat(newPath, (err, stats) => {
             if (err) {
