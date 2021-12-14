@@ -30,7 +30,9 @@ export class AppComponent implements OnInit, OnDestroy {
         if (!this.electronService.remote.app.isPackaged) {
             if (this.electronService.isElectron) {
                 const mainProcess = this.electronService.remote.require('./main.js');
-                mainProcess.loadHardCoded();
+                if (mainProcess.os !== 'win32') {
+                    mainProcess.loadHardCoded();
+                }
             } else {
                 // we'll need to use mocked file data here
                 this.ts.setTracks(TrackServiceMocks.mockTracks());
