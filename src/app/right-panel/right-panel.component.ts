@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { TrackService } from '../services/track.service';
 import { MetadataProperty, UnknownPropertiesObj } from '../classes/track.classes';
 import { ElectronService } from '@services/electron.service';
+import { tap, throttleTime } from 'rxjs/operators';
 
 @Component({
     selector: 'right-panel',
@@ -29,8 +30,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
                 private electronService: ElectronService) {}
 
     ngOnInit() {
-        this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
-            console.log(m);
+        this.metadataSubscription = this.ts.getMetadata().pipe(
+            throttleTime(100, undefined, { leading: true, trailing: true }),
+            tap(m => console.log(m))
+        ).subscribe(m => {
             this.metadata = m;
             this.unknownProperties = this.ts.getUnknownProperties();
             this.hasUnknownProps = Object.keys(this.unknownProperties).length !== 0;
@@ -102,10 +105,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     public tab2hasValues(): boolean {
         return !!(this.hasUnknownProps ||
-            this.metadata.copyright?.default ||
-            this.metadata.encodedBy?.default ||
-            this.metadata.MUISCBRAINZ_ARTISTID?.default ||
-            this.metadata.MUSICBRAINZ_RELEASEGROUPID?.default);
+            this.metadata?.copyright?.default ||
+            this.metadata?.encodedBy?.default ||
+            this.metadata?.MUISCBRAINZ_ARTISTID?.default ||
+            this.metadata?.MUSICBRAINZ_RELEASEGROUPID?.default);
     }
 
     public tab2Conflicts(): boolean {
