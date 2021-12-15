@@ -154,7 +154,7 @@
     padding: 0.5rem;
     height: 88vh;
     max-height: 88vh;
-    overflow-y: scroll;
+    // overflow-y: scroll; // should never overflow y
 
     .top-content {
         flex-shrink: 1;
