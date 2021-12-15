@@ -41,6 +41,26 @@ export class MetadataProperty {
 }
 
 export class MetadataObj {
+    album?: MetadataProperty;
+    albumSortOrder?: MetadataProperty;
+    artist?: MetadataProperty;
+    ARTISTCOUNTRY?: MetadataProperty;
+    ARTISTFILTER?: MetadataProperty;
+    artistSortOrder?: MetadataProperty;
+    CATALOGNUMBER?: MetadataProperty;
+    date?: MetadataProperty;
+    DISCSUBTITLE?: MetadataProperty;
+    EDITION?: MetadataProperty;
+    LABEL?: MetadataProperty;
+    MUSICBRAINZ_ARTISTID?: MetadataProperty;
+    MUSICBRAINZ_LABELID?: MetadataProperty;
+    MUSICBRAINZ_RELEASEGROUPID?: MetadataProperty;
+    originalArtist?: MetadataProperty;
+    originalReleaseDate?: MetadataProperty;
+    partOfSet?: MetadataProperty; // disc
+    RELEASECOUNTRY?: MetadataProperty;
+    RELEASETYPE?: MetadataProperty;
+    title?: MetadataProperty;
     [key: string]: MetadataProperty;
 }
 
