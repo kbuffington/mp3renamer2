@@ -2,18 +2,16 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { knownProperties } from './known-properties';
 import {
-    alwaysLowerCaseWords,
     CommentStruct,
-    lowerCaseWords,
     MetadataObj,
     MetadataProperty,
     Track,
     TrackOptions,
     UnknownPropertiesObj,
-    upperCaseWords,
 } from '../classes/track.classes';
 import { ElectronService } from './electron.service';
 import { ConfigService } from './config.service';
+import { TitleCaseService } from './title-case.service';
 
 @Injectable()
 export class TrackService {
@@ -30,6 +28,7 @@ export class TrackService {
     public doTitleCase = true;
 
     constructor(private electronService: ElectronService,
+                private titleCaseService: TitleCaseService,
                 private configService: ConfigService) {
         const platform = this.electronService.remote.require('./main.js').os;
         if (platform === 'win32') {
@@ -345,101 +344,15 @@ export class TrackService {
         this.selectedTracks = selectedTracks;
     }
 
-    /**
-     * Given a word which is just alpha-numeric characters, capitalize the first letter (if required)
-     * and lowercase the rest. Also test if the word is an Acronym and ensure each letter is capitalized.
-     * @param {string} word
-     * @param {boolean} capitalizeFirstLetter
-     * @return {string}
-     */
-    private titleCaseWord(word: string, capitalizeFirstLetter: boolean): string {
-        let capWord = '';
-        if (word.length) {
-            const isAcronym = /^([a-zA-Z]\.)+(s)?$/;
-            if (isAcronym.test(word)) {
-                capWord = word.toLocaleUpperCase();
-                if (capWord[capWord.length - 1] === 's') {
-                    // plural acronyms like 'M.O.A.B.s'
-                    capWord = capWord.slice(0, -1) + 's';
-                }
-            } else if (upperCaseWords.includes(word.toLocaleUpperCase())) {
-                // acronyms like 'DOA'
-                capWord = word.toLocaleUpperCase();
-            } else if (alwaysLowerCaseWords.includes(word.toLocaleLowerCase())) {
-                // words like 'remix'
-                capWord = word.toLocaleLowerCase();
-            } else if (capitalizeFirstLetter) {
-                capWord = word[0].toUpperCase() + word.substr(1).toLocaleLowerCase();
-            } else {
-                capWord = word.toLocaleLowerCase();
-            }
-        }
-        return capWord;
-    }
-
-    private titleCaseString(str: string): string {
-        let title = str;
-        const hyphenIndexes = [];
-        let blankStart = false;
-        let blankEnd = false;
-        title.split('').forEach((c, i) => {
-            if (c === '-') {
-                hyphenIndexes.push(i);
-            }
-        });
-        const words = title.split(/[ -]/);
-        if (words[0] === '') {
-            blankStart = true;
-            words.shift();
-        }
-        if (words[words.length - 1] === '') {
-            blankEnd = true;
-            words.pop();
-        }
-        const titleCaseWords = words.map((word, index) => {
-            const wordStart = word.match(/^[^a-zA-Z\d.]*/)[0];
-            const wordEnd = word.match(/[^a-zA-Z\d.]*$/)[0];
-            word = word.slice(wordStart.length, wordEnd.length ? 0 - wordEnd.length : undefined); // strip non alphanum chars
-            if (index === 0 || index === words.length - 1 || wordStart === '(' || wordEnd === ')' ||
-                !lowerCaseWords.includes(word.toLocaleLowerCase())) {
-                return wordStart + this.titleCaseWord(word, true) + wordEnd;
-            }
-            return wordStart + this.titleCaseWord(word, false) + wordEnd;
-        });
-        title = titleCaseWords.join(' ');
-        hyphenIndexes.forEach(i => {
-            title = title.slice(0, i) + '-' + title.slice(i+1);
-        });
-        return (blankStart ? ' ' : '') + title + (blankEnd ? ' ' : '');
-    }
-
     public guessTitles() {
         const metadata = this.getCurrentMetadata();
         // const tracks = this.getCurrentTracks(); // used for guessing titles from filename
         const selectedCopy = [...this.selectedTracks];
         const titles = metadata.title.values.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {
-                const parensRegex = /\((.*?)\)/g;
                 let title = origTitle.replace(this.deleteString, ''); // TODO: Guess title from filename
                 if (this.doTitleCase) {
-                    const matches = title.matchAll(parensRegex);
-                    let offset = 0;
-                    const titleSections = [];
-                    for (const match of matches) {
-                        if (match.index > offset) {
-                            titleSections.push(title.substring(offset, match.index));
-                        }
-                        titleSections.push(match[0]);
-                        offset = match.index + match[0].length;
-                    }
-                    if (offset < title.length) {
-                        titleSections.push(title.substring(offset));
-                    }
-                    // console.log(titleSections);
-                    title = titleSections.map((section) => {
-                        return this.titleCaseString(section);
-                    }).join('');
-                    // console.log(track.title);
+                    title = this.titleCaseService.titleCaseString(title);
                 }
                 return title;
             }

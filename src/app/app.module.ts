@@ -36,6 +36,7 @@ import { ConflictModalComponent } from './components/conflict-modal/conflict-mod
 import { ArtistCacheService } from '@services/artist-cache.service';
 import { ThrottleService } from '@services/throttle.service';
 import { ConfigService } from '@services/config.service';
+import { TitleCaseService } from '@services/title-case.service';
 
 @NgModule({
     declarations: [
@@ -79,6 +80,7 @@ import { ConfigService } from '@services/config.service';
         MusicbrainzService,
         PreloadService,
         ThrottleService,
+        TitleCaseService,
         TrackService,
         {
             provide: APP_INITIALIZER,
