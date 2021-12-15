@@ -8,6 +8,7 @@ import { TrackService } from '@services/track.service';
 import { MetadataObj, MetadataProperty } from '@classes/track.classes';
 import { throwError as observableThrowError } from 'rxjs';
 import { CacheService } from '@services/cache.service';
+import { TitleCaseService } from '@services/title-case.service';
 
 export class ReleaseDisplay extends Release {
     constructor(json: any, metadata: MetadataObj) {
@@ -52,6 +53,7 @@ export class GetMetadataComponent implements OnInit {
                 private router: Router,
                 private artistCache: ArtistCacheService,
                 private throttleService: ThrottleService,
+                private titleCaseService: TitleCaseService,
                 private cs: CacheService,
                 private ts: TrackService) {}
 
@@ -211,6 +213,10 @@ export class GetMetadataComponent implements OnInit {
 
         this.ts.setMetadata(metadata);
         this.router.navigate(['/']);
+    }
+
+    public guessCase(prop) {
+        this.selectedRelease[prop] = this.titleCaseService.titleCaseString(this.selectedRelease[prop]);
     }
 
     public clearCache() {

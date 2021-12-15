@@ -77,15 +77,3 @@ export class CommentStruct {
     shortText: string;
     text: string;
 }
-
-// TODO: the first five words should be used by the musicbrainz fuzzy search in ReplaceCommonWords()
-// words that are lowercased if in the middle of a title (not first or last word)
-export const lowerCaseWords = ['a', 'an', 'the', 'and', 'of', 'but', 'as', 'or', 'for', 'nor', 'at', 'by',
-    'to', 'etc.', 'in', 'n\'', 'o\'', 'on',
-    'vs', 'vs.'];
-
-// Acronyms or other words that should always be upper case
-export const upperCaseWords = ['DOA', 'LOL', 'LMAO', 'PCP', 'RIP'];
-
-// Words that should probably always be lower case
-export const alwaysLowerCaseWords = ['remix', 'feat.'];
