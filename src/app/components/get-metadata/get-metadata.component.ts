@@ -206,6 +206,9 @@ export class GetMetadataComponent implements OnInit {
         const needsAlbumArtist = release.tracks.some(track => track.artistString !== release.artistString);
         this.setMetadataVal(metadata, 'performerInfo', needsAlbumArtist ? release.artistString : '');
 
+        // artist sort order
+        this.setMetadataVal(metadata, 'artistSortOrder', release.artistSortString !== release.artistString ? release.artistSortString : '');
+
         this.ts.setMetadata(metadata);
         this.router.navigate(['/']);
     }

@@ -191,6 +191,7 @@ export class Release {
     title: string;
 
     artistString: string;
+    artistSortString: string;
     artistCredits: ArtistCredit[];
     releaseGroup: ReleaseGroup;
     trackCount: number;
@@ -202,8 +203,13 @@ export class Release {
         this.artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
         this.artistString = this.artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
             return idx == 0 ?
-                (artist.name + (artist.joinphrase ? artist.joinphrase : '')) :
-                prevVal + artist.name + (artist.joinphrase ? artist.joinphrase : '');
+                (artist.name + (artist?.joinphrase ?? '')) :
+                prevVal + artist.name + (artist?.joinphrase ?? '');
+        }, '');
+        this.artistSortString = this.artistCredits.reduce((prevVal, credit: ArtistCredit, idx) => {
+            return idx == 0 ?
+                (credit.artist.sortName + (credit?.joinphrase ?? '')) :
+                prevVal + credit.artist.sortName + (credit?.joinphrase ?? '');
         }, '');
         this.media = json.media ? json.media.map(m => new Media(m, json.media.length, this.artistString)) : [];
         this.media.forEach(m => {
