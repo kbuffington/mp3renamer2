@@ -61,9 +61,9 @@ export class ConfigComponent implements OnInit, OnDestroy {
     }
 
     public saveDisabled() {
-        const props = Object.keys(this.config);
+        const props = Object.keys(this.config).filter(key => key !== 'replacementFileNameChars');
         const charProps = this.config.replacementFileNameChars ? Object.keys(this.config.replacementFileNameChars) : [];
-        return !props.some(prop => this.config[prop] !== this.configBackup[prop]) ||
+        return !props.some(prop => this.config[prop] !== this.configBackup[prop]) &&
             !charProps.some(prop => {
                 return this.config.replacementFileNameChars[prop] !== this.configBackup.replacementFileNameChars[prop];
             });
@@ -72,5 +72,9 @@ export class ConfigComponent implements OnInit, OnDestroy {
     public clearCaches() {
         console.log('Clearing caches due to config changes');
         this.cacheService.clearAll();
+    }
+
+    public reloadConfig() {
+        this.config = JSON.parse(JSON.stringify(this.configBackup));
     }
 }

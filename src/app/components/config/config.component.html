@@ -84,6 +84,7 @@
         <div class="btn-container">
             <button class="btn btn-primary" (click)="saveConfig()" [disabled]="saveDisabled()">Save</button>
             <button class="btn btn-outline" [routerLink]="'/'">Back</button>
+            <button class="btn btn-outline spacer" (click)="reloadConfig()">Restore</button>
         </div>
     </footer>
 </div>
