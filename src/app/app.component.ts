@@ -11,8 +11,6 @@ import { TrackServiceMocks } from './services/track.service.mock';
     styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-    fileList: any[] = [];
-
     public trackSubscription: Subscription;
 
     constructor(private electronService: ElectronService,

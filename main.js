@@ -6,11 +6,11 @@ const fs = require('fs');
 require('@electron/remote/main').initialize();
 
 let NodeID3tag;
-if (app.isPackaged) {
+// if (app.isPackaged) {
     NodeID3tag = require('node-id3tag');
-} else {
-    NodeID3tag = require('../node-id3tag');
-}
+// } else {
+//     NodeID3tag = require('../node-id3tag');
+// }
 // const NodeID3tag = require('node-id3');
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -58,9 +58,11 @@ function getFiles(directory) {
         defaultPath: directory,
         properties: ['openFile', 'multiSelections'],
     }).then(resp => {
+        mainWindow.webContents.send('loadingFiles', true);
         console.log('getFiles:', resp.filePaths);
         const tracks = processFiles(resp.filePaths);
         mainWindow.webContents.send('files', tracks);
+        mainWindow.webContents.send('loadingFiles', false);
     });
 }
 

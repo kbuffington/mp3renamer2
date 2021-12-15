@@ -1,5 +1,5 @@
 <div class="grid-container">
-	<clr-datagrid class="datagrid-compact" [(clrDgSelected)]="selected" (clrDgSelectedChange)="selectionChanged($event)">
+	<clr-datagrid *ngIf="!loadingFiles" class="datagrid-compact" [(clrDgSelected)]="selected" (clrDgSelectedChange)="selectionChanged($event)">
 
 		<clr-dg-column>File Name</clr-dg-column>
 		<clr-dg-column>
@@ -51,6 +51,8 @@
 		<clr-dg-footer>{{ tracks.length }} tracks</clr-dg-footer>
 	</clr-datagrid>
 
-	<!-- {{ tracks[0].meta.filename }} -->
-	<!-- Selected tracks: <span *ngFor="let track of selected">{{ track.trackNumber }}, </span> -->
+	<div class="loading-spinner-container" *ngIf="loadingFiles">
+		<clr-spinner></clr-spinner>
+		<div>Processing Files...</div>
+	</div>
 </div>

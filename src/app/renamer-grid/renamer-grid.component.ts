@@ -1,4 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ElectronService } from '@services/electron.service';
+
 import { TrackService } from '../services/track.service';
 import { MetadataObj } from '../classes/track.classes';
 
@@ -23,10 +25,18 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
 
     public editing: boolean[] = [];
     public selected: any[] = [];
+    public loadingFiles = false;
 
-    constructor(private ts: TrackService) {}
+    constructor(private electronService: ElectronService,
+                private ts: TrackService,
+                private zone: NgZone) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.electronService.ipcRenderer.on('loadingFiles', (event, val) => {
+            this.loadingFiles = val;
+            this.zone.run(() => {});
+        });
+    }
 
     ngOnDestroy() {}
 
