@@ -194,19 +194,49 @@ export class TrackService {
         metaProp.values.push(saveValue);
     }
 
+    /**
+     * Returns a quasi-roman numeral that will always be numerically alphabetical (i.e. 4 will
+     * be aphabetized before 5). 1 => 'I', 2 => 'II', 4 => 'IIII', 9 => 'VIIII', 29 => 'XXVIIII'
+     * @param {number|string} num
+     * @returns {string}
+     */
+    private alphaRoman(num: number|string): string {
+        if (typeof num === 'string') {
+            num = parseInt(num, 10);
+        }
+        let tens = Math.floor(num / 10);
+        num -= tens * 10;
+        const five = Math.floor(num / 5);
+        num -= five * 5;
+        const roman = [];
+        while (tens) {
+            roman.push('X');
+            tens--;
+        }
+        if (five) {
+            roman.push('V');
+        }
+        while (num) {
+            roman.push('I');
+            num--;
+        }
+        return roman.join('');
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public previewFilenames(pattern: string) {
         const trackList = this.getCurrentTracks();
         const metadata = this.trackMetaData.getValue();
-        const artist = metadata.artist.default.trim();
+        const artist = metadata.performerInfo.default ? metadata.performerInfo.default : metadata.artist.default;
         const config = this.configService.getCurrentConfig();
-        const replaceCharsStr = Object.keys(config.replacementFileNameChars).join();
+        const replaceCharsStr = Object.keys(config.replacementFileNameChars).join('');
         const regex = new RegExp('[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']', 'g');
         trackList.forEach((t: Track, index: number) => {
             if (this.selectedTracks.includes(index)) {
                 const title = metadata.title.values[index].trim();
-                const filename =
-                    `${artist} [${metadata.album.default.trim()} ${t.trackNumber.trim()}] - ${title}${t.meta.extension}`;
+                const discNum = this.alphaRoman(metadata.partOfSet.values[index]);
+                const filename = `${artist.trim()} [${metadata.album.default.trim()} ${discNum ? discNum + '-' : ''}${t.trackNumber.trim()}]` +
+                        ` - ${title}${t.meta.extension}`;
                 // https://stackoverflow.com/a/70343927/911192
                 t.meta.filename = filename.replace(regex, function(m) {
                     return config.replacementFileNameChars[m];
