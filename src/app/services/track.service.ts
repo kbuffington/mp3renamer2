@@ -133,7 +133,7 @@ export class TrackService {
         if (metadata.trackNumber) {
             // remove total tracks from trackNumber
             metadata.trackNumber.values = metadata.trackNumber.values.map(t => {
-                return t.replace(/\/\d+/, '');
+                return t.replace(/\/\d+/, '').padStart(2, '0');
             });
             metadata.trackNumber.origValues = [...metadata.trackNumber.values];
         }
@@ -235,7 +235,8 @@ export class TrackService {
             if (this.selectedTracks.includes(index)) {
                 const title = metadata.title.values[index].trim();
                 const discNum = this.alphaRoman(metadata.partOfSet.values[index]);
-                const filename = `${artist.trim()} [${metadata.album.default.trim()} ${discNum ? discNum + '-' : ''}${t.trackNumber.trim()}]` +
+                const trackNumber = metadata.trackNumber.values[index];
+                const filename = `${artist.trim()} [${metadata.album.default.trim()} ${discNum ? discNum + '-' : ''}${trackNumber}]` +
                         ` - ${title}${t.meta.extension}`;
                 // https://stackoverflow.com/a/70343927/911192
                 t.meta.filename = filename.replace(regex, function(m) {
