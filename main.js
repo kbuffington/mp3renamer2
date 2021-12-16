@@ -6,12 +6,12 @@ const fs = require('fs');
 require('@electron/remote/main').initialize();
 
 let NodeID3tag;
-// if (app.isPackaged) {
+if (app.isPackaged || process.platform === 'win32') {
     NodeID3tag = require('node-id3tag');
-// } else {
-//     NodeID3tag = require('../node-id3tag');
-// }
-// const NodeID3tag = require('node-id3');
+} else {
+    NodeID3tag = require('../node-id3tag');
+}
+// NodeID3tag = require('node-id3');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -113,7 +113,8 @@ function loadFiles(filePaths) {
 function loadHardCoded() {
     const filePaths = [];
     // const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
-    const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
+    // const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
+    const dir = app.getPath('desktop')+ '/mp3-test/music/Benante, Charlie - 2021 - Silver Linings/';
     const stats = fs.statSync(dir);
     if (stats) {
         // folder exists
