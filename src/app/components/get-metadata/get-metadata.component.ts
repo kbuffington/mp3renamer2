@@ -155,6 +155,7 @@ export class GetMetadataComponent implements OnInit {
     private setDifferentFlag(metaProp: MetadataProperty) {
         const firstVal = metaProp.values.find(val => val) ?? undefined;
         metaProp.different = metaProp.values.some(v => v !== firstVal && v !== undefined && v !== '');
+        metaProp.useDefault = !metaProp.different;
     }
 
     public apply(release: ReleaseDisplay) {
@@ -209,7 +210,8 @@ export class GetMetadataComponent implements OnInit {
         this.setMetadataVal(metadata, 'performerInfo', needsAlbumArtist ? release.artistString : '');
 
         // artist sort order
-        this.setMetadataVal(metadata, 'artistSortOrder', release.artistSortString !== release.artistString ? release.artistSortString : '');
+        this.setMetadataVal(metadata, 'artistSortOrder',
+            release.artistSortString !== release.artistString ? release.artistSortString : '');
 
         this.ts.setMetadata(metadata);
         this.router.navigate(['/']);
