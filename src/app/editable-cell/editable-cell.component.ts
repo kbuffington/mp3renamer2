@@ -17,10 +17,12 @@ export class EditableCellComponent implements OnChanges {
     private backup: string;
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.editing && changes.editing.currentValue === true) {
-            this.backup = this.value;
-        } else {
-            this.valChanged(this.value);
+        if (changes.editing) {
+            if (changes.editing.currentValue === true) {
+                this.backup = this.value;
+            } else if (!changes.editing.firstChange) {
+                this.valChanged(this.value);
+            }
         }
     }
 

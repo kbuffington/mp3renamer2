@@ -139,7 +139,7 @@ export class TrackService {
         }
     }
 
-    setMetadata(updatedMetadata: MetadataObj) {
+    public setMetadata(updatedMetadata: MetadataObj) {
         this.trackMetaData.next(updatedMetadata);
     }
 

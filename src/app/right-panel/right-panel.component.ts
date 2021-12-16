@@ -30,6 +30,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
                 private electronService: ElectronService) {}
 
     ngOnInit() {
+        // do we still need to throttle here?
         this.metadataSubscription = this.ts.getMetadata().pipe(
             throttleTime(100, undefined, { leading: true, trailing: true }),
             tap(m => console.log(m))
