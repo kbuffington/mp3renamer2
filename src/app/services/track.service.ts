@@ -124,8 +124,19 @@ export class TrackService {
                 trackOptions.showArtwork = true;
             }
         });
+        this.postProcessing(metaData);
         this.trackMetaData.next(metaData);
         this.trackOptions.next(trackOptions);
+    }
+
+    private postProcessing(metadata: MetadataObj) {
+        if (metadata.trackNumber) {
+            // remove total tracks from trackNumber
+            metadata.trackNumber.values = metadata.trackNumber.values.map(t => {
+                return t.replace(/\/\d+/, '');
+            });
+            metadata.trackNumber.origValues = [...metadata.trackNumber.values];
+        }
     }
 
     setMetadata(updatedMetadata: MetadataObj) {

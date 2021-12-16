@@ -61,6 +61,7 @@ export class MetadataObj {
     RELEASECOUNTRY?: MetadataProperty;
     RELEASETYPE?: MetadataProperty;
     title?: MetadataProperty;
+    trackNumber?: MetadataProperty;
     [key: string]: MetadataProperty;
 }
 
