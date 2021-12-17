@@ -291,13 +291,11 @@ export class TrackService {
         this.trackList.next(trackList);
     }
 
-    public renameFolder() {
+    private getNewFolderName(): string {
         const md = this.getCurrentMetadata();
-        const path = this.getCurrentPath();
-        // full path without current folder, but with trailing slash
-        const basePath = path.substr(0, path.substr(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
         const year = md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
-        const artist = md.performerInfo.default ? md.performerInfo.default : md.artist.default;
+        const artist = md.artistSortOrder.default ? md.artistSortOrder.default :
+                            md.performerInfo.default ? md.performerInfo.default : md.artist.default;
         let editionYear = '';
         if (md.originalReleaseDate.default.substr(0, 4) < md.date.default.substr(0, 4)) {
             editionYear = md.date.default.substr(0, 4) + ' ';
@@ -305,6 +303,14 @@ export class TrackService {
         const edition = md.EDITION.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
         const newDir = `${artist.trim()} - ${year ? year.substr(0, 4) + ' - ' : ''}` +
                 `${md.album.default.trim()}${edition}${this.pathDelimiter}`;
+        return newDir;
+    }
+
+    public renameFolder() {
+        const path = this.getCurrentPath();
+        // full path without current folder, but with trailing slash
+        const basePath = path.substr(0, path.substr(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
+        const newDir = this.getNewFolderName();
         const newPath = basePath + newDir;
         this.electronService.fs.stat(newPath, (err, stats) => {
             if (err) {
