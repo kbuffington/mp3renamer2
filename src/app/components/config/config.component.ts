@@ -55,6 +55,23 @@ export class ConfigComponent implements OnInit, OnDestroy {
         }
     }
 
+    public async browseFile(prop: string) {
+        const result = await this.electronService.remote.dialog.showOpenDialog(this.mainWindow, {
+            defaultPath: this.electronService.remote.app.getPath('downloads'),
+            properties: ['openFile', 'dontAddToRecent'],
+        });
+        if (!result.canceled) {
+            this.config[prop] = result.filePaths[0];
+        }
+    }
+
+    public suggestValue(prop: string) {
+        const defaultConfig = this.configService.defaultConfig();
+        if (defaultConfig.hasOwnProperty(prop)) {
+            this.config[prop] = defaultConfig[prop];
+        }
+    }
+
     public saveConfig() {
         this.configService.saveConfig(this.config);
         this.backupConfig();

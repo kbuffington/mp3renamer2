@@ -7,6 +7,8 @@ export class ConfigSettingsObject {
     artistLogoDir: string;
     labelLogoDir: string;
     fanartApiKey: string;
+    aadPath: string; // path to album art downloader executable
+    aadParams: string; // command line paramaters to pass to aad.exe
     replaceUnicodeApostrophe: boolean;
     replaceUnicodeEllipsis: boolean;
     replaceUnicodeQuotes: boolean;
@@ -60,12 +62,14 @@ export class ConfigService {
         });
     }
 
-    private defaultConfig(): ConfigSettingsObject {
+    public defaultConfig(): ConfigSettingsObject {
         const defaultConfig = new ConfigSettingsObject({
             homeDir: this.electronService.remote.app.getAppPath(),
             artistLogoDir: this.electronService.remote.app.getPath('downloads'),
             labelLogoDir: this.electronService.remote.app.getPath('downloads'),
             fanartApiKey: 'e98c81989fa12e8171f86068c8b9989a',
+            aadPath: '',
+            aadParams: '/ar "%artist%" /al "%album%" /path "$directory_path(%path%)\folder.\'%extension%\'" /autoclose',
             replaceUnicodeApostrophe: true,
             replaceUnicodeEllipsis: true,
             replaceUnicodeQuotes: true,

@@ -78,6 +78,18 @@
                     </clr-input-container>
                 </div>
             </ng-container>
+
+            <clr-input-container>
+                <label>Album Art Downloader path</label>
+                <input clrInput placeholder="Path to AAD.exe" [(ngModel)]="config.aadPath" />
+            </clr-input-container>
+            <button class="btn btn-primary btn-sm directory-select-btn" (click)="browseFile('aadPath')">Browse</button>
+            <clr-input-container>
+                <label>AAD Command string</label>
+                <input clrInput placeholder="Command-line parameters to pass to AAD" [(ngModel)]="config.aadParams" />
+            </clr-input-container>
+            <button class="btn btn-primary btn-sm directory-select-btn" (click)="suggestValue('aadParams')">Suggest</button>
+
         </div>
     </div>
     <footer>

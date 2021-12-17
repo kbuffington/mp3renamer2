@@ -20,13 +20,16 @@
         "max-len": ["error", { "code": 130 }],
         "object-curly-spacing": ["error", "always"],
         "indent": ["error", 4, { "SwitchCase": 1 }],
+        "linebreak-style": "off",
         "no-case-declarations": "off",
         "no-prototype-builtins": "off",
         "no-undef": "off",
         "no-unused-vars": "off",
+        "quotes": "off",
         "@typescript-eslint/no-unused-vars": ["error", { "args": "after-used", "varsIgnorePattern": "[iI]gnore" }],
         "@typescript-eslint/no-inferrable-types": ["error"],
-        "new-cap": ["error", { "capIsNewExceptions": ["Input", "Component", "Output", "Injectable", "NgModule", "ViewChild"] }],
+        "@typescript-eslint/quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
+        "new-cap": ["error", { "capIsNewExceptions": ["Input", "Component", "Output", "Injectable", "NgModule", "ViewChild", "ViewChildren"] }],
         "require-jsdoc":"off"
     }
 }
