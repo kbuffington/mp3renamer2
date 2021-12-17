@@ -30,6 +30,7 @@ $button-down: #daecfc;
 .top-content {
     padding: 0 .5rem;
     overflow-y: auto;
+    overflow-x: hidden;
     height: calc(100vh - 6rem);
 
     .no-logos-header {
