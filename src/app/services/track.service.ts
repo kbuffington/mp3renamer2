@@ -15,6 +15,7 @@ import { TitleCaseService } from './title-case.service';
 
 @Injectable()
 export class TrackService {
+    private currentFolder: BehaviorSubject<string> = new BehaviorSubject('');
     private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
     private trackMetaData: BehaviorSubject<MetadataObj> = new BehaviorSubject({});
     private trackOptions: BehaviorSubject<TrackOptions> = new BehaviorSubject({});
@@ -48,7 +49,11 @@ export class TrackService {
         return this.trackOptions.asObservable();
     }
 
-    setTracks(tracks: Track[]) {
+    getFolder(): Observable<string> {
+        return this.currentFolder.asObservable();
+    }
+
+    public setTracks(tracks: Track[]) {
         this.trackDataBackup = JSON.parse(JSON.stringify(tracks));
         const trackList = tracks.map((t: Track) => {
             t.meta.originalFilename = t.meta.filename;
@@ -58,6 +63,7 @@ export class TrackService {
         this.trackCount = trackList.length;
         this.processTracks(tracks);
         this.trackList.next(trackList);
+        this.currentFolder.next(this.getCurrentDirectory());
     }
 
     public resetTrackData() {
@@ -68,12 +74,17 @@ export class TrackService {
         this.trackList.next([]);
     }
 
-    getCurrentTracks(): Track[] {
+    public getCurrentTracks(): Track[] {
         return this.trackList.getValue();
     }
 
     public getCurrentPath(): string {
-        return this.trackList.getValue()[0].meta.folder;
+        const trackList = this.trackList.getValue();
+        if (trackList.length) {
+            return trackList[0].meta.folder;
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -281,20 +292,27 @@ export class TrackService {
     }
 
     public renameFolder() {
-        const metadata = this.getCurrentMetadata();
+        const md = this.getCurrentMetadata();
         const path = this.getCurrentPath();
         // full path without current folder, but with trailing slash
         const basePath = path.substr(0, path.substr(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
-        const year = metadata.date.default.substr(0, 4);
-        const newDir = `${metadata.artist.default.trim()} - ${year ? year + ' - ' : ''}` +
-                `${metadata.album.default.trim()}${this.pathDelimiter}`;
+        const year = md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
+        const artist = md.performerInfo.default ? md.performerInfo.default : md.artist.default;
+        let editionYear = '';
+        if (md.originalReleaseDate.default.substr(0, 4) < md.date.default.substr(0, 4)) {
+            editionYear = md.date.default.substr(0, 4) + ' ';
+        }
+        const edition = md.EDITION.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
+        const newDir = `${artist.trim()} - ${year ? year.substr(0, 4) + ' - ' : ''}` +
+                `${md.album.default.trim()}${edition}${this.pathDelimiter}`;
         const newPath = basePath + newDir;
         this.electronService.fs.stat(newPath, (err, stats) => {
             if (err) {
                 this.electronService.fs.rename(path, newPath, (err) => {
                     if (!err) {
-                        console.log(`Renamed directory ${this.getCurrentDirectory()} to ${newDir}`);
+                        console.log(`Renamed directory ${this.getCurrentDirectory()} to "${newDir}"`);
                         this.getCurrentTracks().map(t => t.meta.folder = newPath);
+                        this.currentFolder.next(newDir.substr(0, newDir.length - 1));
                     } else {
                         console.error(err);
                     }

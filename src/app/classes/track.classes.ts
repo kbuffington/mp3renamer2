@@ -58,6 +58,7 @@ export class MetadataObj {
     originalArtist?: MetadataProperty;
     originalReleaseDate?: MetadataProperty;
     partOfSet?: MetadataProperty; // disc
+    performerInfo?: MetadataProperty; // album artist
     RELEASECOUNTRY?: MetadataProperty;
     RELEASETYPE?: MetadataProperty;
     title?: MetadataProperty;

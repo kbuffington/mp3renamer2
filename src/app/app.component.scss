@@ -1,4 +1,22 @@
 .app-wrapper {
     min-height: 100%;
     background-color: white;
+
+    .header {
+        .branding {
+            flex: 1 0 90%;
+
+            .nav-link {
+                width: 100%;
+
+                span.title {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            }
+        }
+        .header-actions {
+            flex: 0 0 3rem;
+        }
+    }
 }

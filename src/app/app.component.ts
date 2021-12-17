@@ -12,6 +12,7 @@ import { TrackServiceMocks } from './services/track.service.mock';
 })
 export class AppComponent implements OnInit, OnDestroy {
     public trackSubscription: Subscription;
+    public title = 'MP3 Renamer2';
 
     constructor(private electronService: ElectronService,
                 private configService: ConfigService,
@@ -21,6 +22,10 @@ export class AppComponent implements OnInit, OnDestroy {
         // we need to call zone.run() whenever the trackSubscription updates
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.trackSubscription = ts.getTracks().subscribe(tracks => zone.run(() => {}));
+        ts.getFolder().subscribe(folder => {
+            this.title = folder ? folder : 'MP3 Renamer2';
+            zone.run(() => {});
+        });
     }
 
     ngOnInit() {
