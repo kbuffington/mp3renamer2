@@ -37,7 +37,7 @@ export class MetadataProperty {
     defaultChanged = false; // has initial value of useDefault changed, or has default value changed?
     values: string[] = [];
     origValues: string[] = []; // copy of values used for resetting
-    write = false; // whether to write this property to the file
+    write = true; // whether to write this property to the file
 }
 
 export class MetadataObj {

@@ -27,9 +27,8 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         if (changes.unknownProperties && changes.unknownProperties.currentValue) {
             this.unknownPropArray = Object.keys(changes.unknownProperties.currentValue);
             this.unknownPropCopy = [...this.unknownPropArray];
-            console.log(this.unknownProperties, this.unknownPropArray);
 
-            this.selected = [...this.unknownPropArray];
+            this.selected = [...this.unknownPropArray.filter(p => this.unknownProperties[p].write)];
             this.clearEditing();
         }
     }
@@ -53,7 +52,10 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     }
 
     public selectionChanged(selection: any) {
-        console.log(selection);
+        Object.keys(this.unknownProperties).forEach(p => this.unknownProperties[p].write = false);
+        selection.forEach(key => {
+            this.unknownProperties[key].write = true;
+        });
     }
 
     public updatePropertyName(index: number, editing: boolean) {
