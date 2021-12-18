@@ -296,7 +296,7 @@ export class TrackService {
         this.trackList.next(trackList);
     }
 
-    private getNewFolderName(): string {
+    public getNewFolderName(): string {
         const md = this.getCurrentMetadata();
         const year = md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
         const artist = md.artistSortOrder.default ? md.artistSortOrder.default :
@@ -307,7 +307,7 @@ export class TrackService {
         }
         const edition = md.EDITION.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
         const newDir = `${artist.trim()} - ${year ? year.substring(0, 4) + ' - ' : ''}` +
-                `${md.album.default.trim()}${edition}`;// ${this.pathDelimiter}`;
+                `${md.album.default.trim()}${edition}`;
         return newDir;
     }
 

@@ -18,6 +18,7 @@ export class MainComponent implements OnInit, OnDestroy {
     public tracks: Track[] = [];
     public metadata: MetadataObj;
     public setNamesDisabled = true;
+    public renameFolderDisabled = true;
 
     private setNamesCheck: any;
     private trackSubscription: Subscription;
@@ -39,6 +40,7 @@ export class MainComponent implements OnInit, OnDestroy {
         });
         this.setNamesCheck = setInterval(() => {
             this.isSetNamesDisabled();
+            this.isRenameFolderDisabled();
         }, 200);
     }
 
@@ -65,6 +67,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
     renameFolder() {
         this.ts.renameFolder();
+        this.renameFolderDisabled = true;
     }
 
     downloadArt() {
@@ -98,6 +101,13 @@ export class MainComponent implements OnInit, OnDestroy {
             return true;
         }
         this.setNamesDisabled = !this.tracks.some(t => t.meta.filename !== t.meta.originalFilename);
+    }
+
+    private isRenameFolderDisabled() {
+        if (!this.tracks.length) {
+            return true;
+        }
+        this.renameFolderDisabled = this.ts.getNewFolderName() === this.ts.getCurrentDirectory();
     }
 
     public clicked() {

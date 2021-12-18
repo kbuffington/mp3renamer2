@@ -19,7 +19,7 @@
             <button class="btn btn-outline" (click)="previewRename()">Preview Names</button>
             <button class="btn btn-outline" (click)="revertRename()">Revert Names</button>
             <button class="btn btn-outline" (click)="setNames()" [disabled]="setNamesDisabled">Set Names</button>
-            <button class="btn btn-outline" (click)="renameFolder()">Rename Folder</button>
+            <button class="btn btn-outline" (click)="renameFolder()" [disabled]="renameFolderDisabled">Rename Folder</button>
         </div>
         <div class="btn-container">
             <button class="btn btn-outline"
