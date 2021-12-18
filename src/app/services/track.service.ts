@@ -24,6 +24,7 @@ export class TrackService {
     private trackCount: number;
     private selectedTracks: number[];
     private pathDelimiter = '/';
+    private rename: Function;
 
     public deleteString = '';
     public doTitleCase = true;
@@ -35,6 +36,7 @@ export class TrackService {
         if (platform === 'win32') {
             this.pathDelimiter = '\\';
         }
+        this.rename = electronService.util.promisify(electronService.fs.rename);
     }
 
     getTracks(): Observable<Track[]> {
@@ -93,8 +95,8 @@ export class TrackService {
     public getCurrentDirectory(): string {
         const path = this.getCurrentPath();
         // full path without current folder, but with trailing slash
-        const folder = path.substr(path.substr(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
-        return folder.substr(0, folder.length - 1);
+        const folder = path.substring(path.substring(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
+        return folder.substring(0, folder.length - 1);
     }
 
     getNumTracks(): number {
@@ -263,25 +265,27 @@ export class TrackService {
      * Renames files (if needed) to the currently set filename in the metadata grid. Should be called
      * only after doing previewFilenames() at least once.
      */
-    public setFilenames() {
-        this.getCurrentTracks().forEach((t: Track, index: number) => {
+    public async setFilenames() {
+        const trackList = this.getCurrentTracks();
+        // use standard for loop so tracklist.next happens after all renames have occured
+        for (let index = 0; index < trackList.length; index++) {
+            const t = trackList[index];
             if (this.selectedTracks.includes(index) && t.meta.filename !== t.meta.originalFilename) {
                 const path = t.meta.folder;
-                // check if we are using mocked files
                 if (path) {
-                    this.electronService.fs.stat(path + t.meta.filename, (err, stats) => {
-                        if (err) {
-                            this.electronService.fs.rename(path + t.meta.originalFilename, path + t.meta.filename,
-                                () => {});
-                            t.meta.originalFilename = t.meta.filename;
-                        } else {
-                            console.log(stats);
-                            console.warn(`File already exists: "${path}${t.meta.filename}"`);
-                        }
-                    });
+                    const newName = path + t.meta.filename; // meta.filename currently shows the value in the renamer grid
+                    const tempPath = newName + ('' + Date.now()).substring(0, 6);
+                    try {
+                        await this.rename(path + t.meta.originalFilename, tempPath);
+                        await this.rename(tempPath, newName);
+                        t.meta.originalFilename = t.meta.filename;
+                    } catch (err) {
+                        console.error(err);
+                    }
                 }
             }
-        });
+        }
+        this.trackList.next(trackList);
     }
 
     public revertFilenames() {
@@ -298,37 +302,35 @@ export class TrackService {
         const artist = md.artistSortOrder.default ? md.artistSortOrder.default :
             md.performerInfo.default ? md.performerInfo.default : md.artist.default;
         let editionYear = '';
-        if (md.originalReleaseDate.default.substr(0, 4) < md.date.default.substr(0, 4)) {
-            editionYear = md.date.default.substr(0, 4) + ' ';
+        if (md.originalReleaseDate.default.substring(0, 4) < md.date.default.substring(0, 4)) {
+            editionYear = md.date.default.substring(0, 4) + ' ';
         }
         const edition = md.EDITION.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
-        const newDir = `${artist.trim()} - ${year ? year.substr(0, 4) + ' - ' : ''}` +
-                `${md.album.default.trim()}${edition}${this.pathDelimiter}`;
+        const newDir = `${artist.trim()} - ${year ? year.substring(0, 4) + ' - ' : ''}` +
+                `${md.album.default.trim()}${edition}`;// ${this.pathDelimiter}`;
         return newDir;
     }
 
-    public renameFolder() {
+    public async renameFolder() {
         const path = this.getCurrentPath();
+        const currentDir = this.getCurrentDirectory();
         // full path without current folder, but with trailing slash
-        const basePath = path.substr(0, path.substr(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
+        const basePath = path.substring(0, path.substring(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
         const newDir = this.getNewFolderName();
-        const newPath = basePath + newDir;
-        this.electronService.fs.stat(newPath, (err, stats) => {
-            if (err) {
-                this.electronService.fs.rename(path, newPath, (err) => {
-                    if (!err) {
-                        console.log(`Renamed directory ${this.getCurrentDirectory()} to "${newDir}"`);
-                        this.getCurrentTracks().map(t => t.meta.folder = newPath);
-                        this.currentFolder.next(newDir.substr(0, newDir.length - 1));
-                    } else {
-                        console.error(err);
-                    }
-                });
-            } else {
-                console.log(stats);
-                console.warn(`Directory already exists: "${newDir}"`);
+        console.log(newDir, currentDir);
+        if (newDir !== currentDir) {
+            const newPath = basePath + newDir;
+            try {
+                const tempPath = newPath + ('' + Date.now()).substring(0, 6);
+                await this.rename(path, tempPath);
+                await this.rename(tempPath, newPath);
+                console.log(`Renamed directory "${currentDir}" to "${newDir}"`);
+                this.getCurrentTracks().map(t => t.meta.folder = newPath);
+                this.currentFolder.next(newDir.substring(0, newDir.length));
+            } catch (err) {
+                console.error(err);
             }
-        });
+        }
     }
 
     setTagData() {
