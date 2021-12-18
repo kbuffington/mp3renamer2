@@ -57,7 +57,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public openFolder() {
         const path = this.electronService.path.parse(this.ts.getCurrentPath());
-        this.electronService.childProcess.execFile('explorer.exe', [`${path.dir}\\${path.base}`])
-            .on('error', err => console.error(err));
+        switch (this.electronService.remote.process.platform) {
+            case 'win32':
+                this.electronService.childProcess.execFile('explorer.exe', [`${path.dir}\\${path.base}`])
+                    .on('error', err => console.error(err));
+                break;
+            default:
+            case 'darwin':
+                this.electronService.childProcess.spawn('open', [`${path.dir}/${path.base}`])
+                    .on('error', err => console.error(err));
+                break;
+        }
     }
 }
