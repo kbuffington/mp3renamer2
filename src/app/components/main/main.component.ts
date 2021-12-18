@@ -4,7 +4,7 @@ import { ElectronService } from '@services/electron.service';
 import { TitleFormatService } from '@services/title-format.service';
 import { TrackService } from '@services/track.service';
 
-import { MetadataObj } from '@classes/track.classes';
+import { MetadataObj, Track } from '@classes/track.classes';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
@@ -15,9 +15,11 @@ import { Subscription } from 'rxjs/internal/Subscription';
 export class MainComponent implements OnInit, OnDestroy {
     public clickOccurred: number;
     public showArtist = true;
-    public tracks: any[] = [];
+    public tracks: Track[] = [];
     public metadata: MetadataObj;
+    public setNamesDisabled = true;
 
+    private setNamesCheck: any;
     private trackSubscription: Subscription;
     private metadataSubscription: Subscription;
 
@@ -28,28 +30,37 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.trackSubscription = this.ts.getTracks().subscribe(tracks => this.tracks = tracks);
+        this.trackSubscription = this.ts.getTracks().subscribe(tracks => {
+            this.tracks = tracks;
+        });
         this.metadataSubscription = this.ts.getMetadata().subscribe(metadata => {
             this.metadata = metadata;
             this.showArtist = this.metadata.artist.different;
         });
+        this.setNamesCheck = setInterval(() => {
+            this.isSetNamesDisabled();
+        }, 200);
     }
 
     ngOnDestroy() {
         this.trackSubscription.unsubscribe();
         this.metadataSubscription.unsubscribe();
+        clearInterval(this.setNamesCheck);
     }
 
     previewRename() {
         this.ts.previewFilenames('');
+        this.isSetNamesDisabled();
     }
 
     revertRename() {
         this.ts.revertFilenames();
+        this.setNamesDisabled = true;
     }
 
     setNames() {
         this.ts.setFilenames();
+        this.setNamesDisabled = true;
     }
 
     renameFolder() {
@@ -77,9 +88,16 @@ export class MainComponent implements OnInit, OnDestroy {
         aad.on('error', (err) => console.error('error:', err) );
     }
 
-    quitApp() {
+    public quitApp() {
         const mainProcess = this.electronService.remote.require('./main.js');
         mainProcess.quitApp();
+    }
+
+    private isSetNamesDisabled() {
+        if (!this.tracks.length) {
+            return true;
+        }
+        this.setNamesDisabled = !this.tracks.some(t => t.meta.filename !== t.meta.originalFilename);
     }
 
     public clicked() {
