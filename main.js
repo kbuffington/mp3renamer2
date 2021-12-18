@@ -35,6 +35,7 @@ function createWindow() {
             webSecurity: false, // TODO: disabling this for dev so can load from file:// disable when using a prod build
         },
     });
+    mainWindow.setMenu(null);
 
     if (app.isPackaged) {
         mainWindow.loadFile('dist/mp3renamer2/index.html');
