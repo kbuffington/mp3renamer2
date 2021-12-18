@@ -4,19 +4,34 @@
 
     .header {
         .branding {
-            flex: 1 0 calc(100% - 6rem);
+            flex: 1 0 auto;
+            max-width: calc(100% - 3rem); // 3rem per icon
 
             .nav-link {
-                width: 100%;
+                flex: 1 0 auto;
+                max-width: 100%;
 
                 span.title {
                     text-overflow: ellipsis;
                     overflow: hidden;
                 }
+
+                &:hover {
+                    cursor: default;
+                }
+
+                &.has-tracks:hover {
+                    cursor: pointer;
+
+                    span {
+                        text-decoration: underline;
+                        color: white;
+                    }
+                }
             }
         }
         .header-actions {
-            flex: 0 0 6rem;
+            flex: 1 0 auto;
         }
     }
 }
