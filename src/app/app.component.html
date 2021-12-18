@@ -7,7 +7,10 @@
 			</a>
 		</div>
 		<div class="header-actions">
-			<a [routerLink]="'/preferences'" class="nav-link nav-icon" aria-label="settings">
+			<a [routerLink]="" class="nav-link nav-icon" aria-settings="Open Folder" [ngClass]="{ 'hidden': !tracks.length }" (click)="openFolder()">
+				<clr-icon shape="folder-open"></clr-icon>
+			</a>
+			<a [routerLink]="'/preferences'" class="nav-link nav-icon" aria-label="preferences">
 				<clr-icon shape="cog"></clr-icon>
 			</a>
 		</div>

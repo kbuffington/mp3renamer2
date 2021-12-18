@@ -4,7 +4,7 @@
 
     .header {
         .branding {
-            flex: 1 0 90%;
+            flex: 1 0 calc(100% - 6rem);
 
             .nav-link {
                 width: 100%;
@@ -16,7 +16,7 @@
             }
         }
         .header-actions {
-            flex: 0 0 3rem;
+            flex: 0 0 6rem;
         }
     }
 }

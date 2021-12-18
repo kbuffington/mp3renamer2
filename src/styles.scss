@@ -57,7 +57,7 @@ header.header {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .clr-combobox-options .clr-combobox-option {

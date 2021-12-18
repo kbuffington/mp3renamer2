@@ -14,6 +14,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public trackSubscription: Subscription;
     public title = 'MP3 Renamer2';
 
+    public tracks = [];
+
     constructor(private electronService: ElectronService,
                 private configService: ConfigService,
                 private ts: TrackService,
@@ -21,7 +23,10 @@ export class AppComponent implements OnInit, OnDestroy {
         configService.loadConfig();
         // we need to call zone.run() whenever the trackSubscription updates
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        this.trackSubscription = ts.getTracks().subscribe(tracks => zone.run(() => {}));
+        this.trackSubscription = ts.getTracks().subscribe(tracks => {
+            zone.run(() => {});
+            this.tracks = tracks;
+        });
         ts.getFolder().subscribe(folder => {
             this.title = folder ? folder : 'MP3 Renamer2';
             zone.run(() => {});
@@ -48,5 +53,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.trackSubscription.unsubscribe();
+    }
+
+    public openFolder() {
+        const path = this.electronService.path.parse(this.ts.getCurrentPath());
+        this.electronService.childProcess.execFile('explorer.exe', [`${path.dir}\\${path.base}`])
+            .on('error', err => console.error(err));
     }
 }
