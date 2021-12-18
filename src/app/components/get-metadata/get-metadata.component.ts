@@ -9,6 +9,13 @@ import { MetadataObj, MetadataProperty } from '@classes/track.classes';
 import { throwError as observableThrowError } from 'rxjs';
 import { CacheService } from '@services/cache.service';
 import { TitleCaseService } from '@services/title-case.service';
+import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
+
+export enum DiffMatchType {
+    Equal = 0,
+    Add = 1,
+    Remove = -1,
+}
 
 export class ReleaseDisplay extends Release {
     constructor(json: any, metadata: MetadataObj) {
@@ -22,7 +29,13 @@ export class ReleaseDisplay extends Release {
             if (t && t.metadataFoundIndex === -1) {
                 t.metadataFoundIndex = index;
                 t.metadataTitle = metadata.title.values[index];
-                t.metadataDiffers = t.title !== t.metadataTitle;
+                if (t.title !== t.metadataTitle) {
+                    const dmp = new DiffMatchPatch();
+                    const diffs = dmp.diff_main(t.metadataTitle, t.title);
+                    dmp.diff_cleanupSemantic(diffs);
+                    t.titleDiffs = diffs;
+                    console.log(diffs);
+                }
             }
         });
     }
@@ -41,6 +54,7 @@ export class GetMetadataComponent implements OnInit {
     public artist = '';
     public album = '';
     public date = '';
+    public diffMatchType = DiffMatchType;
     public fetchingReleases = false;
     public fuzzySearch = false;
     public hasCovers = false;

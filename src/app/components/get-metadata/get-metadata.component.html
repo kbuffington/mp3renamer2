@@ -139,8 +139,15 @@
                     </clr-dg-cell>
                     <clr-dg-cell class="artist">{{ track.artistString }}</clr-dg-cell>
                     <clr-dg-cell>
-                        {{ track.title }}
-                        <span *ngIf="track.metadataDiffers" class="diff">[{{track.metadataTitle}}]</span>
+                        <span *ngIf="track.titleDiffs.length === 0; else showDiffs">{{ track.title }}</span>
+                        <ng-template #showDiffs>
+                            <span *ngFor="let diff of track.titleDiffs"
+                                    [ngClass]="{
+                                        'equal': diff[0] === diffMatchType.Equal,
+                                        'added': diff[0] === diffMatchType.Add,
+                                        'removed': diff[0] === diffMatchType.Remove
+                                    }">{{ diff[1] }}</span>
+                        </ng-template>
                     </clr-dg-cell>
                     <clr-dg-cell *ngIf="hasCovers">
                         {{ track.originalArtist }}

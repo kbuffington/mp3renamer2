@@ -1,3 +1,4 @@
+import { Diff } from 'diff-match-patch';
 import { countryCodes } from '../services/countries';
 
 export class ArtistTag {
@@ -113,7 +114,7 @@ export class Track {
     artistFilter = ''; // sort-order style name used for artistFilter field
     discSet = ''; // if only one disc, this is empty, otherwise formatted like "1/3"
     discTrackStr: string;
-    metadataDiffers = false; // does the title differ from the metadata?
+    titleDiffs: Diff[] = []; // does the title differ from the metadata?
     metadataFound = false; // was the track found in the metadata (by discTrackStr)?
     metadataFoundIndex = -1; // index into tracklist of found item
     metadataTitle?: string; // title found in metadata

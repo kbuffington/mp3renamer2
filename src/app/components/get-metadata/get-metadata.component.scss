@@ -111,9 +111,13 @@
         text-align: right;
     }
 
-    .diff {
-        color: red;
-        font-style: italic;
+    .added {
+        background-color: #e6ffe6;
+        text-decoration: underline;
+    }
+    .removed {
+        background-color: #ffe6e6;
+        text-decoration: line-through;
     }
     .notfound {
         background-color: #f4f4f4;
