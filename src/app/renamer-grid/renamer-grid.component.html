@@ -1,5 +1,8 @@
 <div class="grid-container">
-	<clr-datagrid *ngIf="!loadingFiles" class="datagrid-compact" [(clrDgSelected)]="selected" (clrDgSelectedChange)="selectionChanged($event)">
+	<clr-datagrid *ngIf="!loadingFiles"
+			class="datagrid-compact"
+			[(clrDgSelected)]="selected"
+			(clrDgSelectedChange)="selectionChanged($event)">
 
 		<clr-dg-column>File Name</clr-dg-column>
 		<clr-dg-column>
@@ -10,7 +13,9 @@
 		<clr-dg-column>Title</clr-dg-column>
 		<clr-dg-column class="tracknum">Track#</clr-dg-column>
 
-		<clr-dg-row *clrDgItems="let track of tracks; let i = index" [clrDgItem]="track">
+		<clr-dg-row *clrDgItems="let track of tracks; let i = index"
+				[clrDgItem]="track"
+				(contextmenu)="onRightClick($event, i)">
 			<clr-dg-cell class="ellipsis"
 					[ngClass]="{'editing': editing[i][0]}"
 					[attr.data-title]="track.meta.filename"
@@ -55,4 +60,14 @@
 		<clr-spinner></clr-spinner>
 		<div>Processing Files...</div>
 	</div>
+</div>
+
+<div id="grid-right-click-menu"
+		[ngClass]="{ 'show-menu': showMenu }"
+		[style.left]="menuTopLeftPosition.x"
+		[style.top]="menuTopLeftPosition.y">
+	<div class="menu-item" (click)="menuHandler('uncheck')">Uncheck All</div>
+	<div class="menu-item" (click)="menuHandler('check-this')">Check Only This</div>
+	<div class="menu-item" (click)="menuHandler('inverse')">Check Inverse</div>
+	<div class="menu-item" (click)="menuHandler('check')">Check All</div>
 </div>

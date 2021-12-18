@@ -1,10 +1,11 @@
-<div class="main-wrapper">
+<div class="main-wrapper" (click)="clicked()">
     <div class="content">
         <div class="clr-row">
             <renamer-grid class="clr-col-12"
                 [showArtist]="showArtist"
                 [metadata]="metadata"
-                [tracks]="tracks">
+                [tracks]="tracks"
+                [closeMenu]="closeMenu">
             </renamer-grid>
         </div>
         <upper-button-bar></upper-button-bar>

@@ -46,3 +46,30 @@ $gridHeight: 310px;
 		}
 	}
 }
+
+#grid-right-click-menu {
+	position: absolute;
+	z-index: 1000;
+	background-color: white;
+	border: 1px solid lightgrey;
+	border-radius: 3px;
+	padding: 5px;
+	display: none;
+	max-width: fit-content;
+	box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
+
+	&.show-menu {
+		display: block;
+	}
+
+	.menu-item {
+		padding: 5px 10px;
+		cursor: pointer;
+		display: flex;
+		flex: 0 0 auto;
+
+		&:hover {
+			background-color: var(--clr-global-selection-color, #d8e3e9);
+		}
+	}
+}

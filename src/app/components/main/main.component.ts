@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
     styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit, OnDestroy {
+    public closeMenu: number;
     public showArtist = true;
     public tracks: any[] = [];
     public metadata: MetadataObj;
@@ -79,5 +80,10 @@ export class MainComponent implements OnInit, OnDestroy {
     quitApp() {
         const mainProcess = this.electronService.remote.require('./main.js');
         mainProcess.quitApp();
+    }
+
+    public clicked() {
+        this.closeMenu = Date.now();
+        // console.log('clicked');
     }
 }

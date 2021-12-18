@@ -22,10 +22,15 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
     @Input() showArtist = false;
     @Input() tracks: any[] = [];
     @Input() metadata: MetadataObj;
+    @Input() closeMenu: number;
 
     public editing: boolean[] = [];
     public selected: any[] = [];
     public loadingFiles = false;
+    public showMenu = false;
+    public menuTopLeftPosition = { x: '0px', y: '0px' };
+
+    private menuRow: number;
 
     constructor(private electronService: ElectronService,
                 private ts: TrackService,
@@ -44,6 +49,9 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
         if (changes.tracks && changes.tracks.currentValue) {
             this.selected = changes.tracks.currentValue.map(t => t);
             this.clearEditing();
+        }
+        if (changes.closeMenu) {
+            this.showMenu = false;
         }
     }
 
@@ -68,9 +76,45 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
     selectionChanged(selection: TrackObj[]) {
         const selectedTracks = selection.map((t: TrackObj) => this.tracks.indexOf(t));
         this.ts.updateSelectedTracks(selectedTracks.sort());
+        console.log(selectedTracks);
     }
 
     public updateMetadata() {
         this.ts.setMetadata(this.metadata);
+    }
+
+    public onRightClick(event: MouseEvent, index: number) {
+        console.log(event, index);
+        const bodyWidth = document.querySelector('body').clientWidth;
+        this.menuRow = index;
+        this.showMenu = true;
+        let x = event.clientX;
+        if (x + 140 > bodyWidth) {
+            x = bodyWidth - 140;
+        }
+        this.menuTopLeftPosition.x = x + 'px';
+        this.menuTopLeftPosition.y = event.clientY + 'px';
+    }
+
+    public menuHandler(action: string) {
+        switch (action) {
+            case 'check':
+                this.selected = [...this.tracks];
+                break;
+            case 'uncheck':
+                this.selected = [];
+                break;
+            case 'check-this':
+                this.selected = this.tracks.filter((t, index) => index === this.menuRow);
+                break;
+            case 'inverse':
+                const selectedTracks = this.selected.map((t: TrackObj) => this.tracks.indexOf(t));
+                this.selected = this.tracks.filter((t, index) => !selectedTracks.includes(index));
+                break;
+            default:
+                console.warn('Unknown action:', action);
+        }
+        this.selectionChanged(this.selected);
+        this.showMenu = false;
     }
 }
