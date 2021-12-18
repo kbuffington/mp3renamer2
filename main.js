@@ -100,9 +100,11 @@ function processFiles(files) {
 
 function writeTags(files, tags) {
     console.log(files[0], tags[0]);
+    const start = Date.now();
     files.forEach((f, index) => {
         NodeID3tag.write(tags[index], f);
     });
+    console.log(`write took ${Date.now() - start}ms`);
 }
 
 function loadFiles(filePaths) {
@@ -114,7 +116,7 @@ function loadHardCoded() {
     const filePaths = [];
     // const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
     // const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
-    const dir = app.getPath('desktop')+ '/mp3-test/music/Benante, Charlie - 2021 - Silver Linings/';
+    const dir = app.getPath('desktop') + '/mp3-test/music/Benante, Charlie - 2021 - Silver Linings/';
     const stats = fs.statSync(dir);
     if (stats) {
         // folder exists
