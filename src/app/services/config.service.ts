@@ -69,7 +69,7 @@ export class ConfigService {
             labelLogoDir: this.electronService.remote.app.getPath('downloads'),
             fanartApiKey: 'e98c81989fa12e8171f86068c8b9989a',
             aadPath: '',
-            aadParams: '/ar "%artist%" /al "%album%" /path "$directory_path(%path%)\folder.\'%extension%\'" /autoclose',
+            aadParams: '/ar "%artist%" /al "%album%" /path "%folder%folder.%extension%" /autoclose',
             replaceUnicodeApostrophe: true,
             replaceUnicodeEllipsis: true,
             replaceUnicodeQuotes: true,

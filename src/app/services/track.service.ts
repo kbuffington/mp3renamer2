@@ -209,7 +209,7 @@ export class TrackService {
      * Returns a quasi-roman numeral that will always be numerically alphabetical (i.e. 4 will
      * be aphabetized before 5). 1 => 'I', 2 => 'II', 4 => 'IIII', 9 => 'VIIII', 29 => 'XXVIIII'
      * @param {number|string} num
-     * @returns {string}
+     * @return {string}
      */
     private alphaRoman(num: number|string): string {
         if (typeof num === 'string') {
@@ -247,7 +247,8 @@ export class TrackService {
                 const title = metadata.title.values[index].trim();
                 const discNum = this.alphaRoman(metadata.partOfSet.values[index]);
                 const trackNumber = metadata.trackNumber.values[index];
-                const filename = `${artist.trim()} [${metadata.album.default.trim()} ${discNum ? discNum + '-' : ''}${trackNumber}]` +
+                const filename =
+                        `${artist.trim()} [${metadata.album.default.trim()} ${discNum ? discNum + '-' : ''}${trackNumber}]` +
                         ` - ${title}${t.meta.extension}`;
                 // https://stackoverflow.com/a/70343927/911192
                 t.meta.filename = filename.replace(regex, function(m) {
@@ -295,7 +296,7 @@ export class TrackService {
         const md = this.getCurrentMetadata();
         const year = md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
         const artist = md.artistSortOrder.default ? md.artistSortOrder.default :
-                            md.performerInfo.default ? md.performerInfo.default : md.artist.default;
+            md.performerInfo.default ? md.performerInfo.default : md.artist.default;
         let editionYear = '';
         if (md.originalReleaseDate.default.substr(0, 4) < md.date.default.substr(0, 4)) {
             editionYear = md.date.default.substr(0, 4) + ' ';

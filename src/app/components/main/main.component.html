@@ -29,7 +29,7 @@
                     [disabled]="!metadata.MUSICBRAINZ_ARTISTID?.default">
                 Get Fanart
             </button>
-            <button class="btn btn-outline" (click)="downloadArt()">Download Art</button>
+            <button class="btn btn-outline" (click)="downloadArt()" [disabled]="!tracks.length">Download Art</button>
             <button class="btn btn-primary" (click)="quitApp()">Quit</button>
         </div>
     </footer>

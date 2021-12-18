@@ -8,11 +8,13 @@ import { ipcRenderer, webFrame } from 'electron';
 import * as remote from '@electron/remote';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
+import * as path from 'path';
 @Injectable({
     providedIn: 'root',
 })
 export class ElectronService {
     ipcRenderer: typeof ipcRenderer;
+    path: typeof path;
     webFrame: typeof webFrame;
     remote: typeof remote;
     childProcess: typeof childProcess;
@@ -30,6 +32,7 @@ export class ElectronService {
 
             this.childProcess = window.require('child_process');
             this.fs = window.require('fs');
+            this.path = window.require('path');
 
             // If you want to use a NodeJS 3rd party deps in Renderer process (like @electron/remote),
             // it must be declared in dependencies of both package.json (in root and app folders)
