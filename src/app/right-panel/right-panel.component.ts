@@ -60,7 +60,8 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
 
     guessArtistSortOrder() {
-        const artist: string = this.metadata.artist.default;
+        const meta = this.metadata;
+        const artist: string = meta.performerInfo.default ? meta.performerInfo.default : meta.artist.default;
         let sortOrder = '';
         if (artist.toLowerCase().indexOf('the ') === 0) {
             sortOrder = artist.substr(4) + ', The';
