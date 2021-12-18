@@ -9,6 +9,7 @@ import { MetadataProperty, UnknownPropertiesObj } from '@classes/track.classes';
 })
 export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges {
     @Input() unknownProperties: UnknownPropertiesObj;
+    @Input() stopEditing: number;
 
     @Output() unknownPropertiesChange = new EventEmitter<UnknownPropertiesObj[]>();
 
@@ -31,6 +32,9 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
             this.selected = [...this.unknownPropArray.filter(p => this.unknownProperties[p].write)];
             this.clearEditing();
         }
+        if (changes.stopEditing) {
+            this.clearEditing();
+        }
     }
 
     public clearEditing() {
@@ -47,8 +51,10 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     }
 
     public startEditing(index: number, col: number) {
-        this.clearEditing();
-        this.editing[index][col] = true;
+        setTimeout(() => {
+            this.clearEditing();
+            this.editing[index][col] = true;
+        }, 10);
     }
 
     public selectionChanged(selection: any) {

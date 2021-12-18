@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
     styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit, OnDestroy {
-    public closeMenu: number;
+    public clickOccurred: number;
     public showArtist = true;
     public tracks: any[] = [];
     public metadata: MetadataObj;
@@ -83,7 +83,6 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     public clicked() {
-        this.closeMenu = Date.now();
-        // console.log('clicked');
+        this.clickOccurred = Date.now();
     }
 }

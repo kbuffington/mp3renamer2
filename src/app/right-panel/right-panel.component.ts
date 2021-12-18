@@ -13,6 +13,7 @@ import { tap, throttleTime } from 'rxjs/operators';
 })
 export class RightPanelComponent implements OnInit, OnDestroy {
     @Input() tracks: any[] = [];
+    @Input() stopEditing: number;
 
     public conflictProperty: MetadataProperty;
     public conflictDisplayName: string;
@@ -33,7 +34,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         // do we still need to throttle here?
         this.metadataSubscription = this.ts.getMetadata().pipe(
             throttleTime(100, undefined, { leading: true, trailing: true }),
-            tap(m => console.log(m))
+            tap(m => console.log(m)),
         ).subscribe(m => {
             this.metadata = m;
             this.unknownProperties = this.ts.getUnknownProperties();

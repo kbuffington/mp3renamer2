@@ -5,13 +5,13 @@
                 [showArtist]="showArtist"
                 [metadata]="metadata"
                 [tracks]="tracks"
-                [closeMenu]="closeMenu">
+                [closeMenu]="clickOccurred">
             </renamer-grid>
         </div>
         <upper-button-bar></upper-button-bar>
         <div class="clr-row">
             <left-panel class="panel left-panel" [tracks]="tracks" [(showArtist)]="showArtist"></left-panel>
-            <right-panel class="panel right-panel" [tracks]="tracks"></right-panel>
+            <right-panel class="panel right-panel" [tracks]="tracks" [stopEditing]="clickOccurred"></right-panel>
         </div>
     </div>
     <footer>

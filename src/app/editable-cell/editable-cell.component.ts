@@ -22,6 +22,7 @@ export class EditableCellComponent implements OnChanges {
                 this.backup = this.value;
             } else if (!changes.editing.firstChange) {
                 this.valChanged(this.value);
+                this.editingChange.emit(this.editing);
             }
         }
     }
