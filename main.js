@@ -88,11 +88,6 @@ function processFiles(files) {
                     fs.writeFileSync('./temp/embeddedArtwork.jpg', tags.image.imageBuffer, 'binary');
                 }
             }
-            // tags.title = tags.title + 's';
-            // tags.userDefined.ARTISTFILTER.push('Esq.');
-            // delete(tags.userDefined.genre);
-            // tags = { date: '2019' };
-            // NodeID3.write(tags, f);
         }
     });
     console.log('processFiles:', tracks[0]);

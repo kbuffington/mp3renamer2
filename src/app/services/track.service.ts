@@ -135,6 +135,7 @@ export class TrackService {
             if (!imageLoaded && t.image) {
                 imageLoaded = true;
                 trackOptions.showArtwork = true;
+                this.processImageField(metaData, t.image);
             }
         });
         this.postProcessing(metaData);
@@ -162,6 +163,15 @@ export class TrackService {
 
     public setUnknownProperties(unknownProperties: UnknownPropertiesObj) {
         this.unknownProperties = unknownProperties;
+    }
+
+    private processImageField(metadata: MetadataObj, image: any) {
+        const metaProp = new MetadataProperty();
+        metaProp.multiValue = false;
+        metaProp.useDefault = true;
+        metaProp.default = image;
+
+        metadata.image = metaProp;
     }
 
     private processField(metadata, tracks, property: string, userDefined: boolean,
