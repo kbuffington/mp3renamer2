@@ -90,12 +90,12 @@ function processFiles(files) {
             }
         }
     });
-    console.log('processFiles:', tracks[0]);
+    // console.log('processFiles:', tracks[0]);
     return tracks;
 }
 
 function writeTags(files, tags) {
-    console.log(files[0], tags[0]);
+    // console.log(files[0], tags[0]);
     const start = Date.now();
     files.forEach((f, index) => {
         NodeID3tag.write(tags[index], f);
@@ -112,7 +112,7 @@ function loadHardCoded() {
     const filePaths = [];
     // const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
     // const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
-    const dir = app.getPath('desktop') + '/mp3-test/music/Benante, Charlie - 2021 - Silver Linings/';
+    const dir = app.getPath('desktop') + '/mp3-test/music/Alessia Cara - 2018 - The Pains of Growing/';
     const stats = fs.statSync(dir);
     if (stats) {
         // folder exists
@@ -131,7 +131,8 @@ function loadHardCoded() {
     // filePaths.push(`${dir}id3v2.4 image.mp3`);
 
     if (filePaths.length) {
-        const tracks = processFiles(filePaths);
+        const index = 1;
+        const tracks = processFiles(filePaths.slice(index, index + 1));
         mainWindow.webContents.send('files', tracks);
     }
 }
@@ -208,6 +209,7 @@ exports.loadHardCoded = loadHardCoded; // for testing purposes open files on rel
 exports.quitApp = quitApp;
 exports.writeTags = writeTags;
 exports.os = process.platform;
+exports.electronPath = __dirname;
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

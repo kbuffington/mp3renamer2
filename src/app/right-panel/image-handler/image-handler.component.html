@@ -3,7 +3,7 @@
     <img *ngIf="trackOptions.showArtwork"
         #coverImg
         id="cover-art"
-        src="file:///../../temp/embeddedArtwork.jpg"
+        [src]="imgPath"
         (load)="onLoad()">
     <div>Dimensions ({{ imgSize.x }}x{{ imgSize.y }})</div>
 </div>

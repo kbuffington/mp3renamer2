@@ -13,12 +13,14 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     public imgSize = { x: 0, y: 0 };
     public trackOptions: TrackOptions;
     public trackOptionsSubscription: Subscription;
-
+    public imgPath: string;
 
     @ViewChild('coverImg') readonly coverImg: ElementRef;
 
     constructor(private ts: TrackService,
-                private electronService: ElectronService) {}
+                private electronService: ElectronService) {
+        this.imgPath = `file:///${electronService.main.electronPath}/temp/embeddedArtwork.jpg`;
+    }
 
     ngOnInit() {
         this.trackOptionsSubscription = this.ts.getTrackOptions().subscribe(o => {
