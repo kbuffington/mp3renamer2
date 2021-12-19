@@ -19,6 +19,7 @@ import { CountrySelectComponent } from './right-panel/country-select/country-sel
 import { EditableCellComponent } from './editable-cell/editable-cell.component';
 import { FanartComponent } from '@components/fanart/fanart.component';
 import { GenreSelectComponent } from './right-panel/genre-select/genre-select.component';
+import { ImageHandlerComponent } from './right-panel/image-handler/image-handler.component';
 import { InputFieldComponent } from './input-field/input-field.component';
 import { LeftPanelComponent } from './left-panel/left-panel.component';
 import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.component';
@@ -49,6 +50,7 @@ import { TrackService } from '@services/track.service';
         FanartComponent,
         GenreSelectComponent,
         InputFieldComponent,
+        ImageHandlerComponent,
         LeftPanelComponent,
         MetadataHandlerComponent,
         ConfigComponent,

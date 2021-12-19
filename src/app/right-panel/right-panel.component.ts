@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { InputTypes } from 'app/input-field/input-field.component';
 import { Subscription } from 'rxjs';
-import { TrackService } from '../services/track.service';
-import { MetadataProperty, UnknownPropertiesObj } from '../classes/track.classes';
+import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
+import { MetadataProperty, TrackOptions, UnknownPropertiesObj } from '@classes/track.classes';
 import { tap, throttleTime } from 'rxjs/operators';
 
 @Component({
@@ -23,9 +23,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     public metadataSubscription: Subscription;
     public releaseTypes = [];
     public showModal = false;
+    public trackOptions: TrackOptions;
+    public trackOptionsSubscription: Subscription;
     public unknownProperties: UnknownPropertiesObj;
 
     private hasUnknownProps: boolean;
+
+    @ViewChild('coverImg') readonly coverImg: ElementRef;
 
     constructor(private ts: TrackService,
                 private electronService: ElectronService) {}
@@ -40,6 +44,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
             this.unknownProperties = this.ts.getUnknownProperties();
             this.hasUnknownProps = Object.keys(this.unknownProperties).length !== 0;
         });
+        this.trackOptionsSubscription = this.ts.getTrackOptions().subscribe(o => {
+            this.trackOptions = o;
+        });
+
         this.releaseTypes = [
             'Album',
             'EP',
@@ -57,6 +65,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.metadataSubscription.unsubscribe();
+        this.trackOptionsSubscription.unsubscribe();
     }
 
     guessArtistSortOrder() {
@@ -119,6 +128,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
             (!this.metadata.encodedBy?.defaultChanged && this.metadata.encodedBy?.different) ||
             (!this.metadata.MUSICBRAINZ_ARTISTID?.defaultChanged && this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
             (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.defaultChanged && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
+    }
+
+    public tab3hasValues(): boolean {
+        return this.trackOptions.showArtwork;
     }
 
     public openMusicBrainz(prop: string) {

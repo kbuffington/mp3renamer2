@@ -147,6 +147,14 @@
 					<unknown-properties [(unknownProperties)]="unknownProperties" [stopEditing]="stopEditing"></unknown-properties>
 				</clr-tab-content>
 			</clr-tab>
+			<clr-tab>
+				<button clrTabLink>Artwork
+					<div class="tab-badge" [ngClass]="{'green': tab3hasValues(), 'hide': !tab3hasValues()}"></div>
+				</button>
+				<clr-tab-content *clrIfActive>
+					<image-handler></image-handler>
+				</clr-tab-content>
+			</clr-tab>
 		</clr-tabs>
 	</div>
 </div>

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { TrackService } from '@services/track.service';
 import { Subscription } from 'rxjs';
-import { MetadataObj, MetadataProperty, TrackOptions } from '../classes/track.classes';
+import { MetadataObj, MetadataProperty } from '../classes/track.classes';
 
 @Component({
     selector: 'left-panel',
@@ -22,8 +22,6 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     public metadata: MetadataObj;
     public metadataSubscription: Subscription;
     public showModal = false;
-    public trackOptions: TrackOptions;
-    public trackOptionsSubscription: Subscription;
 
     constructor(private ts: TrackService) {
         this.deleteString = ts.deleteString;
@@ -34,14 +32,10 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
             this.metadata = m;
         });
-        this.trackOptionsSubscription = this.ts.getTrackOptions().subscribe(o => {
-            this.trackOptions = o;
-        });
     }
 
     ngOnDestroy() {
         this.metadataSubscription.unsubscribe();
-        this.trackOptionsSubscription.unsubscribe();
     }
 
     public showConflict(property: MetadataProperty, name: string, readOnly = false) {

@@ -1,0 +1,9 @@
+<div class="artwork-tab">
+    <h6 class="title">Embedded Artwork</h6>
+    <img *ngIf="trackOptions.showArtwork"
+        #coverImg
+        id="cover-art"
+        src="file:///../../temp/embeddedArtwork.jpg"
+        (load)="onLoad()">
+    <div>Dimensions ({{ imgSize.x }}x{{ imgSize.y }})</div>
+</div>
