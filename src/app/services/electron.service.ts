@@ -23,6 +23,8 @@ export class ElectronService {
     fs: typeof fs;
     util: typeof util;
 
+    main: any;
+
     get isElectron(): boolean {
         return !!(window && window.process && window.process.type);
     }
@@ -42,6 +44,8 @@ export class ElectronService {
             // it must be declared in dependencies of both package.json (in root and app folders)
             // If you want to use remote object in renderer process, please set enableRemoteModule to true in main.ts
             this.remote = window.require('@electron/remote');
+
+            this.main = this.remote.require('./main');
         }
     }
 }

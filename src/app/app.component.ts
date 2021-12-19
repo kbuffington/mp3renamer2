@@ -37,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.ts.setTracks([]);
         if (!this.electronService.remote.app.isPackaged) {
             if (this.electronService.isElectron) {
-                const mainProcess = this.electronService.remote.require('./main.js');
+                const mainProcess = this.electronService.main;
                 if (mainProcess.os !== 'win32') {
                     mainProcess.loadHardCoded();
                 }

@@ -32,7 +32,7 @@ export class TrackService {
     constructor(private electronService: ElectronService,
                 private titleCaseService: TitleCaseService,
                 private configService: ConfigService) {
-        const platform = this.electronService.remote.require('./main.js').os;
+        const platform = this.electronService.main.os;
         if (platform === 'win32') {
             this.pathDelimiter = '\\';
         }
@@ -399,8 +399,7 @@ export class TrackService {
         trackTagFields = trackTagFields.filter(t => t); // remove empty objects
         console.log(trackTagFields);
 
-        const mainProcess = this.electronService.remote.require('./main.js');
-        mainProcess.writeTags(files, trackTagFields);
+        this.electronService.main.writeTags(files, trackTagFields);
     }
 
     public getSelectedTracks(): Track[] {

@@ -92,8 +92,7 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     public quitApp() {
-        const mainProcess = this.electronService.remote.require('./main.js');
-        mainProcess.quitApp();
+        this.electronService.main.quitApp();
     }
 
     private isSetNamesDisabled() {

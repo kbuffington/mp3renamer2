@@ -24,8 +24,7 @@ export class UpperButtonBarComponent implements OnInit {
     public requestFiles() {
         const config = this.configService.getCurrentConfig();
         if (this.electronService.isElectron) {
-            const mainProcess = this.electronService.remote.require('./main.js');
-            mainProcess.getFiles(config.homeDir);
+            this.electronService.main.getFiles(config.homeDir);
         } else {
             // we'll need to use mocked file data here
         }
@@ -33,8 +32,7 @@ export class UpperButtonBarComponent implements OnInit {
 
     public reloadFiles() {
         const fileList = this.ts.getCurrentTracks().map(t => t.meta.folder + t.meta.filename);
-        const mainProcess = this.electronService.remote.require('./main.js');
-        mainProcess.loadFiles(fileList);
+        this.electronService.main.loadFiles(fileList);
     }
 
     public guessTitles() {
