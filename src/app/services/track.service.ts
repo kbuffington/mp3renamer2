@@ -51,6 +51,10 @@ export class TrackService {
         return this.trackOptions.asObservable();
     }
 
+    setTrackOptions(trackOptions: TrackOptions) {
+        this.trackOptions.next(trackOptions);
+    }
+
     getFolder(): Observable<string> {
         return this.currentFolder.asObservable();
     }
@@ -165,7 +169,7 @@ export class TrackService {
         this.unknownProperties = unknownProperties;
     }
 
-    private processImageField(metadata: MetadataObj, image: any) {
+    public processImageField(metadata: MetadataObj, image: any) {
         const metaProp = new MetadataProperty();
         metaProp.multiValue = false;
         metaProp.useDefault = true;

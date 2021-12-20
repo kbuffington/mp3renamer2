@@ -1,3 +1,5 @@
+$image-max-width: 350px;
+
 .artwork-tab {
     padding-left: .5rem;
 
@@ -6,10 +8,26 @@
         text-transform: uppercase;
     }
 
+    .image-wrapper {
+        position: relative;
+
+        &.cleared:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            width: $image-max-width;
+            top: 0; bottom: 0;
+            background: rgba(0,0,0,.35);
+        }
+    }
     #cover-art {
-        width: 350px;
+        width: $image-max-width;
         height: auto;
         max-height: 400px;
         border: 1px solid rgba(0,0,0,.2);
+    }
+
+    .first-checkbox-block {
+        margin-top: .5rem;
     }
 }

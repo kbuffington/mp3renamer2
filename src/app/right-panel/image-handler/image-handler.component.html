@@ -1,9 +1,26 @@
 <div class="artwork-tab">
-    <h6 class="title">Embedded Artwork</h6>
-    <img *ngIf="trackOptions.showArtwork"
-        #coverImg
-        id="cover-art"
-        [src]="imgPath"
-        (load)="onLoad()">
-    <div>Dimensions ({{ imgSize.x }}x{{ imgSize.y }})</div>
+    <h6 class="title">{{ title }} Artwork</h6>
+    <div class="image-block-container" *ngIf="metadata.image; else noArtwork">
+        <div class="row">
+            <clr-checkbox-container class="first-checkbox-block">
+                <clr-checkbox-wrapper>
+                    <input type="checkbox" clrCheckbox [(ngModel)]="metadata.image.write" />
+                    <label>Write Image to File</label>
+                </clr-checkbox-wrapper>
+            </clr-checkbox-container>
+        </div>
+        <div class="image-wrapper" [ngClass]="{ 'cleared': !metadata?.image?.write }">
+            <img #coverImg
+                id="cover-art"
+                [src]="imgPath"
+                (load)="onLoad()">
+        </div>
+        <div>Dimensions ({{ imgSize.x }}x{{ imgSize.y }})</div>
+    </div>
+    <ng-template #noArtwork>
+        <span>No artwork found in file</span>
+    </ng-template>
+    <div class="row">
+        <button class="btn btn-primary btn-sm" (click)="loadImage()">Load Image</button>
+    </div>
 </div>

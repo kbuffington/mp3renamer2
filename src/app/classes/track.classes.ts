@@ -68,6 +68,7 @@ export class MetadataObj {
 
 export class TrackOptions {
     showArtwork?: boolean;
+    localArtwork?: string; // path to user loaded artwork not saved yet
 }
 
 export class UnknownPropertiesObj {
@@ -78,4 +79,24 @@ export class CommentStruct {
     language: string;
     shortText: string;
     text: string;
+}
+
+export class ImageType {
+    id = 3;
+    name = 'front cover';
+}
+
+export class ImageStruct {
+    mime = 'jpeg';
+    description: string = undefined;
+    imageBuffer: Buffer;
+    type: ImageType;
+
+    constructor(imageBuffer: Buffer, mimeType?: string, type?: ImageType) {
+        this.imageBuffer = imageBuffer;
+        this.type = type || new ImageType();
+        if (mimeType) {
+            this.mime = mimeType;
+        }
+    }
 }
