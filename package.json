@@ -18,7 +18,7 @@
   "dependencies": {
     "@electron/remote": "^2.0.1",
     "electron-dl": "^3.2.1",
-    "node-id3tag": "^0.9.1"
+    "node-id3tag": "^0.9.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.14",
