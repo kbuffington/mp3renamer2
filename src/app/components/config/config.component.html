@@ -86,7 +86,8 @@
             <button class="btn btn-primary btn-sm directory-select-btn" (click)="browseFile('aadPath')">Browse</button>
             <clr-input-container>
                 <label>AAD Command string</label>
-                <input clrInput placeholder="Command-line parameters to pass to AAD" [(ngModel)]="config.aadParams" />
+                <input clrInput placeholder="Command-line parameters to pass to Album Art Downloader"
+                    [(ngModel)]="config.aadParams" />
             </clr-input-container>
             <button class="btn btn-primary btn-sm directory-select-btn" (click)="suggestValue('aadParams')">Suggest</button>
 
