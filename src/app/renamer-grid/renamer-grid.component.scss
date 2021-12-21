@@ -24,6 +24,11 @@ $gridHeight: 310px;
 			white-space: pre;
 		}
 
+		clr-dg-cell.filename,
+		clr-dg-column.filename {
+			max-width: 475px;
+		}
+
 		clr-dg-cell.tracknum,
 		clr-dg-column.tracknum {
 			max-width: $trackColWidth;

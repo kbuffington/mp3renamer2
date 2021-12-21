@@ -4,7 +4,7 @@
 			[(clrDgSelected)]="selected"
 			(clrDgSelectedChange)="selectionChanged($event)">
 
-		<clr-dg-column>File Name</clr-dg-column>
+		<clr-dg-column class="filename">File Name</clr-dg-column>
 		<clr-dg-column>
 			<ng-container *clrDgHideableColumn="{hidden: !showArtist}">
 				Track Artist
@@ -16,7 +16,7 @@
 		<clr-dg-row *clrDgItems="let track of tracks; let i = index"
 				[clrDgItem]="track"
 				(contextmenu)="onRightClick($event, i)">
-			<clr-dg-cell class="ellipsis"
+			<clr-dg-cell class="ellipsis filename"
 					[ngClass]="{'editing': editing[i][0]}"
 					[attr.data-title]="track.meta.filename"
 					(click)="startEditing(i, 0)">
