@@ -21,10 +21,19 @@ export class UpperButtonBarComponent implements OnInit {
 
     ngOnInit() {}
 
+    /**
+     * Displays file selector
+     */
     public requestFiles() {
-        const config = this.configService.getCurrentConfig();
+        let dir = this.configService.getCurrentConfig().homeDir;
+        const fileList = this.ts.getCurrentTracks();
+        if (fileList.length) {
+            const regex = new RegExp(`${this.ts.pathDelimiter.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1')}$`, '');
+            const folder = fileList[0].meta.folder.replace(regex, ''); // folder without trailing slash
+            dir = folder.substring(0, folder.lastIndexOf(this.ts.pathDelimiter)); // up one directory
+        }
         if (this.electronService.isElectron) {
-            this.electronService.main.getFiles(config.homeDir);
+            this.electronService.main.getFiles(dir);
         } else {
             // we'll need to use mocked file data here
         }

@@ -22,7 +22,6 @@ export class AppComponent implements OnInit, OnDestroy {
                 private zone: NgZone) {
         configService.loadConfig();
         // we need to call zone.run() whenever the trackSubscription updates
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.trackSubscription = ts.getTracks().subscribe(tracks => {
             zone.run(() => {});
             this.tracks = tracks;

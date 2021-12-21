@@ -25,11 +25,11 @@ export class TrackService implements OnDestroy {
     private trackDataBackup: any;
     private trackCount: number;
     private selectedTracks: number[];
-    private pathDelimiter = '/';
     private rename: Function;
 
     public deleteString = '';
     public doTitleCase = true;
+    public pathDelimiter = '/';
 
     constructor(private electronService: ElectronService,
                 private titleCaseService: TitleCaseService,
