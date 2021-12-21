@@ -91,6 +91,10 @@ export class TrackService implements OnDestroy {
         return this.trackList.getValue();
     }
 
+    /**
+     * Returns the full path of the first loaded file
+     * @return {string}
+     */
     public getCurrentPath(): string {
         const trackList = this.trackList.getValue();
         if (trackList.length) {
@@ -347,16 +351,30 @@ export class TrackService implements OnDestroy {
         // full path without current folder, but with trailing slash
         const basePath = path.substring(0, path.substring(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
         const newDir = this.getNewFolderName();
-        console.log(newDir, currentDir);
         if (newDir !== currentDir) {
             const newPath = basePath + newDir;
             try {
-                const tempPath = newPath + ('' + Date.now()).substring(0, 6);
-                await this.rename(path, tempPath);
-                await this.rename(tempPath, newPath);
-                console.log(`Renamed directory "${currentDir}" to "${newDir}"`);
-                this.getCurrentTracks().map(t => t.meta.folder = newPath + this.pathDelimiter);
-                this.currentFolder.next(newDir.substring(0, newDir.length));
+                if (this.electronService.fs.statSync(newPath)) {
+                    // newPath already exists, so move files into it:
+                    this.getCurrentTracks().map(async t => {
+                        await this.rename(t.meta.folder + t.meta.originalFilename,
+                            newPath + this.pathDelimiter + t.meta.originalFilename);
+                        this.getCurrentTracks().map(t => t.meta.folder = newPath + this.pathDelimiter);
+                    });
+                    console.log(`Moved files from "${currentDir}" to "${newDir}"`);
+                    this.currentFolder.next(newDir.substring(0, newDir.length));
+                    // delete empty folder if possible
+                    this.electronService.fs.rmdir(path, (err) => {
+                        if (err) console.error(err);
+                    });
+                } else {
+                    const tempPath = newPath + ('' + Date.now()).substring(0, 6);
+                    await this.rename(path, tempPath);
+                    await this.rename(tempPath, newPath);
+                    console.log(`Renamed directory "${currentDir}" to "${newDir}"`);
+                    this.getCurrentTracks().map(t => t.meta.folder = newPath + this.pathDelimiter);
+                    this.currentFolder.next(newDir.substring(0, newDir.length));
+                }
             } catch (err) {
                 console.error(err);
             }
