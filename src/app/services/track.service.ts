@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { knownProperties } from './known-properties';
 import {
     CommentStruct,
@@ -10,11 +10,13 @@ import {
     UnknownPropertiesObj,
 } from '../classes/track.classes';
 import { ElectronService } from './electron.service';
-import { ConfigService } from './config.service';
+import { ConfigService, ConfigSettingsObject } from './config.service';
 import { TitleCaseService } from './title-case.service';
 
 @Injectable()
-export class TrackService {
+export class TrackService implements OnDestroy {
+    private config: ConfigSettingsObject;
+    private configSub: Subscription;
     private currentFolder: BehaviorSubject<string> = new BehaviorSubject('');
     private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
     private trackMetaData: BehaviorSubject<MetadataObj> = new BehaviorSubject({});
@@ -37,6 +39,11 @@ export class TrackService {
             this.pathDelimiter = '\\';
         }
         this.rename = electronService.util.promisify(electronService.fs.rename);
+        this.configSub = configService.getConfig().subscribe(config => this.config = config);
+    }
+
+    ngOnDestroy(): void {
+        this.configSub.unsubscribe();
     }
 
     getTracks(): Observable<Track[]> {
@@ -255,7 +262,7 @@ export class TrackService {
         const trackList = this.getCurrentTracks();
         const metadata = this.trackMetaData.getValue();
         const artist = metadata.performerInfo.default ? metadata.performerInfo.default : metadata.artist.default;
-        const config = this.configService.getCurrentConfig();
+        const config = this.config;
         const replaceCharsStr = Object.keys(config.replacementFileNameChars).join('');
         const regex = new RegExp('[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']', 'g');
         trackList.forEach((t: Track, index: number) => {
@@ -312,6 +319,7 @@ export class TrackService {
 
     public getNewFolderName(): string {
         const md = this.getCurrentMetadata();
+        const config = this.config;
         const year = md.albumSortOrder.default ? md.albumSortOrder.default :
             md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
         const artist = md.artistSortOrder.default ? md.artistSortOrder.default :
@@ -321,8 +329,15 @@ export class TrackService {
             editionYear = md.date.default.substring(0, 4) + ' ';
         }
         const edition = md.EDITION.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
-        const newDir = `${artist.trim()} - ${year ? year.substring(0, 4) + ' - ' : ''}` +
+        let newDir = `${artist.trim()} - ${year ? year.substring(0, 4) + ' - ' : ''}` +
                 `${md.album.default.trim()}${edition}`;
+
+        const replaceCharsStr = Object.keys(config.replacementFileNameChars).join('');
+        const regex = new RegExp('[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']', 'g');
+        newDir = newDir.replace(regex, function(m) {
+            return config.replacementFileNameChars[m];
+        });
+
         return newDir;
     }
 
