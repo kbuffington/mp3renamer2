@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfigService } from '@services/config.service';
 import { ElectronService } from '@services/electron.service';
-import { TrackService } from '../services/track.service';
+import { TrackService } from '../../services/track.service';
 
 @Component({
     selector: 'upper-button-bar',

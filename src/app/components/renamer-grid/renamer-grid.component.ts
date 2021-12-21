@@ -1,8 +1,8 @@
 import { Component, Input, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ElectronService } from '@services/electron.service';
 
-import { TrackService } from '../services/track.service';
-import { MetadataObj } from '../classes/track.classes';
+import { TrackService } from '../../services/track.service';
+import { MetadataObj } from '../../classes/track.classes';
 
 export class TrackObj {
     meta: {

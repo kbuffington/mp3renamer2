@@ -8,24 +8,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { DontAllowOnReload } from './dont-allow-on-reload.guard';
 
 /* Components */
-import { GetMetadataComponent } from '@components/get-metadata/get-metadata.component';
-import { MainComponent } from '@components/main/main.component';
-import { UnknownPropertiesComponent } from '@components/unknown-properties/unknown-properties.component';
 import { AutoFocusDirective } from '@directives/auto-focus.directive';
 import { AppComponent } from './app.component';
 import { ConfigComponent } from '@components/config/config.component';
-import { ConflictModalComponent } from './components/conflict-modal/conflict-modal.component';
-import { CountrySelectComponent } from './right-panel/country-select/country-select.component';
+import { ConflictModalComponent } from '@components/conflict-modal/conflict-modal.component';
+import { CountrySelectComponent } from '@components/right-panel/country-select/country-select.component';
 import { EditableCellComponent } from './editable-cell/editable-cell.component';
 import { FanartComponent } from '@components/fanart/fanart.component';
-import { GenreSelectComponent } from './right-panel/genre-select/genre-select.component';
-import { ImageHandlerComponent } from './right-panel/image-handler/image-handler.component';
+import { GenreSelectComponent } from '@components/right-panel/genre-select/genre-select.component';
+import { GetMetadataComponent } from '@components/get-metadata/get-metadata.component';
+import { ImageHandlerComponent } from '@components/right-panel/image-handler/image-handler.component';
 import { InputFieldComponent } from './input-field/input-field.component';
-import { LeftPanelComponent } from './left-panel/left-panel.component';
-import { MetadataHandlerComponent } from './metadata-handler/metadata-handler.component';
-import { RenamerGridComponent } from './renamer-grid/renamer-grid.component';
-import { RightPanelComponent } from './right-panel/right-panel.component';
-import { UpperButtonBarComponent } from './upper-button-bar/upper-button-bar.component';
+import { LeftPanelComponent } from '@components/left-panel/left-panel.component';
+import { MainComponent } from '@components/main/main.component';
+import { MetadataHandlerComponent } from '@components/metadata-handler/metadata-handler.component';
+import { RenamerGridComponent } from '@components/renamer-grid/renamer-grid.component';
+import { RightPanelComponent } from '@components/right-panel/right-panel.component';
+import { UpperButtonBarComponent } from '@components/upper-button-bar/upper-button-bar.component';
+import { UnknownPropertiesComponent } from '@components/unknown-properties/unknown-properties.component';
 
 /* Services */
 import { ArtistCacheService } from '@services/artist-cache.service';
