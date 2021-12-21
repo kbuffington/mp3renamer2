@@ -312,11 +312,12 @@ export class TrackService {
 
     public getNewFolderName(): string {
         const md = this.getCurrentMetadata();
-        const year = md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
+        const year = md.albumSortOrder.default ? md.albumSortOrder.default :
+            md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
         const artist = md.artistSortOrder.default ? md.artistSortOrder.default :
             md.performerInfo.default ? md.performerInfo.default : md.artist.default;
         let editionYear = '';
-        if (md.originalReleaseDate.default.substring(0, 4) < md.date.default.substring(0, 4)) {
+        if (md.originalReleaseDate.default && md.originalReleaseDate.default.substring(0, 4) < md.date.default.substring(0, 4)) {
             editionYear = md.date.default.substring(0, 4) + ' ';
         }
         const edition = md.EDITION.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
@@ -339,7 +340,7 @@ export class TrackService {
                 await this.rename(path, tempPath);
                 await this.rename(tempPath, newPath);
                 console.log(`Renamed directory "${currentDir}" to "${newDir}"`);
-                this.getCurrentTracks().map(t => t.meta.folder = newPath);
+                this.getCurrentTracks().map(t => t.meta.folder = newPath + this.pathDelimiter);
                 this.currentFolder.next(newDir.substring(0, newDir.length));
             } catch (err) {
                 console.error(err);
