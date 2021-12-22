@@ -8,7 +8,13 @@ import { TrackService } from '@services/track.service';
     styleUrls: ['./metadata-handler.component.scss'],
 })
 export class MetadataHandlerComponent implements OnInit {
-    constructor(private ts: TrackService) { }
+    public tagsSet = false;
+
+    constructor(private ts: TrackService) {
+        this.ts.getTracks().subscribe(t => {
+            this.tagsSet = false;
+        });
+    }
 
     ngOnInit() {
     }
@@ -30,6 +36,7 @@ export class MetadataHandlerComponent implements OnInit {
                 this.ts.setMetadata(metadata);
             }
             this.ts.setTagData();
+            this.tagsSet = true;
         }, 100);
     }
 }
