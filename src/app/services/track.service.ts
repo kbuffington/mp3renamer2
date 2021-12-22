@@ -353,8 +353,14 @@ export class TrackService implements OnDestroy {
         const newDir = this.getNewFolderName();
         if (newDir !== currentDir) {
             const newPath = basePath + newDir;
+            let stats;
             try {
-                if (this.electronService.fs.statSync(newPath)) {
+                stats = this.electronService.fs.statSync(newPath);
+            } catch (e) {
+                // ignore
+            }
+            try {
+                if (stats) {
                     // newPath already exists, so move files into it:
                     this.getCurrentTracks().map(async t => {
                         await this.rename(t.meta.folder + t.meta.originalFilename,
