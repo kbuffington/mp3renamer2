@@ -74,9 +74,11 @@ export class TrackService implements OnDestroy {
             return t;
         });
         this.trackCount = trackList.length;
-        this.processTracks(tracks);
+        // process tracks emits metadata before tracklist emits tracks which could be an issue at some point
+        const tOptions = this.processTracks(tracks);
         this.trackList.next(trackList);
         this.currentFolder.next(this.getCurrentDirectory());
+        this.trackOptions.next(tOptions);
     }
 
     public resetTrackData() {
@@ -122,7 +124,7 @@ export class TrackService implements OnDestroy {
         return this.trackMetaData.getValue();
     }
 
-    private processTracks(tracks: Track[]) {
+    private processTracks(tracks: Track[]): TrackOptions {
         const metaData: MetadataObj = {};
         const trackOptions: TrackOptions = {};
         let imageLoaded = false;
@@ -155,7 +157,7 @@ export class TrackService implements OnDestroy {
         });
         this.postProcessing(metaData);
         this.trackMetaData.next(metaData);
-        this.trackOptions.next(trackOptions);
+        return trackOptions;
     }
 
     private postProcessing(metadata: MetadataObj) {

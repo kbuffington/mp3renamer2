@@ -1,33 +1,62 @@
-$image-max-width: 350px;
+$image-max-size: 325px;
 
 .artwork-tab {
     padding-left: .5rem;
 
     .title {
-        margin-top: .5rem;
+        margin-top: .4rem;
         text-transform: uppercase;
     }
 
     .image-wrapper {
+        margin-left: 1rem;
         position: relative;
+        display: inline-block;
 
         &.cleared:before {
             content: "";
             position: absolute;
             left: 0;
-            width: $image-max-width;
+            width: $image-max-size;
             top: 0; bottom: 0;
             background: rgba(0,0,0,.35);
         }
+
+        .dimensions,
+        .zoom {
+            position: absolute;
+            left: 0.5px;
+            top: 0.5px;
+            padding: 0 .25rem;
+            background: black;
+            color: white;
+        }
+
+        .zoom {
+            right: 1px;
+            left: unset;
+        }
     }
     #cover-art {
-        width: $image-max-width;
-        height: auto;
-        max-height: 400px;
+        width: auto;
+        height: $image-max-size;
+        max-height: $image-max-size;
         border: 1px solid rgba(0,0,0,.2);
     }
 
     .first-checkbox-block {
-        margin-top: .5rem;
+        margin-top: 0rem;
+    }
+
+    .load-image-btn {
+        margin: 0 0 .25rem -.25rem;
+    }
+
+    .artwork-list {
+        margin: 0 0 0 1rem;
+        li {
+            font-size: .65rem;
+            line-height: 1rem;
+        }
     }
 }

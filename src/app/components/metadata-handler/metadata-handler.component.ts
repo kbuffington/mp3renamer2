@@ -11,7 +11,7 @@ export class MetadataHandlerComponent implements OnInit {
     public tagsSet = false;
 
     constructor(private ts: TrackService) {
-        this.ts.getTracks().subscribe(t => {
+        this.ts.getTracks().subscribe(() => {
             this.tagsSet = false;
         });
     }

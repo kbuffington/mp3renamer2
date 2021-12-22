@@ -72,7 +72,7 @@ function processFiles(files) {
     const tracks = [];
 
     files.forEach(f => {
-        if (f.match(/.mp3$/)) {
+        if (f.match(/\.mp3$/)) {
             tags = NodeID3tag.read(f);
             tags.meta = {
                 filename: f.replace(/^.*[\\/]/, ''),

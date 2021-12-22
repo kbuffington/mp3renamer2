@@ -1,26 +1,39 @@
 <div class="artwork-tab">
     <h6 class="title">{{ title }} Artwork</h6>
     <div class="image-block-container" *ngIf="metadata.image; else noArtwork">
-        <div class="row">
-            <clr-checkbox-container class="first-checkbox-block">
-                <clr-checkbox-wrapper>
-                    <input type="checkbox" clrCheckbox [(ngModel)]="metadata.image.write" />
-                    <label>Write Image to File</label>
-                </clr-checkbox-wrapper>
-            </clr-checkbox-container>
+        <div class="clr-row">
+            <div class="clr-col-6">
+                <clr-checkbox-container class="first-checkbox-block">
+                    <clr-checkbox-wrapper>
+                        <input type="checkbox" clrCheckbox [(ngModel)]="metadata.image.write" />
+                        <label>Write Image to File</label>
+                    </clr-checkbox-wrapper>
+                </clr-checkbox-container>
+            </div>
+            <div class="clr-col-6">
+                <button class="btn btn-primary btn-sm load-image-btn" (click)="loadImage()">Load Image</button>
+            </div>
         </div>
         <div class="image-wrapper" [ngClass]="{ 'cleared': !metadata?.image?.write }">
             <img #coverImg
                 id="cover-art"
                 [src]="imgPath"
                 (load)="onLoad()">
+            <div class="dimensions">({{ embedImage.x }}x{{ embedImage.y }})</div>
+            <div class="zoom"><clr-icon shape="zoom-in" (click)="zoomImg()"></clr-icon></div>
         </div>
-        <div>Dimensions ({{ imgSize.x }}x{{ imgSize.y }})</div>
     </div>
     <ng-template #noArtwork>
         <span>No artwork found in file</span>
+        <div>
+            <button class="btn btn-primary btn-sm" (click)="loadImage()">Load Image</button>
+        </div>
     </ng-template>
-    <div class="row">
-        <button class="btn btn-primary btn-sm" (click)="loadImage()">Load Image</button>
-    </div>
+    <h6 class="title">Local Artwork</h6>
+    <ul class="artwork-list">
+        <li *ngFor="let img of localImages; let i = index">
+            {{ img.name }} <span *ngIf="img.x && img.y">({{ img.x }}x{{img.y}})</span>
+            <img #localImg class="local-img" [src]="img.path" (load)="onLoad(i)" style="width: 50px; height: 50px; display: none">
+        </li>
+    </ul>
 </div>
