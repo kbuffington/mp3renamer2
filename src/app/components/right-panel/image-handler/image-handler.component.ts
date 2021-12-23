@@ -22,11 +22,13 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     public localImages: ImgInfo[];
     public metadata: MetadataObj;
     public path: string;
+    public popoverImage: ImgInfo;
     public title = 'Embedded';
     public trackOptions: TrackOptions;
     public trackOptionsSubscription: Subscription;
 
     @ViewChild('coverImg') readonly coverImg: ElementRef;
+    @ViewChild('popOverContainer') popOverContainer: ElementRef;
     @ViewChildren('localImg') readonly localImgEls: QueryList<ElementRef>;
 
     constructor(private ts: TrackService,
@@ -43,9 +45,9 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.trackOptionsSubscription = this.ts.getTrackOptions().subscribe(o => {
             this.trackOptions = o;
-            this.embedImage = { x: 0, y: 0 };
             this.title = 'Embedded';
             this.refreshImage(this.trackOptions.localArtwork);
+            this.embedImage = { x: 0, y: 0, path: this.imgPath };
             this.localImages = [];
             this.path = this.ts.getCurrentPath();
             this.electronService.fs.readdir(this.path, (err, files) => {
@@ -102,5 +104,16 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
         console.log(this.imgPath);
     }
 
-    public zoomImg() {}
+    public zoomImg(img: ImgInfo) {
+        this.popoverImage = img;
+        setTimeout(() => this.popOverContainer.nativeElement.focus());
+    }
+
+    public keypressed(event: KeyboardEvent) {
+        switch (event.key) {
+            case 'Escape':
+                this.popoverImage = null;
+                break;
+        }
+    }
 }

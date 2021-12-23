@@ -1,3 +1,5 @@
+@import 'variables.scss';
+
 $image-max-size: 325px;
 
 .artwork-tab {
@@ -64,5 +66,31 @@ $image-max-size: 325px;
                 line-height: 1rem;
             }
         }
+    }
+}
+
+.pop-over {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: $headerHeight;
+    left: 0;
+    padding: 0.25rem;
+    text-align: center;
+    width: 100%;
+    z-index: 1000;
+
+    .close-icon {
+        background: white;
+        position: absolute;
+        right: 4px;
+        top: 4px;
+    }
+
+    &.hide {
+        display: none;
+    }
+
+    img {
+        max-width: 800px;
     }
 }
