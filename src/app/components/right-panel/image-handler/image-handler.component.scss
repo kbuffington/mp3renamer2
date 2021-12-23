@@ -52,11 +52,17 @@ $image-max-size: 325px;
         margin: 0 0 .25rem -.25rem;
     }
 
-    .artwork-list {
-        margin: 0 0 0 1rem;
-        li {
-            font-size: .65rem;
-            line-height: 1rem;
+    .local-art-container {
+        max-height: 3.5rem;
+        overflow-y: scroll;
+        width: calc(100% - 5px);
+
+        .artwork-list {
+            margin: 0 0 0 1rem;
+            li {
+                font-size: .65rem;
+                line-height: 1rem;
+            }
         }
     }
 }

@@ -29,11 +29,13 @@
             <button class="btn btn-primary btn-sm" (click)="loadImage()">Load Image</button>
         </div>
     </ng-template>
-    <h6 class="title">Local Artwork</h6>
-    <ul class="artwork-list">
-        <li *ngFor="let img of localImages; let i = index">
-            {{ img.name }} <span *ngIf="img.x && img.y">({{ img.x }}x{{img.y}})</span>
-            <img #localImg class="local-img" [src]="img.path" (load)="onLoad(i)" style="width: 50px; height: 50px; display: none">
-        </li>
-    </ul>
+    <div [ngClass]="{ 'local-art-container': metadata.image }">
+        <h6 class="title">Local Artwork</h6>
+        <ul class="artwork-list">
+            <li *ngFor="let img of localImages; let i = index">
+                {{ img.name }} <span *ngIf="img.x && img.y">({{ img.x }}x{{img.y}})</span>
+                <img #localImg class="local-img" [src]="img.path" (load)="onLoad(i)" style="width: 50px; height: 50px; display: none">
+            </li>
+        </ul>
+    </div>
 </div>
