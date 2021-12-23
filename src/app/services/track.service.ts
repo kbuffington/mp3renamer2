@@ -324,8 +324,9 @@ export class TrackService implements OnDestroy {
     }
 
     public getNewFolderName(): string {
-        const md = this.getCurrentMetadata();
+        if (Object.keys(this.config).length === 0) return undefined; // at startup config may not be loaded yet
         const config = this.config;
+        const md = this.getCurrentMetadata();
         const year = md.albumSortOrder.default ? md.albumSortOrder.default :
             md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
         const artist = md.artistSortOrder.default ? md.artistSortOrder.default :

@@ -23,7 +23,18 @@ export class ElectronService {
     fs: typeof fs;
     util: typeof util;
 
-    main: any;
+    main: {
+        getFiles: Function,
+        loadFiles: Function,
+        loadFilesFromFolder: Function,
+        loadHardCoded: Function,
+        quitApp: Function,
+        writeTags: Function,
+        os: NodeJS.Platform,
+        electronPath: string,
+        cliArguments: string[]
+        [key: string]: any
+    };
 
     get isElectron(): boolean {
         return !!(window && window.process && window.process.type);
