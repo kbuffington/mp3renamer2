@@ -17,7 +17,7 @@ if (app.isPackaged || process.platform === 'win32') {
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-console.log('Command-line args:', process.argv.slice(2));
+console.log('Command-line args:', process.argv.slice(app.isPackaged ? 1 : 2));
 
 function createWindow() {
     const ses = session.fromPartition('persist:name', { cache: true });
@@ -227,7 +227,7 @@ exports.quitApp = quitApp;
 exports.writeTags = writeTags;
 exports.os = process.platform;
 exports.electronPath = __dirname;
-exports.cliArguments = process.argv.slice(2); // skip first two arguments
+exports.cliArguments = process.argv.slice(app.isPackaged ? 1 : 2); // skip first two arguments
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
