@@ -17,6 +17,14 @@
 			<label>Delete String:</label>
 			<input clrInput [(ngModel)]="deleteString" (ngModelChange)="updateDeleteString($event)" />
 		</clr-input-container>
+		<clr-input-container class="string-input find">
+			<label>Find:</label>
+			<input clrInput [(ngModel)]="findString" (ngModelChange)="updateFindReplaceVals()" />
+		</clr-input-container>
+		<clr-input-container class="string-input replace">
+			<label>Replace String:</label>
+			<input clrInput [(ngModel)]="replaceString" (ngModelChange)="updateFindReplaceVals()" />
+		</clr-input-container>
 	</div>
 	<clr-checkbox-container class="options-block">
 		<clr-checkbox-wrapper>

@@ -28,6 +28,10 @@
         }
     }
 
+    &.replace {
+        margin-top: 0;
+    }
+
     ::ng-deep .clr-control-container {
         flex-grow: 1;
 

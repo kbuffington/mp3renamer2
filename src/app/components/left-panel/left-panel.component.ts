@@ -19,6 +19,8 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     public conflictReadOnly: boolean;
     public deleteString: string;
     public doTitleCase: boolean;
+    public findString: string;
+    public replaceString: string;
     public metadata: MetadataObj;
     public metadataSubscription: Subscription;
     public showModal = false;
@@ -26,6 +28,8 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     constructor(private ts: TrackService) {
         this.deleteString = ts.deleteString;
         this.doTitleCase = ts.doTitleCase;
+        this.findString = ts.findString;
+        this.replaceString = ts.replaceString;
     }
 
     ngOnInit() {
@@ -55,5 +59,10 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 
     public updateDoTitleCase(val: boolean) {
         this.ts.doTitleCase = val;
+    }
+
+    public updateFindReplaceVals() {
+        this.ts.findString = this.findString;
+        this.ts.replaceString = this.replaceString;
     }
 }

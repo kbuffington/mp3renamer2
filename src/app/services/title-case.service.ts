@@ -94,7 +94,7 @@ export class TitleCaseService {
      * Given a string, split it up into subsections based on found paren blocks, and title case those
      * and then return the re-combined title-cased string.
      * @param {string} str The string to title-case
-     * @returns {string}
+     * @return {string}
      */
     public titleCaseString(str: string): string {
         const parensRegex = /\((.*?)\)/g;
@@ -118,5 +118,4 @@ export class TitleCaseService {
 
         return str;
     }
-
 }

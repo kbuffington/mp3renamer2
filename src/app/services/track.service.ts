@@ -29,7 +29,9 @@ export class TrackService implements OnDestroy {
 
     public deleteString = '';
     public doTitleCase = true;
+    public findString = '';
     public pathDelimiter = '/';
+    public replaceString = '';
 
     constructor(private electronService: ElectronService,
                 private titleCaseService: TitleCaseService,
@@ -476,6 +478,7 @@ export class TrackService implements OnDestroy {
         const titles = metadata.title.values.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {
                 let title = origTitle.replace(this.deleteString, ''); // TODO: Guess title from filename
+                title = origTitle.replace(this.findString, this.replaceString); // should we do this AFTER title case?
                 if (this.doTitleCase) {
                     title = this.titleCaseService.titleCaseString(title);
                 }
