@@ -168,7 +168,7 @@ export class GetMetadataComponent implements OnInit {
 
     private setDifferentFlag(metaProp: MetadataProperty) {
         const firstVal = metaProp.values[0] ?? undefined;
-        metaProp.different = metaProp.values.some(v => v !== firstVal && v !== undefined && v !== '');
+        metaProp.different = metaProp.values.some(v => v !== firstVal);
         metaProp.useDefault = !metaProp.different;
     }
 
