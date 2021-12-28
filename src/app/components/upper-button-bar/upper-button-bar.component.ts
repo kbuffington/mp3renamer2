@@ -10,6 +10,7 @@ import { TrackService } from '../../services/track.service';
 })
 export class UpperButtonBarComponent implements OnInit {
     public filesLoaded = false;
+    public startNumber = 1;
 
     constructor(private electronService: ElectronService,
                 private configService: ConfigService,
@@ -48,7 +49,11 @@ export class UpperButtonBarComponent implements OnInit {
         this.ts.guessTitles();
     }
 
-    renumberTracks() {
-        this.ts.renumberTracks(1);
+    public renumberTracks() {
+        this.ts.renumberTracks(this.startNumber);
+    }
+
+    public inputClick(event: Event) {
+        event.stopPropagation();
     }
 }
