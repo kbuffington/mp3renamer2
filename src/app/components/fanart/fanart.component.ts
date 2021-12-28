@@ -205,9 +205,9 @@ export class FanartComponent implements OnInit {
     }
 
     public saveSelected() {
-        const saveLogo = this.artistData.hdmusiclogos.filter(val => val.save && !val.local);
-        const saveDiscs = this.albumData.album.cdart.filter(val => val.saveIndex && !val.local);
-        const saveLabels = this.musicLabels.filter(val => val.musiclabels.filter(l => l.save).length > 0);
+        const saveLogo = this.artistData?.hdmusiclogos.filter(val => val.save && !val.local) ?? [];
+        const saveDiscs = this.albumData?.album.cdart.filter(val => val.saveIndex && !val.local) ?? [];
+        const saveLabels = this.musicLabels.filter(val => val.musiclabels.filter(l => l.save).length > 0) ?? [];
         saveLogo.forEach(logo => {
             this.electronService.ipcRenderer.send('download', {
                 url: logo.url,
@@ -271,7 +271,6 @@ export class FanartComponent implements OnInit {
     }
 
     private setPopoverImage(imageIndex: number) {
-        setTimeout(() => this.popOverContainer.nativeElement.focus());
         if (imageIndex < 0) {
             imageIndex = this.numLogos + this.albumData.album.cdart.length + this.numLabelLogos - 1;
         } else if (imageIndex >= this.numLogos + this.numCds + this.numLabelLogos) {
@@ -290,6 +289,11 @@ export class FanartComponent implements OnInit {
                 i++;
             }
             this.popoverImage = this.musicLabels[i].musiclabels[index];
+        }
+        if (!this.popoverImage.loaded) {
+            this.popoverImage = undefined;
+        } else {
+            setTimeout(() => this.popOverContainer.nativeElement.focus());
         }
     }
 
@@ -316,5 +320,9 @@ export class FanartComponent implements OnInit {
                 setTimeout(() => clearTimeout(this.hoverTimer), 100);
                 break;
         }
+    }
+
+    public onLoad(img: FanartImg) {
+        img.loaded = true;
     }
 }

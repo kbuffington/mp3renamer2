@@ -18,8 +18,13 @@
                             (mouseenter)="mouseEnter(i, false)"
                             (mouseleave)="mouseLeave()"
                             (click)="logoButtonClicked(logo)">
-                        <img [src]="logo.url" class="logo-img">
-                        <clr-icon shape="zoom-in" size="18" class="zoom" (click)="zoom($event, i)"></clr-icon>
+                        <img [src]="logo.url" class="logo-img" (load)="onLoad(logo)">
+                        <clr-icon *ngIf="logo.loaded"
+                            shape="zoom-in"
+                            size="18"
+                            class="zoom"
+                            (click)="zoom($event, i)">
+                        </clr-icon>
                     </button>
                 </div>
                 <h4 class="clr-col-12 no-logos-header" *ngIf="!artistData?.hdmusiclogos?.length">
@@ -42,8 +47,13 @@
                             (mouseenter)="mouseEnter(i + numLogos)"
                             (mouseleave)="mouseLeave()"
                             (click)="discButtonClicked(i)">
-                        <img [src]="cdart.url" class="cdart-img">
-                        <clr-icon shape="zoom-in" size="18" class="zoom" (click)="zoom($event, i + numLogos)"></clr-icon>
+                        <img [src]="cdart.url" class="cdart-img" (load)="onLoad(cdart)">
+                        <clr-icon *ngIf="cdart.loaded"
+                            shape="zoom-in"
+                            size="18"
+                            class="zoom"
+                            (click)="zoom($event, i + numLogos)">
+                        </clr-icon>
                     </button>
                     <div class="disc-index">
                         Disc: {{ cdart.disc }}
@@ -70,8 +80,13 @@
                                 (mouseenter)="mouseEnter(i, label)"
                                 (mouseleave)="mouseLeave()"
                                 (click)="labelButtonClicked(logo, label)">
-                            <img [src]="logo.url" class="logo-img">
-                            <clr-icon shape="zoom-in" size="18" class="zoom" (click)="zoom($event, i, label)"></clr-icon>
+                            <img [src]="logo.url" class="logo-img" (load)="onLoad(logo)">
+                            <clr-icon *ngIf="logo.loaded"
+                                shape="zoom-in"
+                                size="18"
+                                class="zoom"
+                                (click)="zoom($event, i, label)">
+                            </clr-icon>
                         </button>
                     </div>
                     <h4 class="clr-col-12 no-logos-header" *ngIf="!label.musiclabels.length">

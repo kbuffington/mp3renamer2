@@ -4,6 +4,7 @@ export class FanartImg {
     url: string;
     local = false;
     filename?: string;
+    loaded = false;
 
     constructor(json) {
         this.id = json.id;
