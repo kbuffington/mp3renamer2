@@ -35,23 +35,29 @@ export class MusicbrainzService {
         return this.http.get(url);
     }
 
-    public searchReleases(queryParams: Object, fuzzy = true): Promise<any> {
-        // `${MB_BASE}release/?limit=100&query=artist:(${artist.trim()}*) AND release:(${album.trim()}*)`;
+    public searchReleases(queryParams: any, fuzzy = true): Promise<any> {
         let uri = `${MB_BASE}release/?limit=100&query=`;
-        let foundVals = 0;
-        Object.keys(queryParams).forEach(key => {
-            if (queryParams[key].length) {
-                const and = foundVals > 0 ? ' AND ' : '';
-                const val = encodeURIComponent(queryParams[key].trim());
-                if (NON_FUZZY_FIELDS.includes(key)) {
-                    fuzzy = false;
+        if (queryParams.releaseGroup) {
+            /* eslint-disable max-len */
+            // ${MB_BASE}release?release-group=ffb094d1-1a16-4348-a8dd-beb69cbd9a66&inc=release-groups+artist-credits+media+labels&limit=100
+            uri = `${MB_BASE}release?release-group=${queryParams.releaseGroup}&inc=release-groups+artist-credits+media+labels&limit=100`;
+        } else {
+            // `${MB_BASE}release/?limit=100&query=artist:(${artist.trim()}*) AND release:(${album.trim()}*)`;
+            let foundVals = 0;
+            Object.keys(queryParams).forEach(key => {
+                if (queryParams[key].length) {
+                    const and = foundVals > 0 ? ' AND ' : '';
+                    const val = encodeURIComponent(queryParams[key].trim());
+                    if (NON_FUZZY_FIELDS.includes(key)) {
+                        fuzzy = false;
+                    }
+                    if (val.length) {
+                        uri += `${and}${key}:${fuzzy ? '(' : ''}${val}${fuzzy ? '*)' : ''}`;
+                        foundVals++;
+                    }
                 }
-                if (val.length) {
-                    uri += `${and}${key}:${fuzzy ? '(' : ''}${val}${fuzzy ? '*)' : ''}`;
-                    foundVals++;
-                }
-            }
-        });
+            });
+        }
         return this.get(uri).toPromise();
     }
 

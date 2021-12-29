@@ -3,7 +3,7 @@
         <div class="top-content">
             <div class="clr-row">
                 <div class="input-field clr-col-4">
-                    <label>Artist:</label>
+                    <label class="artist-label">Artist:</label>
                     <input clrInput [(ngModel)]="artist" (keyup.enter)="requestMetadata()" />
                 </div>
                 <div class="input-field clr-col-4">
@@ -17,6 +17,10 @@
                 <button class="btn btn-sm btn-primary search-btn" (click)="requestMetadata()">
                     <clr-icon shape="search"></clr-icon> Search
                 </button>
+                <div class="input-field clr-col-4">
+                    <label>MB RGID:</label>
+                    <input clrInput [(ngModel)]="releaseGroup" (keyup.enter)="requestMetadata()" />
+                </div>
                 <clr-checkbox-wrapper class="clr-col-3">
                     <input type="checkbox" clrCheckbox [(ngModel)]="fuzzySearch" />
                     <label>Use fuzzy search</label>

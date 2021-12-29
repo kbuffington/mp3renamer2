@@ -473,7 +473,6 @@ export class TrackService implements OnDestroy {
 
     public guessTitles() {
         const metadata = this.getCurrentMetadata();
-        // const tracks = this.getCurrentTracks(); // used for guessing titles from filename
         const selectedCopy = [...this.selectedTracks];
         const titles = metadata.title.values.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {

@@ -59,6 +59,7 @@ export class GetMetadataComponent implements OnInit {
     public fuzzySearch = false;
     public hasCovers = false;
     public numTracks: number;
+    public releaseGroup: string;
     public selectedRelease: ReleaseDisplay;
 
     private metadata: MetadataObj;
@@ -75,6 +76,7 @@ export class GetMetadataComponent implements OnInit {
         this.metadata = this.ts.getCurrentMetadata();
         this.artist = this.metadata.artist.default;
         this.album = this.metadata.album.default;
+        this.releaseGroup = this.metadata.MUSICBRAINZ_RELEASEGROUPID.default;
         this.numTracks = this.ts.getNumTracks();
         if (this.artist || this.album) {
             this.requestMetadata().then(() => {
@@ -92,9 +94,11 @@ export class GetMetadataComponent implements OnInit {
         this.selectedRelease = null;
         this.fetchingReleases = true;
         this.throttleService.clearQueuedRequests();
-        return this.mb.searchReleases({ artist: this.artist, release: this.album, date: this.date }, this.fuzzySearch)
+        return this.mb.searchReleases({
+            artist: this.artist, release: this.album, date: this.date, releaseGroup: this.releaseGroup,
+        }, this.fuzzySearch)
             .then(data => {
-                // set tieeout so release table refreshes even if entry is cached
+                // set timeout so release table refreshes even if entry is cached
                 setTimeout(() => {
                     this.fetchingReleases = false;
                     this.releaseData = data;

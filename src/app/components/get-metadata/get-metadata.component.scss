@@ -17,6 +17,10 @@
             margin: -2px -1px 0 -2px;
             cursor: pointer;
         }
+
+        &.artist-label {
+            width: 57px;
+        }
     }
 
     &.sm-input ::ng-deep .clr-control-container {
