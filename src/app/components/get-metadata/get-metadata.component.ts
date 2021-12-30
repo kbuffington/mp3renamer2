@@ -18,6 +18,8 @@ export enum DiffMatchType {
 }
 
 export class ReleaseDisplay extends Release {
+    needsArtistCol: boolean;
+
     constructor(json: any, metadata: MetadataObj) {
         super(json);
         const partOfSet = metadata.partOfSet;
@@ -34,10 +36,18 @@ export class ReleaseDisplay extends Release {
                     const diffs = dmp.diff_main(t.metadataTitle, t.title);
                     dmp.diff_cleanupSemantic(diffs);
                     t.titleDiffs = diffs;
-                    console.log(diffs);
+                }
+                t.metadataArtist = metadata.artist.values[index];
+                if (t.artistString !== t.metadataArtist) {
+                    this.needsArtistCol = true;
+                    const dmp = new DiffMatchPatch();
+                    const diffs = dmp.diff_main(t.metadataArtist, t.artistString);
+                    dmp.diff_cleanupSemantic(diffs);
+                    t.artistDiffs = diffs;
                 }
             }
         });
+        this.needsArtistCol = this.needsArtistCol || this.tracks.some(t => t.artistString !== this.artistString);
     }
 }
 
@@ -111,28 +121,30 @@ export class GetMetadataComponent implements OnInit {
         this.hasCovers = false;
         this.selectedRelease = null;
         this.throttleService.clearQueuedRequests();
-        this.mb.getReleaseInfo(release.id)
-            .subscribe(
-                (release: any) => {
-                    this.selectedRelease = new ReleaseDisplay(release, this.metadata);
-                    console.log(this.selectedRelease);
-                    this.getArtistCountries(this.selectedRelease.artistCredits);
-                    this.selectedRelease.tracks.forEach(track => {
-                        track.relations.forEach(relation => {
-                            if (relation.attributes.includes('cover')) {
-                                this.hasCovers = true;
-                                this.mb.getWork(relation.work.id).then(work => {
-                                    const w = new Work(work);
-                                    const rel = w.relations.find(r => r.attributes.length === 0);
-                                    if (rel?.artistString) {
-                                        track.originalArtist = rel.artistString;
-                                    }
-                                }).catch(err => err);
-                            }
+        setTimeout(() => {
+            this.mb.getReleaseInfo(release.id)
+                .subscribe(
+                    (release: any) => {
+                        this.selectedRelease = new ReleaseDisplay(release, this.metadata);
+                        console.log(this.selectedRelease);
+                        this.getArtistCountries(this.selectedRelease.artistCredits);
+                        this.selectedRelease.tracks.forEach(track => {
+                            track.relations.forEach(relation => {
+                                if (relation.attributes.includes('cover')) {
+                                    this.hasCovers = true;
+                                    this.mb.getWork(relation.work.id).then(work => {
+                                        const w = new Work(work);
+                                        const rel = w.relations.find(r => r.attributes.length === 0);
+                                        if (rel?.artistString) {
+                                            track.originalArtist = rel.artistString;
+                                        }
+                                    }).catch(err => err);
+                                }
+                            });
                         });
-                    });
-                },
-                error => this.handleError(error));
+                    },
+                    error => this.handleError(error));
+        }, 10);
     }
 
     private getArtistCountries(artists: ArtistCredit[]) {
@@ -144,7 +156,7 @@ export class GetMetadataComponent implements OnInit {
                 artistData.artists.forEach(artist => {
                     if (artist.country) {
                         this.artistCache.set(new ArtistData(artist));
-                    } else {
+                    } else if (artist.area) {
                         this.mb.getCountry(artist.area.id).then(country => {
                             artist.country = country;
                             this.artistCache.set(new ArtistData(artist));

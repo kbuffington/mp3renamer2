@@ -132,7 +132,9 @@
         <div class="selected-release" *ngIf="selectedRelease; else noSelectedRelease">
             <clr-datagrid id="release-datagrid" class="datagrid-compact" *ngIf="selectedRelease">
                 <clr-dg-column class="track-num">Track</clr-dg-column>
-                <clr-dg-column class="artist" [clrDgField]="'artistString'">Artist Credit</clr-dg-column>
+                <clr-dg-column class="artist" [clrDgField]="'artistString'" *ngIf="selectedRelease.needsArtistCol">
+                    Artist Credit
+                </clr-dg-column>
                 <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
                 <clr-dg-column *ngIf="hasCovers">Original Artist</clr-dg-column>"
                 <clr-dg-column class="time">Time</clr-dg-column>
@@ -145,7 +147,17 @@
                             <span *ngIf="track.media">{{ track.discNumber }}-</span>{{ track.number }}
                         </ng-template>
                     </clr-dg-cell>
-                    <clr-dg-cell class="artist">{{ track.artistString }}</clr-dg-cell>
+                    <clr-dg-cell class="artist" *ngIf="selectedRelease.needsArtistCol">
+                        <span *ngIf="track.artistDiffs.length === 0; else showArtistDiffs">{{ track.artistString }}</span>
+                        <ng-template #showArtistDiffs>
+                            <span *ngFor="let diff of track.artistDiffs"
+                                    [ngClass]="{
+                                        'equal': diff[0] === diffMatchType.Equal,
+                                        'added': diff[0] === diffMatchType.Add,
+                                        'removed': diff[0] === diffMatchType.Remove
+                                    }">{{ diff[1] }}</span>
+                        </ng-template>
+                    </clr-dg-cell>
                     <clr-dg-cell>
                         <span *ngIf="track.titleDiffs.length === 0; else showDiffs">{{ track.title }}</span>
                         <ng-template #showDiffs>

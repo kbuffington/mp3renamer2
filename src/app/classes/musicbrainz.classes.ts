@@ -111,12 +111,14 @@ export class Track {
     artistIDs: string[];
     artistCredits: ArtistCredit[];
     artistString: string;
+    artistDiffs: Diff[] = [];
     artistFilter = ''; // sort-order style name used for artistFilter field
     discSet = ''; // if only one disc, this is empty, otherwise formatted like "1/3"
     discTrackStr: string;
     titleDiffs: Diff[] = []; // does the title differ from the metadata?
     metadataFound = false; // was the track found in the metadata (by discTrackStr)?
     metadataFoundIndex = -1; // index into tracklist of found item
+    metadataArtist?: string;
     metadataTitle?: string; // title found in metadata
     originalArtist?: string;
     time: string;
