@@ -1,26 +1,30 @@
 <div class="main-wrapper">
     <div class="content-wrapper">
         <div class="top-content">
-            <div class="clr-row">
-                <div class="input-field clr-col-4">
-                    <label class="artist-label">Artist:</label>
-                    <input clrInput [(ngModel)]="artist" (keyup.enter)="requestMetadata()" />
-                </div>
-                <div class="input-field clr-col-4">
-                    <label>Album:</label>
-                    <input clrInput [(ngModel)]="album" (keyup.enter)="requestMetadata()" />
-                </div>
-                <div class="input-field clr-col-2 sm-input">
-                    <label>Date:</label>
-                    <input clrInput [(ngModel)]="date" (keyup.enter)="requestMetadata()" />
-                </div>
-                <button class="btn btn-sm btn-primary search-btn" (click)="requestMetadata()">
-                    <clr-icon shape="search"></clr-icon> Search
-                </button>
-                <div class="input-field clr-col-4">
+            <div class="clr-row clr-justify-content-between">
+                <div class="input-field clr-col-5" *ngIf="releaseGroup; else noReleaseGroup">
                     <label>MB RGID:</label>
                     <input clrInput [(ngModel)]="releaseGroup" (keyup.enter)="requestMetadata()" />
                 </div>
+                <ng-template #noReleaseGroup>
+                    <div class="input-field clr-col-4">
+                        <label>Artist:</label>
+                        <input clrInput [(ngModel)]="artist" (keyup.enter)="requestMetadata()" />
+                    </div>
+                    <div class="input-field clr-col-4">
+                        <label>Album:</label>
+                        <input clrInput [(ngModel)]="album" (keyup.enter)="requestMetadata()" />
+                    </div>
+                    <div class="input-field clr-col-2 sm-input">
+                        <label>Date:</label>
+                        <input clrInput [(ngModel)]="date" (keyup.enter)="requestMetadata()" />
+                    </div>
+                </ng-template>
+                <button class="btn btn-sm btn-primary search-btn" (click)="requestMetadata()">
+                    <clr-icon shape="search"></clr-icon> Search
+                </button>
+            </div>
+            <div class="clr-row">
                 <clr-checkbox-wrapper class="clr-col-3">
                     <input type="checkbox" clrCheckbox [(ngModel)]="fuzzySearch" />
                     <label>Use fuzzy search</label>

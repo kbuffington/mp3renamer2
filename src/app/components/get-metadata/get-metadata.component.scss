@@ -5,6 +5,7 @@
     justify-content: flex-start;
     flex-flow: nowrap;
     margin-bottom: 2px;
+    padding-right: .25rem;
 
     label {
         padding: 0;
@@ -16,10 +17,6 @@
         clr-icon {
             margin: -2px -1px 0 -2px;
             cursor: pointer;
-        }
-
-        &.artist-label {
-            width: 57px;
         }
     }
 
