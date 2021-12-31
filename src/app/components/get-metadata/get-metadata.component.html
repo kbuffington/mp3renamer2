@@ -39,7 +39,7 @@
                 <clr-dg-column [clrDgField]="'labelInfo.0.label.name'">Release</clr-dg-column>
                 <clr-dg-column [clrDgField]="'date'" class="date">Date</clr-dg-column>
                 <clr-dg-column [clrDgField]="'media.0.format'" class="media">Media</clr-dg-column>
-                <clr-dg-column [clrDgField]="'track-count'" class="num-tracks"># Tracks</clr-dg-column>
+                <clr-dg-column [clrDgField]="'trackCount'" class="num-tracks"># Tracks</clr-dg-column>
 
                 <clr-dg-row *clrDgItems="let release of releases" (click)="getReleaseInfo(release)">
                     <clr-dg-cell class="artist">{{ release.artistString }}</clr-dg-cell>
@@ -52,9 +52,9 @@
                     <clr-dg-cell>{{ release.labelInfo ? release.labelInfo[0]?.label?.name : '' }} / {{ release.country }}</clr-dg-cell>
                     <clr-dg-cell class="date">{{ release.date }}</clr-dg-cell>
                     <clr-dg-cell class="media">{{ release.media[0].format }}</clr-dg-cell>
-                    <clr-dg-cell class="num-tracks" [ngClass]="{'red': release['track-count'] !== numTracks}">
+                    <clr-dg-cell class="num-tracks" [ngClass]="{'red': release.trackCount !== numTracks}">
                         <span *ngIf="release.media.length > 1">{{ release.media.length }} / </span>
-                        {{ release['track-count'] }}
+                        {{ release.trackCount }}
                     </clr-dg-cell>
                 </clr-dg-row>
                 <clr-dg-footer>

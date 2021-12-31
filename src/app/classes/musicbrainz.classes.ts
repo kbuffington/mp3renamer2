@@ -220,7 +220,11 @@ export class Release {
         });
         this.releaseGroup = new ReleaseGroup(json['release-group']);
         this.labelInfo = json['label-info'] ? new LabelInfo(json['label-info']) : undefined;
-        this.trackCount = json['track-count'];
+        if (json['track-count']) {
+            this.trackCount = json['track-count'];
+        } else {
+            this.trackCount = this.media.reduce((prevVal, m) => prevVal + m.trackCount, 0);
+        }
     }
 }
 
