@@ -17,3 +17,8 @@
         </clr-options>
     </clr-combobox>
 </clr-combobox-container>
+<button *ngIf="showGuessButton && !selectedGenres.length"
+        class="btn btn-outline btn-sm guess-btn"
+        (click)="guessGenres()">
+    Guess Genres
+</button>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ArtistData } from '../classes/musicbrainz.classes';
 
 const ARTIST_CACHE_KEY = 'artistCache';
-const STALE_TIME = 1000 * 60 * 60 * 24 * 365; // one year
+const STALE_TIME = 1000 * 60 * 60 * 24 * 90; // three months
 
 class CacheEntry {
     artist: ArtistData;
@@ -38,7 +38,7 @@ export class ArtistCacheService {
         if (!cached || Date.now() - cached.addedTime > STALE_TIME) {
             this.deleteArtist(artistId);
         }
-        return cached.artist;
+        return cached?.artist;
     }
 
     public set(artist: ArtistData): void {
@@ -54,10 +54,10 @@ export class ArtistCacheService {
     }
 
     private deleteArtist(artistId): void {
-        setTimeout(() => {
-            this.cacheMap.delete(artistId);
-            this.saveCacheMap();
-        }, 1000);
+        // setTimeout(() => {
+        this.cacheMap.delete(artistId);
+        this.saveCacheMap();
+        // }, 1000); // Why am I waiting a second?
     }
 
     private saveCacheMap(): void {
