@@ -487,7 +487,7 @@ export class TrackService implements OnDestroy {
                         title = results[2];
                     }
                 }
-                title = origTitle.replace(this.deleteString, ''); // TODO: Guess title from filename
+                title = origTitle.replace(this.deleteString, '');
                 title = origTitle.replace(this.findString, this.replaceString); // should we do this AFTER title case?
                 if (this.doTitleCase) {
                     title = this.titleCaseService.titleCaseString(title);

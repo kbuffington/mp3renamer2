@@ -18,18 +18,17 @@
 		clr-dg-cell.ellipsis {
 			text-overflow: ellipsis;
 
-			&[data-title]:not(.editing):hover {
+			&[data-tooltip]:not(.editing):hover {
 				overflow: initial;
 				color: rgba(0,0,0,0);
 			}
 
-			&[data-title]:not(.editing):hover:before {
-				content: attr(data-title);
+			&[data-tooltip]:not(.editing):hover:before {
+				content: attr(data-tooltip);
 				padding: 3px 4px 3px 3px;
 				color: #333;
-				position: relative;
-				left: 0px;
-				top: 0px;
+				position: absolute;
+				margin-top: -4px;
 				margin-left: -4px;
 				pointer-events: none;
 				background: #eee;

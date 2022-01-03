@@ -18,7 +18,7 @@
 				(contextmenu)="onRightClick($event, i)">
 			<clr-dg-cell class="ellipsis filename"
 					[ngClass]="{'editing': editing[i][0]}"
-					[attr.data-title]="track.meta.filename"
+					[attr.data-tooltip]="track.meta.filename"
 					(click)="startEditing(i, 0)">
 				<editable-cell [(value)]="track.meta.filename"
 					[(editing)]="editing[i][0]"
@@ -27,7 +27,7 @@
 			</clr-dg-cell>
 			<clr-dg-cell class="ellipsis"
 					[ngClass]="{'editing': editing[i][1]}"
-					[attr.data-title]="metadata.artist.values[i]"
+					[attr.data-tooltip]="metadata.artist.values[i]"
 					(click)="startEditing(i, 1)">
 				<editable-cell [(value)]="metadata.artist.values[i]"
 					(valueChange)="updateMetadata()"
@@ -36,7 +36,7 @@
 			</clr-dg-cell>
 			<clr-dg-cell class="ellipsis"
 					[ngClass]="{'editing': editing[i][2]}"
-					[attr.data-title]="metadata.title.values[i]"
+					[attr.data-tooltip]="metadata.title.values[i]"
 					(click)="startEditing(i, 2)">
 				<editable-cell [(value)]="metadata.title.values[i]"
 					(valueChange)="updateMetadata()"
@@ -45,7 +45,6 @@
 			</clr-dg-cell>
 			<clr-dg-cell class="tracknum"
 					[ngClass]="{'editing': editing[i][3]}"
-					[attr.data-title]="metadata.trackNumber.values[i]"
 					(click)="startEditing(i, 3)">
 				<editable-cell [(value)]="metadata.trackNumber.values[i]"
 					[(editing)]="editing[i][3]">
