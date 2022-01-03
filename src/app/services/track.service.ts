@@ -474,9 +474,20 @@ export class TrackService implements OnDestroy {
     public guessTitles() {
         const metadata = this.getCurrentMetadata();
         const selectedCopy = [...this.selectedTracks];
+        const tracks = this.getCurrentTracks();
         const titles = metadata.title.values.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {
-                let title = origTitle.replace(this.deleteString, ''); // TODO: Guess title from filename
+                let title;
+                if (!origTitle) {
+                    const track = tracks[index];
+                    origTitle = track.meta.originalFilename;
+                    const titleRegex = new RegExp(/\d+\]?[ .]+(-\s*)?(.*).mp3/);
+                    if (titleRegex.test(origTitle)) {
+                        const results = titleRegex.exec(origTitle);
+                        title = results[2];
+                    }
+                }
+                title = origTitle.replace(this.deleteString, ''); // TODO: Guess title from filename
                 title = origTitle.replace(this.findString, this.replaceString); // should we do this AFTER title case?
                 if (this.doTitleCase) {
                     title = this.titleCaseService.titleCaseString(title);
