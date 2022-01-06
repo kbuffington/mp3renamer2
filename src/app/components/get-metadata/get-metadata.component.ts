@@ -131,12 +131,12 @@ export class GetMetadataComponent implements OnInit {
                         this.selectedRelease.tracks.forEach(track => {
                             track.relations.forEach(relation => {
                                 if (relation.attributes.includes('cover')) {
-                                    this.hasCovers = true;
                                     this.mb.getWork(relation.work.id).then(work => {
                                         const w = new Work(work);
                                         const rel = w.relations.find(r => r.attributes.length === 0);
-                                        if (rel?.artistString) {
+                                        if (rel?.artistString && rel.artistString !== track.artistString) {
                                             track.originalArtist = rel.artistString;
+                                            this.hasCovers = true;
                                         }
                                     }).catch(err => err);
                                 }
