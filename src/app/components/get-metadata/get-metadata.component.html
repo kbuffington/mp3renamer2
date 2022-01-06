@@ -49,7 +49,7 @@
                             {{ release.disambiguation ? ' [' + release.disambiguation + ']' : ''}}
                         </span>
                     </clr-dg-cell>
-                    <clr-dg-cell>{{ release.labelInfo ? release.labelInfo.label[0]?.label?.name : '' }} / {{ release.country }}</clr-dg-cell>
+                    <clr-dg-cell>{{ release.labelInfo ? release.labelInfo.label[0]?.name : '' }} / {{ release.country }}</clr-dg-cell>
                     <clr-dg-cell class="date">{{ release.date }}</clr-dg-cell>
                     <clr-dg-cell class="media">{{ release.media[0].format }}</clr-dg-cell>
                     <clr-dg-cell class="num-tracks" [ngClass]="{'red': release.trackCount !== numTracks}">

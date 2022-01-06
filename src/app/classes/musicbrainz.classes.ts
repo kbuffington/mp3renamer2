@@ -70,7 +70,7 @@ export class Label {
 }
 
 export class LabelInfo {
-    label: Label[];
+    label: Label[] = [];
     allLabels = ''; // semi-colon delimited list of labels
     catalogNumbers = [];
     selectedCatalog: string;
