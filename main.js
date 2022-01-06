@@ -6,8 +6,10 @@ const fs = require('fs');
 require('@electron/remote/main').initialize();
 
 let NodeID3tag;
+let debug = true;
 if (app.isPackaged || process.platform === 'win32') {
     NodeID3tag = require('node-id3tag');
+    debug = false;
 } else {
     NodeID3tag = require('../node-id3tag');
 }
@@ -24,7 +26,7 @@ function createWindow() {
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: app.isPackaged ? 920 : 1400,
+        width: debug ? 1400 : 920,
         height: 1024,
         webPreferences: {
             nodeIntegration: true,
@@ -40,9 +42,11 @@ function createWindow() {
     mainWindow.setMenu(null);
 
     if (app.isPackaged) {
-        mainWindow.loadFile('dist/mp3renamer2/index.html');
+        mainWindow.loadFile('dist/index.html');
     } else {
         mainWindow.loadURL('http://localhost:4200');
+    }
+    if (debug) {
         // Open the DevTools.
         mainWindow.webContents.openDevTools();
     }
