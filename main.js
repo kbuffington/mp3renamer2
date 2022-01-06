@@ -7,9 +7,11 @@ require('@electron/remote/main').initialize();
 
 let NodeID3tag;
 let debug = true;
+if (app.isPackaged) {
+    debug = false;
+}
 if (app.isPackaged || process.platform === 'win32') {
     NodeID3tag = require('node-id3tag');
-    debug = false;
 } else {
     NodeID3tag = require('../node-id3tag');
 }
