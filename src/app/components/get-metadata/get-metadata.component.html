@@ -36,7 +36,7 @@
             <clr-datagrid id="releases-datagrid" class="datagrid-compact" *ngIf="!fetchingReleases">
                 <clr-dg-column [clrDgField]="'artistString'" class="artist">Artist Credit</clr-dg-column>
                 <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
-                <clr-dg-column [clrDgField]="'labelInfo.0.label.name'">Release</clr-dg-column>
+                <clr-dg-column [clrDgField]="'labelInfo.label.0.label.name'">Release</clr-dg-column>
                 <clr-dg-column [clrDgField]="'date'" class="date">Date</clr-dg-column>
                 <clr-dg-column [clrDgField]="'media.0.format'" class="media">Media</clr-dg-column>
                 <clr-dg-column [clrDgField]="'trackCount'" class="num-tracks"># Tracks</clr-dg-column>
@@ -49,7 +49,7 @@
                             {{ release.disambiguation ? ' [' + release.disambiguation + ']' : ''}}
                         </span>
                     </clr-dg-cell>
-                    <clr-dg-cell>{{ release.labelInfo ? release.labelInfo[0]?.label?.name : '' }} / {{ release.country }}</clr-dg-cell>
+                    <clr-dg-cell>{{ release.labelInfo ? release.labelInfo.label[0]?.label?.name : '' }} / {{ release.country }}</clr-dg-cell>
                     <clr-dg-cell class="date">{{ release.date }}</clr-dg-cell>
                     <clr-dg-cell class="media">{{ release.media[0].format }}</clr-dg-cell>
                     <clr-dg-cell class="num-tracks" [ngClass]="{'red': release.trackCount !== numTracks}">

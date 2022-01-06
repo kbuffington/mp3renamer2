@@ -77,24 +77,24 @@ export class LabelInfo {
     labelIds: string[] = [];
 
     constructor(labels: any[]) {
-        Object.assign(this, labels);
         if (labels.length) {
-            this.label = labels.map(l => new Label(l));
-            this.label.forEach((l, idx) => {
-                this.allLabels += l.name;
-                if (idx < this.label.length - 1) {
-                    this.allLabels += '; ';
-                }
-                if (l.catalogNum && !this.catalogNumbers.includes(l.catalogNum)) {
-                    this.catalogNumbers.push(l.catalogNum);
-                }
-                if (this.catalogNumbers.length) {
-                    this.selectedCatalog = this.catalogNumbers[0];
-                }
-                if (l.id) {
-                    this.labelIds.push(l.id);
+            labels.forEach(l => {
+                if (l['catalog-number'] && !this.catalogNumbers.includes(l['catalog-number'])) {
+                    this.catalogNumbers.push(l['catalog-number']);
                 }
             });
+            // we keep all unique catalog numbers, but remove duplicate labels
+            this.label = labels.map(l => new Label(l)).filter(l => {
+                if (!this.labelIds.includes(l.id)) {
+                    this.labelIds.push(l.id);
+                    return true;
+                }
+                return false;
+            });
+            this.allLabels = this.label.map(l => l.name).join('; ');
+            if (this.catalogNumbers.length) {
+                this.selectedCatalog = this.catalogNumbers[0];
+            }
         }
     }
 }
