@@ -93,7 +93,16 @@ function processFiles(files) {
                 } else {
                     console.log('writing image');
                     imageWritten = true;
-                    fs.writeFileSync('./temp/embeddedArtwork.jpg', tags.image.imageBuffer, 'binary');
+                    let path;
+                    if (app.isPackaged) {
+                        path = app.getPath('exe').replace('mp3renamer2.exe', '');
+                        path += 'resources\\app\\temp\\';
+                    } else {
+                        path = './temp/';
+                    }
+                    const embedPath = `${path}embeddedArtwork.jpg`;
+                    console.log(embedPath);
+                    fs.writeFileSync(embedPath, tags.image.imageBuffer, 'binary');
                 }
             }
         }
