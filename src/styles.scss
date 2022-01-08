@@ -1,23 +1,12 @@
 @import 'variables.scss';
 
 @font-face {
-    font-family: "Roboto";
-    src: local("Roboto"), url(./assets/fonts/Roboto/Roboto-Regular.ttf) format("truetype");
-}
-
-@font-face {
-    font-family: "Lato";
-    src: local("Lato"), url(./assets/fonts/Lato/Lato-Regular.ttf) format("truetype");
-}
-
-@font-face {
     font-family: "Open Sans";
     src: local("Open Sans"), url(./assets/fonts/OpenSans/OpenSans-Regular.ttf) format("truetype");
 }
 
 body {
     overflow: hidden;
-    // font-family: "Roboto", sans-serif !important;
     font-family: "Open Sans", sans-serif !important;
 }
 
