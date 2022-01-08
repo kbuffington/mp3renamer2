@@ -6,8 +6,8 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "build:win": "npm run build && npx electron-packager . --platform=win32 --arch=x64 --ignore=\\e2e --overwrite",
-    "build:osx": "npm run build && npx electron-packager . --platform=darwin --arch=x64 --ignore=\\e2e --overwrite",
+    "build:win": "npm run build && npx electron-packager . --platform=win32 --arch=x64 --ignore=\"(e2e|node_modules/.cache)\" --overwrite",
+    "build:osx": "npm run build && npx electron-packager . --platform=darwin --arch=x64 --ignore=\"(e2e|node_modules/.cache)\" --overwrite",
     "test": "ng test",
     "lint": "ng lint",
     "postinstall": "ngcc",
