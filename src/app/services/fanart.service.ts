@@ -8,7 +8,7 @@ const FANART_BASE = 'http://webservice.fanart.tv/v3/music/';
 // const CLIENT_KEY = '62c1ba6dcd7701667d97cd7ea384206f';
 // http://webservice.fanart.tv/v3/music/f4a31f0a-51dd-4fa7-986d-3095c40c5ed9?api_key=e98c81989fa12e8171f86068c8b9989a
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class FanartService {
     apiKey: string;
 
