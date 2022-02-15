@@ -18,7 +18,7 @@
   "dependencies": {
     "@electron/remote": "^2.0.1",
     "electron-dl": "^3.2.1",
-    "node-id3tag": "^0.9.4"
+    "node-id3tag": "^0.9.5"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.14",
@@ -59,7 +59,6 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
-    "node-id3": "^0.2.3",
     "protractor": "~7.0.0",
     "rxjs": "^6.6.6",
     "ts-node": "~5.0.1",
