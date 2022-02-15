@@ -9,7 +9,7 @@ class CacheEntry {
     addedTime: number;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ArtistCacheService {
     cacheMap: Map<string, CacheEntry>;
 

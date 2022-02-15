@@ -9,7 +9,7 @@ class CacheEntry {
     addedTime: number;
 }
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class CacheService {
     cacheMap: Map<string, CacheEntry>;
 

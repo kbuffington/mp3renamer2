@@ -13,7 +13,7 @@ import { ElectronService } from './electron.service';
 import { ConfigService, ConfigSettingsObject } from './config.service';
 import { TitleCaseService } from './title-case.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TrackService implements OnDestroy {
     private config: ConfigSettingsObject;
     private configSub: Subscription;

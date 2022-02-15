@@ -12,7 +12,7 @@ export const upperCaseWords = ['DOA', 'LOL', 'LMAO', 'PCP', 'RIP', 'R&B'];
 // Words that should probably always be lower case
 export const alwaysLowerCaseWords = ['remix', 'feat.', 'x'];
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TitleCaseService {
     constructor() {}
 

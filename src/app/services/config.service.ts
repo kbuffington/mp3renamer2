@@ -31,7 +31,7 @@ export class ConfigSettingsObject {
 
 const CONFIG_FILE_NAME = 'config.json';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ConfigService {
     private configuration: BehaviorSubject<ConfigSettingsObject> = new BehaviorSubject(new ConfigSettingsObject({}));
     private path: string;

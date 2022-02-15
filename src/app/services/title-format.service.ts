@@ -4,7 +4,7 @@ import { MetadataObj } from '@classes/track.classes';
 import { TrackService } from './track.service';
 
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class TitleFormatService {
     private fbPropToMetadataProp = {
         '%album%': { prop: 'album' },

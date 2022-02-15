@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -34,7 +34,6 @@ import { CacheService } from '@services/cache.service';
 import { ConfigService } from '@services/config.service';
 import { FanartService } from '@services/fanart.service';
 import { MusicbrainzService } from '@services/musicbrainz.service';
-import { PreloadFactory, PreloadService } from './app-preload.service';
 import { ThrottleService } from '@services/throttle.service';
 import { TitleCaseService } from '@services/title-case.service';
 import { TitleFormatService } from '@services/title-format.service';
@@ -81,17 +80,10 @@ import { TrackService } from '@services/track.service';
         DontAllowOnReload,
         FanartService,
         MusicbrainzService,
-        PreloadService,
         ThrottleService,
         TitleCaseService,
         TitleFormatService,
         TrackService,
-        {
-            provide: APP_INITIALIZER,
-            useFactory: PreloadFactory,
-            deps: [PreloadService],
-            multi: true,
-        },
     ],
     bootstrap: [AppComponent],
 })

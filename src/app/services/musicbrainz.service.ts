@@ -17,7 +17,7 @@ const NON_FUZZY_FIELDS = [
     'date',
 ];
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class MusicbrainzService {
     private releaseIncludes: string;
     constructor(private http: HttpClient) {
