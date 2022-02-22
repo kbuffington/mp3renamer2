@@ -96,7 +96,7 @@ export class TrackService implements OnDestroy {
     }
 
     /**
-     * Returns the full path of the first loaded file
+     * Returns the full path of the first loaded file, without the filename. Contains trailing slash.
      * @return {string}
      */
     public getCurrentPath(): string {
@@ -229,6 +229,9 @@ export class TrackService implements OnDestroy {
         if (Array.isArray(value)) {
             value = value.join('; ');
         }
+        // if (value instanceof CommentStruct) {
+        //     console.l
+        // }
         const saveValue = value.hasOwnProperty('text') ? value['text'] : value;
         if (!metaProp.default) {
             metaProp.default = saveValue;
