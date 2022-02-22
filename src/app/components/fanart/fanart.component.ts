@@ -15,6 +15,8 @@ import { MetadataObj } from '@classes/track.classes';
 export class FanartComponent implements OnInit {
     public artistData: FanartArtist;
     public albumData: FanartAlbum;
+    public fetchingHdLogos = false;
+    public fetchingLabels = 0;
     public musicLabels: FanartMusicLabel[] = [];
     public popoverImage: FanartImg;
     public popoverImageIndex: number;
@@ -56,6 +58,7 @@ export class FanartComponent implements OnInit {
 
     private getArtistArt() {
         let logo: HDMusicLogo = undefined;
+        this.fetchingHdLogos = true;
         this.metadata = this.ts.getCurrentMetadata();
         const artist = this.metadata.artist.default;
         const path = `${this.configSettings.artistLogoDir}/${artist}.png`;
@@ -72,8 +75,10 @@ export class FanartComponent implements OnInit {
                 this.artistData.hdmusiclogos.unshift(logo);
             }
             this.numLogos = this.artistData.hdmusiclogos.length;
+            this.fetchingHdLogos = false;
             console.log(this.artistData);
         }).catch((err) => {
+            this.fetchingHdLogos = false;
             if (err.status === 404) {
                 console.log('No artist found for', this.artistId);
             } else {
@@ -119,6 +124,7 @@ export class FanartComponent implements OnInit {
 
     private getLabelLogos() {
         this.labelIds.forEach(labelId => {
+            this.fetchingLabels++;
             this.fanartService.getLogo(labelId).then(musiclabel => {
                 const label = new FanartMusicLabel(musiclabel);
                 const saveName = this.getLabelSaveName(label.name);
@@ -133,8 +139,10 @@ export class FanartComponent implements OnInit {
                 }
                 this.musicLabels.push(label);
                 this.numLabelLogos += label.musiclabels.length;
+                this.fetchingLabels--;
                 console.log(label);
             }).catch(err => {
+                this.fetchingLabels--;
                 if (err.status === 404) {
                     console.log('No logos found for label:', labelId);
                 } else {

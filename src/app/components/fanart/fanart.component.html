@@ -27,7 +27,7 @@
                         </clr-icon>
                     </button>
                 </div>
-                <h4 class="clr-col-12 no-logos-header" *ngIf="!artistData?.hdmusiclogos?.length">
+                <h4 class="clr-col-12 no-logos-header" *ngIf="!fetchingHdLogos && !artistData?.hdmusiclogos?.length">
                     No HD Music Logos found for this artist.
                 </h4>
             </div>
@@ -62,7 +62,7 @@
                         {{ cdArtFilename(cdart.saveIndex) }}
                     </div>
                 </div>
-                <h4 class="clr-col-12 no-logos-header" *ngIf="!albumData?.album?.cdart.length">
+                <h4 class="clr-col-12 no-logos-header" *ngIf="fetchingLabels === 0 && !albumData?.album?.cdart.length">
                     No cdArt found for this album.
                 </h4>
             </div>
