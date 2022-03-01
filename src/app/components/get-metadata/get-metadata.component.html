@@ -144,7 +144,7 @@
                         {{ selectedRelease.tracks.length > 1 ? track.trackDisplay : track.position }}
                         <span *ngIf="track.position != track.number; else showDiscTrack">{{ track.position }} ({{ track.number }})</span>
                         <ng-template #showDiscTrack>
-                            <span *ngIf="track.media">{{ track.discNumber }}-</span>{{ track.number }}
+                            <span *ngIf="track.discSet">{{ track.discNumber }}-</span>{{ track.number }}
                         </ng-template>
                     </clr-dg-cell>
                     <clr-dg-cell class="artist" *ngIf="selectedRelease.needsArtistCol">
