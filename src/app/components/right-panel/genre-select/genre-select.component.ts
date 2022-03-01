@@ -108,5 +108,6 @@ export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
         this.genres = tags.filter((a, index) => index < 5)
             .map(t => this.title.titleCaseString(t.name)).join('; ');
         this.ngOnChanges();
+        this.updateSelection(this.selectedGenres);
     }
 }
