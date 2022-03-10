@@ -363,7 +363,9 @@ export class TrackService implements OnDestroy {
             const newPath = basePath + newDir;
             let stats;
             try {
-                stats = this.electronService.fs.statSync(newPath);
+                if (newDir.toLocaleLowerCase() !== currentDir.toLocaleLowerCase()) {
+                    stats = this.electronService.fs.statSync(newPath);
+                }
             } catch (e) {
                 // ignore
             }

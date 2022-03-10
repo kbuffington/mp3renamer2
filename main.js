@@ -142,8 +142,9 @@ function loadFilesFromFolder(dir) {
 function loadHardCoded() {
     const filePaths = [];
     // const dir = app.getPath('desktop')+ '/mp3-test/music/Graveyard - 2018 - Peace/';
-    // const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
-    const dir = app.getPath('desktop') + '/mp3-test/music/Alessia Cara - 2018 - The Pains of Growing/';
+    const dir = app.getPath('desktop')+ '/mp3-test/music/Ozzy Osbourne - 1987 - Tribute/';
+    // eslint:disable-next-line
+    // const dir = app.getPath('desktop') + '/mp3-test/music/BRUIT ≤ - 2021 - The Machine is burning and now everyone knows it could happen again/';
     const stats = fs.statSync(dir);
     if (stats) {
         // folder exists
@@ -162,7 +163,7 @@ function loadHardCoded() {
     // filePaths.push(`${dir}id3v2.4 image.mp3`);
 
     if (filePaths.length) {
-        const index = 1;
+        const index = 0;
         const tracks = processFiles(filePaths.slice(index, index + 1));
         mainWindow.webContents.send('files', tracks);
     }
