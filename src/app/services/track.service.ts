@@ -279,10 +279,21 @@ export class TrackService implements OnDestroy {
         trackList.forEach((t: Track, index: number) => {
             if (this.selectedTracks.includes(index)) {
                 const title = metadata.title.values[index].trim();
-                const discNum = this.alphaRoman(metadata.partOfSet.values[index]);
+                const partOfSet = metadata.partOfSet.useDefault ? metadata.partOfSet.default : metadata.partOfSet.values[index];
+                let discNum = '';
+                if (partOfSet.length) {
+                    if (partOfSet.includes('/')) {
+                        const [disc, totalDiscs] = partOfSet.split('/');
+                        discNum = (parseInt(totalDiscs, 10) > 1 || parseInt(disc, 10) > 1) ?
+                            `${this.alphaRoman(disc)}-` : '';
+                    } else {
+                        discNum = this.alphaRoman(partOfSet) + '-';
+                    }
+                }
+                // const discNum = this.alphaRoman(metadata.partOfSet.values[index]);
                 const trackNumber = metadata.trackNumber.values[index];
                 const filename =
-                        `${artist.trim()} [${metadata.album.default.trim()} ${discNum ? discNum + '-' : ''}${trackNumber}]` +
+                        `${artist.trim()} [${metadata.album.default.trim()} ${discNum}${trackNumber}]` +
                         ` - ${title}${t.meta.extension}`;
                 // https://stackoverflow.com/a/70343927/911192
                 t.meta.filename = filename.replace(regex, function(m) {
