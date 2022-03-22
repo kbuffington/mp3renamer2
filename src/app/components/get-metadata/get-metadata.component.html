@@ -80,7 +80,7 @@
             <div class="clr-row">
                 <div class="input-field clr-col-3">
                     <label>Release Date:</label>
-                    <input clrInput class="small" [(ngModel)]="selectedRelease.date" />
+                    <input clrInput class="small date" [(ngModel)]="selectedRelease.date" />
                 </div>
                 <div class="input-field clr-col-3">
                     <label class="wide-label">Release Country:</label>
@@ -100,7 +100,10 @@
             <div class="clr-row">
                 <div class="input-field clr-col-3">
                     <label>Orig. Rel. Date:</label>
-                    <input clrInput class="small" [(ngModel)]="selectedRelease.releaseGroup.firstReleaseDate" />
+                    <input clrInput class="small date" [(ngModel)]="selectedRelease.releaseGroup.firstReleaseDate" />
+                    <button class="guesscase clarity-icon" (click)="copyOriginalReleaseToDate()">
+                        <clr-icon shape="arrow"></clr-icon>
+                    </button>
                 </div>
                 <div class="input-field clr-col-3">
                     <label class="wide-label">Release Type:</label>

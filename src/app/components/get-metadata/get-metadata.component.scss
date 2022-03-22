@@ -144,12 +144,23 @@
             .small.clr-input {
                 width: 100px;
                 flex-grow: 0;
+                &.date {
+                    width: 92px; // space for button
+                }
             }
             .xsmall.clr-input {
                 width: 30px;
                 flex-grow: 0;
                 margin-left: -8px;
             }
+        }
+    }
+
+    .guesscase.clarity-icon {
+        // overrides guesscase class from styles.scss
+        background-image: none;
+        clr-icon {
+            margin-top: -8px;
         }
     }
 }

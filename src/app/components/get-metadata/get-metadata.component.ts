@@ -256,6 +256,10 @@ export class GetMetadataComponent implements OnInit {
         this.selectedRelease[prop] = this.titleCaseService.titleCaseString(this.selectedRelease[prop]);
     }
 
+    public copyOriginalReleaseToDate() {
+        this.selectedRelease.date = this.selectedRelease.releaseGroup.firstReleaseDate;
+    }
+
     public clearCache() {
         this.cs.clearAll();
         this.requestMetadata();
