@@ -101,7 +101,11 @@
 			</clr-tab>
 			<clr-tab>
 				<button clrTabLink>Extra Tags
-					<div class="tab-badge" [ngClass]="{'green': !tab2Conflicts(), 'hide': !tab2hasValues()}"></div>
+					<div class="tab-badge" [ngClass]="{
+                        'blue': tab2hasUnknownProperties(),
+                        'green': !tab2Conflicts(),
+                        'hide': !tab2hasValues()
+                    }"></div>
 				</button>
 				<clr-tab-content *clrIfActive>
 					<div class="clr-col-12 input-fields">

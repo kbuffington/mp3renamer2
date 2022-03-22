@@ -130,6 +130,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
             (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.defaultChanged && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
     }
 
+    public tab2hasUnknownProperties(): boolean {
+        return Object.keys(this.unknownProperties).length > 0;
+    }
+
     public tab3hasValues(): boolean {
         return this.trackOptions.showArtwork;
     }
