@@ -27,20 +27,39 @@ export class Track {
 }
 
 export class MetadataProperty {
-    default = '';
-    different = false; // whether not all values are the same
-    multiValue = false;
-    origValue = '';
-    overwrite = true;
-    userDefined = false;
-    useDefault = false; // if true, the default value will be used instead of individual values for each track
-    defaultChanged = false; // has initial value of useDefault changed, or has default value changed?
-    values: string[] = [];
-    origValues: string[] = []; // copy of values used for resetting
-    write = true; // whether to write this property to the file
+    private pvtDefault = '';
+    private parent: MetadataObj;
+
+    public different = false; // whether not all values are the same
+    public multiValue = false;
+    public origValue = '';
+    public overwrite = true;
+    public userDefined = false;
+    public useDefault = false; // if true, the default value will be used instead of individual values for each track
+    public defaultChanged = false; // has initial value of useDefault changed, or has default value changed?
+    public values: string[] = [];
+    public origValues: string[] = []; // copy of values used for resetting
+    public write = true; // whether to write this property to the file
+
+    constructor(parent: MetadataObj) {
+        this.parent = parent;
+    }
+
+    public get default() {
+        return this.pvtDefault;
+    }
+
+    public set default(value) {
+        this.pvtDefault = value;
+        if (this.parent) {
+            this.parent.valuesWritten = false;
+        }
+    }
 }
 
 export class MetadataObj {
+    valuesWritten? = false;
+
     album?: MetadataProperty;
     albumSortOrder?: MetadataProperty;
     artist?: MetadataProperty;
@@ -48,9 +67,12 @@ export class MetadataObj {
     ARTISTFILTER?: MetadataProperty;
     artistSortOrder?: MetadataProperty;
     CATALOGNUMBER?: MetadataProperty;
+    copyright?: MetadataProperty;
     date?: MetadataProperty;
     DISCSUBTITLE?: MetadataProperty;
     EDITION?: MetadataProperty;
+    encodedBy?: MetadataProperty;
+    image?: MetadataProperty;
     LABEL?: MetadataProperty;
     MUSICBRAINZ_ARTISTID?: MetadataProperty;
     MUSICBRAINZ_LABELID?: MetadataProperty;
@@ -63,7 +85,6 @@ export class MetadataObj {
     RELEASETYPE?: MetadataProperty;
     title?: MetadataProperty;
     trackNumber?: MetadataProperty;
-    [key: string]: MetadataProperty;
 }
 
 export class TrackOptions {

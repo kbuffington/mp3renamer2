@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { TrackService } from '@services/track.service';
-import { MetadataProperty, UnknownPropertiesObj } from '@classes/track.classes';
+import { MetadataObj, MetadataProperty, UnknownPropertiesObj } from '@classes/track.classes';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'unknown-properties',
@@ -18,11 +19,20 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     public editing: boolean[] = [];
     public selected: any[] = [];
 
+    private metadata: MetadataObj;
+    private metadataSubscription: Subscription;
+
     constructor(private ts: TrackService) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
+            this.metadata = m;
+        });
+    }
 
-    ngOnDestroy() {}
+    ngOnDestroy() {
+        this.metadataSubscription.unsubscribe();
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.unknownProperties && changes.unknownProperties.currentValue) {
@@ -86,7 +96,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     }
 
     public addProperty() {
-        const newProp = new MetadataProperty();
+        const newProp = new MetadataProperty(null);
         const name = 'NEW_PROPERTY';
         newProp.different = false;
         newProp.useDefault = true;
@@ -98,6 +108,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         this.selected.push(name);
         this.startEditing(this.unknownPropArray.length - 1, 0);
         this.setFocusCell(this.unknownPropArray.length - 1, 0);
+        this.metadata.valuesWritten = false;
     }
 
     public tabPressed(row: number, column: number) {

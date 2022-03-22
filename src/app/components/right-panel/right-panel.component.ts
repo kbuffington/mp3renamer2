@@ -3,7 +3,7 @@ import { InputTypes } from 'app/input-field/input-field.component';
 import { Subscription } from 'rxjs';
 import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
-import { MetadataProperty, TrackOptions, UnknownPropertiesObj } from '@classes/track.classes';
+import { MetadataObj, MetadataProperty, TrackOptions, UnknownPropertiesObj } from '@classes/track.classes';
 import { tap, throttleTime } from 'rxjs/operators';
 
 @Component({
@@ -19,7 +19,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     public conflictDisplayName: string;
     public conflictReadOnly: boolean;
     public inputTypes = InputTypes;
-    public metadata: { [key: string]: MetadataProperty; };
+    public metadata: MetadataObj;
     public metadataSubscription: Subscription;
     public releaseTypes = [];
     public showModal = false;
@@ -119,7 +119,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         return !!(this.hasUnknownProps ||
             this.metadata?.copyright?.default ||
             this.metadata?.encodedBy?.default ||
-            this.metadata?.MUISCBRAINZ_ARTISTID?.default ||
+            this.metadata?.MUSICBRAINZ_ARTISTID?.default ||
             this.metadata?.MUSICBRAINZ_RELEASEGROUPID?.default);
     }
 

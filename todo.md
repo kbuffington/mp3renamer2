@@ -1,6 +1,5 @@
 TODO List:
 
-* The "Set Tags" checkbox should only be cleared if data changes
 * When downloaded cover artists, don't let save happen until all requests are completed
 * Show Track Artists value should only be set when loading files or returning from metadata
 * Allow saving/handling of embedded .pngs

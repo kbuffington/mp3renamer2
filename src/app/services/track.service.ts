@@ -185,7 +185,7 @@ export class TrackService implements OnDestroy {
     }
 
     public processImageField(metadata: MetadataObj, image: any) {
-        const metaProp = new MetadataProperty();
+        const metaProp = new MetadataProperty(metadata);
         metaProp.multiValue = false;
         metaProp.useDefault = true;
         metaProp.default = image;
@@ -195,7 +195,7 @@ export class TrackService implements OnDestroy {
 
     private processField(metadata, tracks, property: string, userDefined: boolean,
         multiValue: boolean, useDefault = false, alias?: string) {
-        const metaProp = new MetadataProperty();
+        const metaProp = new MetadataProperty(metadata);
         metaProp.multiValue = multiValue;
         metaProp.useDefault = useDefault;
         tracks.forEach(t => {
@@ -465,6 +465,7 @@ export class TrackService implements OnDestroy {
         console.log(trackTagFields);
 
         this.electronService.main.writeTags(files, trackTagFields);
+        metadata.valuesWritten = true;
     }
 
     public getSelectedTracks(): Track[] {
