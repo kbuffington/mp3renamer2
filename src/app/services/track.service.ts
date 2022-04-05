@@ -177,6 +177,7 @@ export class TrackService implements OnDestroy {
     }
 
     public getUnknownProperties(): UnknownPropertiesObj {
+        delete this.unknownProperties.valuesWritten;
         return this.unknownProperties;
     }
 

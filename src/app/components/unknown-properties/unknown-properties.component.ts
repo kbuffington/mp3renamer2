@@ -97,7 +97,8 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
 
     public addProperty() {
         const newProp = new MetadataProperty(null);
-        const name = 'NEW_PROPERTY';
+        const newPropCount = Object.keys(this.unknownProperties).filter(p => p.includes('NEW_PROPERTY')).length;
+        const name = `NEW_PROPERTY${newPropCount > 0 ? newPropCount + 1 : ''}`;
         newProp.different = false;
         newProp.useDefault = true;
         newProp.userDefined = true;
