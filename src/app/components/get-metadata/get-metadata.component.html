@@ -55,7 +55,7 @@
                         </span>
                     </clr-dg-cell>
                     <clr-dg-cell>{{ release.labelInfo ? release.labelInfo.label[0]?.name : '' }}
-                        {{ release.labelInfo.label[0]?.catalogNum ? '(' + release.labelInfo.label[0]?.catalogNum + ')' : '' }}
+                        {{ release.labelInfo?.catalogNumbers.length && !release.labelInfo?.catalogNumbers[0].includes('none') ? '(' + release.labelInfo.catalogNumbers[0] + ')' : '' }}
                          / {{ release.country }}</clr-dg-cell>
                     <clr-dg-cell class="date">{{ release.date }}</clr-dg-cell>
                     <clr-dg-cell class="media">{{ release.media[0].format }}</clr-dg-cell>
