@@ -2,10 +2,15 @@
     <div class="content-wrapper">
         <div class="top-content">
             <div class="clr-row clr-justify-content-between">
-                <div class="input-field clr-col-5" *ngIf="releaseGroup; else noReleaseGroup">
-                    <label>MB RGID:</label>
-                    <input clrInput [(ngModel)]="releaseGroup" (keyup.enter)="requestMetadata()" />
-                </div>
+                <ng-container *ngIf="releaseGroup; else noReleaseGroup">
+                    <div class="clr-col-10 release-group-container">
+                        <div class="input-field clr-col-5">
+                            <label>MB RGID:</label>
+                            <input clrInput [(ngModel)]="releaseGroup" (keyup.enter)="requestMetadata()" />
+                        </div>
+                        <button class="btn btn-outline btn-sm clear-btn" (click)="releaseGroup = ''">Clear</button>
+                    </div>
+                </ng-container>
                 <ng-template #noReleaseGroup>
                     <div class="input-field clr-col-4">
                         <label>Artist:</label>
@@ -49,7 +54,9 @@
                             {{ release.disambiguation ? ' [' + release.disambiguation + ']' : ''}}
                         </span>
                     </clr-dg-cell>
-                    <clr-dg-cell>{{ release.labelInfo ? release.labelInfo.label[0]?.name : '' }} / {{ release.country }}</clr-dg-cell>
+                    <clr-dg-cell>{{ release.labelInfo ? release.labelInfo.label[0]?.name : '' }}
+                        {{ release.labelInfo.label[0]?.catalogNum ? '(' + release.labelInfo.label[0]?.catalogNum + ')' : '' }}
+                         / {{ release.country }}</clr-dg-cell>
                     <clr-dg-cell class="date">{{ release.date }}</clr-dg-cell>
                     <clr-dg-cell class="media">{{ release.media[0].format }}</clr-dg-cell>
                     <clr-dg-cell class="num-tracks" [ngClass]="{'red': release.trackCount !== numTracks}">

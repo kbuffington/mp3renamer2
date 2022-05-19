@@ -56,7 +56,15 @@
     }
 }
 
-.search-btn {
+.release-group-container {
+    display: inline-flex;
+    .clear-btn {
+        margin-left: .5rem;
+    }
+}
+
+.search-btn,
+.clear-btn {
     margin-top: 0;
 }
 
