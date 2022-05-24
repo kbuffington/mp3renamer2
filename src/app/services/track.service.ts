@@ -362,7 +362,7 @@ export class TrackService implements OnDestroy {
             return config.replacementFileNameChars[m];
         });
 
-        return newDir;
+        return newDir.replace(/\.+$/, '');
     }
 
     public async renameFolder() {
