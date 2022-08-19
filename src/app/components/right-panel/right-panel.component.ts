@@ -102,9 +102,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         const date: MetadataProperty = JSON.parse(JSON.stringify(metadata.date));
         const originalDate: MetadataProperty = JSON.parse(JSON.stringify(metadata.originalReleaseDate));
         metadata.date = originalDate;
-        // metadata.date.changed = true;
         metadata.originalReleaseDate = date;
-        // metadata.originalReleaseDate.changed = true;
         this.ts.setMetadata(metadata);
     }
 
@@ -112,6 +110,13 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         const metadata = this.ts.getCurrentMetadata();
         metadata.RELEASECOUNTRY.default = country;
         metadata.RELEASECOUNTRY.defaultChanged = true;
+        this.ts.setMetadata(metadata);
+    }
+
+    public setLabel(label: string) {
+        const metadata = this.ts.getCurrentMetadata();
+        metadata.LABEL.default = label;
+        metadata.LABEL.defaultChanged = true;
         this.ts.setMetadata(metadata);
     }
 
