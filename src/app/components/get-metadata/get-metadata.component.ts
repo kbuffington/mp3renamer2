@@ -140,8 +140,8 @@ export class GetMetadataComponent implements OnInit {
                                         if (rel?.artistString && rel.artistString !== track.artistString) {
                                             track.originalArtist = rel.artistString;
                                             this.hasCovers = true;
-                                            this.numCovers--;
                                         }
+                                        this.numCovers--;
                                     }).catch(err => err);
                                 }
                             });
