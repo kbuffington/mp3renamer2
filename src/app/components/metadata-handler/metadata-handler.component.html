@@ -6,7 +6,10 @@
 		<button class="btn btn-outline" (click)="resetTags()">
 			Reset Tags
 		</button>
-		<button class="btn btn-outline" (click)="setTags()">
+		<button class="btn set-tags"
+                (click)="setTags()"
+                [ngClass]="{'btn-primary': !metadata.valuesWritten,
+                            'btn-outline': metadata.valuesWritten}">
 			Set Tags
 			<clr-icon shape="check" *ngIf="metadata.valuesWritten"></clr-icon>
 		</button>

@@ -5,7 +5,7 @@
             <div class="clr-col-6">
                 <clr-checkbox-container class="first-checkbox-block">
                     <clr-checkbox-wrapper>
-                        <input type="checkbox" clrCheckbox [(ngModel)]="metadata.image.write" />
+                        <input type="checkbox" clrCheckbox [(ngModel)]="metadata.image.write" (click)="writeToggled()" />
                         <label>Write Image to File</label>
                     </clr-checkbox-wrapper>
                 </clr-checkbox-container>

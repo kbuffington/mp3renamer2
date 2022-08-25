@@ -116,4 +116,8 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
                 break;
         }
     }
+
+    public writeToggled() {
+        this.metadata.valuesWritten = false;
+    }
 }

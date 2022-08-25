@@ -5,10 +5,13 @@
         padding-right: 0px;
     }
 
-    button {
-        // margin-right: .25rem;
-        // padding-left: .5rem;
-        // padding-right: .5rem;
+    button.set-tags {
+        width: 110px;
+        transition: 1s;
+
+        &.btn-primary {
+            transition: 0s;
+        }
     }
 
     button:last-of-type {
