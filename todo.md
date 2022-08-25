@@ -5,11 +5,9 @@ TODO List:
 * Allow text entry for Catalog # in metadata
 * Fix original release date width
 * button for self-released
-* clear comments of "EAC FLAC -8"
 * clear button for comments
 * Click on MBID and ArtistID to copy to clipboard
 * Unchecking artwork does not reset the "set tags" checkmark
-* Discnumber "1/1" not removed on Set Tags
 * If metadata has been retrieved, guess titles does not account for delete string
 * When downloaded cover artists, don't let save happen until all requests are completed
 * Show Track Artists value should only be set when loading files or returning from metadata

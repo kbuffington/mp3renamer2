@@ -162,14 +162,16 @@ export class TrackService implements OnDestroy {
         return trackOptions;
     }
 
-    private postProcessing(metadata: MetadataObj) {
-        if (metadata.trackNumber) {
-            // remove total tracks from trackNumber
-            metadata.trackNumber.values = metadata.trackNumber.values.map(t => {
-                return t.replace(/\/\d+/, '').padStart(2, '0');
-            });
-            metadata.trackNumber.origValues = [...metadata.trackNumber.values];
+    private fixValues(prop: MetadataProperty, cb: Function) {
+        if (prop) {
+            prop.values = prop.values.map(value => cb(value));
+            prop.origValues = [...prop.values];
         }
+    }
+
+    private postProcessing(metadata: MetadataObj) {
+        this.fixValues(metadata.trackNumber, t => t.replace(/\/\d+/, '').padStart(2, '0'));
+        this.fixValues(metadata.comment, c => c.replace(/EAC FLAC[\s-]+\d/, ''));
     }
 
     public setMetadata(updatedMetadata: MetadataObj) {
@@ -415,6 +417,7 @@ export class TrackService implements OnDestroy {
         let trackTagFields = [];
         const files = [];
 
+        this.preProcessing(metadata);
         trackList.forEach((t: Track, index: number) => {
             if (this.selectedTracks.includes(index)) {
                 files.push(t.meta.folder + t.meta.filename);
@@ -467,6 +470,18 @@ export class TrackService implements OnDestroy {
 
         this.electronService.main.writeTags(files, trackTagFields);
         metadata.valuesWritten = true;
+    }
+
+    // process metadataProperties before writing to files
+    private preProcessing(metadata: MetadataObj) {
+        if (metadata.partOfSet) {
+            if (metadata.partOfSet.useDefault && metadata.partOfSet.default === '1/1') {
+                metadata.partOfSet.default = '';
+            }
+            metadata.partOfSet.values = metadata.partOfSet.values.map(d => {
+                return d === '1/1' ? '' : d;
+            });
+        }
     }
 
     public getSelectedTracks(): Track[] {

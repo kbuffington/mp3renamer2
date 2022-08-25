@@ -68,6 +68,7 @@ export class MetadataObj {
     artistSortOrder?: MetadataProperty;
     CATALOGNUMBER?: MetadataProperty;
     copyright?: MetadataProperty;
+    comment?: MetadataProperty;
     date?: MetadataProperty;
     DISCSUBTITLE?: MetadataProperty;
     EDITION?: MetadataProperty;
