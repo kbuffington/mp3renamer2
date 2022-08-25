@@ -192,7 +192,7 @@
     </div>
     <footer>
         <div class="btn-container">
-            <button class="btn btn-primary" [disabled]="!selectedRelease" (click)="apply(selectedRelease)">Apply to Files</button>
+            <button class="btn btn-primary" [disabled]="!selectedRelease || numCovers > 0" (click)="apply(selectedRelease)">Apply to Files</button>
             <a class="btn btn-outline" [routerLink]="'/'">Cancel</a>
         </div>
     </footer>

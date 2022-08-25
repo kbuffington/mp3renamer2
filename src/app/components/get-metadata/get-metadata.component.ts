@@ -68,6 +68,7 @@ export class GetMetadataComponent implements OnInit {
     public fetchingReleases = false;
     public fuzzySearch = false;
     public hasCovers = false;
+    public numCovers = 0; // number of cover artists for album
     public numTracks: number;
     public releaseGroup: string;
     public selectedRelease: ReleaseDisplay;
@@ -125,18 +126,21 @@ export class GetMetadataComponent implements OnInit {
             this.mb.getReleaseInfo(release.id)
                 .subscribe(
                     (release: any) => {
+                        this.numCovers = 0;
                         this.selectedRelease = new ReleaseDisplay(release, this.metadata);
                         console.log(this.selectedRelease);
                         this.getArtistCountries(this.selectedRelease.artistCredits);
                         this.selectedRelease.tracks.forEach(track => {
                             track.relations.forEach(relation => {
                                 if (relation.attributes.includes('cover')) {
+                                    this.numCovers++;
                                     this.mb.getWork(relation.work.id).then(work => {
                                         const w = new Work(work);
                                         const rel = w.relations.find(r => r.attributes.length === 0);
                                         if (rel?.artistString && rel.artistString !== track.artistString) {
                                             track.originalArtist = rel.artistString;
                                             this.hasCovers = true;
+                                            this.numCovers--;
                                         }
                                     }).catch(err => err);
                                 }
