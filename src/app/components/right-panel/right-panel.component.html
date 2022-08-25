@@ -6,8 +6,9 @@
 				<clr-tab-content *clrIfActive>
 					<div class="clr-col-12 input-fields">
 						<input-field label="Genre:" [inputType]="inputTypes.Genre" [(value)]="metadata.genre" (showConflicts)="showConflict(metadata.genre, 'Genre')"></input-field>
-						<input-field label="Comment:" [inputType]="inputTypes.Textarea" [(value)]="metadata.comment" (showConflicts)="showConflict(metadata.comment, 'Comments')"></input-field>
-						<div class="flex-container">
+                        <input-field label="Comment:" [inputType]="inputTypes.Textarea" [(value)]="metadata.comment" (showConflicts)="showConflict(metadata.comment, 'Comments')"></input-field>
+                        <button class="btn btn-outline btn-sm btn-xs" (click)="setLabel('[self released]')">Clear</button>
+      					<div class="flex-container">
                             <input-field label="Label:" [(value)]="metadata.LABEL" (showConflicts)="showConflict(metadata.LABEL, 'Label')"></input-field>
                             <button class="btn btn-outline btn-sm btn-xs" (click)="setLabel('[self released]')">SR</button>
                         </div>

@@ -137,12 +137,13 @@
 
 .release-block {
     margin-top: 1rem;
+    padding-left: .75rem;
 
     .input-field {
         width: 100%;
 
         label {
-            width: 4.5rem;
+            width: 4.75rem;
             &.wide-label {
                 width: 5.5rem;
             }
@@ -167,6 +168,7 @@
     .guesscase.clarity-icon {
         // overrides guesscase class from styles.scss
         background-image: none;
+        padding-right: 4.25rem;
         clr-icon {
             margin-top: -8px;
         }
