@@ -78,7 +78,12 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
         this.ts.updateSelectedTracks(selectedTracks.sort());
     }
 
-    public updateMetadata() {
+    public updateMetadata(index?: number, property?: string) {
+        if (property === 'title') {
+            // needed to handle multi-try/stage guessing for delete & find/replace
+            console.log(this.metadata.title.origValues[index], this.metadata.title.values[index]);
+            this.metadata.title.origValues[index] = this.metadata.title.values[index];
+        }
         this.ts.setMetadata(this.metadata);
     }
 

@@ -469,6 +469,7 @@ export class TrackService implements OnDestroy {
         console.log(trackTagFields);
 
         this.electronService.main.writeTags(files, trackTagFields);
+        metadata.title.values = metadata.title.origValues; // so you can multi-step guess delete & find/replace
         metadata.valuesWritten = true;
     }
 
@@ -508,7 +509,7 @@ export class TrackService implements OnDestroy {
         const metadata = this.getCurrentMetadata();
         const selectedCopy = [...this.selectedTracks];
         const tracks = this.getCurrentTracks();
-        const titles = metadata.title.values.map((origTitle, index) => {
+        const titles = metadata.title.origValues.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {
                 let title;
                 if (!origTitle) {
@@ -521,7 +522,7 @@ export class TrackService implements OnDestroy {
                     }
                 }
                 title = origTitle.replace(this.deleteString, '');
-                title = origTitle.replace(this.findString, this.replaceString); // should we do this AFTER title case?
+                title = title.replace(this.findString, this.replaceString); // should we do this AFTER title case?
                 if (this.doTitleCase) {
                     title = this.titleCaseService.titleCaseString(title);
                 }
