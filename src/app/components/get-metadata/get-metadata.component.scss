@@ -34,6 +34,11 @@
             flex-grow: 1;
         }
 
+        // so the button appears directly to the left regardless of size
+        label.no-flex-grow + clr-input-container.clr-form-control {
+            flex-grow: 0;
+        }
+
         .clr-control-container {
             width: 100%;
 
@@ -145,7 +150,8 @@
         label {
             width: 4.75rem;
             &.wide-label {
-                width: 5.5rem;
+                width: 5.25rem;
+                min-width: 5.25rem;
             }
         }
 
@@ -160,7 +166,7 @@
             .xsmall.clr-input {
                 width: 30px;
                 flex-grow: 0;
-                margin-left: -8px;
+                // margin-left: -8px;
             }
         }
     }
@@ -168,7 +174,6 @@
     .guesscase.clarity-icon {
         // overrides guesscase class from styles.scss
         background-image: none;
-        padding-right: 4.25rem;
         clr-icon {
             margin-top: -8px;
         }
