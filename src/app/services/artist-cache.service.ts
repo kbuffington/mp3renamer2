@@ -4,6 +4,17 @@ import { ArtistData } from '../classes/musicbrainz.classes';
 const ARTIST_CACHE_KEY = 'artistCache';
 const STALE_TIME = 1000 * 60 * 60 * 24 * 90; // three months
 
+const EXCLUDED_TAGS = [
+    'american',
+    'band',
+    'british',
+    'english',
+    'folk pop',
+    'seen live',
+    'uk',
+    'usa',
+];
+
 class CacheEntry {
     artist: ArtistData;
     addedTime: number;
@@ -42,6 +53,8 @@ export class ArtistCacheService {
     }
 
     public set(artist: ArtistData): void {
+        const filteredTags = artist.tags.filter(tag => !EXCLUDED_TAGS.includes(tag.name));
+        artist.tags = filteredTags.filter(tag => tag.count >= 0);
         this.cacheMap.set(artist.id, {
             artist: artist,
             addedTime: Date.now(),
@@ -54,10 +67,8 @@ export class ArtistCacheService {
     }
 
     private deleteArtist(artistId): void {
-        // setTimeout(() => {
         this.cacheMap.delete(artistId);
         this.saveCacheMap();
-        // }, 1000); // Why am I waiting a second?
     }
 
     private saveCacheMap(): void {
