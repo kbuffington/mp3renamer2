@@ -56,7 +56,7 @@ export class InputFieldComponent implements OnInit {
 
     public onFocus($event) {
         $event.target.select();
-        if (this.copyToClipboard) {
+        if (this.copyToClipboard && $event.target.value) {
             this.electronService.remote.clipboard.writeText($event.target.value);
             this.showCopied = true;
         }
