@@ -14,7 +14,7 @@
 			<input *ngSwitchCase="inputTypes.Input"
 				clrInput
 				[value]="value.default"
-				(focus)="$event.target.select()"
+				(focus)="onFocus($event)"
 				[disabled]="readOnly"
 				[ngClass]="{ 'dont-overwrite': !value.overwrite }"
 				(input)="defaultValChanged($event.target.value)">
@@ -30,7 +30,7 @@
 			<textarea *ngSwitchCase="inputTypes.Textarea"
 				clrTextarea
 				[value]="value.default"
-				(focus)="$event.target.select()"
+				(focus)="onFocus($event)"
 				(input)="defaultValChanged($event.target.value)">
 			</textarea>
 			<genre-select *ngSwitchCase="inputTypes.Genre"
@@ -45,5 +45,6 @@
 				(countrySelected)="defaultValChanged($event)">
 			</country-select>
 		</ng-container>
+        <span class="copied" [ngClass]="{'show': showCopied}">copied</span>
 	</div>
 </div>

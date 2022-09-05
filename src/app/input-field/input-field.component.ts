@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ElectronService } from '@services/electron.service';
 import { MetadataProperty } from '../classes/track.classes';
 
 export enum InputTypes {
@@ -23,6 +24,7 @@ export class InputFieldComponent implements OnInit {
     @Input() readOnly = false;
     @Input() selectOptions: string[] = undefined;
     @Input() value: MetadataProperty;
+    @Input() copyToClipboard = false;
 
     @Output() valueChange = new EventEmitter();
     @Output() showConflicts = new EventEmitter();
@@ -30,8 +32,9 @@ export class InputFieldComponent implements OnInit {
     public displayLabel = '';
     public editValues = false;
     public inputTypes = InputTypes;
+    public showCopied = false;
 
-    constructor() {}
+    constructor(private electronService: ElectronService) {}
 
     ngOnInit() {
         this.displayLabel = this.label.substring(0, this.label.length - 1);
@@ -49,5 +52,16 @@ export class InputFieldComponent implements OnInit {
 
     public showConflictValues() {
         this.showConflicts.emit();
+    }
+
+    public onFocus($event) {
+        $event.target.select();
+        if (this.copyToClipboard) {
+            this.electronService.remote.clipboard.writeText($event.target.value);
+            this.showCopied = true;
+        }
+        setTimeout(() => {
+            this.showCopied = false;
+        }, 1000);
     }
 }
