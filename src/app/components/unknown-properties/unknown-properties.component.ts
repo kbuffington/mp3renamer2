@@ -21,6 +21,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
 
     private metadata: MetadataObj;
     private metadataSubscription: Subscription;
+    private loadedComponent = false;
 
     constructor(private ts: TrackService) {}
 
@@ -28,6 +29,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
             this.metadata = m;
         });
+        this.loadedComponent = true;
     }
 
     ngOnDestroy() {
@@ -72,6 +74,10 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         selection.forEach(key => {
             this.unknownProperties[key].write = true;
         });
+        if (!this.loadedComponent) {
+            this.metadata.valuesWritten = false;
+        }
+        this.loadedComponent = false;
     }
 
     public updatePropertyName(index: number, editing: boolean) {

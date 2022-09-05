@@ -8,6 +8,7 @@
     button.set-tags {
         width: 110px;
         transition: 1s;
+        text-overflow: clip;
 
         &.btn-primary {
             transition: 0s;
