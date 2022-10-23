@@ -77,4 +77,8 @@ export class ConflictModalComponent implements OnInit {
     public identify(index: number, item: string) {
         return index;
     }
+
+    public copyToAllVals() {
+        this.field.values = new Array(this.field.values.length).fill(this.field.default);
+    }
 }

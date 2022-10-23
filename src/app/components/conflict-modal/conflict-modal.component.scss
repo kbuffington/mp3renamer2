@@ -10,12 +10,27 @@
         border-radius: 2px;
         border-width: 1px;
         flex-grow: 1;
+
+        &.disabled {
+            background-color: rgb(220,220,220);
+            color: gray;
+        }
     }
 }
 
-.edit-toggle {
-    margin-top: .5rem;
+.control-row {
+    display: flex;
+
+    .edit-toggle {
+        margin-top: .5rem;
+    }
+
+    .right {
+        margin-left: auto;
+        margin-right: 0;
+    }
 }
+
 
 $index-width: 1.5rem;
 
