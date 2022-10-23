@@ -203,6 +203,11 @@ export class Release {
 
     constructor(json: any) {
         Object.assign(this, json); // maybe assign all properties to avoid duplicates?
+        if (json['release-events']?.length > 1 &&
+                (this.country === 'AF' || this.country === 'AL' || this.country === 'DZ')) {
+            // Afghanistan, Azerbaijan and Algeria are unlikely to be actual release countries
+            this.country = 'XW';
+        }
         this.artistCredits = json['artist-credit'].map(ac => new ArtistCredit(ac));
         this.artistString = this.artistCredits.reduce((prevVal, artist: ArtistCredit, idx) => {
             return idx == 0 ?
