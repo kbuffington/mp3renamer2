@@ -15,6 +15,7 @@
 				clrInput
 				[value]="value.default"
 				(focus)="onFocus($event)"
+                (blur)="onBlur($event)"
 				[disabled]="readOnly"
 				[ngClass]="{ 'dont-overwrite': !value.overwrite }"
 				(input)="defaultValChanged($event.target.value)">

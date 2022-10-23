@@ -34,6 +34,8 @@ export class InputFieldComponent implements OnInit {
     public inputTypes = InputTypes;
     public showCopied = false;
 
+    private prevFocusedElement;
+
     constructor(private electronService: ElectronService) {}
 
     ngOnInit() {
@@ -55,6 +57,9 @@ export class InputFieldComponent implements OnInit {
     }
 
     public onFocus($event) {
+        if (this.prevFocusedElement === document.activeElement) {
+            return;
+        }
         $event.target.select();
         if (this.copyToClipboard && $event.target.value) {
             this.electronService.remote.clipboard.writeText($event.target.value);
@@ -63,5 +68,9 @@ export class InputFieldComponent implements OnInit {
         setTimeout(() => {
             this.showCopied = false;
         }, 1000);
+    }
+
+    public onBlur() {
+        this.prevFocusedElement = document.activeElement;
     }
 }
