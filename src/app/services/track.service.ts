@@ -469,7 +469,7 @@ export class TrackService implements OnDestroy {
         console.log(trackTagFields);
 
         this.electronService.main.writeTags(files, trackTagFields);
-        metadata.title.values = metadata.title.origValues; // so you can multi-step guess delete & find/replace
+        metadata.title.origValues = metadata.title.values; // so you can multi-step guess delete & find/replace
         metadata.valuesWritten = true;
     }
 
