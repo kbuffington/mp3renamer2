@@ -98,8 +98,13 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/app/css"
+              ]
+            },
             "scripts": [],
             "assets": [
               "src/favicon.ico",

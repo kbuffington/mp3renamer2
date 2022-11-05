@@ -1,16 +1,17 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { MetadataHandlerComponent } from './metadata-handler.component';
 
-describe('XmlHandlerComponent', () => {
+describe('MetadataHandlerComponent', () => {
     let component: MetadataHandlerComponent;
     let fixture: ComponentFixture<MetadataHandlerComponent>;
 
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
+            imports: [RouterTestingModule],
             declarations: [MetadataHandlerComponent],
-        })
-            .compileComponents();
+        }).compileComponents();
     }));
 
     beforeEach(() => {

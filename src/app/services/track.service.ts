@@ -36,12 +36,12 @@ export class TrackService implements OnDestroy {
     constructor(private electronService: ElectronService,
                 private titleCaseService: TitleCaseService,
                 private configService: ConfigService) {
-        const platform = this.electronService.main.os;
+        const platform = this.electronService.main?.os;
         if (platform === 'win32') {
             this.pathDelimiter = '\\';
         }
-        this.rename = electronService.util.promisify(electronService.fs.rename);
-        this.configSub = configService.getConfig().subscribe(config => this.config = config);
+        this.rename = electronService.util?.promisify(electronService.fs.rename);
+        this.configSub = this.configService.getConfig().subscribe(config => this.config = config);
     }
 
     ngOnDestroy(): void {

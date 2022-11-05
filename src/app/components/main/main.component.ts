@@ -50,27 +50,27 @@ export class MainComponent implements OnInit, OnDestroy {
         clearInterval(this.setNamesCheck);
     }
 
-    previewRename() {
+    public previewRename() {
         this.ts.previewFilenames('');
         this.isSetNamesDisabled();
     }
 
-    revertRename() {
+    public revertRename() {
         this.ts.revertFilenames();
         this.setNamesDisabled = true;
     }
 
-    setNames() {
+    public setNames() {
         this.ts.setFilenames();
         this.setNamesDisabled = true;
     }
 
-    renameFolder() {
+    public renameFolder() {
         this.ts.renameFolder();
         this.renameFolderDisabled = true;
     }
 
-    downloadArt() {
+    public downloadArt() {
         const config = this.cs.getCurrentConfig();
         let params = this.tf.eval(config.aadParams).split(' /');
         params = params.map(p => {

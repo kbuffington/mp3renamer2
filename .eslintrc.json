@@ -29,7 +29,18 @@
         "@typescript-eslint/no-unused-vars": ["error", { "args": "after-used", "varsIgnorePattern": "[iI]gnore" }],
         "@typescript-eslint/no-inferrable-types": ["error"],
         "@typescript-eslint/quotes": ["error", "single", { "avoidEscape": true, "allowTemplateLiterals": true }],
-        "new-cap": ["error", { "capIsNewExceptions": ["Input", "Component", "Output", "Injectable", "NgModule", "ViewChild", "ViewChildren"] }],
+        "new-cap": ["error",
+            { "capIsNewExceptions": [
+                "Component",
+                "Directive",
+                "Input",
+                "Injectable",
+                "Output",
+                "NgModule",
+                "ViewChild",
+                "ViewChildren"
+            ]}
+        ],
         "require-jsdoc":"off"
     }
 }

@@ -4,6 +4,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'For Those About To Rock (We Salute You)',
             artist: 'AC/DC',
@@ -27,6 +28,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'Put the Finger on You',
             artist: 'AC/DC',
@@ -36,6 +38,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'Something is upside-down anti-intellectual fuckery',
             artist: 'AC/DC',
@@ -45,6 +48,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'the the the the (the the) the the the (the the the)',
             artist: 'AC/DC',
@@ -54,6 +58,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'ACDC [For Those About to Rock (We Salute You) 01] - For Those About to Rock.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'DOA PCP NWA',
             artist: 'AC/DC',
@@ -63,6 +68,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'Do it if you want to (Metallica remix)',
             artist: 'AC/DC',
@@ -72,6 +78,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'ACDC [For Those About to Rock (We Salute You) 07] - C.O.D..mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'C.O.D.',
             artist: 'AC/DC',
@@ -81,6 +88,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'ASIWYFA [Gangs 08] Gangs',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'Gangs of the modern era which is now dumbass',
             artist: 'And So I Watch You From Afar',
@@ -90,6 +98,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: '8a.m. 9P.M. 10am 11PM (feat. Kesha)',
             artist: 'Primordial',
@@ -99,6 +108,7 @@ export class TrackServiceMocks {
         tracks.push({
             meta: {
                 filename: 'Primordial [Where Greater Men Have Fallen 02] - Where Greater Men Have Fallen.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
             },
             title: 'Where Greater Men Have Fallen',
             artist: 'Primordial',

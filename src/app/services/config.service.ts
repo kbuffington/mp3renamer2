@@ -37,7 +37,7 @@ export class ConfigService {
     private path: string;
 
     constructor(private electronService: ElectronService) {
-        this.path = this.electronService.remote.app.getAppPath();
+        this.path = this.electronService.remote?.app.getAppPath();
     }
 
     public getConfig(): Observable<ConfigSettingsObject> {
@@ -49,7 +49,7 @@ export class ConfigService {
     }
 
     public loadConfig(): void {
-        this.electronService.fs.readFile(`${this.path}/${CONFIG_FILE_NAME}`, (err, data) => {
+        this.electronService.fs?.readFile(`${this.path}/${CONFIG_FILE_NAME}`, (err, data) => {
             if (err) {
                 // config file does not exist so create default
                 const defaultConfig = this.defaultConfig();

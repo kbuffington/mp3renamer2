@@ -37,7 +37,7 @@ export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
                 private zone: NgZone) {}
 
     ngOnInit() {
-        this.electronService.ipcRenderer.on('loadingFiles', (event, val) => {
+        this.electronService.ipcRenderer?.on('loadingFiles', (event, val) => {
             this.loadingFiles = val;
             this.zone.run(() => {});
         });

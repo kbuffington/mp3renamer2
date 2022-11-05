@@ -20,7 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 private configService: ConfigService,
                 private ts: TrackService,
                 private zone: NgZone) {
-        configService.loadConfig();
+        this.configService.loadConfig();
         // we need to call zone.run() whenever the trackSubscription updates
         this.trackSubscription = ts.getTracks().subscribe(tracks => {
             zone.run(() => {});
@@ -34,22 +34,23 @@ export class AppComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.ts.setTracks([]);
-        if (this.electronService.main.cliArguments.length) {
+        if (this.electronService.main?.cliArguments.length) {
             const startPath = this.electronService.main.cliArguments.shift().replace(/\\\\/g, '\\');
             console.log('Loading files from:', startPath);
             this.electronService.main.loadFilesFromFolder(startPath);
-        } else if (!this.electronService.remote.app.isPackaged) {
+        } else if (!this.electronService.remote?.app.isPackaged) {
             if (this.electronService.isElectron) {
                 const mainProcess = this.electronService.main;
                 if (mainProcess.os !== 'win32') {
                     mainProcess.loadHardCoded();
                 }
             } else {
+                console.log('Loading mocked data!');
                 // we'll need to use mocked file data here
                 this.ts.setTracks(TrackServiceMocks.mockTracks());
             }
         }
-        this.electronService.ipcRenderer.on('files', (event, json) => {
+        this.electronService.ipcRenderer?.on('files', (event, json) => {
             this.ts.setTracks(json);
         });
     }
