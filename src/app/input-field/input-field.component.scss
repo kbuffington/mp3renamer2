@@ -87,7 +87,7 @@
         position: absolute;
         right: 1px;
         font-size: 10px;
-        transition: 1s all;
+        transition: 1s opacity;
         color: #555;
         background-color: var(--clr-global-selection-color, #d8e3e9);
         border-radius: 3px;
@@ -95,9 +95,8 @@
         padding: 0px 3px;
         height: 22px;
         line-height: 18px;
-
-        display: black;
         opacity: 0%;
+        pointer-events: none;
         &.show {
             opacity: 100%;
         }

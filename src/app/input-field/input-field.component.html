@@ -46,6 +46,6 @@
 				(countrySelected)="defaultValChanged($event)">
 			</country-select>
 		</ng-container>
-        <span class="copied" [ngClass]="{'show': showCopied}">copied</span>
+        <span *ngIf="copyToClipboard" class="copied" [ngClass]="{'show': showCopied}">copied</span>
 	</div>
 </div>
