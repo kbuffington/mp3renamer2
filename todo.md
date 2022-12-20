@@ -1,5 +1,6 @@
 TODO List:
 
+* Add "[EP]" to end of folder
 * Detect non-properly title-cased albums (Taylor Swift: Midnights for one)
 * Run pingo on .png files downloaded
 * Allow text entry for Catalog # in metadata
