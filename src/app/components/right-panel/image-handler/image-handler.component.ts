@@ -20,6 +20,8 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     public imgPath = '';
     public embedImage: ImgInfo = { x: 0, y: 0 };
     public localImages: ImgInfo[];
+    public defaultEmbedImg: string;
+    public embedImgLabel: string;
     public metadata: MetadataObj;
     public path: string;
     public popoverImage: ImgInfo;
@@ -44,6 +46,7 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.trackOptionsSubscription = this.ts.getTrackOptions().subscribe(o => {
+            this.defaultEmbedImg = undefined;
             this.trackOptions = o;
             this.title = 'Embedded';
             this.refreshImage(this.trackOptions.localArtwork);
@@ -55,6 +58,10 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
                 files.forEach(f => {
                     if (f.match(/\.(png|jpg|jpeg|gif)$/)) {
                         this.localImages.push({ name: f, path: `file:///${this.path}${f}${this.cachebuster}` });
+                        if (f === 'thumb.jpg' || (!this.defaultEmbedImg && f === 'folder.jpg')) {
+                            this.defaultEmbedImg = `${this.path}${f}`;
+                            this.embedImgLabel = f;
+                        }
                     }
                 });
             });
@@ -75,14 +82,23 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public loadImage() {
-        const path = this.ts.getCurrentPath();
-        this.electronService.remote.dialog.showOpenDialog({
-            defaultPath: path ? path : '',
-            properties: ['openFile'],
-        }).then(result => {
-            this.trackOptions.localArtwork = result.filePaths[0];
-            const imgBuffer = this.electronService.fs.readFileSync(result.filePaths[0]);
+    public async loadImage(imgPath?: string) {
+        if (imgPath) {
+            this.trackOptions.localArtwork = imgPath;
+        } else {
+            const path = this.ts.getCurrentPath();
+            await this.electronService.remote.dialog.showOpenDialog({
+                defaultPath: path ? path : '',
+                properties: ['openFile'],
+            }).then(result => {
+                console.log(result.filePaths);
+                this.trackOptions.localArtwork = result.filePaths[0];
+            }).catch(err => {
+                console.warn(err);
+            });
+        }
+        if (this.trackOptions.localArtwork) {
+            const imgBuffer = this.electronService.fs.readFileSync(this.trackOptions.localArtwork);
             const imageData = new ImageStruct(imgBuffer);
             this.refreshImage();
             console.log(imageData);
@@ -90,9 +106,7 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
             this.ts.processImageField(metadata, imageData);
             this.ts.setTrackOptions(this.trackOptions);
             this.title = 'Unsaved';
-        }).catch(err => {
-            console.warn(err);
-        });
+        }
     }
 
     public refreshImage(localFile?: string) {

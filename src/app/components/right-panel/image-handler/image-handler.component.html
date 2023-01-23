@@ -27,6 +27,9 @@
         <span>No artwork found in file</span>
         <div>
             <button class="btn btn-primary btn-sm" (click)="loadImage()">Load Image</button>
+            <button class="btn btn-outline btn-sm" (click)="loadImage(defaultEmbedImg)" *ngIf="defaultEmbedImg">
+                Embed {{embedImgLabel}}
+            </button>
         </div>
     </ng-template>
     <div [ngClass]="{ 'local-art-container': metadata.image }">
