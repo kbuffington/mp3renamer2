@@ -33,6 +33,7 @@ export class MainComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.trackSubscription = this.ts.getTracks().subscribe(tracks => {
             this.tracks = tracks;
+            // console.log(this.tf.eval('$lower(%artistsortorder%) $upper(%artist%) $year($year(%date%))'));
         });
         this.metadataSubscription = this.ts.getMetadata().subscribe(metadata => {
             this.metadata = metadata;
