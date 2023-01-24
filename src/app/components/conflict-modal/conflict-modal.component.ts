@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MetadataProperty } from '@classes/track.classes';
+import { MetadataObj, MetadataProperty } from '@classes/track.classes';
+import { TrackService } from '@services/track.service';
 
 @Component({
     selector: 'conflict-modal',
@@ -16,19 +17,21 @@ export class ConflictModalComponent implements OnInit {
     @Output() showModalChange = new EventEmitter<boolean>();
 
     public showValues = false;
+    public metadata: MetadataObj;
 
     private origDefault: string;
     private origValues: string[];
     private origUseDefault: boolean;
     private origDefaultChanged: boolean;
 
-    constructor() { }
+    constructor(private ts: TrackService) { }
 
     ngOnInit(): void {
         this.origUseDefault = this.field.useDefault;
         this.origDefaultChanged = this.field.defaultChanged;
         this.origDefault = this.field.default;
         this.origValues = [...this.field.values];
+        this.metadata = this.ts.getCurrentMetadata();
     }
 
     public modalClosed() {

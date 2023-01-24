@@ -24,7 +24,7 @@
             </ol>
             <ol class="editable-list" *ngIf="!field.useDefault && !readOnly">
                 <li *ngFor="let val of field.values; let i = index; trackBy: identify" class="edit-item">
-                    <input [(ngModel)]="field.values[i]">
+                    <input [(ngModel)]="field.values[i]" [placeholder]="metadata.title.values[i]">
                 </li>
             </ol>
         </div>

@@ -73,4 +73,8 @@ $index-width: 1.5rem;
             }
         }
     }
+
+    .editable-list input::placeholder {
+        color: rgb(200,200,200);
+    }
 }
