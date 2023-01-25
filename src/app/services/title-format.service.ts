@@ -8,24 +8,33 @@ import { TrackService } from './track.service';
 export class TitleFormatService {
     private fbPropToMetadataProp = {
         'album artist': { prop: 'performerInfo' },
-        'discnumber': { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: false },
         'folder': { prop: 'unused', methodName: 'getFolder' },
         'path': { prop: 'unused', methodName: 'getPath' },
-        'totaldiscs': { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: true },
         'albumsortorder': { prop: 'albumSortOrder' },
         'artistsortorder': { prop: 'artistSortOrder' },
+        // properties below require an index as they are track specific
+        'discnumber': { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: false },
+        'totaldiscs': { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: true },
         'tracknumber': { prop: 'trackNumber' },
     };
 
     private fbFunctionEval = {
         'year': { name: 'getYear' },
-        'upper': { name: 'upper' },
         'lower': { name: 'lower' },
+        'roman': { name: 'roman' },
+        'upper': { name: 'upper' },
     }
 
     constructor(private ts: TrackService) {}
 
-    public eval(tf: string, index?: number): string {
+    /**
+     * Evaluates a title-formatting string.
+     * @param {string} tf The string to evaluate
+     * @param {number} index The index of the track to evaluate on, defaults to 0.
+     * @return {string}
+     */
+    public eval(tf: string, index = 0): string {
+        if (!tf.length) return '';
         const funcRegex = new RegExp(/\$([a-zA-Z]+)\((.*)/);
         tf = tf.replace(funcRegex, (match, funcName, contents: string) => {
             // recurse through functions
@@ -91,7 +100,8 @@ export class TitleFormatService {
 
     private getDiscVal(metadata: MetadataObj, prop: string, index: number, total: boolean): string {
         if (index !== 0 && !index) return '';
-        const setVal = metadata[prop].values[index].split('/');
+        const setVal = metadata[prop].values[index]?.split('/');
+        if (!setVal) return '';
         if (total) {
             return setVal.length === 2 ? setVal[1] : '';
         } else {
@@ -121,5 +131,9 @@ export class TitleFormatService {
 
     private lower(str: string): string {
         return str.toLocaleLowerCase();
+    }
+
+    private roman(num: number|string): string {
+        return this.ts.alphaRoman(num);
     }
 }

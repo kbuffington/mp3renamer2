@@ -248,7 +248,7 @@ export class TrackService implements OnDestroy {
      * @param {number|string} num
      * @return {string}
      */
-    private alphaRoman(num: number|string): string {
+    public alphaRoman(num: number|string): string {
         if (typeof num === 'string') {
             num = parseInt(num, 10);
         }
