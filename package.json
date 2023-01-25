@@ -51,7 +51,7 @@
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "core-js": "^2.6.12",
     "diff-match-patch": "^1.0.5",
-    "electron": "^13.6.1",
+    "electron": "^18.3.7",
     "electron-packager": "^15.4.0",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
