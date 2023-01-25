@@ -10,7 +10,7 @@
     "build:osx": "npm run build && npx electron-packager . --platform=darwin --arch=x64 --ignore=\"(e2e|node_modules/.cache)\" --overwrite",
     "deploy:win": "npm run move && npm run delete && npm run rename",
     "move": "xcopy mp3renamer2-win32-x64 H:\\mp3renamer2-new /E/H/C/I",
-    "delete": "rd /S /Q h:\\mp3renamer2",
+    "delete": "rd /S /Q h:\\mp3renamer2 || echo \"Directory does not exist\"",
     "rename": "ren H:\\mp3renamer2-new mp3renamer2",
     "test": "ng test",
     "lint": "ng lint",
