@@ -236,6 +236,7 @@ ipcMain.on('download', (event, info) => {
     if (info.options.directory) {
         info.options.directory = path.resolve(info.options.directory);
     }
+    info.options.showProgressBar = true;
     downloadQueue.push(info);
     // await download(info.win, info.url, info.options);
     // console.log('done with', info.options.filename);

@@ -21,7 +21,7 @@
   "private": true,
   "dependencies": {
     "@electron/remote": "^2.0.9",
-    "electron-dl": "^3.2.1",
+    "electron-dl": "^3.5.0",
     "node-id3tag": "^0.9.8"
   },
   "devDependencies": {
