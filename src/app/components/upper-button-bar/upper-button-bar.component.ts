@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfigService } from '@services/config.service';
 import { ElectronService } from '@services/electron.service';
+import { TitleCaseService } from '@services/title-case.service';
+import { Subscription } from 'rxjs/internal/Subscription';
 import { TrackService } from '../../services/track.service';
 
 @Component({
@@ -8,19 +10,31 @@ import { TrackService } from '../../services/track.service';
     templateUrl: './upper-button-bar.component.html',
     styleUrls: ['./upper-button-bar.component.scss'],
 })
-export class UpperButtonBarComponent implements OnInit {
+export class UpperButtonBarComponent implements OnInit, OnDestroy {
     public filesLoaded = false;
     public startNumber = 1;
+    public capitalizationBad = false;
+
+    private metadataSubscription: Subscription;
 
     constructor(private electronService: ElectronService,
                 private configService: ConfigService,
-                private ts: TrackService) {
+                private ts: TrackService,
+                private titleCaseService: TitleCaseService) {
         ts.getTracks().subscribe(tracks => {
             this.filesLoaded = tracks.length > 0;
         });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
+            this.capitalizationBad = this.titleCaseService.hasBadCaps(m.title);
+        });
+    }
+
+    ngOnDestroy() {
+        this.metadataSubscription.unsubscribe();
+    }
 
     /**
      * Displays file selector
@@ -43,6 +57,10 @@ export class UpperButtonBarComponent implements OnInit {
     public reloadFiles() {
         const fileList = this.ts.getCurrentTracks().map(t => t.meta.folder + t.meta.filename);
         this.electronService.main.loadFiles(fileList);
+    }
+
+    public fixCapitalization() {
+        this.ts.fixCapitalization();
     }
 
     public guessTitles() {

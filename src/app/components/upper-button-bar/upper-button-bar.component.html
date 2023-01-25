@@ -9,6 +9,9 @@
 	</div>
 	<div class="clr-col">
 		<div class="right">
+			<button class="btn btn-warning-outline" (click)="fixCapitalization()" *ngIf="capitalizationBad">
+				Fix Capitalization
+			</button>
 			<button class="btn btn-outline" (click)="guessTitles()">
 				Guess Titles
 			</button>

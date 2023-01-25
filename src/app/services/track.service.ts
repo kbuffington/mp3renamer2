@@ -505,6 +505,19 @@ export class TrackService implements OnDestroy {
         this.selectedTracks = selectedTracks;
     }
 
+    public fixCapitalization() {
+        const metadata = this.getCurrentMetadata();
+        const titles = metadata.title.values.map((origTitle, index) => {
+            if (this.selectedTracks.includes(index)) {
+                return this.titleCaseService.fixCapitalization(origTitle);
+            } else {
+                return origTitle;
+            }
+        });
+        metadata.title.values = titles;
+        this.setMetadata(metadata);
+    }
+
     public guessTitles() {
         const metadata = this.getCurrentMetadata();
         const selectedCopy = [...this.selectedTracks];

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { MetadataProperty } from '@classes/track.classes';
 
 // TODO: the first five words should be used by the musicbrainz fuzzy search in ReplaceCommonWords()
 // words that are lowercased if in the middle of a title (not first or last word)
-export const lowerCaseWords = ['a', 'an', 'the', 'and', 'of', 'but', 'as', 'or', 'for', 'nor', 'at', 'by',
-    'to', 'etc.', 'in', 'n\'', 'o\'', 'on',
+export const lowerCaseWords = ['a', 'an', 'the', 'and', 'of', 'but', 'as', 'or', 'for', 'nor',
+    'at', 'by', 'to', 'etc.', 'in', 'n\'', 'o\'', 'on',
     'vs', 'vs.'];
 
 // Acronyms or other words that should always be upper case
@@ -117,5 +118,34 @@ export class TitleCaseService {
         }).join('');
 
         return str;
+    }
+
+    /**
+     * Given a string, find all words that _should_ always be lowercase, and
+     * ensure they are in fact lowercase.
+     * @param {string} str
+     * @return {string}
+     */
+    public fixCapitalization(str: string): string {
+        const words = str.split(' ');
+        for (let i = 1; i < words.length - 1; i++) {
+            const word = words[i].toLowerCase();
+            if (lowerCaseWords.includes(word)) {
+                words[i] = words[i].toLowerCase();
+            }
+        }
+        return words.join(' ');
+    }
+
+    public hasBadCaps(titles: MetadataProperty): boolean {
+        return titles.values.some(title => {
+            const words = title.split(' ');
+            for (let i = 1; i < words.length - 1; i++) {
+                const word = words[i];
+                if (lowerCaseWords.includes(word.toLowerCase()) && !lowerCaseWords.includes(word)) {
+                    return true;
+                }
+            }
+        });
     }
 }
