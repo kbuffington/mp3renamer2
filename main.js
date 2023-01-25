@@ -181,6 +181,11 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
+// https://github.com/electron/remote/issues/94#issuecomment-1024849702
+app.on('browser-window-created', (_, window) => {
+    require('@electron/remote/main').enable(window.webContents);
+});
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
     // On OS X it is common for applications and their menu bar
