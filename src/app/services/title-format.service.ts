@@ -7,15 +7,16 @@ import { TrackService } from './track.service';
 @Injectable({ providedIn: 'root' })
 export class TitleFormatService {
     private fbPropToMetadataProp = {
-        'album artist': { prop: 'performerInfo' },
         'folder': { prop: 'unused', methodName: 'getFolder' },
         'path': { prop: 'unused', methodName: 'getPath' },
         'albumsortorder': { prop: 'albumSortOrder' },
         'artistsortorder': { prop: 'artistSortOrder' },
         // properties below require an index as they are track specific
+        'album artist': { prop: 'performerInfo', methodName: 'getAlbumArtist' },
         'discnumber': { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: false },
         'totaldiscs': { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: true },
-        'tracknumber': { prop: 'trackNumber' },
+        'tracknumber': { prop: 'trackNumber', methodName: 'getTrackNum', methodParam: true },
+        'track number': { prop: 'trackNumber', methodName: 'getTrackNum', methodParam: false },
     };
 
     private fbFunctionEval = {
@@ -23,6 +24,10 @@ export class TitleFormatService {
         'lower': { name: 'lower' },
         'roman': { name: 'roman' },
         'upper': { name: 'upper' },
+        'if': { name: 'ifFunc' },
+        'ifequal': { name: 'ifEqual' },
+        'iflonger': { name: 'ifLonger' },
+        'ifgreater': { name: 'ifGreater' },
     }
 
     constructor(private ts: TrackService) {}
@@ -40,10 +45,13 @@ export class TitleFormatService {
             // recurse through functions
             let openCount = 1;
             let closeIndex = -1; // TODO: handle unclosed parens better?
+            const commaIndices = [];
             for (let i = 0; i < contents.length; i++) {
                 const char = contents[i];
                 if (char === '(') openCount++;
                 if (char === ')') openCount--;
+                // we want to split params on commas only at the current func level, and not internal funcs
+                if (char === ',' && openCount === 1) commaIndices.push(i);
                 if (openCount === 0) {
                     closeIndex = i;
                     break;
@@ -52,16 +60,23 @@ export class TitleFormatService {
             if (closeIndex === -1) {
                 return `$${funcName}(<NOT CLOSED>${this.eval(contents)}`;
             }
-            const funcContents = contents.substring(0, closeIndex);
+            // const funcContents = contents.substring(0, closeIndex).split(',');
+            const funcContents = [];
+            let paramStart = 0;
+            for (let i = 0; i < commaIndices.length; i++) {
+                funcContents.push(contents.substring(paramStart, commaIndices[i]));
+                paramStart = commaIndices[i] + 1;
+            }
+            funcContents.push(contents.substring(paramStart, closeIndex));
             const afterContents = contents.substring(closeIndex + 1); // not in func
 
-            // console.log(funcName, funcContents, afterContents);
+            // console.log(funcName, '::', funcContents, '::', afterContents);
 
-            const evaledSubstr = this.eval(funcContents, index);
+            const evaledSubstrs = funcContents.map(p => this.eval(p, index));
             const method = this.fbFunctionEval[funcName];
             const evaledAfter = this.eval(afterContents, index);
             if (method) {
-                return `${this[method.name](evaledSubstr)}${evaledAfter}`;
+                return `${this[method.name](...evaledSubstrs)}${evaledAfter}`;
             } else {
                 return `${funcName}(${funcContents})${evaledAfter}`;
             }
@@ -98,6 +113,18 @@ export class TitleFormatService {
             metadata[propName.toLocaleUpperCase()] ?? null;
     }
 
+    private getAlbumArtist(metadata: MetadataObj, prop: string, index: number): string {
+        if (index !== 0 && !index) return '';
+        let albumArtist = metadata['performerInfo']?.values[index] ?? '';
+        if (!albumArtist) {
+            albumArtist = metadata['artist']?.values[index] ?? '';
+        }
+        if (!albumArtist) {
+            albumArtist = metadata['composer']?.values[index] ?? '';
+        }
+        return albumArtist;
+    }
+
     private getDiscVal(metadata: MetadataObj, prop: string, index: number, total: boolean): string {
         if (index !== 0 && !index) return '';
         const setVal = metadata[prop].values[index]?.split('/');
@@ -107,6 +134,15 @@ export class TitleFormatService {
         } else {
             return setVal[0];
         }
+    }
+
+    private getTrackNum(metadata: MetadataObj, prop: string, index: number, pad: boolean): string {
+        if (index >= 0 && metadata[prop]?.values?.length > index) {
+            let track: string = metadata[prop].values[index];
+            track = parseInt(track, 10).toString();
+            return pad ? track.padStart(2, '0') : track;
+        }
+        return '?';
     }
 
     private getPath(metadata: MetadataObj, prop: string, index: number): string {
@@ -135,5 +171,28 @@ export class TitleFormatService {
 
     private roman(num: number|string): string {
         return this.ts.alphaRoman(num);
+    }
+
+    // if input string is not empty or '?' return ifResp
+    // if input is a number and not 0, return ifResp
+    private ifFunc(a: string, ifResp: string, then: string): string {
+        if (Number.isNaN(parseInt(a))) {
+            const trimmed = a.trim();
+            return trimmed.length && trimmed !== '?' ? ifResp : then;
+        } else {
+            return parseInt(a) !== 0 ? ifResp : then;
+        }
+    }
+
+    private ifLonger(a: string, b: string, ifResp: string, then: string): string {
+        return a.length > b.length ? ifResp : then;
+    }
+
+    private ifGreater(a: string, b: string, ifResp: string, then: string): string {
+        return parseInt(a) > parseInt(b) ? ifResp : then;
+    }
+
+    private ifEqual(a: string, b: string, ifResp: string, then: string): string {
+        return parseInt(a) == parseInt(b) ? ifResp : then;
     }
 }

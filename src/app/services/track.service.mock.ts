@@ -13,6 +13,7 @@ export class TrackServiceMocks {
             comment: 'This is a really long string of commented text that we can use to test out ' +
                      'the comments section of the page.\nTrying some line breaks\n\nhere.',
             composer: 'Satan',
+            date: '1983-02-24',
             originalArtist: 'AC/DC',
             genre: 'Rock; Made-up-genre; Metal; Pop',
             userDefined: {
@@ -30,6 +31,7 @@ export class TrackServiceMocks {
                 filename: 'ACDC [For Those About to Rock (We Salute You) 02] - Put the Finger on You.mp3',
                 folder: '/music/ACDC - For Those About to Rock',
             },
+            performerInfo: 'Various Artists',
             title: 'Put the Finger on You',
             artist: 'AC/DC',
             album: 'For Those About to Rock (We Salute You)',
@@ -116,5 +118,26 @@ export class TrackServiceMocks {
             trackNumber: '10',
         });
         return tracks;
+    }
+
+    static mockTrack(extraProps = {}): any {
+        return Object.assign({
+            meta: {
+                filename: 'Mock Track.mp3',
+                folder: '/music/ACDC - For Those About to Rock',
+            },
+            title: 'Mock Track',
+            artist: 'AC/DC',
+            album: 'Mock Track',
+            trackNumber: '01',
+            genre: 'Rock; Made-up-genre; Metal; Pop',
+            userDefined: {
+                ARTISTCOUNTRY: 'United States; Germany; Sweden;',
+                EDITION: 'Super Deluxe Remaster',
+                RELEASETYPE: 'Album',
+                MUSICBRAINZ_ARTISTID: '66c662b6-6e2f-4930-8610-912e24c63ed1',
+                MUSICBRAINZ_RELEASEGROUPID: '331084ff-497b-3e3a-958e-0fefdae80cb6',
+            },
+        }, extraProps);
     }
 }
