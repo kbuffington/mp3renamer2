@@ -5,7 +5,7 @@ import { TitleFormatService } from './title-format.service';
 import { TrackService } from './track.service';
 import { TrackServiceMocks } from './track.service.mock';
 
-fdescribe('TitleFormatService', () => {
+describe('TitleFormatService', () => {
     let service: TitleFormatService;
     let trackService: TrackService;
     let titleCaseService: TitleCaseService;
