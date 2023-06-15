@@ -25,9 +25,9 @@
     "node-id3tag": "^0.9.8"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^14.2.11",
+    "@angular-devkit/build-angular": "^15.2.8",
     "@angular/animations": "^16.1.1",
-    "@angular/cli": "^14.2.11",
+    "@angular/cli": "^15.2.8",
     "@angular/common": "^16.1.1",
     "@angular/compiler": "^16.1.1",
     "@angular/compiler-cli": "^16.1.1",
