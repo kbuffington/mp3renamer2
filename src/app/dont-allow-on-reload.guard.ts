@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 @Injectable()
-export class DontAllowOnReload implements CanActivate {
+export class DontAllowOnReload  {
     private router: Router;
 
     // I initialize the secondary-view route guard.
