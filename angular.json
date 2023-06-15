@@ -133,5 +133,7 @@
       }
     }
   },
-  "defaultProject": "mp3renamer2"
+  "cli": {
+    "analytics": "0745a880-4195-45d1-8593-fe2679535ad8"
+  }
 }
