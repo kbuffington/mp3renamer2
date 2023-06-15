@@ -1,13 +1,19 @@
 @import 'variables.scss';
 
+// color overrides
+:root {
+    --clr-combobox-pill-border-color: #cccccc;
+    --clr-forms-border-color: #aaaaaa;
+}
+
 @font-face {
-    font-family: "Open Sans";
-    src: local("Open Sans"), url(./assets/fonts/OpenSans/OpenSans-Regular.ttf) format("truetype");
+    font-family: 'Open Sans';
+    src: local('Open Sans'), url(./assets/fonts/OpenSans/OpenSans-Regular.ttf) format('truetype');
 }
 
 body {
     overflow: hidden;
-    font-family: "Open Sans", sans-serif !important;
+    font-family: 'Open Sans', sans-serif !important;
 }
 
 header.header {
@@ -50,7 +56,7 @@ header.header {
 }
 
 .clr-combobox-options .clr-combobox-option {
-    padding: .15rem .75rem;
+    padding: 0.15rem 0.75rem;
 
     &.long-name {
         letter-spacing: -0.3px;
@@ -58,7 +64,7 @@ header.header {
 }
 
 .clr-combobox-wrapper .label-combobox-pill {
-    margin-right: .2rem;
+    margin-right: 0.2rem;
 
     .clr-combobox-pill-content {
         padding-right: 2px;
@@ -74,6 +80,6 @@ button.guesscase {
     min-width: 16px;
     border: none;
     padding: 0;
-    margin: .2rem 0 0 .25rem;
+    margin: 0.2rem 0 0 0.25rem;
     cursor: pointer;
 }
