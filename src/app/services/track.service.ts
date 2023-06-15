@@ -33,15 +33,17 @@ export class TrackService implements OnDestroy {
     public pathDelimiter = '/';
     public replaceString = '';
 
-    constructor(private electronService: ElectronService,
-                private titleCaseService: TitleCaseService,
-                private configService: ConfigService) {
+    constructor(
+        private electronService: ElectronService,
+        private titleCaseService: TitleCaseService,
+        private configService: ConfigService,
+    ) {
         const platform = this.electronService.main?.os;
         if (platform === 'win32') {
             this.pathDelimiter = '\\';
         }
         this.rename = electronService.util?.promisify(electronService.fs.rename);
-        this.configSub = this.configService.getConfig().subscribe(config => this.config = config);
+        this.configSub = this.configService.getConfig().subscribe(config => (this.config = config));
     }
 
     ngOnDestroy(): void {
@@ -114,7 +116,9 @@ export class TrackService implements OnDestroy {
     public getCurrentDirectory(): string {
         const path = this.getCurrentPath();
         // full path without current folder, but with trailing slash
-        const folder = path.substring(path.substring(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
+        const folder = path.substring(
+            path.substring(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1,
+        );
         return folder.substring(0, folder.length - 1);
     }
 
@@ -127,15 +131,22 @@ export class TrackService implements OnDestroy {
     }
 
     private processTracks(tracks: Track[]): TrackOptions {
-        const metaData: MetadataObj = {};
+        const metaData = new MetadataObj();
         const trackOptions: TrackOptions = {};
         let imageLoaded = false;
 
         this.unknownProperties = {};
         const aliases = [];
         knownProperties.forEach((prop, name) => {
-            this.processField(metaData, tracks, name, prop.userDefined,
-                prop.multiValue, prop.useDefault, prop.alias);
+            this.processField(
+                metaData,
+                tracks,
+                name,
+                prop.userDefined,
+                prop.multiValue,
+                prop.useDefault,
+                prop.alias,
+            );
             metaData[name].write = prop.write ?? true;
             if (prop.alias) {
                 aliases.push(prop.alias); // save all aliases for filtering out of unknownProperties
@@ -144,9 +155,11 @@ export class TrackService implements OnDestroy {
         tracks.forEach(t => {
             if (t.userDefined) {
                 Object.keys(t.userDefined).forEach(prop => {
-                    if (!knownProperties.has(prop) &&
-                            !aliases.includes(prop) &&
-                            !this.unknownProperties[prop]) {
+                    if (
+                        !knownProperties.has(prop) &&
+                        !aliases.includes(prop) &&
+                        !this.unknownProperties[prop]
+                    ) {
                         this.processField(this.unknownProperties, tracks, prop, true, true);
                     }
                 });
@@ -179,7 +192,7 @@ export class TrackService implements OnDestroy {
     }
 
     public getUnknownProperties(): UnknownPropertiesObj {
-        delete this.unknownProperties.valuesWritten;
+        delete this.unknownProperties.parentData;
         return this.unknownProperties;
     }
 
@@ -196,8 +209,15 @@ export class TrackService implements OnDestroy {
         metadata.image = metaProp;
     }
 
-    private processField(metadata, tracks, property: string, userDefined: boolean,
-        multiValue: boolean, useDefault = false, alias?: string) {
+    private processField(
+        metadata: MetadataObj,
+        tracks,
+        property: string,
+        userDefined: boolean,
+        multiValue: boolean,
+        useDefault = false,
+        alias?: string,
+    ) {
         const metaProp = new MetadataProperty(metadata);
         metaProp.multiValue = multiValue;
         metaProp.useDefault = useDefault;
@@ -212,7 +232,10 @@ export class TrackService implements OnDestroy {
                 // console.log(property);
                 metaProp.userDefined = true;
                 if (t.userDefined && (t.userDefined[property] || t.userDefined[alias])) {
-                    this.setMetadataValue(metaProp, t.userDefined[property] || t.userDefined[alias]); // short-circuit eval
+                    this.setMetadataValue(
+                        metaProp,
+                        t.userDefined[property] || t.userDefined[alias],
+                    ); // short-circuit eval
                 } else {
                     metaProp.values.push('');
                 }
@@ -248,7 +271,7 @@ export class TrackService implements OnDestroy {
      * @param {number|string} num
      * @return {string}
      */
-    public alphaRoman(num: number|string): string {
+    public alphaRoman(num: number | string): string {
         if (typeof num === 'string') {
             num = parseInt(num, 10);
         }
@@ -275,20 +298,27 @@ export class TrackService implements OnDestroy {
     public previewFilenames(pattern: string) {
         const trackList = this.getCurrentTracks();
         const metadata = this.trackMetaData.getValue();
-        const artist = metadata.performerInfo.default ? metadata.performerInfo.default : metadata.artist.default;
+        const artist = metadata.performerInfo.default || metadata.artist.default;
         const config = this.config;
         const replaceCharsStr = Object.keys(config.replacementFileNameChars).join('');
-        const regex = new RegExp('[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']', 'g');
+        const regex = new RegExp(
+            '[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']',
+            'g',
+        );
         trackList.forEach((t: Track, index: number) => {
             if (this.selectedTracks.includes(index)) {
                 const title = metadata.title.values[index].trim();
-                const partOfSet = metadata.partOfSet.useDefault ? metadata.partOfSet.default : metadata.partOfSet.values[index];
+                const partOfSet = metadata.partOfSet.useDefault
+                    ? metadata.partOfSet.default
+                    : metadata.partOfSet.values[index];
                 let discNum = '';
                 if (partOfSet.length) {
                     if (partOfSet.includes('/')) {
                         const [disc, totalDiscs] = partOfSet.split('/');
-                        discNum = (parseInt(totalDiscs, 10) > 1 || parseInt(disc, 10) > 1) ?
-                            `${this.alphaRoman(disc)}-` : '';
+                        discNum =
+                            parseInt(totalDiscs, 10) > 1 || parseInt(disc, 10) > 1
+                                ? `${this.alphaRoman(disc)}-`
+                                : '';
                     } else {
                         discNum = this.alphaRoman(partOfSet) + '-';
                     }
@@ -296,10 +326,10 @@ export class TrackService implements OnDestroy {
                 // const discNum = this.alphaRoman(metadata.partOfSet.values[index]);
                 const trackNumber = metadata.trackNumber.values[index];
                 const filename =
-                        `${artist.trim()} [${metadata.album.default.trim()} ${discNum}${trackNumber}]` +
-                        ` - ${title}${t.meta.extension}`;
+                    `${artist.trim()} [${metadata.album.default.trim()} ${discNum}${trackNumber}]` +
+                    ` - ${title}${t.meta.extension}`;
                 // https://stackoverflow.com/a/70343927/911192
-                t.meta.filename = filename.replace(regex, function(m) {
+                t.meta.filename = filename.replace(regex, m => {
                     return config.replacementFileNameChars[m];
                 });
             }
@@ -316,7 +346,10 @@ export class TrackService implements OnDestroy {
         // use standard for loop so tracklist.next happens after all renames have occured
         for (let index = 0; index < trackList.length; index++) {
             const t = trackList[index];
-            if (this.selectedTracks.includes(index) && t.meta.filename !== t.meta.originalFilename) {
+            if (
+                this.selectedTracks.includes(index) &&
+                t.meta.filename !== t.meta.originalFilename
+            ) {
                 const path = t.meta.folder;
                 if (path) {
                     const newName = path + t.meta.filename; // meta.filename currently shows the value in the renamer grid
@@ -346,21 +379,26 @@ export class TrackService implements OnDestroy {
         if (Object.keys(this.config).length === 0) return undefined; // at startup config may not be loaded yet
         const config = this.config;
         const md = this.getCurrentMetadata();
-        const year = md.albumSortOrder.default ? md.albumSortOrder.default :
-            md.originalReleaseDate.default ? md.originalReleaseDate.default : md.date.default;
-        const artist = md.artistSortOrder.default ? md.artistSortOrder.default :
-            md.performerInfo.default ? md.performerInfo.default : md.artist.default;
+        const year = md.albumSortOrder.default || md.originalReleaseDate.default || md.date.default;
+        const artist = md.artistSortOrder.default || md.performerInfo.default || md.artist.default;
         let editionYear = '';
-        if (md.originalReleaseDate.default && md.originalReleaseDate.default.substring(0, 4) < md.date.default.substring(0, 4)) {
+        if (
+            md.originalReleaseDate.default &&
+            md.originalReleaseDate.default.substring(0, 4) < md.date.default.substring(0, 4)
+        ) {
             editionYear = md.date.default.substring(0, 4) + ' ';
         }
         const edition = md.EDITION.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
-        let newDir = `${artist.trim()} - ${year ? year.substring(0, 4) + ' - ' : ''}` +
-                `${md.album.default.trim()}${edition}`;
+        let newDir =
+            `${artist.trim()} - ${year ? year.substring(0, 4) + ' - ' : ''}` +
+            `${md.album.default.trim()}${edition}`;
 
         const replaceCharsStr = Object.keys(config.replacementFileNameChars).join('');
-        const regex = new RegExp('[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']', 'g');
-        newDir = newDir.replace(regex, function(m) {
+        const regex = new RegExp(
+            '[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']',
+            'g',
+        );
+        newDir = newDir.replace(regex, m => {
             return config.replacementFileNameChars[m];
         });
 
@@ -371,7 +409,10 @@ export class TrackService implements OnDestroy {
         const path = this.getCurrentPath();
         const currentDir = this.getCurrentDirectory();
         // full path without current folder, but with trailing slash
-        const basePath = path.substring(0, path.substring(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1);
+        const basePath = path.substring(
+            0,
+            path.substring(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1,
+        );
         const newDir = this.getNewFolderName();
         if (newDir !== currentDir) {
             const newPath = basePath + newDir;
@@ -387,14 +428,18 @@ export class TrackService implements OnDestroy {
                 if (stats) {
                     // newPath already exists, so move files into it:
                     this.getCurrentTracks().map(async t => {
-                        await this.rename(t.meta.folder + t.meta.originalFilename,
-                            newPath + this.pathDelimiter + t.meta.originalFilename);
-                        this.getCurrentTracks().map(t => t.meta.folder = newPath + this.pathDelimiter);
+                        await this.rename(
+                            t.meta.folder + t.meta.originalFilename,
+                            newPath + this.pathDelimiter + t.meta.originalFilename,
+                        );
+                        this.getCurrentTracks().map(
+                            t => (t.meta.folder = newPath + this.pathDelimiter),
+                        );
                     });
                     console.log(`Moved files from "${currentDir}" to "${newDir}"`);
                     this.currentFolder.next(newDir.substring(0, newDir.length));
                     // delete empty folder if possible
-                    this.electronService.fs.rmdir(path, (err) => {
+                    this.electronService.fs.rmdir(path, err => {
                         if (err) console.error(err);
                     });
                 } else {
@@ -402,7 +447,9 @@ export class TrackService implements OnDestroy {
                     await this.rename(path, tempPath);
                     await this.rename(tempPath, newPath);
                     console.log(`Renamed directory "${currentDir}" to "${newDir}"`);
-                    this.getCurrentTracks().map(t => t.meta.folder = newPath + this.pathDelimiter);
+                    this.getCurrentTracks().map(
+                        t => (t.meta.folder = newPath + this.pathDelimiter),
+                    );
                     this.currentFolder.next(newDir.substring(0, newDir.length));
                 }
             } catch (err) {
@@ -457,7 +504,10 @@ export class TrackService implements OnDestroy {
                                 }
                                 trackTagFields[i][key] = value;
                             } else {
-                                trackTagFields[i].userDefined = Object.assign({}, trackTagFields[i].userDefined);
+                                trackTagFields[i].userDefined = Object.assign(
+                                    {},
+                                    trackTagFields[i].userDefined,
+                                );
                                 trackTagFields[i].userDefined[key] = value;
                             }
                         }
@@ -470,7 +520,7 @@ export class TrackService implements OnDestroy {
 
         this.electronService.main.writeTags(files, trackTagFields);
         metadata.title.origValues = metadata.title.values; // so you can multi-step guess delete & find/replace
-        metadata.valuesWritten = true;
+        metadata.parentData.valuesWritten = true;
     }
 
     // process metadataProperties before writing to files

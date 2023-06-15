@@ -3,7 +3,12 @@ import { InputTypes } from 'app/input-field/input-field.component';
 import { Subscription } from 'rxjs';
 import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
-import { MetadataObj, MetadataProperty, TrackOptions, UnknownPropertiesObj } from '@classes/track.classes';
+import {
+    MetadataObj,
+    MetadataProperty,
+    TrackOptions,
+    UnknownPropertiesObj,
+} from '@classes/track.classes';
 import { tap, throttleTime } from 'rxjs/operators';
 
 @Component({
@@ -31,19 +36,21 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     @ViewChild('coverImg') readonly coverImg: ElementRef;
 
-    constructor(private ts: TrackService,
-                private electronService: ElectronService) {}
+    constructor(private ts: TrackService, private electronService: ElectronService) {}
 
     ngOnInit() {
         // do we still need to throttle here?
-        this.metadataSubscription = this.ts.getMetadata().pipe(
-            throttleTime(100, undefined, { leading: true, trailing: true }),
-            tap(m => console.log(m)),
-        ).subscribe(m => {
-            this.metadata = m;
-            this.unknownProperties = this.ts.getUnknownProperties();
-            this.hasUnknownProps = Object.keys(this.unknownProperties).length !== 0;
-        });
+        this.metadataSubscription = this.ts
+            .getMetadata()
+            .pipe(
+                throttleTime(100, undefined, { leading: true, trailing: true }),
+                tap(m => console.log(m)),
+            )
+            .subscribe(m => {
+                this.metadata = m;
+                this.unknownProperties = this.ts.getUnknownProperties();
+                this.hasUnknownProps = Object.keys(this.unknownProperties).length !== 0;
+            });
         this.trackOptionsSubscription = this.ts.getTrackOptions().subscribe(o => {
             this.trackOptions = o;
         });
@@ -70,7 +77,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     guessArtistSortOrder() {
         const meta = this.metadata;
-        const artist: string = meta.performerInfo.default ? meta.performerInfo.default : meta.artist.default;
+        const artist: string = meta.performerInfo.default
+            ? meta.performerInfo.default
+            : meta.artist.default;
         let sortOrder = '';
         if (artist.toLowerCase().indexOf('the ') === 0) {
             sortOrder = artist.substr(4) + ', The';
@@ -99,10 +108,9 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     public swapDates() {
         const metadata = this.ts.getCurrentMetadata();
-        const date: MetadataProperty = JSON.parse(JSON.stringify(metadata.date));
-        const originalDate: MetadataProperty = JSON.parse(JSON.stringify(metadata.originalReleaseDate));
-        metadata.date = originalDate;
-        metadata.originalReleaseDate = date;
+        const origReleaseDateCopy = metadata.originalReleaseDate;
+        metadata.originalReleaseDate = metadata.date;
+        metadata.date = origReleaseDateCopy;
         this.ts.setMetadata(metadata);
     }
 
@@ -121,18 +129,24 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
 
     public tab2hasValues(): boolean {
-        return !!(this.hasUnknownProps ||
+        return !!(
+            this.hasUnknownProps ||
             this.metadata?.copyright?.default ||
             this.metadata?.encodedBy?.default ||
             this.metadata?.MUSICBRAINZ_ARTISTID?.default ||
-            this.metadata?.MUSICBRAINZ_RELEASEGROUPID?.default);
+            this.metadata?.MUSICBRAINZ_RELEASEGROUPID?.default
+        );
     }
 
     public tab2Conflicts(): boolean {
-        return (!this.metadata.copyright?.defaultChanged && this.metadata.copyright?.different) ||
+        return (
+            (!this.metadata.copyright?.defaultChanged && this.metadata.copyright?.different) ||
             (!this.metadata.encodedBy?.defaultChanged && this.metadata.encodedBy?.different) ||
-            (!this.metadata.MUSICBRAINZ_ARTISTID?.defaultChanged && this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
-            (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.defaultChanged && this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different);
+            (!this.metadata.MUSICBRAINZ_ARTISTID?.defaultChanged &&
+                this.metadata.MUSICBRAINZ_ARTISTID?.different) ||
+            (!this.metadata.MUSICBRAINZ_RELEASEGROUPID?.defaultChanged &&
+                this.metadata.MUSICBRAINZ_RELEASEGROUPID?.different)
+        );
     }
 
     public tab2hasUnknownProperties(): boolean {

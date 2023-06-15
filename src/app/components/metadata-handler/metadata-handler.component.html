@@ -1,17 +1,17 @@
 <div class="clr-row metadata-handler">
     <div class="clr-col-12">
-        <button [routerLink]="'/metadata'" class="btn btn-outline">
-            Get Metadata
-        </button>
-        <button class="btn btn-outline" (click)="resetTags()">
-            Reset Tags
-        </button>
-        <button class="btn set-tags"
-                (click)="setTags()"
-                [ngClass]="{'btn-primary': !metadata.valuesWritten,
-                            'btn-outline': metadata.valuesWritten}">
+        <button [routerLink]="'/metadata'" class="btn btn-outline">Get Metadata</button>
+        <button class="btn btn-outline" (click)="resetTags()">Reset Tags</button>
+        <button
+            class="btn set-tags"
+            (click)="setTags()"
+            [ngClass]="{
+                'btn-primary': !metadata.parentData.valuesWritten,
+                'btn-outline': metadata.parentData.valuesWritten
+            }"
+        >
             Set Tags
-            <clr-icon shape="check" *ngIf="metadata.valuesWritten"></clr-icon>
+            <clr-icon shape="check" *ngIf="metadata.parentData.valuesWritten"></clr-icon>
         </button>
     </div>
 </div>

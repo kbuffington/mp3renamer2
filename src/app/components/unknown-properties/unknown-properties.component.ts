@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+} from '@angular/core';
 import { TrackService } from '@services/track.service';
 import { MetadataObj, MetadataProperty, UnknownPropertiesObj } from '@classes/track.classes';
 import { Subscription } from 'rxjs';
@@ -70,12 +79,12 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     }
 
     public selectionChanged(selection: any) {
-        Object.keys(this.unknownProperties).forEach(p => this.unknownProperties[p].write = false);
+        Object.keys(this.unknownProperties).forEach(p => (this.unknownProperties[p].write = false));
         selection.forEach(key => {
             this.unknownProperties[key].write = true;
         });
         if (!this.loadedComponent) {
-            this.metadata.valuesWritten = false;
+            this.metadata.parentData.valuesWritten = false;
         }
         this.loadedComponent = false;
     }
@@ -102,8 +111,10 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     }
 
     public addProperty() {
-        const newProp = new MetadataProperty(null);
-        const newPropCount = Object.keys(this.unknownProperties).filter(p => p.includes('NEW_PROPERTY')).length;
+        const newProp = new MetadataProperty({ parentData: { valuesWritten: false } });
+        const newPropCount = Object.keys(this.unknownProperties).filter(p =>
+            p.includes('NEW_PROPERTY'),
+        ).length;
         const name = `NEW_PROPERTY${newPropCount > 0 ? newPropCount + 1 : ''}`;
         newProp.different = false;
         newProp.useDefault = true;
@@ -115,7 +126,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         this.selected.push(name);
         this.startEditing(this.unknownPropArray.length - 1, 0);
         this.setFocusCell(this.unknownPropArray.length - 1, 0);
-        this.metadata.valuesWritten = false;
+        // this.metadata.parentData.valuesWritten = false;
     }
 
     public tabPressed(row: number, column: number) {

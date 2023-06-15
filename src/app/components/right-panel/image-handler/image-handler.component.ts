@@ -1,4 +1,12 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    QueryList,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TrackService } from '@services/track.service';
 import { ImageStruct, MetadataObj, TrackOptions } from '@classes/track.classes';
@@ -33,8 +41,7 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     @ViewChild('popOverContainer') popOverContainer: ElementRef;
     @ViewChildren('localImg') readonly localImgEls: QueryList<ElementRef>;
 
-    constructor(private ts: TrackService,
-                private electronService: ElectronService) {
+    constructor(private ts: TrackService, private electronService: ElectronService) {
         this.ts.getMetadata().subscribe(metadata => {
             this.metadata = metadata;
         });
@@ -57,7 +64,10 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
                 if (!files?.length) return;
                 files.forEach(f => {
                     if (f.match(/\.(png|jpg|jpeg|gif)$/)) {
-                        this.localImages.push({ name: f, path: `file:///${this.path}${f}${this.cachebuster}` });
+                        this.localImages.push({
+                            name: f,
+                            path: `file:///${this.path}${f}${this.cachebuster}`,
+                        });
                         if (f === 'thumb.jpg' || (!this.defaultEmbedImg && f === 'folder.jpg')) {
                             this.defaultEmbedImg = `${this.path}${f}`;
                             this.embedImgLabel = f;
@@ -74,8 +84,12 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
 
     public onLoad(index?: number) {
         if (index >= 0) {
-            this.localImages[index].x = (this.localImgEls.get(index).nativeElement as HTMLImageElement).naturalWidth;
-            this.localImages[index].y = (this.localImgEls.get(index).nativeElement as HTMLImageElement).naturalHeight;
+            this.localImages[index].x = (
+                this.localImgEls.get(index).nativeElement as HTMLImageElement
+            ).naturalWidth;
+            this.localImages[index].y = (
+                this.localImgEls.get(index).nativeElement as HTMLImageElement
+            ).naturalHeight;
         } else {
             this.embedImage.x = (this.coverImg.nativeElement as HTMLImageElement).naturalWidth;
             this.embedImage.y = (this.coverImg.nativeElement as HTMLImageElement).naturalHeight;
@@ -87,15 +101,18 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
             this.trackOptions.localArtwork = imgPath;
         } else {
             const path = this.ts.getCurrentPath();
-            await this.electronService.remote.dialog.showOpenDialog({
-                defaultPath: path ? path : '',
-                properties: ['openFile'],
-            }).then(result => {
-                console.log(result.filePaths);
-                this.trackOptions.localArtwork = result.filePaths[0];
-            }).catch(err => {
-                console.warn(err);
-            });
+            await this.electronService.remote.dialog
+                .showOpenDialog({
+                    defaultPath: path ? path : '',
+                    properties: ['openFile'],
+                })
+                .then(result => {
+                    console.log(result.filePaths);
+                    this.trackOptions.localArtwork = result.filePaths[0];
+                })
+                .catch(err => {
+                    console.warn(err);
+                });
         }
         if (this.trackOptions.localArtwork) {
             const imgBuffer = this.electronService.fs.readFileSync(this.trackOptions.localArtwork);
@@ -132,6 +149,6 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     }
 
     public writeToggled() {
-        this.metadata.valuesWritten = false;
+        this.metadata.parentData.valuesWritten = false;
     }
 }
