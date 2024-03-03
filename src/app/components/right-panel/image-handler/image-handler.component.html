@@ -5,30 +5,40 @@
             <div class="clr-col-6">
                 <clr-checkbox-container class="first-checkbox-block">
                     <clr-checkbox-wrapper>
-                        <input type="checkbox" clrCheckbox [(ngModel)]="metadata.image.write" (click)="writeToggled()" />
+                        <input
+                            type="checkbox"
+                            clrCheckbox
+                            [(ngModel)]="metadata.image.write"
+                            (click)="writeToggled()"
+                        />
                         <label>Write Image to File</label>
                     </clr-checkbox-wrapper>
                 </clr-checkbox-container>
             </div>
             <div class="clr-col-6">
-                <button class="btn btn-primary btn-sm load-image-btn" (click)="loadImage()">Load Image</button>
+                <button class="btn btn-primary btn-sm load-image-btn" (click)="loadImage()">
+                    Load Image
+                </button>
             </div>
         </div>
-        <div class="image-wrapper" [ngClass]="{ 'cleared': !metadata?.image?.write }">
-            <img #coverImg
-                id="cover-art"
-                [src]="imgPath"
-                (load)="onLoad()">
+        <div class="image-wrapper" [ngClass]="{ cleared: !metadata?.image?.write }">
+            <img #coverImg id="cover-art" [src]="imgPath" (load)="onLoad()" />
             <div class="dimensions">({{ embedImage.x }}x{{ embedImage.y }})</div>
-            <div class="zoom"><clr-icon shape="zoom-in" (click)="zoomImg(embedImage)"></clr-icon></div>
+            <div class="zoom">
+                <cds-icon shape="zoom-in" (click)="zoomImg(embedImage)"></cds-icon>
+            </div>
         </div>
     </div>
     <ng-template #noArtwork>
         <span>No artwork found in file</span>
         <div>
             <button class="btn btn-primary btn-sm" (click)="loadImage()">Load Image</button>
-            <button class="btn btn-outline btn-sm" (click)="loadImage(defaultEmbedImg)" *ngIf="defaultEmbedImg">
-                Embed {{embedImgLabel}}
+            <button
+                class="btn btn-outline btn-sm"
+                (click)="loadImage(defaultEmbedImg)"
+                *ngIf="defaultEmbedImg"
+            >
+                Embed {{ embedImgLabel }}
             </button>
         </div>
     </ng-template>
@@ -36,19 +46,31 @@
         <h6 class="title">Local Artwork</h6>
         <ul class="artwork-list">
             <li *ngFor="let img of localImages; let i = index">
-                {{ img.name }} <span *ngIf="img.x && img.y">({{ img.x }}x{{img.y}})</span>
-                <clr-icon shape="zoom-in" (click)="zoomImg(img)" style="margin-left: .25rem;"></clr-icon>
-                <img #localImg class="local-img" [src]="img.path" (load)="onLoad(i)" style="width: 50px; height: 50px; display: none">
+                {{ img.name }} <span *ngIf="img.x && img.y">({{ img.x }}x{{ img.y }})</span>
+                <cds-icon
+                    shape="zoom-in"
+                    (click)="zoomImg(img)"
+                    style="margin-left: 0.25rem"
+                ></cds-icon>
+                <img
+                    #localImg
+                    class="local-img"
+                    [src]="img.path"
+                    (load)="onLoad(i)"
+                    style="width: 50px; height: 50px; display: none"
+                />
             </li>
         </ul>
     </div>
 </div>
-<div #popOverContainer
-        class="pop-over"
-        [ngClass]="{'hide': !popoverImage}"
-        (keyup)="keypressed($event)"
-        (blur)="popoverImage = null"
-        tabindex="0">
-    <img [src]="popoverImage?.path" class="logo-img">
-    <clr-icon class="close-icon" shape="close" size="30" (click)="popoverImage = null"></clr-icon>
+<div
+    #popOverContainer
+    class="pop-over"
+    [ngClass]="{ hide: !popoverImage }"
+    (keyup)="keypressed($event)"
+    (blur)="popoverImage = null"
+    tabindex="0"
+>
+    <img [src]="popoverImage?.path" class="logo-img" />
+    <cds-icon class="close-icon" shape="close" size="30" (click)="popoverImage = null"></cds-icon>
 </div>

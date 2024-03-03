@@ -6,9 +6,18 @@
                     <div class="clr-col-10 release-group-container">
                         <div class="input-field clr-col-5">
                             <label>MB RGID:</label>
-                            <input clrInput [(ngModel)]="releaseGroup" (keyup.enter)="requestMetadata()" />
+                            <input
+                                clrInput
+                                [(ngModel)]="releaseGroup"
+                                (keyup.enter)="requestMetadata()"
+                            />
                         </div>
-                        <button class="btn btn-outline btn-sm clear-btn" (click)="releaseGroup = ''">Clear</button>
+                        <button
+                            class="btn btn-outline btn-sm clear-btn"
+                            (click)="releaseGroup = ''"
+                        >
+                            Clear
+                        </button>
                     </div>
                 </ng-container>
                 <ng-template #noReleaseGroup>
@@ -26,7 +35,7 @@
                     </div>
                 </ng-template>
                 <button class="btn btn-sm btn-primary search-btn" (click)="requestMetadata()">
-                    <clr-icon shape="search"></clr-icon> Search
+                    <cds-icon shape="search"></cds-icon> Search
                 </button>
             </div>
             <div class="clr-row">
@@ -39,34 +48,49 @@
                 </button>
             </div>
             <clr-datagrid id="releases-datagrid" class="datagrid-compact" *ngIf="!fetchingReleases">
-                <clr-dg-column [clrDgField]="'artistString'" class="artist">Artist Credit</clr-dg-column>
+                <clr-dg-column [clrDgField]="'artistString'" class="artist"
+                    >Artist Credit</clr-dg-column
+                >
                 <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
                 <clr-dg-column [clrDgField]="'labelInfo.label.0.label.name'">Release</clr-dg-column>
                 <clr-dg-column [clrDgField]="'date'" class="date">Date</clr-dg-column>
                 <clr-dg-column [clrDgField]="'media.0.format'" class="media">Media</clr-dg-column>
-                <clr-dg-column [clrDgField]="'trackCount'" class="num-tracks"># Tracks</clr-dg-column>
+                <clr-dg-column [clrDgField]="'trackCount'" class="num-tracks"
+                    ># Tracks</clr-dg-column
+                >
 
                 <clr-dg-row *clrDgItems="let release of releases" (click)="getReleaseInfo(release)">
                     <clr-dg-cell class="artist">{{ release.artistString }}</clr-dg-cell>
                     <clr-dg-cell>
                         {{ release.title }}
                         <span class="edition">
-                            {{ release.disambiguation ? ' [' + release.disambiguation + ']' : ''}}
+                            {{ release.disambiguation ? ' [' + release.disambiguation + ']' : '' }}
                         </span>
                     </clr-dg-cell>
-                    <clr-dg-cell>{{ release.labelInfo ? release.labelInfo.label[0]?.name : '' }}
-                        {{ release.labelInfo?.catalogNumbers.length && !release.labelInfo?.catalogNumbers[0].includes('none') ? '(' + release.labelInfo.catalogNumbers[0] + ')' : '' }}
-                         / {{ release.country }}</clr-dg-cell>
+                    <clr-dg-cell
+                        >{{ release.labelInfo ? release.labelInfo.label[0]?.name : '' }}
+                        {{
+                            release.labelInfo?.catalogNumbers.length &&
+                            !release.labelInfo?.catalogNumbers[0].includes('none')
+                                ? '(' + release.labelInfo.catalogNumbers[0] + ')'
+                                : ''
+                        }}
+                        / {{ release.country }}</clr-dg-cell
+                    >
                     <clr-dg-cell class="date">{{ release.date }}</clr-dg-cell>
                     <clr-dg-cell class="media">{{ release.media[0].format }}</clr-dg-cell>
-                    <clr-dg-cell class="num-tracks" [ngClass]="{'red': release.trackCount !== numTracks}">
+                    <clr-dg-cell
+                        class="num-tracks"
+                        [ngClass]="{ red: release.trackCount !== numTracks }"
+                    >
                         <span *ngIf="release.media.length > 1">{{ release.media.length }} / </span>
                         {{ release.trackCount }}
                     </clr-dg-cell>
                 </clr-dg-row>
                 <clr-dg-footer>
                     <clr-dg-pagination #pagination [clrDgPageSize]="10">
-                        {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{pagination.totalItems}} releases
+                        {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of
+                        {{ pagination.totalItems }} releases
                     </clr-dg-pagination>
                 </clr-dg-footer>
             </clr-datagrid>
@@ -97,24 +121,35 @@
                     <label>Catalog #:</label>
                     <clr-select-container>
                         <select clrSelect [(ngModel)]="selectedRelease.labelInfo.selectedCatalog">
-                            <option *ngFor="let cat of selectedRelease.labelInfo.catalogNumbers" [ngValue]="cat">
+                            <option
+                                *ngFor="let cat of selectedRelease.labelInfo.catalogNumbers"
+                                [ngValue]="cat"
+                            >
                                 {{ cat }}
                             </option>
                         </select>
-                        </clr-select-container>
+                    </clr-select-container>
                 </div>
             </div>
             <div class="clr-row">
                 <div class="input-field clr-col-4">
                     <label class="no-flex-grow">Orig. Rel. Date:</label>
-                    <input clrInput class="small date" [(ngModel)]="selectedRelease.releaseGroup.firstReleaseDate" />
+                    <input
+                        clrInput
+                        class="small date"
+                        [(ngModel)]="selectedRelease.releaseGroup.firstReleaseDate"
+                    />
                     <button class="guesscase clarity-icon" (click)="copyOriginalReleaseToDate()">
-                        <clr-icon shape="arrow"></clr-icon>
+                        <cds-icon shape="arrow"></cds-icon>
                     </button>
                 </div>
                 <div class="input-field clr-col-3">
                     <label class="wide-label">Release Type:</label>
-                    <input clrInput class="small" [(ngModel)]="selectedRelease.releaseGroup.primaryType" />
+                    <input
+                        clrInput
+                        class="small"
+                        [(ngModel)]="selectedRelease.releaseGroup.primaryType"
+                    />
                 </div>
                 <div class="input-field clr-col-4">
                     <label>Media:</label>
@@ -142,41 +177,63 @@
         <div class="selected-release" *ngIf="selectedRelease; else noSelectedRelease">
             <clr-datagrid id="release-datagrid" class="datagrid-compact" *ngIf="selectedRelease">
                 <clr-dg-column class="track-num">Track</clr-dg-column>
-                <clr-dg-column class="artist" [clrDgField]="'artistString'" *ngIf="selectedRelease.needsArtistCol">
+                <clr-dg-column
+                    class="artist"
+                    [clrDgField]="'artistString'"
+                    *ngIf="selectedRelease.needsArtistCol"
+                >
                     Artist Credit
                 </clr-dg-column>
                 <clr-dg-column [clrDgField]="'title'">Title</clr-dg-column>
                 <clr-dg-column *ngIf="hasCovers">Original Artist</clr-dg-column>"
                 <clr-dg-column class="time">Time</clr-dg-column>
 
-                <clr-dg-row *clrDgItems="let track of selectedRelease.tracks" [ngClass]="{ 'notfound': track.metadataFoundIndex === -1 }">
+                <clr-dg-row
+                    *clrDgItems="let track of selectedRelease.tracks"
+                    [ngClass]="{ notfound: track.metadataFoundIndex === -1 }"
+                >
                     <clr-dg-cell class="track-num">
-                        {{ selectedRelease.tracks.length > 1 ? track.trackDisplay : track.position }}
-                        <span *ngIf="track.position != track.number; else showDiscTrack">{{ track.position }} ({{ track.number }})</span>
+                        {{
+                            selectedRelease.tracks.length > 1 ? track.trackDisplay : track.position
+                        }}
+                        <span *ngIf="track.position != track.number; else showDiscTrack"
+                            >{{ track.position }} ({{ track.number }})</span
+                        >
                         <ng-template #showDiscTrack>
-                            <span *ngIf="track.discSet">{{ track.discNumber }}-</span>{{ track.number }}
+                            <span *ngIf="track.discSet">{{ track.discNumber }}-</span
+                            >{{ track.number }}
                         </ng-template>
                     </clr-dg-cell>
                     <clr-dg-cell class="artist" *ngIf="selectedRelease.needsArtistCol">
-                        <span *ngIf="track.artistDiffs.length === 0; else showArtistDiffs">{{ track.artistString }}</span>
+                        <span *ngIf="track.artistDiffs.length === 0; else showArtistDiffs">{{
+                            track.artistString
+                        }}</span>
                         <ng-template #showArtistDiffs>
-                            <span *ngFor="let diff of track.artistDiffs"
-                                    [ngClass]="{
-                                        'equal': diff[0] === diffMatchType.Equal,
-                                        'added': diff[0] === diffMatchType.Add,
-                                        'removed': diff[0] === diffMatchType.Remove
-                                    }">{{ diff[1] }}</span>
+                            <span
+                                *ngFor="let diff of track.artistDiffs"
+                                [ngClass]="{
+                                    equal: diff[0] === diffMatchType.Equal,
+                                    added: diff[0] === diffMatchType.Add,
+                                    removed: diff[0] === diffMatchType.Remove
+                                }"
+                                >{{ diff[1] }}</span
+                            >
                         </ng-template>
                     </clr-dg-cell>
                     <clr-dg-cell>
-                        <span *ngIf="track.titleDiffs.length === 0; else showDiffs">{{ track.title }}</span>
+                        <span *ngIf="track.titleDiffs.length === 0; else showDiffs">{{
+                            track.title
+                        }}</span>
                         <ng-template #showDiffs>
-                            <span *ngFor="let diff of track.titleDiffs"
-                                    [ngClass]="{
-                                        'equal': diff[0] === diffMatchType.Equal,
-                                        'added': diff[0] === diffMatchType.Add,
-                                        'removed': diff[0] === diffMatchType.Remove
-                                    }">{{ diff[1] }}</span>
+                            <span
+                                *ngFor="let diff of track.titleDiffs"
+                                [ngClass]="{
+                                    equal: diff[0] === diffMatchType.Equal,
+                                    added: diff[0] === diffMatchType.Add,
+                                    removed: diff[0] === diffMatchType.Remove
+                                }"
+                                >{{ diff[1] }}</span
+                            >
                         </ng-template>
                     </clr-dg-cell>
                     <clr-dg-cell *ngIf="hasCovers">
@@ -192,7 +249,13 @@
     </div>
     <footer>
         <div class="btn-container">
-            <button class="btn btn-primary" [disabled]="!selectedRelease || numCovers > 0" (click)="apply(selectedRelease)">Apply to Files</button>
+            <button
+                class="btn btn-primary"
+                [disabled]="!selectedRelease || numCovers > 0"
+                (click)="apply(selectedRelease)"
+            >
+                Apply to Files
+            </button>
             <a class="btn btn-outline" [routerLink]="'/'">Cancel</a>
         </div>
     </footer>

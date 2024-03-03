@@ -1,33 +1,50 @@
 <div class="main-wrapper">
-    <div #popOverContainer
-            class="pop-over"
-            [ngClass]="{'hide': !popoverImage}"
-            (keyup)="keypressed($event)"
-            (blur)="popoverImage = null"
-            tabindex="0">
-        <img [src]="popoverImage?.url" class="logo-img">
-        <clr-icon class="close-icon" shape="close" size="30" (click)="popoverImage = null"></clr-icon>
+    <div
+        #popOverContainer
+        class="pop-over"
+        [ngClass]="{ hide: !popoverImage }"
+        (keyup)="keypressed($event)"
+        (blur)="popoverImage = null"
+        tabindex="0"
+    >
+        <img [src]="popoverImage?.url" class="logo-img" />
+        <cds-icon
+            class="close-icon"
+            shape="close"
+            size="30"
+            (click)="popoverImage = null"
+        ></cds-icon>
     </div>
     <div class="content-wrapper">
         <div class="top-content">
             <div class="clr-row">
                 <h3 class="clr-col-12 logo-header">HD Logos</h3>
-                <div class="img-container clr-col-4" *ngFor="let logo of artistData?.hdmusiclogos; let i = index">
-                    <button class="btn btn-outline btn-img"
-                            [ngClass]="{'btn-selected': logo.save }"
-                            (mouseenter)="mouseEnter(i, false)"
-                            (mouseleave)="mouseLeave()"
-                            (click)="logoButtonClicked(logo)">
-                        <img [src]="logo.url" class="logo-img" (load)="onLoad(logo)">
-                        <clr-icon *ngIf="logo.loaded"
+                <div
+                    class="img-container clr-col-4"
+                    *ngFor="let logo of artistData?.hdmusiclogos; let i = index"
+                >
+                    <button
+                        class="btn btn-outline btn-img"
+                        [ngClass]="{ 'btn-selected': logo.save }"
+                        (mouseenter)="mouseEnter(i, false)"
+                        (mouseleave)="mouseLeave()"
+                        (click)="logoButtonClicked(logo)"
+                    >
+                        <img [src]="logo.url" class="logo-img" (load)="onLoad(logo)" />
+                        <cds-icon
+                            *ngIf="logo.loaded"
                             shape="zoom-in"
                             size="18"
                             class="zoom"
-                            (click)="zoom($event, i)">
-                        </clr-icon>
+                            (click)="zoom($event, i)"
+                        >
+                        </cds-icon>
                     </button>
                 </div>
-                <h4 class="clr-col-12 no-logos-header" *ngIf="!fetchingHdLogos && !artistData?.hdmusiclogos?.length">
+                <h4
+                    class="clr-col-12 no-logos-header"
+                    *ngIf="!fetchingHdLogos && !artistData?.hdmusiclogos?.length"
+                >
                     No HD Music Logos found for this artist.
                 </h4>
             </div>
@@ -41,52 +58,65 @@
                         </clr-toggle-wrapper>
                     </clr-toggle-container>
                 </h3>
-                <div class="img-container clr-col-4" *ngFor="let cdart of albumData?.album.cdart; let i = index">
-                    <button class="btn btn-outline btn-img"
-                            [ngClass]="{'btn-selected': cdart.saveIndex > 0 }"
-                            (mouseenter)="mouseEnter(i + numLogos)"
-                            (mouseleave)="mouseLeave()"
-                            (click)="discButtonClicked(i)">
-                        <img [src]="cdart.url" class="cdart-img" (load)="onLoad(cdart)">
-                        <clr-icon *ngIf="cdart.loaded"
+                <div
+                    class="img-container clr-col-4"
+                    *ngFor="let cdart of albumData?.album.cdart; let i = index"
+                >
+                    <button
+                        class="btn btn-outline btn-img"
+                        [ngClass]="{ 'btn-selected': cdart.saveIndex > 0 }"
+                        (mouseenter)="mouseEnter(i + numLogos)"
+                        (mouseleave)="mouseLeave()"
+                        (click)="discButtonClicked(i)"
+                    >
+                        <img [src]="cdart.url" class="cdart-img" (load)="onLoad(cdart)" />
+                        <cds-icon
+                            *ngIf="cdart.loaded"
                             shape="zoom-in"
                             size="18"
                             class="zoom"
-                            (click)="zoom($event, i + numLogos)">
-                        </clr-icon>
+                            (click)="zoom($event, i + numLogos)"
+                        >
+                        </cds-icon>
                     </button>
-                    <div class="disc-index">
-                        Disc: {{ cdart.disc }}
-                    </div>
+                    <div class="disc-index">Disc: {{ cdart.disc }}</div>
                     <div class="selected-index">
                         {{ cdArtFilename(cdart.saveIndex) }}
                     </div>
                 </div>
-                <h4 class="clr-col-12 no-logos-header" *ngIf="fetchingLabels === 0 && !albumData?.album?.cdart.length">
+                <h4
+                    class="clr-col-12 no-logos-header"
+                    *ngIf="fetchingLabels === 0 && !albumData?.album?.cdart.length"
+                >
                     No cdArt found for this album.
                 </h4>
             </div>
             <div class="clr-row" *ngIf="musicLabels.length">
-                <h3 class="clr-col-12 logo-header">
-                    Record Labels
-                </h3>
+                <h3 class="clr-col-12 logo-header">Record Labels</h3>
                 <ng-container *ngFor="let label of musicLabels">
                     <div class="clr-col-12">
                         <h4 class="label-header">{{ label.name }}</h4>
                     </div>
-                    <div class="img-container clr-col-4" *ngFor="let logo of label.musiclabels; let i = index">
-                        <button class="btn btn-outline btn-img"
-                                [ngClass]="{'btn-selected': logo.save }"
-                                (mouseenter)="mouseEnter(i, label)"
-                                (mouseleave)="mouseLeave()"
-                                (click)="labelButtonClicked(logo, label)">
-                            <img [src]="logo.url" class="logo-img" (load)="onLoad(logo)">
-                            <clr-icon *ngIf="logo.loaded"
+                    <div
+                        class="img-container clr-col-4"
+                        *ngFor="let logo of label.musiclabels; let i = index"
+                    >
+                        <button
+                            class="btn btn-outline btn-img"
+                            [ngClass]="{ 'btn-selected': logo.save }"
+                            (mouseenter)="mouseEnter(i, label)"
+                            (mouseleave)="mouseLeave()"
+                            (click)="labelButtonClicked(logo, label)"
+                        >
+                            <img [src]="logo.url" class="logo-img" (load)="onLoad(logo)" />
+                            <cds-icon
+                                *ngIf="logo.loaded"
                                 shape="zoom-in"
                                 size="18"
                                 class="zoom"
-                                (click)="zoom($event, i, label)">
-                            </clr-icon>
+                                (click)="zoom($event, i, label)"
+                            >
+                            </cds-icon>
                         </button>
                     </div>
                     <h4 class="clr-col-12 no-logos-header" *ngIf="!label.musiclabels.length">
@@ -98,7 +128,9 @@
     </div>
     <footer>
         <div class="btn-container">
-            <button class="btn btn-primary" (click)="saveSelected()" [disabled]="isSaveDisabled()">Save</button>
+            <button class="btn btn-primary" (click)="saveSelected()" [disabled]="isSaveDisabled()">
+                Save
+            </button>
             <button class="btn btn-outline" [routerLink]="'/'">Back</button>
         </div>
     </footer>

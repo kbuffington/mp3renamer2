@@ -1,181 +1,333 @@
 <div class="right-wrapper">
-	<div class="clr-row">
-		<clr-tabs>
-			<clr-tab>
-				<button clrTabLink>Primary Tags</button>
-				<clr-tab-content *clrIfActive>
-					<div class="clr-col-12 input-fields">
-						<input-field label="Genre:" [inputType]="inputTypes.Genre" [(value)]="metadata.genre" (showConflicts)="showConflict(metadata.genre, 'Genre')"></input-field>
-                        <input-field label="Comment:" [inputType]="inputTypes.Textarea" [(value)]="metadata.comment" (showConflicts)="showConflict(metadata.comment, 'Comments')"></input-field>
+    <div class="clr-row">
+        <clr-tabs>
+            <clr-tab>
+                <button clrTabLink>Primary Tags</button>
+                <clr-tab-content *clrIfActive>
+                    <div class="clr-col-12 input-fields">
+                        <input-field
+                            label="Genre:"
+                            [inputType]="inputTypes.Genre"
+                            [(value)]="metadata.genre"
+                            (showConflicts)="showConflict(metadata.genre, 'Genre')"
+                        ></input-field>
+                        <input-field
+                            label="Comment:"
+                            [inputType]="inputTypes.Textarea"
+                            [(value)]="metadata.comment"
+                            (showConflicts)="showConflict(metadata.comment, 'Comments')"
+                        ></input-field>
                         <!-- <button class="btn btn-outline btn-sm btn-xs" (click)="setLabel('[self released]')">Clear</button> -->
-      					<div class="flex-container">
-                            <input-field label="Label:" [(value)]="metadata.LABEL" (showConflicts)="showConflict(metadata.LABEL, 'Label')"></input-field>
-                            <button class="btn btn-outline btn-sm btn-xs" (click)="setLabel('[self released]')">SR</button>
+                        <div class="flex-container">
+                            <input-field
+                                label="Label:"
+                                [(value)]="metadata.LABEL"
+                                (showConflicts)="showConflict(metadata.LABEL, 'Label')"
+                            ></input-field>
+                            <button
+                                class="btn btn-outline btn-sm btn-xs"
+                                (click)="setLabel('[self released]')"
+                            >
+                                SR
+                            </button>
                         </div>
-						<input-field label="Edition:" [(value)]="metadata.EDITION" (showConflicts)="showConflict(metadata.EDITION, 'Edition')"></input-field>
-						<div class="clr-row">
-							<div class="clr-col-6dot5 inline">
-								<div class="flex-container">
-									<input-field
-										label="Date:"
-										[(value)]="metadata.date"
-										(showConflicts)="showConflict(metadata.date, 'Date')">
-									</input-field>
-									<clr-icon shape="switch" class="inline-button" (click)="swapDates()"></clr-icon>
-								</div>
-							</div>
-							<div class="clr-col-5dot5 inline">
-								<input-field label="Orig Date:"
-										[(value)]="metadata.originalReleaseDate"
-										(showConflicts)="showConflict(metadata.originalReleaseDate, 'Original Release Date')"
-										[labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }">
-								</input-field>
-							</div>
-						</div>
-						<div class="clr-row">
-							<div class="clr-col-6dot5 inline">
-								<input-field label="Catalog #:" [(value)]="metadata.CATALOGNUMBER" (showConflicts)="showConflict(metadata.CATALOGNUMBER, 'Catalog Number')"></input-field>
-							</div>
-							<div class="clr-col-5dot5 inline">
-								<div class="flex-container">
-									<input-field label="Rel. Cntry."
-											[(value)]="metadata.RELEASECOUNTRY"
-											[inputType]="inputTypes.CountryCode"
-											(showConflicts)="showConflict(metadata.RELEASECOUNTRY, 'Release Country')"
-											[labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }">
-									</input-field>
-									<button class="btn btn-outline btn-sm btn-xs" (click)="setReleaseCountry('US')">US</button>
-									<button class="btn btn-outline btn-sm btn-xs" (click)="setReleaseCountry('GB')">GB</button>
-								</div>
-							</div>
-						</div>
-						<div class="clr-row">
-							<div class="clr-col-8 inline">
-								<input-field label="Disc Subtitle:" [(value)]="metadata.DISCSUBTITLE" (showConflicts)="showConflict(metadata.DISCSUBTITLE, 'Disc Subtitle')"></input-field>
-							</div>
-							<div class="clr-col-4 inline">
-								<input-field label="Disc Num:"
-										[(value)]="metadata.partOfSet"
-										(showConflicts)="showConflict(metadata.partOfSet, 'Disc Num')"
-										[labelStyle]="{ 'max-width': '80px', 'min-width': '80px', 'letter-spacing': '-.25px' }">
-								</input-field>
-							</div>
-						</div>
-						<input-field label="Art. Country:"
-							[(value)]="metadata.ARTISTCOUNTRY"
-							[inputType]="inputTypes.Country"
-							(showConflicts)="showConflict(metadata.ARTISTCOUNTRY, 'Artist Country')">
-						</input-field>
-						<!-- <input-field label="Art. Country:" [(value)]="metadata.ARTISTCOUNTRY" (showConflicts)="showConflict(metadata.xxx, '')"></input-field> -->
-						<input-field label="Release Type:"
-							[(value)]="metadata.RELEASETYPE"
-							[selectOptions]="releaseTypes"
-							(showConflicts)="showConflict(metadata.RELEASETYPE, 'Release Type')">
-						</input-field>
-						<input-field label="Album Artist:" [(value)]="metadata.performerInfo" (showConflicts)="showConflict(metadata.performerInfo, 'Album Artist')"></input-field>
-						<input-field label="Artist Filter:" [(value)]="metadata.ARTISTFILTER" (showConflicts)="showConflict(metadata.ARTISTFILTER, 'Artist Filter')"></input-field>
-						<input-field label="Orig. Artist:" [(value)]="metadata.originalArtist" (showConflicts)="showConflict(metadata.originalArtist, 'Original Artist')"></input-field>
-						<input-field label="Composer:" [(value)]="metadata.composer" (showConflicts)="showConflict(metadata.composer, 'Composer')"></input-field>
-						<div class="clr-row">
-							<div class="clr-col-12 inline">
-								<div class="flex-container">
-									<input-field label="Artist Sort:"
-											[(value)]="metadata.artistSortOrder"
-											(showConflicts)="showConflict(metadata.artistShowOrder, 'Artist Sort')">
-									</input-field>
-									<button class="btn btn-outline btn-sm" (click)="guessArtistSortOrder()">Guess</button>
-								</div>
-							</div>
-						</div>
-						<div class="clr-row">
-							<div class="clr-col-7 inline">
-								<input-field label="Album Sort:" [(value)]="metadata.albumSortOrder" (showConflicts)="showConflict(metadata.albumSortOrder, 'Album Sort')"></input-field>
-							</div>
-							<div class="clr-col-5 inline">
-								<input-field label="Replay Gain:"
-										[(value)]="metadata.replaygain_album_gain"
-										[readOnly]="true"
-										(showConflicts)="showConflict(metadata.replaygain_album_gain, 'Replay Gain', true)"
-										[labelStyle]="{ 'max-width': '110px', 'min-width': '110px' }">
-								</input-field>
-							</div>
-						</div>
-					</div>
-				</clr-tab-content>
-			</clr-tab>
-			<clr-tab>
-				<button clrTabLink>Extra Tags
-					<div class="tab-badge" [ngClass]="{
-                        'blue': tab2hasUnknownProperties(),
-                        'green': !tab2Conflicts(),
-                        'hide': !tab2hasValues()
-                    }"></div>
-				</button>
-				<clr-tab-content *clrIfActive>
-					<div class="clr-col-12 input-fields">
-						<input-field label="Copyright:" [(value)]="metadata.copyright" (showConflicts)="showConflict(metadata.copyright, 'Copyright')"></input-field>
-						<input-field label="Encoded By:" [(value)]="metadata.encodedBy" (showConflicts)="showConflict(metadata.encodedBy, 'Encoded By')"></input-field>
-						<div class="clr-row">
-							<div class="clr-col-12">
-								<div class="flex-container">
-									<input-field label="MB ArtistID:"
-										[(value)]="metadata.MUSICBRAINZ_ARTISTID"
+                        <input-field
+                            label="Edition:"
+                            [(value)]="metadata.EDITION"
+                            (showConflicts)="showConflict(metadata.EDITION, 'Edition')"
+                        ></input-field>
+                        <div class="clr-row">
+                            <div class="clr-col-6dot5 inline">
+                                <div class="flex-container">
+                                    <input-field
+                                        label="Date:"
+                                        [(value)]="metadata.date"
+                                        (showConflicts)="showConflict(metadata.date, 'Date')"
+                                    >
+                                    </input-field>
+                                    <cds-icon
+                                        shape="switch"
+                                        class="inline-button"
+                                        (click)="swapDates()"
+                                    ></cds-icon>
+                                </div>
+                            </div>
+                            <div class="clr-col-5dot5 inline">
+                                <input-field
+                                    label="Orig Date:"
+                                    [(value)]="metadata.originalReleaseDate"
+                                    (showConflicts)="
+                                        showConflict(
+                                            metadata.originalReleaseDate,
+                                            'Original Release Date'
+                                        )
+                                    "
+                                    [labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }"
+                                >
+                                </input-field>
+                            </div>
+                        </div>
+                        <div class="clr-row">
+                            <div class="clr-col-6dot5 inline">
+                                <input-field
+                                    label="Catalog #:"
+                                    [(value)]="metadata.CATALOGNUMBER"
+                                    (showConflicts)="
+                                        showConflict(metadata.CATALOGNUMBER, 'Catalog Number')
+                                    "
+                                ></input-field>
+                            </div>
+                            <div class="clr-col-5dot5 inline">
+                                <div class="flex-container">
+                                    <input-field
+                                        label="Rel. Cntry."
+                                        [(value)]="metadata.RELEASECOUNTRY"
+                                        [inputType]="inputTypes.CountryCode"
+                                        (showConflicts)="
+                                            showConflict(metadata.RELEASECOUNTRY, 'Release Country')
+                                        "
+                                        [labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }"
+                                    >
+                                    </input-field>
+                                    <button
+                                        class="btn btn-outline btn-sm btn-xs"
+                                        (click)="setReleaseCountry('US')"
+                                    >
+                                        US
+                                    </button>
+                                    <button
+                                        class="btn btn-outline btn-sm btn-xs"
+                                        (click)="setReleaseCountry('GB')"
+                                    >
+                                        GB
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clr-row">
+                            <div class="clr-col-8 inline">
+                                <input-field
+                                    label="Disc Subtitle:"
+                                    [(value)]="metadata.DISCSUBTITLE"
+                                    (showConflicts)="
+                                        showConflict(metadata.DISCSUBTITLE, 'Disc Subtitle')
+                                    "
+                                ></input-field>
+                            </div>
+                            <div class="clr-col-4 inline">
+                                <input-field
+                                    label="Disc Num:"
+                                    [(value)]="metadata.partOfSet"
+                                    (showConflicts)="showConflict(metadata.partOfSet, 'Disc Num')"
+                                    [labelStyle]="{
+                                        'max-width': '80px',
+                                        'min-width': '80px',
+                                        'letter-spacing': '-.25px'
+                                    }"
+                                >
+                                </input-field>
+                            </div>
+                        </div>
+                        <input-field
+                            label="Art. Country:"
+                            [(value)]="metadata.ARTISTCOUNTRY"
+                            [inputType]="inputTypes.Country"
+                            (showConflicts)="showConflict(metadata.ARTISTCOUNTRY, 'Artist Country')"
+                        >
+                        </input-field>
+                        <!-- <input-field label="Art. Country:" [(value)]="metadata.ARTISTCOUNTRY" (showConflicts)="showConflict(metadata.xxx, '')"></input-field> -->
+                        <input-field
+                            label="Release Type:"
+                            [(value)]="metadata.RELEASETYPE"
+                            [selectOptions]="releaseTypes"
+                            (showConflicts)="showConflict(metadata.RELEASETYPE, 'Release Type')"
+                        >
+                        </input-field>
+                        <input-field
+                            label="Album Artist:"
+                            [(value)]="metadata.performerInfo"
+                            (showConflicts)="showConflict(metadata.performerInfo, 'Album Artist')"
+                        ></input-field>
+                        <input-field
+                            label="Artist Filter:"
+                            [(value)]="metadata.ARTISTFILTER"
+                            (showConflicts)="showConflict(metadata.ARTISTFILTER, 'Artist Filter')"
+                        ></input-field>
+                        <input-field
+                            label="Orig. Artist:"
+                            [(value)]="metadata.originalArtist"
+                            (showConflicts)="
+                                showConflict(metadata.originalArtist, 'Original Artist')
+                            "
+                        ></input-field>
+                        <input-field
+                            label="Composer:"
+                            [(value)]="metadata.composer"
+                            (showConflicts)="showConflict(metadata.composer, 'Composer')"
+                        ></input-field>
+                        <div class="clr-row">
+                            <div class="clr-col-12 inline">
+                                <div class="flex-container">
+                                    <input-field
+                                        label="Artist Sort:"
+                                        [(value)]="metadata.artistSortOrder"
+                                        (showConflicts)="
+                                            showConflict(metadata.artistShowOrder, 'Artist Sort')
+                                        "
+                                    >
+                                    </input-field>
+                                    <button
+                                        class="btn btn-outline btn-sm"
+                                        (click)="guessArtistSortOrder()"
+                                    >
+                                        Guess
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clr-row">
+                            <div class="clr-col-7 inline">
+                                <input-field
+                                    label="Album Sort:"
+                                    [(value)]="metadata.albumSortOrder"
+                                    (showConflicts)="
+                                        showConflict(metadata.albumSortOrder, 'Album Sort')
+                                    "
+                                ></input-field>
+                            </div>
+                            <div class="clr-col-5 inline">
+                                <input-field
+                                    label="Replay Gain:"
+                                    [(value)]="metadata.replaygain_album_gain"
+                                    [readOnly]="true"
+                                    (showConflicts)="
+                                        showConflict(
+                                            metadata.replaygain_album_gain,
+                                            'Replay Gain',
+                                            true
+                                        )
+                                    "
+                                    [labelStyle]="{ 'max-width': '110px', 'min-width': '110px' }"
+                                >
+                                </input-field>
+                            </div>
+                        </div>
+                    </div>
+                </clr-tab-content>
+            </clr-tab>
+            <clr-tab>
+                <button clrTabLink>
+                    Extra Tags
+                    <div
+                        class="tab-badge"
+                        [ngClass]="{
+                            blue: tab2hasUnknownProperties(),
+                            green: !tab2Conflicts(),
+                            hide: !tab2hasValues()
+                        }"
+                    ></div>
+                </button>
+                <clr-tab-content *clrIfActive>
+                    <div class="clr-col-12 input-fields">
+                        <input-field
+                            label="Copyright:"
+                            [(value)]="metadata.copyright"
+                            (showConflicts)="showConflict(metadata.copyright, 'Copyright')"
+                        ></input-field>
+                        <input-field
+                            label="Encoded By:"
+                            [(value)]="metadata.encodedBy"
+                            (showConflicts)="showConflict(metadata.encodedBy, 'Encoded By')"
+                        ></input-field>
+                        <div class="clr-row">
+                            <div class="clr-col-12">
+                                <div class="flex-container">
+                                    <input-field
+                                        label="MB ArtistID:"
+                                        [(value)]="metadata.MUSICBRAINZ_ARTISTID"
                                         [copyToClipboard]="true"
-										(showConflicts)="showConflict(metadata.MUSICBRAINZ_ARTISTID, 'MB Artist ID')">
-									</input-field>
-									<button class="btn btn-outline btn-sm btn-xs icon-btn"
-											[disabled]="!metadata.MUSICBRAINZ_ARTISTID.default"
-											title="MusicBrainz"
-											(click)="openMusicBrainz('MUSICBRAINZ_ARTISTID')">
-										<img class="mb-icon" src="assets/images/musicbrainz.png">
-									</button>
-									<button class="btn btn-outline btn-sm btn-xs icon-btn"
-											[disabled]="!metadata.MUSICBRAINZ_ARTISTID.default"
-											title="Fanart.tv"
-											(click)="openFanart()">
-										<img class="mb-icon" src="assets/images/fanart.png">
-									</button>
-								</div>
-							</div>
-						</div>
-						<div class="clr-row">
-							<div class="clr-col-12 inline">
-								<div class="flex-container">
-									<input-field label="MB RGID:"
+                                        (showConflicts)="
+                                            showConflict(
+                                                metadata.MUSICBRAINZ_ARTISTID,
+                                                'MB Artist ID'
+                                            )
+                                        "
+                                    >
+                                    </input-field>
+                                    <button
+                                        class="btn btn-outline btn-sm btn-xs icon-btn"
+                                        [disabled]="!metadata.MUSICBRAINZ_ARTISTID.default"
+                                        title="MusicBrainz"
+                                        (click)="openMusicBrainz('MUSICBRAINZ_ARTISTID')"
+                                    >
+                                        <img class="mb-icon" src="assets/images/musicbrainz.png" />
+                                    </button>
+                                    <button
+                                        class="btn btn-outline btn-sm btn-xs icon-btn"
+                                        [disabled]="!metadata.MUSICBRAINZ_ARTISTID.default"
+                                        title="Fanart.tv"
+                                        (click)="openFanart()"
+                                    >
+                                        <img class="mb-icon" src="assets/images/fanart.png" />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clr-row">
+                            <div class="clr-col-12 inline">
+                                <div class="flex-container">
+                                    <input-field
+                                        label="MB RGID:"
                                         [(value)]="metadata.MUSICBRAINZ_RELEASEGROUPID"
                                         [copyToClipboard]="true"
-                                        (showConflicts)="showConflict(metadata.MUSICBRAINZ_RELEASEGROUPID, 'MB Release Group ID')">
+                                        (showConflicts)="
+                                            showConflict(
+                                                metadata.MUSICBRAINZ_RELEASEGROUPID,
+                                                'MB Release Group ID'
+                                            )
+                                        "
+                                    >
                                     </input-field>
-									<button class="btn btn-outline btn-sm btn-xs icon-btn"
-											[disabled]="!metadata.MUSICBRAINZ_RELEASEGROUPID.default"
-											title="MusicBrainz"
-											(click)="openMusicBrainz('MUSICBRAINZ_RELEASEGROUPID')">
-										<img class="mb-icon" src="assets/images/musicbrainz.png">
-									</button>
-									<div class="btn-spacer"></div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<unknown-properties [(unknownProperties)]="unknownProperties" [stopEditing]="stopEditing"></unknown-properties>
-				</clr-tab-content>
-			</clr-tab>
-			<clr-tab>
-				<button clrTabLink>Artwork
-					<div class="tab-badge" [ngClass]="{'green': tab3hasValues(), 'hide': !tab3hasValues()}"></div>
-				</button>
-				<clr-tab-content *clrIfActive>
-					<image-handler></image-handler>
-				</clr-tab-content>
-			</clr-tab>
-		</clr-tabs>
-	</div>
+                                    <button
+                                        class="btn btn-outline btn-sm btn-xs icon-btn"
+                                        [disabled]="!metadata.MUSICBRAINZ_RELEASEGROUPID.default"
+                                        title="MusicBrainz"
+                                        (click)="openMusicBrainz('MUSICBRAINZ_RELEASEGROUPID')"
+                                    >
+                                        <img class="mb-icon" src="assets/images/musicbrainz.png" />
+                                    </button>
+                                    <div class="btn-spacer"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <unknown-properties
+                        [(unknownProperties)]="unknownProperties"
+                        [stopEditing]="stopEditing"
+                    ></unknown-properties>
+                </clr-tab-content>
+            </clr-tab>
+            <clr-tab>
+                <button clrTabLink>
+                    Artwork
+                    <div
+                        class="tab-badge"
+                        [ngClass]="{ green: tab3hasValues(), hide: !tab3hasValues() }"
+                    ></div>
+                </button>
+                <clr-tab-content *clrIfActive>
+                    <image-handler></image-handler>
+                </clr-tab-content>
+            </clr-tab>
+        </clr-tabs>
+    </div>
 </div>
 
 <conflict-modal
-	*ngIf="showModal"
-	[(field)]="conflictProperty"
-	[displayName]="conflictDisplayName"
-	[readOnly]="conflictReadOnly"
-	[(showModal)]="showModal">
+    *ngIf="showModal"
+    [(field)]="conflictProperty"
+    [displayName]="conflictDisplayName"
+    [readOnly]="conflictReadOnly"
+    [(showModal)]="showModal"
+>
 </conflict-modal>

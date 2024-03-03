@@ -1,16 +1,21 @@
 <div class="app-wrapper">
-	<header class="header header-5">
-		<div class="branding">
-			<a href="#" class="nav-link" [ngClass]="{ 'has-tracks': tracks.length }" (click)="openFolder()" >
-				<clr-icon shape="library"></clr-icon>
-				<span class="title">{{ title }}</span>
-			</a>
-		</div>
-		<div class="header-actions">
-			<a [routerLink]="'/preferences'" class="nav-link nav-icon" aria-label="preferences">
-				<clr-icon shape="cog"></clr-icon>
-			</a>
-		</div>
-	</header>
-	<router-outlet></router-outlet>
+    <header class="header header-5">
+        <div class="branding">
+            <a
+                href="#"
+                class="nav-link"
+                [ngClass]="{ 'has-tracks': tracks.length }"
+                (click)="openFolder()"
+            >
+                <cds-icon shape="library"></cds-icon>
+                <span class="title">{{ title }}</span>
+            </a>
+        </div>
+        <div class="header-actions">
+            <a [routerLink]="'/preferences'" class="nav-link nav-icon" aria-label="preferences">
+                <cds-icon shape="cog"></cds-icon>
+            </a>
+        </div>
+    </header>
+    <router-outlet></router-outlet>
 </div>

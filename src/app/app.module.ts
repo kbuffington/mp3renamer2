@@ -39,6 +39,12 @@ import { TitleCaseService } from '@services/title-case.service';
 import { TitleFormatService } from '@services/title-format.service';
 import { TrackService } from '@services/track.service';
 
+/* Icons */
+import { ClarityIcons, libraryIcon, checkIcon, cogIcon, switchIcon } from '@cds/core/icon';
+import '@cds/core/icon/register.js';
+
+ClarityIcons.addIcons(libraryIcon, checkIcon, cogIcon, switchIcon);
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -87,4 +93,4 @@ import { TrackService } from '@services/track.service';
     ],
     bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
