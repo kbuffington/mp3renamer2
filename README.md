@@ -21,6 +21,21 @@ npm start
 electron .
 ```
 
+## Updating Electron
+
+To update the version of electron you'll need to do the following:
+
+```
+npm install --save-dev electron@latest
+npm isntall @electron/remote@latest
+```
+
+You will probably also need to do the following:
+
+```bash
+npm install -g electron@latest
+```
+
 ## Renaming and Tagging files
 
 I'll fill this out once the program works

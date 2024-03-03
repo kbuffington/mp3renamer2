@@ -20,8 +20,8 @@
   },
   "private": true,
   "dependencies": {
-    "@electron/remote": "^2.0.9",
-    "electron-dl": "^3.5.0",
+    "@electron/remote": "^2.1.2",
+    "electron-dl": "^3.5.2",
     "node-id3tag": "^0.9.8"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "core-js": "^2.6.12",
     "diff-match-patch": "^1.0.5",
-    "electron": "^22.0.3",
+    "electron": "^29.1.0",
     "electron-packager": "^17.1.1",
     "eslint": "^8.57.0",
     "eslint-config-google": "^0.14.0",
