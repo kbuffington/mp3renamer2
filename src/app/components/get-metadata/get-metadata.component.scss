@@ -5,16 +5,16 @@
     justify-content: flex-start;
     flex-flow: nowrap;
     margin-bottom: 2px;
-    padding-right: .25rem;
+    padding-right: 0.25rem;
 
     label {
         padding: 0;
-        margin-right: .5rem;
+        margin-right: 0.5rem;
         cursor: default;
         font-size: 13px;
         overflow: visible;
 
-        clr-icon {
+        cds-icon {
             margin: -2px -1px 0 -2px;
             cursor: pointer;
         }
@@ -64,7 +64,7 @@
 .release-group-container {
     display: inline-flex;
     .clear-btn {
-        margin-left: .5rem;
+        margin-left: 0.5rem;
     }
 }
 
@@ -142,7 +142,7 @@
 
 .release-block {
     margin-top: 1rem;
-    padding-left: .75rem;
+    padding-left: 0.75rem;
 
     .input-field {
         width: 100%;
@@ -174,7 +174,7 @@
     .guesscase.clarity-icon {
         // overrides guesscase class from styles.scss
         background-image: none;
-        clr-icon {
+        cds-icon {
             margin-top: -8px;
         }
     }
@@ -197,18 +197,17 @@
         overflow: hidden;
         margin-bottom: -10px;
     }
-
 }
 
 footer {
-    padding: 0.5em 0.5em .75em 0.5em;
+    padding: 0.5em 0.5em 0.75em 0.5em;
     display: flex;
 
     .btn-container {
         flex-grow: 1;
 
         .btn {
-            margin-right: .25rem;
+            margin-right: 0.25rem;
             float: right;
         }
     }

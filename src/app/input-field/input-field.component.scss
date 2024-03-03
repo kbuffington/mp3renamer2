@@ -6,7 +6,7 @@
     flex-flow: nowrap;
     margin-bottom: 2px;
 
-    input[type="checkbox"] {
+    input[type='checkbox'] {
         display: inline-block;
         margin-top: 2px;
     }
@@ -17,7 +17,7 @@
         font-size: 13px;
         overflow: visible;
 
-        clr-icon {
+        cds-icon {
             margin: -2px -1px 0 -2px;
             cursor: pointer;
         }
@@ -43,7 +43,7 @@
             width: 100%;
 
             .clr-textarea-wrapper {
-                margin-top: .1rem;
+                margin-top: 0.1rem;
                 width: calc(100% + 6px);
             }
             textarea {
@@ -131,7 +131,7 @@
             list-style: none;
 
             &:before {
-                content: counter(item)". ";
+                content: counter(item) '. ';
                 counter-increment: item;
                 width: 1.5em;
                 display: inline-block;
@@ -146,7 +146,7 @@
 
             &:hover:before {
                 color: black;
-                content: "→";
+                content: '→';
             }
         }
 

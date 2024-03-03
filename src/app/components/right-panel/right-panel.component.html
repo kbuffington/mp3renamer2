@@ -62,7 +62,10 @@
                                             'Original Release Date'
                                         )
                                     "
-                                    [labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }"
+                                    [labelStyle]="{
+                                        'max-width': '83px',
+                                        'min-width': '83px',
+                                    }"
                                 >
                                 </input-field>
                             </div>
@@ -86,7 +89,10 @@
                                         (showConflicts)="
                                             showConflict(metadata.RELEASECOUNTRY, 'Release Country')
                                         "
-                                        [labelStyle]="{ 'max-width': '83px', 'min-width': '83px' }"
+                                        [labelStyle]="{
+                                            'max-width': '83px',
+                                            'min-width': '83px',
+                                        }"
                                     >
                                     </input-field>
                                     <button
@@ -120,8 +126,8 @@
                                     [(value)]="metadata.partOfSet"
                                     (showConflicts)="showConflict(metadata.partOfSet, 'Disc Num')"
                                     [labelStyle]="{
-                                        'max-width': '80px',
-                                        'min-width': '80px',
+                                        'max-width': '83px',
+                                        'min-width': '83px',
                                         'letter-spacing': '-.25px'
                                     }"
                                 >
