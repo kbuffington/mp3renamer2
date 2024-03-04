@@ -64,8 +64,6 @@ header.header {
     }
 }
 
-$override-caret-icon-size: 12px; // new default was 16px
-$border-color: rgb(153, 162, 166);
 .clr-combobox-wrapper {
     padding-left: 3px;
     padding-right: 22px; // shrink due to smaller caret size
