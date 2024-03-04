@@ -63,12 +63,45 @@ header.header {
     }
 }
 
-.clr-combobox-wrapper .label-combobox-pill {
-    margin-right: 0.2rem;
+$override-caret-icon-size: 12px; // new default was 16px
+$border-color: rgb(153, 162, 166);
+.clr-combobox-wrapper {
+    padding-left: 3px;
+    padding-right: 22px; // shrink due to smaller caret size
+    border-bottom: 1px solid $border-color;
 
-    .clr-combobox-pill-content {
-        padding-right: 2px;
+    .clr-combobox-trigger {
+        padding-left: 5px;
+        padding-right: 5px;
+
+        cds-icon[shape='angle'],
+        clr-icon[shape='angle'] {
+            width: $override-caret-icon-size;
+            height: $override-caret-icon-size;
+            min-width: $override-caret-icon-size;
+            min-height: $override-caret-icon-size;
+        }
     }
+
+    .label-combobox-pill {
+        margin-right: 0.2rem;
+
+        .clr-combobox-pill-content {
+            padding-right: 2px;
+        }
+    }
+}
+
+.clr-textarea {
+    border: 1px solid $border-color;
+}
+
+.clr-input {
+    border-bottom: 1px solid $border-color;
+}
+
+.clr-select-wrapper select {
+    border-bottom: 1px solid $border-color;
 }
 
 .clr-checkbox-wrapper .clr-control-label {
@@ -77,10 +110,6 @@ header.header {
 
 .btn {
     font-weight: 500; // stop chonky fonts
-}
-
-.clr-input {
-    border-bottom: 1px solid rgb(153, 162, 166);
 }
 
 button.guesscase {
