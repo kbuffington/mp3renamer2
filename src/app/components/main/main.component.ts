@@ -24,11 +24,12 @@ export class MainComponent implements OnInit, OnDestroy {
     private trackSubscription: Subscription;
     private metadataSubscription: Subscription;
 
-    constructor(private electronService: ElectronService,
-                private cs: ConfigService,
-                private tf: TitleFormatService,
-                private ts: TrackService) {
-    }
+    constructor(
+        private electronService: ElectronService,
+        private cs: ConfigService,
+        private tf: TitleFormatService,
+        private ts: TrackService,
+    ) {}
 
     ngOnInit() {
         this.trackSubscription = this.ts.getTracks().subscribe(tracks => {
@@ -74,7 +75,12 @@ export class MainComponent implements OnInit, OnDestroy {
 
     public downloadArt() {
         const config = this.cs.getCurrentConfig();
-        let params = this.tf.eval(config.aadParams).split(' /');
+        const artist = this.tf.eval('%artist%');
+        const album = this.tf.eval('%album%');
+        const paramsString = config.aadParams
+            .replace('%artist%', 'FIXARTISTSTRING')
+            .replace('%album%', 'FIXALBUMSTRING');
+        let params = this.tf.eval(paramsString).split(' /');
         params = params.map(p => {
             if (p[0] !== '/') {
                 p = '/' + p;
@@ -84,13 +90,24 @@ export class MainComponent implements OnInit, OnDestroy {
         const splitParams = [];
         params.forEach(p => {
             const index = p.indexOf(' ');
-            splitParams.push(p.substring(0, index), p.substring(index + 1).replace(/^"/, '').replace(/"$/, ''));
+            splitParams.push(
+                p.substring(0, index),
+                p
+                    .substring(index + 1)
+                    .replace('FIXARTISTSTRING', artist)
+                    .replace('FIXALBUMSTRING', album)
+                    .replace(/^"/, '')
+                    .replace(/"$/, ''),
+            );
         });
 
         console.log(params, splitParams);
         const path = this.electronService.path.parse(config.aadPath);
-        const aad = this.electronService.childProcess.execFile(`${path.dir}\\${path.base}`, splitParams.filter(p => p.length));
-        aad.on('error', (err) => console.error('error:', err) );
+        const aad = this.electronService.childProcess.execFile(
+            `${path.dir}\\${path.base}`,
+            splitParams.filter(p => p.length),
+        );
+        aad.on('error', err => console.error('error:', err));
     }
 
     public quitApp() {
