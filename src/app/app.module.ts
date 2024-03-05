@@ -40,10 +40,29 @@ import { TitleFormatService } from '@services/title-format.service';
 import { TrackService } from '@services/track.service';
 
 /* Icons */
-import { ClarityIcons, libraryIcon, checkIcon, cogIcon, switchIcon } from '@cds/core/icon';
+import {
+    ClarityIcons,
+    libraryIcon,
+    checkIcon,
+    cogIcon,
+    switchIcon,
+    zoomInIcon,
+    arrowIcon,
+    infoCircleIcon,
+    searchIcon,
+} from '@cds/core/icon';
 import '@cds/core/icon/register.js';
 
-ClarityIcons.addIcons(libraryIcon, checkIcon, cogIcon, switchIcon);
+ClarityIcons.addIcons(
+    libraryIcon,
+    checkIcon,
+    cogIcon,
+    switchIcon,
+    zoomInIcon,
+    arrowIcon,
+    infoCircleIcon,
+    searchIcon,
+);
 
 @NgModule({
     declarations: [
