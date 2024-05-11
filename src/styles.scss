@@ -115,6 +115,18 @@ header.header {
     font-weight: 500; // stop chonky fonts
 }
 
+clr-datagrid.datagrid-compact {
+    .datagrid .datagrid-column,
+    .datagrid .datagrid-cell {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .datagrid .datagrid-cell {
+        font-size: 12px;
+    }
+}
+
 button.guesscase {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAY1BMVEWXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5cXFxciIiIvLy88PDxKSkpQUFBZWVlcXFxpaWl2dnZ6enqEhISMjIySkpKenp6vr6+wsLC/v7/Pz8/W1tbf39/q6uru7u7////o0SZmAAAACXRSTlPZ3N3g6+/w8/SnvyacAAAAaUlEQVR4AVXIXRKCIBSA0VtJP0EiGaQk9u1/lTlMznDP45GTUY5yQTFi2Mwrf12N5RZ1hNHqsLiljbcnjm1459y9idUCj5lpCKVGDED0vL5TqrHLKaj4PMkqSp/6oQ1KJm9xRTnLoVPkB1q2Fx1xZ3hdAAAAAElFTkSuQmCC);
     background-repeat: no-repeat;
