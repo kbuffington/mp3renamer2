@@ -21,6 +21,13 @@ npm start
 electron .
 ```
 
+## Build and Deploy
+
+```
+npm run build:win
+npm run deploy:win
+```
+
 ## Updating Electron
 
 To update the version of electron you'll need to do the following:
