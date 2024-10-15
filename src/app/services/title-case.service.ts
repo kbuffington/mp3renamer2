@@ -8,7 +8,7 @@ export const lowerCaseWords = ['a', 'an', 'the', 'and', 'of', 'but', 'as', 'or',
     'vs', 'vs.'];
 
 // Acronyms or other words that should always be upper case
-export const upperCaseWords = ['DOA', 'LOL', 'LMAO', 'PCP', 'RIP', 'R&B'];
+export const upperCaseWords = ['DOA', 'LOL', 'LMAO', 'PCP', 'RIP', 'R&B', 'NWOBHM'];
 
 // Words that should probably always be lower case
 export const alwaysLowerCaseWords = ['remix', 'feat.', 'x'];
@@ -76,9 +76,17 @@ export class TitleCaseService {
                 // has letters to actually capitalize
                 const wordStart = word.match(/^[^a-zA-Z\d.]*/)[0];
                 const wordEnd = word.match(/[^a-zA-Z\d.]*$/)[0];
-                word = word.slice(wordStart.length, wordEnd.length ? 0 - wordEnd.length : undefined); // strip non alphanum chars
-                if (index === 0 || index === words.length - 1 || wordStart === '(' || wordEnd === ')' ||
-                    !lowerCaseWords.includes(word.toLocaleLowerCase())) {
+                word = word.slice(
+                    wordStart.length,
+                    wordEnd.length ? 0 - wordEnd.length : undefined,
+                ); // strip non alphanum chars
+                if (
+                    index === 0 ||
+                    index === words.length - 1 ||
+                    wordStart === '(' ||
+                    wordEnd === ')' ||
+                    !lowerCaseWords.includes(word.toLocaleLowerCase())
+                ) {
                     return wordStart + this.titleCaseWord(word, true) + wordEnd;
                 }
                 return wordStart + this.titleCaseWord(word, false) + wordEnd;
@@ -86,7 +94,7 @@ export class TitleCaseService {
         });
         title = titleCaseWords.join(' ');
         hyphenIndexes.forEach(i => {
-            title = title.slice(0, i) + '-' + title.slice(i+1);
+            title = title.slice(0, i) + '-' + title.slice(i + 1);
         });
         return (blankStart ? ' ' : '') + title + (blankEnd ? ' ' : '');
     }
@@ -114,8 +122,8 @@ export class TitleCaseService {
         }
         // console.log(titleSections);
         str = titleSections.map((section) => {
-            return this.titleCaseSection(section);
-        }).join('');
+                return this.titleCaseSection(section);
+            }).join('');
 
         return str;
     }

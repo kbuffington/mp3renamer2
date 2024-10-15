@@ -8,11 +8,20 @@ const EXCLUDED_TAGS = [
     'american',
     'band',
     'british',
+    'canada',
     'english',
     'folk pop',
+    'guitarist',
+    'musician',
+    'rick and morty',
     'seen live',
+    'smoosh',
+    'songwriter',
+    'special purpose artist',
+    'tag spam',
     'uk',
     'usa',
+    'utah',
 ];
 
 class CacheEntry {
@@ -39,7 +48,7 @@ export class ArtistCacheService {
         });
         this.saveCacheMap();
         if (map) {
-            console.log('Artist Cache size:', Math.round(map.length*10 / 1024)/10 + 'KB');
+            console.log('Artist Cache size:', Math.round((map.length * 10) / 1024) / 10 + 'KB');
         }
     }
 
@@ -53,7 +62,8 @@ export class ArtistCacheService {
     }
 
     public set(artist: ArtistData): void {
-        const filteredTags = artist.tags.filter(tag => !EXCLUDED_TAGS.includes(tag.name));
+        const filteredTags =
+            artist.tags?.filter(tag => !EXCLUDED_TAGS.includes(tag.name.toLowerCase())) ?? [];
         artist.tags = filteredTags.filter(tag => tag.count >= 0);
         this.cacheMap.set(artist.id, {
             artist: artist,
