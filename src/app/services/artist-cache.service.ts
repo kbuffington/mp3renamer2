@@ -22,6 +22,10 @@ const EXCLUDED_TAGS = [
     'uk',
     'usa',
     'utah',
+    '80s',
+    '90s',
+    '00s',
+    '10s',
 ];
 
 class CacheEntry {
@@ -62,8 +66,10 @@ export class ArtistCacheService {
     }
 
     public set(artist: ArtistData): void {
+        console.log('artist.tags', artist.tags);
         const filteredTags =
             artist.tags?.filter(tag => !EXCLUDED_TAGS.includes(tag.name.toLowerCase())) ?? [];
+        console.log('filteredTags', filteredTags);
         artist.tags = filteredTags.filter(tag => tag.count >= 0);
         this.cacheMap.set(artist.id, {
             artist: artist,
