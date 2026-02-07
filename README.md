@@ -34,7 +34,7 @@ To update the version of electron you'll need to do the following:
 
 ```
 npm install --save-dev electron@latest
-npm isntall @electron/remote@latest
+npm install @electron/remote@latest
 ```
 
 You will probably also need to do the following:

@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
     selector: 'unknown-properties',
     templateUrl: './unknown-properties.component.html',
     styleUrls: ['./unknown-properties.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges {
     @Input() unknownProperties: UnknownPropertiesObj;

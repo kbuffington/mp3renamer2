@@ -1,27 +1,30 @@
 <div class="clr-row upper-button-bar">
-	<div class="clr-col-md-auto">
-		<button class="btn btn-primary" (click)="requestFiles()">
-			Load Files
-		</button>
-		<button class="btn btn-outline" (click)="reloadFiles()" [disabled]="!filesLoaded">
-			Reload Files
-		</button>
-	</div>
-	<div class="clr-col">
-		<div class="right">
-			<button class="btn btn-warning-outline" (click)="fixCapitalization()" *ngIf="capitalizationBad">
-				Fix Capitalization
-			</button>
-			<button class="btn btn-outline" (click)="guessTitles()">
-				Guess Titles
-			</button>
-			<button class="btn btn-outline" (click)="renumberTracks()">
-				Renumber
-				<input clrInput class="renumber-input"
-					type="number"
-					[(ngModel)]="startNumber"
-					(click)="inputClick($event)">
-			</button>
-		</div>
-	</div>
+    <div class="clr-col-md-auto">
+        <button class="btn btn-primary" (click)="requestFiles()">Load Files</button>
+        <button class="btn btn-outline" (click)="reloadFiles()" [disabled]="!filesLoaded">
+            Reload Files
+        </button>
+    </div>
+    <div class="clr-col">
+        <div class="right">
+            <button
+                class="btn btn-warning-outline"
+                (click)="fixCapitalization()"
+                *ngIf="capitalizationBad"
+            >
+                Fix Capitalization
+            </button>
+            <button class="btn btn-outline" (click)="guessTitles()">Guess Titles</button>
+            <button class="btn btn-outline" (click)="renumberTracks()">
+                Renumber
+                <input
+                    clrInput
+                    class="renumber-input"
+                    type="number"
+                    [(ngModel)]="startNumber"
+                    (click)="inputClick($event)"
+                />
+            </button>
+        </div>
+    </div>
 </div>

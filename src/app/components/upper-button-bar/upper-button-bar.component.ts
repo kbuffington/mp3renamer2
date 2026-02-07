@@ -9,7 +9,7 @@ import { TrackService } from '../../services/track.service';
     selector: 'upper-button-bar',
     templateUrl: './upper-button-bar.component.html',
     styleUrls: ['./upper-button-bar.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class UpperButtonBarComponent implements OnInit, OnDestroy {
     public filesLoaded = false;
@@ -18,10 +18,12 @@ export class UpperButtonBarComponent implements OnInit, OnDestroy {
 
     private metadataSubscription: Subscription;
 
-    constructor(private electronService: ElectronService,
-                private configService: ConfigService,
-                private ts: TrackService,
-                private titleCaseService: TitleCaseService) {
+    constructor(
+        private electronService: ElectronService,
+        private configService: ConfigService,
+        private ts: TrackService,
+        private titleCaseService: TitleCaseService,
+    ) {
         ts.getTracks().subscribe(tracks => {
             this.filesLoaded = tracks.length > 0;
         });
@@ -44,7 +46,10 @@ export class UpperButtonBarComponent implements OnInit, OnDestroy {
         let dir = this.configService.getCurrentConfig().homeDir;
         const fileList = this.ts.getCurrentTracks();
         if (fileList.length) {
-            const regex = new RegExp(`${this.ts.pathDelimiter.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1')}$`, '');
+            const regex = new RegExp(
+                `${this.ts.pathDelimiter.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1')}$`,
+                '',
+            );
             const folder = fileList[0].meta.folder.replace(regex, ''); // folder without trailing slash
             dir = folder.substring(0, folder.lastIndexOf(this.ts.pathDelimiter)); // up one directory
         }
