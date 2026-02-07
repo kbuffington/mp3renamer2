@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
     selector: 'app-main',
     templateUrl: './main.component.html',
     styleUrls: ['./main.component.scss'],
+    standalone: false
 })
 export class MainComponent implements OnInit, OnDestroy {
     public clickOccurred: number;

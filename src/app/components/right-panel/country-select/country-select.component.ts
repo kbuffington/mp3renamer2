@@ -5,6 +5,7 @@ import { countryCodes, CountryEntry } from '@services/countries';
     selector: 'country-select',
     templateUrl: './country-select.component.html',
     styleUrls: ['./country-select.component.scss'],
+    standalone: false
 })
 export class CountrySelectComponent implements OnInit, OnChanges {
     @Input() multiSelect = false;

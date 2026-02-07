@@ -9,6 +9,7 @@ import { TrackService } from '../../services/track.service';
     selector: 'upper-button-bar',
     templateUrl: './upper-button-bar.component.html',
     styleUrls: ['./upper-button-bar.component.scss'],
+    standalone: false
 })
 export class UpperButtonBarComponent implements OnInit, OnDestroy {
     public filesLoaded = false;

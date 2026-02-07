@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
     selector: 'genre-select',
     templateUrl: './genre-select.component.html',
     styleUrls: ['./genre-select.component.scss'],
+    standalone: false
 })
 export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
     @Input() genres: string;

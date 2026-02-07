@@ -9,6 +9,7 @@ import { TrackServiceMocks } from './services/track.service.mock';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
     public trackSubscription: Subscription;

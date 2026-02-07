@@ -57,6 +57,7 @@ const ONE_WEEK = 7 * 24 * 60 * 60 * 1000;
     selector: 'get-metadata',
     templateUrl: './get-metadata.component.html',
     styleUrls: ['./get-metadata.component.scss'],
+    standalone: false
 })
 export class GetMetadataComponent implements OnInit {
     public releaseData: any;

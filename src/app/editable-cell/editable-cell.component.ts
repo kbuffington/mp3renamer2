@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
     selector: 'editable-cell',
     templateUrl: './editable-cell.component.html',
     styleUrls: ['./editable-cell.component.scss'],
+    standalone: false
 })
 export class EditableCellComponent implements OnChanges {
     @Input() value: string;

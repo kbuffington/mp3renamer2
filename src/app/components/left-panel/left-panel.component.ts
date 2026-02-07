@@ -7,6 +7,7 @@ import { MetadataObj, MetadataProperty } from '../../classes/track.classes';
     selector: 'left-panel',
     templateUrl: './left-panel.component.html',
     styleUrls: ['./left-panel.component.scss'],
+    standalone: false
 })
 export class LeftPanelComponent implements OnInit, OnDestroy {
     @Input() tracks: any[] = [];

@@ -10,6 +10,7 @@ import { CacheService } from '@services/cache.service';
     selector: 'config-view',
     templateUrl: './config.component.html',
     styleUrls: ['./config.component.scss'],
+    standalone: false
 })
 export class ConfigComponent implements OnInit, OnDestroy {
     public config: ConfigSettingsObject;

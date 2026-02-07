@@ -15,6 +15,7 @@ import { tap, throttleTime } from 'rxjs/operators';
     selector: 'right-panel',
     templateUrl: './right-panel.component.html',
     styleUrls: ['./right-panel.component.scss'],
+    standalone: false
 })
 export class RightPanelComponent implements OnInit, OnDestroy {
     @Input() tracks: any[] = [];

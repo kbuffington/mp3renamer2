@@ -15,6 +15,7 @@ export enum InputTypes {
     selector: 'input-field',
     templateUrl: './input-field.component.html',
     styleUrls: ['./input-field.component.scss'],
+    standalone: false
 })
 export class InputFieldComponent implements OnInit {
     @Input() inputType: string = InputTypes.Input;

@@ -11,6 +11,7 @@ import { MetadataObj } from '@classes/track.classes';
     selector: 'fanart',
     templateUrl: './fanart.component.html',
     styleUrls: ['./fanart.component.scss'],
+    standalone: false
 })
 export class FanartComponent implements OnInit {
     public artistData: FanartArtist;

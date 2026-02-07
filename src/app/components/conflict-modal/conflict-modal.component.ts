@@ -6,6 +6,7 @@ import { TrackService } from '@services/track.service';
     selector: 'conflict-modal',
     templateUrl: './conflict-modal.component.html',
     styleUrls: ['./conflict-modal.component.scss'],
+    standalone: false
 })
 export class ConflictModalComponent implements OnInit {
     @Input() field: MetadataProperty;

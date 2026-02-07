@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
     selector: 'metadata-handler',
     templateUrl: './metadata-handler.component.html',
     styleUrls: ['./metadata-handler.component.scss'],
+    standalone: false
 })
 export class MetadataHandlerComponent implements OnInit, OnDestroy {
     public metadata: MetadataObj;

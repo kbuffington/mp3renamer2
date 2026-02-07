@@ -23,6 +23,7 @@ class ImgInfo {
     selector: 'image-handler',
     templateUrl: './image-handler.component.html',
     styleUrls: ['./image-handler.component.scss'],
+    standalone: false
 })
 export class ImageHandlerComponent implements OnInit, OnDestroy {
     public imgPath = '';

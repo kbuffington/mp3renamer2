@@ -17,6 +17,7 @@ export class TrackObj {
     selector: 'renamer-grid',
     templateUrl: './renamer-grid.component.html',
     styleUrls: ['./renamer-grid.component.scss'],
+    standalone: false
 })
 export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
     @Input() showArtist = false;
