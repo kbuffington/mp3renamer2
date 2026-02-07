@@ -44,10 +44,15 @@
 
             .clr-input-wrapper {
                 display: flex;
+                width: 100%;
 
-                .clr-input {
-                    padding: 0 1px 0 3px;
-                    flex-grow: 1;
+                .clr-input-group {
+                    width: 100%;
+
+                    .clr-input {
+                        padding: 0 1px 0 3px;
+                        flex-grow: 1;
+                    }
                 }
             }
             .clr-select-wrapper {
@@ -111,7 +116,7 @@
 
     .track-num {
         width: 4rem;
-        min-width: 4rem;
+        max-width: 4rem;
     }
     .artist {
         // width: 5.2rem;
@@ -120,6 +125,7 @@
     .time {
         min-width: 3rem;
         width: 3rem;
+        max-width: 3rem;
     }
     clr-dg-cell.time {
         text-align: right;
