@@ -162,6 +162,10 @@
         }
 
         ::ng-deep {
+            .clr-input-group:has(.small),
+            .clr-input-group:has(.xsmall) {
+                width: auto;
+            }
             .small.clr-input {
                 width: 100px;
                 flex-grow: 0;
