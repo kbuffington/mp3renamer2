@@ -50,18 +50,20 @@ import {
     arrowIcon,
     infoCircleIcon,
     searchIcon,
+    copyIcon,
 } from '@cds/core/icon';
 import '@cds/core/icon/register.js';
 
 ClarityIcons.addIcons(
-    libraryIcon,
+    arrowIcon,
     checkIcon,
     cogIcon,
+    copyIcon,
+    infoCircleIcon,
+    libraryIcon,
+    searchIcon,
     switchIcon,
     zoomInIcon,
-    arrowIcon,
-    infoCircleIcon,
-    searchIcon,
 );
 
 @NgModule({

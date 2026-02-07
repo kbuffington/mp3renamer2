@@ -8,6 +8,7 @@ import { TrackService } from '@services/track.service';
 import { MetadataObj, MetadataProperty } from '@classes/track.classes';
 import { throwError as observableThrowError } from 'rxjs';
 import { CacheService } from '@services/cache.service';
+import { ElectronService } from '@services/electron.service';
 import { TitleCaseService } from '@services/title-case.service';
 import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
 
@@ -82,7 +83,15 @@ export class GetMetadataComponent implements OnInit {
                 private throttleService: ThrottleService,
                 private titleCaseService: TitleCaseService,
                 private cs: CacheService,
+                private electronService: ElectronService,
                 private ts: TrackService) {}
+
+    public copyCatalog() {
+        const val = this.selectedRelease?.labelInfo?.selectedCatalog;
+        if (val) {
+            this.electronService.remote.clipboard.writeText(val);
+        }
+    }
 
     ngOnInit() {
         this.metadata = this.ts.getCurrentMetadata();
