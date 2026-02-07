@@ -3,6 +3,10 @@
         max-width: 100%;
     }
 
+    .label-combobox-pill {
+        cursor: pointer;
+    }
+
     .clr-combobox-wrapper {
         background-color: white;
         margin-top: -2px;
@@ -15,10 +19,18 @@
             padding-left: 0px;
             padding-right: 0px;
             width: 0px;
+            height: 0;
+            min-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
 
             &:focus {
                 padding-left: 0.15rem;
                 width: 4.5rem;
+                height: auto;
+                min-height: initial;
+                padding-top: initial;
+                padding-bottom: initial;
             }
         }
 

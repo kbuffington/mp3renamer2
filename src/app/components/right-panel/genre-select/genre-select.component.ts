@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+} from '@angular/core';
 import { ArtistData, ArtistTag } from '@classes/musicbrainz.classes';
 import { ArtistCacheService } from '@services/artist-cache.service';
 import { GenreEntry, genreList } from '@services/genres';
@@ -11,7 +19,7 @@ import { Subscription } from 'rxjs';
     selector: 'genre-select',
     templateUrl: './genre-select.component.html',
     styleUrls: ['./genre-select.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
     @Input() genres: string;
@@ -25,10 +33,12 @@ export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
 
     private metadataSub: Subscription;
 
-    constructor(private ts: TrackService,
-                private title: TitleCaseService,
-                private mb: MusicbrainzService,
-                private ac: ArtistCacheService) {
+    constructor(
+        private ts: TrackService,
+        private title: TitleCaseService,
+        private mb: MusicbrainzService,
+        private ac: ArtistCacheService,
+    ) {
         this.metadataSub = ts.getMetadata().subscribe(m => {
             this.showGuessButton = !!m.MUSICBRAINZ_ARTISTID.default;
         });
@@ -50,7 +60,10 @@ export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private getSelectedGenreEntries(genreString: string): GenreEntry[] {
-        const genres = genreString.split(';').map(genre => genre.trim()).filter(g => g);
+        const genres = genreString
+            .split(';')
+            .map(genre => genre.trim())
+            .filter(g => g);
         return genres.map(genre => {
             let foundGenre = this.genreList.find(g => genre === g.name);
             if (!foundGenre) {
@@ -71,6 +84,15 @@ export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
             genreStrings = genres.map(g => g.name).join('; ');
         }
         this.genreSelected.emit(genreStrings);
+    }
+
+    public removeIfSelected(genre: GenreEntry) {
+        console.log('removeIfSelected', genre);
+        const index = this.selectedGenres.findIndex(g => g.name === genre.name);
+        if (index >= 0) {
+            this.selectedGenres.splice(index, 1);
+            this.updateSelection(this.selectedGenres);
+        }
     }
 
     public inputChanged(text) {
@@ -106,8 +128,10 @@ export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
     private setArtistGenres(artist: ArtistData) {
         const tags = artist.tags.sort((a: ArtistTag, b: ArtistTag) => b.count - a.count);
         console.log(tags);
-        this.genres = tags.filter((a, index) => index < 5)
-            .map(t => this.title.titleCaseString(t.name)).join('; ');
+        this.genres = tags
+            .filter((a, index) => index < 5)
+            .map(t => this.title.titleCaseString(t.name))
+            .join('; ');
         this.ngOnChanges();
         this.updateSelection(this.selectedGenres);
     }

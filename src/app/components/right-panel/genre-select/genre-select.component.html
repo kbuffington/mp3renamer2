@@ -1,24 +1,29 @@
 <clr-combobox-container class="genre-select margin-top-none">
     <clr-combobox
-            [(ngModel)]="selectedGenres"
-            name="countrySelect"
-            [clrMulti]="true"
-            (clrInputChange)="inputChanged($event)"
-            (ngModelChange)="updateSelection($event)">
-        <ng-container *clrOptionSelected="let selected">
+        [(ngModel)]="selectedGenres"
+        name="countrySelect"
+        [clrMulti]="true"
+        (clrInputChange)="inputChanged($event)"
+        (ngModelChange)="updateSelection($event)"
+    >
+        <span *clrOptionSelected="let selected" (click)="removeIfSelected(selected)">
             {{ selected?.name }}
-        </ng-container>
+        </span>
         <clr-options>
-            <clr-option *clrOptionItems="let genre of genreList; field:'name'"
-                    [clrValue]="genre"
-                    [ngClass]="{'hidden': genre.name === '```'}">
+            <clr-option
+                *clrOptionItems="let genre of genreList; field: 'name'"
+                [clrValue]="genre"
+                [ngClass]="{ hidden: genre.name === '```' }"
+            >
                 {{ genre.name }}
             </clr-option>
         </clr-options>
     </clr-combobox>
 </clr-combobox-container>
-<button *ngIf="showGuessButton && !selectedGenres.length"
-        class="btn btn-outline btn-sm guess-btn"
-        (click)="guessGenres()">
+<button
+    *ngIf="showGuessButton && !selectedGenres.length"
+    class="btn btn-outline btn-sm guess-btn"
+    (click)="guessGenres()"
+>
     Guess Genres
 </button>
