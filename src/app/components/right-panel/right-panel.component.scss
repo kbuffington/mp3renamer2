@@ -35,23 +35,22 @@ clr-tabs {
         padding-right: 0;
     }
     .inline:not(:first-of-type) {
-        padding-left: .25rem;
+        padding-left: 0.25rem;
     }
 
     .clr-col-6dot5 {
         flex: 0 0 54%;
         max-width: 54%;
-        padding-left: .6rem;
+        padding-left: 0.6rem;
     }
 
     .clr-col-5dot5 {
         flex: 0 0 46%;
         max-width: 46%;
-        padding-left: .6rem;
-        padding-right: .6rem;
+        padding-left: 0.6rem;
+        padding-right: 0.6rem;
     }
 }
-
 
 .flex-container {
     display: flex;
@@ -62,7 +61,7 @@ clr-tabs {
     }
 
     button {
-        margin: 0 0 0 .25rem;
+        margin: 0 0 0 0.25rem;
 
         &:not(:first-of-type) {
             margin-left: 1px;
@@ -93,12 +92,6 @@ clr-tabs {
 
     .btn-spacer {
         min-width: 27px;
-    }
-}
-
-::ng-deep input-field {
-    input {
-        width: 0%;
     }
 }
 

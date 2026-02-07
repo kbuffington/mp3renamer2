@@ -33,10 +33,14 @@
     }
 
     ::ng-deep .clr-control-container {
-        flex-grow: 1;
+        width: 100%;
 
-        input {
+        .clr-input-group {
             width: 100%;
+
+            input {
+                width: 100%;
+            }
         }
     }
 }
