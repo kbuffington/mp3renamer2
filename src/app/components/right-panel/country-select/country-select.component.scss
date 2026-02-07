@@ -27,16 +27,18 @@
         border-top: none;
         border-left: none;
         border-right: none;
-        // white-space: nowrap;
+        min-height: 26px;
 
         .clr-combobox-input {
             padding-left: 0;
             padding-right: 0;
             width: 0px;
+            height: 0;
 
             &:focus {
                 padding-left: 0.15rem;
                 width: 4.5rem;
+                height: auto;
             }
         }
 
@@ -54,4 +56,3 @@
         }
     }
 }
-
