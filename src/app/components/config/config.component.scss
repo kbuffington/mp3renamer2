@@ -5,7 +5,7 @@
     height: calc(100vh - 6rem);
 
     ::ng-deep {
-        .clr-control-container {
+        :not(.inline-char-input) > .clr-control-container {
             width: calc(100% - 5rem);
 
             .clr-input-wrapper,
@@ -55,9 +55,17 @@
         }
 
         ::ng-deep {
-            input {
-                width: 20px;
-                border: 0.05rem solid var(--clr-forms-border-color, #b3b3b3);
+            .clr-input-group {
+                border: none;
+
+                input {
+                    width: 24px;
+                    border: 1px solid var(--clr-forms-border-color, #b3b3b3);
+
+                    &:focus {
+                        border: 1px solid rgb(0, 86, 122);
+                    }
+                }
             }
         }
     }
