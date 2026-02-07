@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
     selector: 'editable-cell',
     templateUrl: './editable-cell.component.html',
     styleUrls: ['./editable-cell.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class EditableCellComponent implements OnChanges {
     @Input() value: string;
@@ -35,8 +35,8 @@ export class EditableCellComponent implements OnChanges {
         });
     }
 
-    public keypressHandler(keyCode: string) {
-        switch (keyCode) {
+    public keypressHandler(event: KeyboardEvent) {
+        switch (event.key) {
             case 'Escape':
                 this.editing = false;
                 this.value = this.backup;
@@ -54,6 +54,16 @@ export class EditableCellComponent implements OnChanges {
                 this.valChanged(this.value);
                 this.editingChange.emit(this.editing);
                 this.tabHandler.emit();
+                break;
+            case 'ArrowLeft':
+            case 'ArrowRight':
+            case 'ArrowUp':
+            case 'ArrowDown':
+            case 'Home':
+            case 'End':
+            case 'PageUp':
+            case 'PageDown':
+                event.stopPropagation();
                 break;
             default:
                 break;
