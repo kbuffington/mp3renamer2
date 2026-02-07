@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TestBed, inject } from '@angular/core/testing';
 
 import { MusicbrainzService } from './musicbrainz.service';
@@ -6,8 +6,8 @@ import { MusicbrainzService } from './musicbrainz.service';
 describe('MusicbrainzService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpClientModule],
-            providers: [MusicbrainzService],
+            imports: [],
+            providers: [MusicbrainzService, provideHttpClient(withInterceptorsFromDi())],
         });
     });
 

@@ -1,4 +1,4 @@
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -85,14 +85,8 @@ ClarityIcons.addIcons(
         GetMetadataComponent,
         ConflictModalComponent,
     ],
-    imports: [
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        BrowserModule,
-        ClarityModule,
-        FormsModule,
-        HttpClientModule,
-    ],
+    bootstrap: [AppComponent],
+    imports: [AppRoutingModule, BrowserAnimationsModule, BrowserModule, ClarityModule, FormsModule],
     providers: [
         ArtistCacheService,
         CacheService,
@@ -109,7 +103,7 @@ ClarityIcons.addIcons(
         TitleCaseService,
         TitleFormatService,
         TrackService,
+        provideHttpClient(withInterceptorsFromDi()),
     ],
-    bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -25,18 +25,18 @@
     "node-id3tag": "^0.9.8"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.2.2",
-    "@angular/animations": "^17.2.3",
-    "@angular/cli": "^17.2.2",
-    "@angular/common": "^17.2.3",
-    "@angular/compiler": "^17.2.3",
-    "@angular/compiler-cli": "^17.2.3",
-    "@angular/core": "^17.2.3",
-    "@angular/forms": "^17.2.3",
-    "@angular/language-service": "^17.2.3",
-    "@angular/platform-browser": "^17.2.3",
-    "@angular/platform-browser-dynamic": "^17.2.3",
-    "@angular/router": "^17.2.3",
+    "@angular-devkit/build-angular": "^18.2.21",
+    "@angular/animations": "^18.2.14",
+    "@angular/cli": "^18.2.21",
+    "@angular/common": "^18.2.14",
+    "@angular/compiler": "^18.2.14",
+    "@angular/compiler-cli": "^18.2.14",
+    "@angular/core": "^18.2.14",
+    "@angular/forms": "^18.2.14",
+    "@angular/language-service": "^18.2.14",
+    "@angular/platform-browser": "^18.2.14",
+    "@angular/platform-browser-dynamic": "^18.2.14",
+    "@angular/router": "^18.2.14",
     "@cds/core": "^6.9.2",
     "@clr/angular": "^17.0.1",
     "@clr/ui": "^17.0.1",
@@ -67,6 +67,6 @@
     "ts-node": "~5.0.1",
     "tslib": "^2.0.0",
     "typescript": "^5.3.3",
-    "zone.js": "~0.14.4"
+    "zone.js": "~0.14.10"
   }
 }
