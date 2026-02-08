@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { MetadataObj, MetadataProperty } from '@classes/track.classes';
+import { MetadataProperty } from '@classes/track.classes';
 import { ClarityModule } from '@clr/angular';
 
 import { ConflictModalComponent } from './conflict-modal.component';
@@ -8,7 +8,6 @@ import { ConflictModalComponent } from './conflict-modal.component';
 describe('ConflictModalComponent', () => {
     let component: ConflictModalComponent;
     let fixture: ComponentFixture<ConflictModalComponent>;
-    const metadata = new MetadataObj();
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
@@ -21,7 +20,7 @@ describe('ConflictModalComponent', () => {
         fixture = TestBed.createComponent(ConflictModalComponent);
         component = fixture.componentInstance;
 
-        component.field = new MetadataProperty(metadata);
+        component.field = new MetadataProperty();
         fixture.detectChanges();
     });
 

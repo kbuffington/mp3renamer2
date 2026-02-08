@@ -10,6 +10,7 @@ import { throwError as observableThrowError } from 'rxjs';
 import { CacheService } from '@services/cache.service';
 import { ElectronService } from '@services/electron.service';
 import { TitleCaseService } from '@services/title-case.service';
+import { ValuesWrittenService } from '@services/values-written.service';
 import { diff_match_patch as DiffMatchPatch } from 'diff-match-patch';
 
 export enum DiffMatchType {
@@ -86,7 +87,8 @@ export class GetMetadataComponent implements OnInit {
                 private titleCaseService: TitleCaseService,
                 private cs: CacheService,
                 private electronService: ElectronService,
-                private ts: TrackService) {}
+                private ts: TrackService,
+                private valuesWrittenService: ValuesWrittenService) {}
 
     public copyCatalog() {
         const val = this.selectedRelease?.labelInfo?.selectedCatalog;
@@ -273,6 +275,7 @@ export class GetMetadataComponent implements OnInit {
         }
 
         this.ts.setMetadata(metadata);
+        this.valuesWrittenService.markDirty();
         this.router.navigate(['/']);
     }
 

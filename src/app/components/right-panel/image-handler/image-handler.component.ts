@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { TrackService } from '@services/track.service';
 import { ImageStruct, MetadataObj, TrackOptions } from '@classes/track.classes';
 import { ElectronService } from '@services/electron.service';
+import { ValuesWrittenService } from '@services/values-written.service';
 
 class ImgInfo {
     name?: string;
@@ -42,7 +43,11 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     @ViewChild('popOverContainer') popOverContainer: ElementRef;
     @ViewChildren('localImg') readonly localImgEls: QueryList<ElementRef>;
 
-    constructor(private ts: TrackService, private electronService: ElectronService) {
+    constructor(
+        private ts: TrackService,
+        private electronService: ElectronService,
+        private valuesWrittenService: ValuesWrittenService,
+    ) {
         this.ts.getMetadata().subscribe(metadata => {
             this.metadata = metadata;
         });
@@ -150,6 +155,6 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     }
 
     public writeToggled() {
-        this.metadata.parentData.valuesWritten = false;
+        this.valuesWrittenService.markDirty();
     }
 }

@@ -9,7 +9,7 @@ import { TrackServiceMocks } from './services/track.service.mock';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy {
     public trackSubscription: Subscription;
@@ -17,10 +17,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
     public tracks = [];
 
-    constructor(private electronService: ElectronService,
-                private configService: ConfigService,
-                private ts: TrackService,
-                private zone: NgZone) {
+    constructor(
+        private electronService: ElectronService,
+        private configService: ConfigService,
+        private ts: TrackService,
+        private zone: NgZone,
+    ) {
         this.configService.loadConfig();
         // we need to call zone.run() whenever the trackSubscription updates
         this.trackSubscription = ts.getTracks().subscribe(tracks => {
@@ -65,12 +67,14 @@ export class AppComponent implements OnInit, OnDestroy {
             const path = this.electronService.path.parse(this.ts.getCurrentPath());
             switch (this.electronService.remote.process.platform) {
                 case 'win32':
-                    this.electronService.childProcess.execFile('explorer.exe', [`${path.dir}\\${path.base}`])
+                    this.electronService.childProcess
+                        .execFile('explorer.exe', [`${path.dir}\\${path.base}`])
                         .on('error', err => console.error(err));
                     break;
                 default:
                 case 'darwin':
-                    this.electronService.childProcess.spawn('open', [`${path.dir}/${path.base}`])
+                    this.electronService.childProcess
+                        .spawn('open', [`${path.dir}/${path.base}`])
                         .on('error', err => console.error(err));
                     break;
             }

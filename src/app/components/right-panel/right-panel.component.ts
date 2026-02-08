@@ -3,6 +3,7 @@ import { InputTypes } from 'app/input-field/input-field.component';
 import { Subscription } from 'rxjs';
 import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
+import { ValuesWrittenService } from '@services/values-written.service';
 import {
     MetadataObj,
     MetadataProperty,
@@ -37,7 +38,11 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     @ViewChild('coverImg') readonly coverImg: ElementRef;
 
-    constructor(private ts: TrackService, private electronService: ElectronService) {}
+    constructor(
+        private ts: TrackService,
+        private electronService: ElectronService,
+        private valuesWrittenService: ValuesWrittenService,
+    ) {}
 
     ngOnInit() {
         // do we still need to throttle here?
@@ -98,6 +103,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         const metaField = this.metadata[fieldname];
         metaField.default = value;
         metaField.defaultChanged = true;
+        this.valuesWrittenService.markDirty();
     }
 
     public showConflict(property: MetadataProperty, name: string, readOnly = false) {
@@ -113,6 +119,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         metadata.originalReleaseDate = metadata.date;
         metadata.date = origReleaseDateCopy;
         this.ts.setMetadata(metadata);
+        this.valuesWrittenService.markDirty();
     }
 
     public setReleaseCountry(country: string) {
@@ -120,6 +127,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         metadata.RELEASECOUNTRY.default = country;
         metadata.RELEASECOUNTRY.defaultChanged = true;
         this.ts.setMetadata(metadata);
+        this.valuesWrittenService.markDirty();
     }
 
     public setLabel(label: string) {
@@ -127,6 +135,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         metadata.LABEL.default = label;
         metadata.LABEL.defaultChanged = true;
         this.ts.setMetadata(metadata);
+        this.valuesWrittenService.markDirty();
     }
 
     public tab2hasValues(): boolean {

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ElectronService } from '@services/electron.service';
+import { ValuesWrittenService } from '@services/values-written.service';
 import { MetadataProperty } from '../classes/track.classes';
 
 export enum InputTypes {
@@ -37,7 +38,10 @@ export class InputFieldComponent implements OnInit {
 
     private prevFocusedElement;
 
-    constructor(private electronService: ElectronService) {}
+    constructor(
+        private electronService: ElectronService,
+        private valuesWrittenService: ValuesWrittenService,
+    ) {}
 
     ngOnInit() {
         this.displayLabel = this.label.substring(0, this.label.length - 1);
@@ -51,6 +55,7 @@ export class InputFieldComponent implements OnInit {
         this.value.defaultChanged = true;
         this.value.useDefault = true;
         this.valueChange.emit(this.value);
+        this.valuesWrittenService.markDirty();
     }
 
     public showConflictValues() {

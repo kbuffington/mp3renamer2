@@ -6,12 +6,12 @@
             class="btn set-tags"
             (click)="setTags()"
             [ngClass]="{
-                'btn-primary': !metadata.parentData.valuesWritten,
-                'btn-outline': metadata.parentData.valuesWritten
+                'btn-primary': !valuesWritten,
+                'btn-outline': valuesWritten
             }"
         >
             Set Tags
-            <cds-icon shape="check" *ngIf="metadata.parentData.valuesWritten"></cds-icon>
+            <cds-icon shape="check" *ngIf="valuesWritten"></cds-icon>
         </button>
     </div>
 </div>

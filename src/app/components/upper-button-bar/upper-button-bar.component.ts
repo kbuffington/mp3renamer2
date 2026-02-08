@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfigService } from '@services/config.service';
 import { ElectronService } from '@services/electron.service';
 import { TitleCaseService } from '@services/title-case.service';
+import { ValuesWrittenService } from '@services/values-written.service';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { TrackService } from '../../services/track.service';
 
@@ -17,12 +18,15 @@ export class UpperButtonBarComponent implements OnInit, OnDestroy {
     public capitalizationBad = false;
 
     private metadataSubscription: Subscription;
+    private valuesWrittenSubscription: Subscription;
+    public valuesWritten = true;
 
     constructor(
         private electronService: ElectronService,
         private configService: ConfigService,
         private ts: TrackService,
         private titleCaseService: TitleCaseService,
+        private valuesWrittenService: ValuesWrittenService,
     ) {
         ts.getTracks().subscribe(tracks => {
             this.filesLoaded = tracks.length > 0;
@@ -33,16 +37,32 @@ export class UpperButtonBarComponent implements OnInit, OnDestroy {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
             this.capitalizationBad = this.titleCaseService.hasBadCaps(m.title);
         });
+        this.valuesWrittenSubscription = this.valuesWrittenService.get().subscribe(v => {
+            this.valuesWritten = v;
+        });
     }
 
     ngOnDestroy() {
         this.metadataSubscription.unsubscribe();
+        this.valuesWrittenSubscription.unsubscribe();
     }
 
     /**
      * Displays file selector
      */
     public requestFiles() {
+        if (this.filesLoaded && !this.valuesWritten) {
+            const result = this.electronService.remote.dialog.showMessageBoxSync({
+                type: 'warning',
+                buttons: ['OK', 'Cancel'],
+                defaultId: 1,
+                message: 'You have unwritten changes. Discard and load new files?',
+            });
+            if (result !== 0) {
+                return;
+            }
+        }
+
         let dir = this.configService.getCurrentConfig().homeDir;
         const fileList = this.ts.getCurrentTracks();
         if (fileList.length) {

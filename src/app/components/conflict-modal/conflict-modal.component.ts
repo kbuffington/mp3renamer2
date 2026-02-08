@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MetadataObj, MetadataProperty } from '@classes/track.classes';
 import { TrackService } from '@services/track.service';
+import { ValuesWrittenService } from '@services/values-written.service';
 
 @Component({
     selector: 'conflict-modal',
@@ -25,7 +26,10 @@ export class ConflictModalComponent implements OnInit {
     private origUseDefault: boolean;
     private origDefaultChanged: boolean;
 
-    constructor(private ts: TrackService) { }
+    constructor(
+        private ts: TrackService,
+        private valuesWrittenService: ValuesWrittenService,
+    ) { }
 
     ngOnInit(): void {
         this.origUseDefault = this.field.useDefault;
@@ -59,6 +63,7 @@ export class ConflictModalComponent implements OnInit {
         this.field.default = value;
         this.field.defaultChanged = true;
         this.fieldChange.emit(this.field);
+        this.valuesWrittenService.markDirty();
     }
 
     public resetValues() {

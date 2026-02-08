@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { TrackService } from '@services/track.service';
 import { MetadataObj, MetadataProperty, UnknownPropertiesObj } from '@classes/track.classes';
+import { ValuesWrittenService } from '@services/values-written.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -33,7 +34,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     private metadataSubscription: Subscription;
     private loadedComponent = false;
 
-    constructor(private ts: TrackService) {}
+    constructor(private ts: TrackService, private valuesWrittenService: ValuesWrittenService) {}
 
     ngOnInit() {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
@@ -85,7 +86,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
             this.unknownProperties[key].write = true;
         });
         if (!this.loadedComponent) {
-            this.metadata.parentData.valuesWritten = false;
+            this.valuesWrittenService.markDirty();
         }
         this.loadedComponent = false;
     }
@@ -112,7 +113,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     }
 
     public addProperty() {
-        const newProp = new MetadataProperty({ parentData: { valuesWritten: false } });
+        const newProp = new MetadataProperty();
         const newPropCount = Object.keys(this.unknownProperties).filter(p =>
             p.includes('NEW_PROPERTY'),
         ).length;
@@ -127,7 +128,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         this.selected.push(name);
         this.startEditing(this.unknownPropArray.length - 1, 0);
         this.setFocusCell(this.unknownPropArray.length - 1, 0);
-        // this.metadata.parentData.valuesWritten = false;
+        this.valuesWrittenService.markDirty();
     }
 
     public tabPressed(row: number, column: number) {

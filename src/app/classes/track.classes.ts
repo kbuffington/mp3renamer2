@@ -28,7 +28,6 @@ export class Track {
 
 export class MetadataProperty {
     private pvtDefault = '';
-    private parentData: MetadataParentData;
 
     public different = false; // whether not all values are the same
     public multiValue = false;
@@ -41,29 +40,16 @@ export class MetadataProperty {
     public origValues: string[] = []; // copy of values used for resetting
     public write = true; // whether to write this property to the file
 
-    constructor(metadata: MetadataObj) {
-        this.parentData = metadata.parentData;
-    }
-
     public get default() {
         return this.pvtDefault;
     }
 
     public set default(value) {
         this.pvtDefault = value;
-        if (this.parentData) {
-            this.parentData.valuesWritten = false;
-        }
     }
 }
 
-export class MetadataParentData {
-    valuesWritten: boolean;
-}
-
 export class MetadataObj {
-    parentData?: MetadataParentData;
-
     album?: MetadataProperty;
     albumSortOrder?: MetadataProperty;
     artist?: MetadataProperty;
@@ -92,12 +78,6 @@ export class MetadataObj {
     trackNumber?: MetadataProperty;
     'VINYL SIDE'?: MetadataProperty;
     'VINYL TRACKNUMBER'?: MetadataProperty;
-
-    constructor() {
-        this.parentData = {
-            valuesWritten: false,
-        };
-    }
 }
 
 export class TrackOptions {

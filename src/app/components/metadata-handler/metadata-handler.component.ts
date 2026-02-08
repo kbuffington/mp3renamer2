@@ -1,30 +1,39 @@
-
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MetadataObj } from '@classes/track.classes';
 import { TrackService } from '@services/track.service';
+import { ValuesWrittenService } from '@services/values-written.service';
 import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'metadata-handler',
     templateUrl: './metadata-handler.component.html',
     styleUrls: ['./metadata-handler.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class MetadataHandlerComponent implements OnInit, OnDestroy {
     public metadata: MetadataObj;
+    public valuesWritten = true;
 
     private metadataSubscription: Subscription;
+    private valuesWrittenSubscription: Subscription;
 
-    constructor(private ts: TrackService) {}
+    constructor(
+        private ts: TrackService,
+        private valuesWrittenService: ValuesWrittenService,
+    ) {}
 
     ngOnInit() {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
             this.metadata = m;
         });
+        this.valuesWrittenSubscription = this.valuesWrittenService.get().subscribe(v => {
+            this.valuesWritten = v;
+        });
     }
 
     ngOnDestroy() {
         this.metadataSubscription.unsubscribe();
+        this.valuesWrittenSubscription.unsubscribe();
     }
 
     public resetTags() {
@@ -32,7 +41,8 @@ export class MetadataHandlerComponent implements OnInit, OnDestroy {
     }
 
     public setTags() {
-        setTimeout(() => { // wait for DOM to update and metadata values to be set
+        setTimeout(() => {
+            // wait for DOM to update and metadata values to be set
             const metadata = this.ts.getCurrentMetadata();
             const sortOrder = metadata.albumSortOrder.default;
             const date = metadata.date.default;

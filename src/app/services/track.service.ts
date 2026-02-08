@@ -12,6 +12,7 @@ import {
 import { ElectronService } from './electron.service';
 import { ConfigService, ConfigSettingsObject } from './config.service';
 import { TitleCaseService } from './title-case.service';
+import { ValuesWrittenService } from './values-written.service';
 
 @Injectable({ providedIn: 'root' })
 export class TrackService implements OnDestroy {
@@ -37,6 +38,7 @@ export class TrackService implements OnDestroy {
         private electronService: ElectronService,
         private titleCaseService: TitleCaseService,
         private configService: ConfigService,
+        private valuesWrittenService: ValuesWrittenService,
     ) {
         const platform = this.electronService.main?.os;
         if (platform === 'win32') {
@@ -83,6 +85,7 @@ export class TrackService implements OnDestroy {
         this.trackList.next(trackList);
         this.currentFolder.next(this.getCurrentDirectory());
         this.trackOptions.next(tOptions);
+        this.valuesWrittenService.markWritten();
     }
 
     public resetTrackData() {
@@ -192,7 +195,6 @@ export class TrackService implements OnDestroy {
     }
 
     public getUnknownProperties(): UnknownPropertiesObj {
-        delete this.unknownProperties.parentData;
         return this.unknownProperties;
     }
 
@@ -201,7 +203,7 @@ export class TrackService implements OnDestroy {
     }
 
     public processImageField(metadata: MetadataObj, image: any) {
-        const metaProp = new MetadataProperty(metadata);
+        const metaProp = new MetadataProperty();
         metaProp.multiValue = false;
         metaProp.useDefault = true;
         metaProp.default = image;
@@ -218,7 +220,7 @@ export class TrackService implements OnDestroy {
         useDefault = false,
         alias?: string,
     ) {
-        const metaProp = new MetadataProperty(metadata);
+        const metaProp = new MetadataProperty();
         metaProp.multiValue = multiValue;
         metaProp.useDefault = useDefault;
         tracks.forEach(t => {
@@ -527,7 +529,7 @@ export class TrackService implements OnDestroy {
 
         this.electronService.main.writeTags(files, trackTagFields);
         metadata.title.origValues = metadata.title.values; // so you can multi-step guess delete & find/replace
-        metadata.parentData.valuesWritten = true;
+        this.valuesWrittenService.markWritten();
     }
 
     // process metadataProperties before writing to files
@@ -556,6 +558,7 @@ export class TrackService implements OnDestroy {
                 count++;
             }
         });
+        this.valuesWrittenService.markDirty();
     }
 
     updateSelectedTracks(selectedTracks: number[]) {
@@ -573,6 +576,7 @@ export class TrackService implements OnDestroy {
         });
         metadata.title.values = titles;
         this.setMetadata(metadata);
+        this.valuesWrittenService.markDirty();
     }
 
     public guessTitles() {
@@ -603,5 +607,6 @@ export class TrackService implements OnDestroy {
         metadata.title.values = titles;
         this.setMetadata(metadata);
         this.selectedTracks = selectedCopy;
+        this.valuesWrittenService.markDirty();
     }
 }

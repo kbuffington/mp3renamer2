@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
     selector: 'app-main',
     templateUrl: './main.component.html',
     styleUrls: ['./main.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class MainComponent implements OnInit, OnDestroy {
     public clickOccurred: number;
@@ -35,8 +35,6 @@ export class MainComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.trackSubscription = this.ts.getTracks().subscribe(tracks => {
             this.tracks = tracks;
-            // console.log(this.tf.eval('$roman(%tracknumber%)', 0));
-            // console.log(this.tf.eval('$lower(%artistsortorder%) $upper(%artist%) $year($year(%date%))'));
         });
         this.metadataSubscription = this.ts.getMetadata().subscribe(metadata => {
             this.metadata = metadata;
