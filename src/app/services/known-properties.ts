@@ -39,4 +39,6 @@ export const knownProperties: Map<string, PropertyInfo> = new Map([
     ['replaygain_album_peak',       { userDefined: true, multiValue: true, useDefault: true }],
     ['replaygain_track_gain',       { userDefined: true, multiValue: true }],
     ['replaygain_track_peak',       { userDefined: true, multiValue: true }],
+    ['VINYL SIDE',                  { userDefined: true, multiValue: false }],
+    ['VINYL TRACKNUMBER',           { userDefined: true, multiValue: false }],
 ]);

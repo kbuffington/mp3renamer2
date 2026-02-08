@@ -475,7 +475,14 @@ export class TrackService implements OnDestroy {
         Object.entries(this.unknownProperties).forEach(([key, value]) => {
             metadata[key] = value;
         });
-        Object.entries(metadata).forEach(([key, obj]) => {
+        const allEntries: [string, any][] = Object.entries(metadata);
+        const seen = new Set(allEntries.map(([k]) => k));
+        knownProperties.forEach((_, key) => {
+            if (!seen.has(key) && metadata[key]) {
+                allEntries.push([key, metadata[key]]);
+            }
+        });
+        allEntries.forEach(([key, obj]) => {
             if (obj.write) {
                 let value: any;
 
@@ -516,7 +523,7 @@ export class TrackService implements OnDestroy {
             }
         });
         trackTagFields = trackTagFields.filter(t => t); // remove empty objects
-        console.log(trackTagFields);
+        console.log('trackTagFields:', trackTagFields);
 
         this.electronService.main.writeTags(files, trackTagFields);
         metadata.title.origValues = metadata.title.values; // so you can multi-step guess delete & find/replace

@@ -129,7 +129,11 @@
                             </option>
                         </select>
                     </clr-select-container>
-                    <button class="btn btn-icon btn-sm copy-btn" title="Copy to clipboard" (click)="copyCatalog()">
+                    <button
+                        class="btn btn-icon btn-sm copy-btn"
+                        title="Copy to clipboard"
+                        (click)="copyCatalog()"
+                    >
                         <cds-icon shape="copy"></cds-icon>
                     </button>
                 </div>
@@ -176,6 +180,12 @@
                     <input clrInput [(ngModel)]="selectedRelease.labelInfo.allLabels" />
                 </div>
             </div>
+            <clr-checkbox-container *ngIf="hasVinylTracks" style="margin-top: 0.33rem">
+                <clr-checkbox-wrapper>
+                    <input type="checkbox" clrCheckbox [(ngModel)]="useVinylNumbering" />
+                    <label>Use vinyl numbering</label>
+                </clr-checkbox-wrapper>
+            </clr-checkbox-container>
         </div>
         <div class="selected-release" *ngIf="selectedRelease; else noSelectedRelease">
             <clr-datagrid id="release-datagrid" class="datagrid-compact" *ngIf="selectedRelease">

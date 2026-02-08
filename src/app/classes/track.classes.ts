@@ -90,6 +90,8 @@ export class MetadataObj {
     RELEASETYPE?: MetadataProperty;
     title?: MetadataProperty;
     trackNumber?: MetadataProperty;
+    'VINYL SIDE'?: MetadataProperty;
+    'VINYL TRACKNUMBER'?: MetadataProperty;
 
     constructor() {
         this.parentData = {

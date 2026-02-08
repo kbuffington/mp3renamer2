@@ -70,10 +70,12 @@ export class GetMetadataComponent implements OnInit {
     public fetchingReleases = false;
     public fuzzySearch = false;
     public hasCovers = false;
+    public hasVinylTracks = false;
     public numCovers = 0; // number of cover artists for album
     public numTracks: number;
     public releaseGroup: string;
     public selectedRelease: ReleaseDisplay;
+    public useVinylNumbering = false;
 
     private metadata: MetadataObj;
 
@@ -138,6 +140,10 @@ export class GetMetadataComponent implements OnInit {
                     (release: any) => {
                         this.numCovers = 0;
                         this.selectedRelease = new ReleaseDisplay(release, this.metadata);
+                        this.hasVinylTracks = this.selectedRelease.tracks.some(
+                            t => t.position != t['number']
+                        );
+                        this.useVinylNumbering = false;
                         console.log(this.selectedRelease);
                         this.getArtistCountries(this.selectedRelease.artistCredits);
                         this.selectedRelease.tracks.forEach(track => {
@@ -262,8 +268,27 @@ export class GetMetadataComponent implements OnInit {
         this.setMetadataVal(metadata, 'artistSortOrder',
             release.artistSortString !== release.artistString ? release.artistSortString : '');
 
+        if (this.useVinylNumbering) {
+            this.applyVinylNumbering(metadata, release);
+        }
+
         this.ts.setMetadata(metadata);
         this.router.navigate(['/']);
+    }
+
+    private applyVinylNumbering(metadata: MetadataObj, release: ReleaseDisplay) {
+        release.tracks.forEach(track => {
+            if (track.metadataFoundIndex >= 0) {
+                const number = String(track['number'] ?? '');
+                const sideMatch = number.match(/^([A-Za-z]+)/);
+                const numMatch = number.match(/(\d+)$/);
+                metadata['VINYL SIDE'].values[track.metadataFoundIndex] = sideMatch ? sideMatch[1] : '';
+                metadata['VINYL TRACKNUMBER'].values[track.metadataFoundIndex] =
+                    numMatch ? numMatch[1] : '';
+            }
+        });
+        this.setNewDefault(metadata, 'VINYL SIDE');
+        this.setNewDefault(metadata, 'VINYL TRACKNUMBER');
     }
 
     public guessCase(prop) {
