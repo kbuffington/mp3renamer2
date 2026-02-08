@@ -6,6 +6,19 @@
     --cds-alias-object-interaction-border-color: #aaaaaa;
 }
 
+.clr-select-wrapper::after {
+    background-color: #aaaaaa;
+}
+
+.clr-combobox-trigger cds-icon[shape='angle'],
+.clr-combobox-trigger clr-icon[shape='angle'] {
+    color: #aaaaaa;
+
+    &:hover {
+        color: black;
+    }
+}
+
 @font-face {
     font-family: 'Open Sans';
     src: local('Open Sans'), url(./assets/fonts/OpenSans/OpenSans-Regular.ttf) format('truetype');
