@@ -87,7 +87,6 @@ export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public removeIfSelected(genre: GenreEntry) {
-        console.log('removeIfSelected', genre);
         const index = this.selectedGenres.findIndex(g => g.name === genre.name);
         if (index >= 0) {
             this.selectedGenres.splice(index, 1);

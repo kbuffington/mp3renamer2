@@ -96,7 +96,6 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
             const newName = this.unknownPropCopy[index];
             const origPropertyName = this.unknownPropArray[index];
             if (!editing && newName !== origPropertyName) {
-                console.log(`Renaming property ${origPropertyName} to ${newName}`);
                 this.unknownProperties[newName] = this.unknownProperties[origPropertyName];
                 delete this.unknownProperties[origPropertyName];
                 this.unknownPropArray[index] = newName;

@@ -231,7 +231,6 @@ export class TrackService implements OnDestroy {
                     metaProp.values.push('');
                 }
             } else {
-                // console.log(property);
                 metaProp.userDefined = true;
                 if (t.userDefined && (t.userDefined[property] || t.userDefined[alias])) {
                     this.setMetadataValue(
