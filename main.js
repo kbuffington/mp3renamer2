@@ -45,7 +45,7 @@ function createWindow() {
     mainWindow.setMenu(null);
 
     if (app.isPackaged) {
-        mainWindow.loadFile('dist/index.html');
+        mainWindow.loadFile('dist/browser/index.html');
     } else {
         mainWindow.loadURL('http://localhost:4200');
     }
