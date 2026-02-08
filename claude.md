@@ -4,8 +4,8 @@ Electron + Angular desktop app for MP3 file renaming, ID3 tagging, MusicBrainz m
 
 ## Tech Stack
 
-- **Frontend:** Angular 17 with TypeScript 5.3
-- **Desktop:** Electron 29 (main process in `main.js`)
+- **Frontend:** Angular 19 with TypeScript 5.3
+- **Desktop:** Electron 40 (main process in `main.js`)
 - **UI:** Clarity Design System (clr/cds) v17
 - **State:** RxJS BehaviorSubjects in services (no NgRx)
 - **ID3:** node-id3tag for MP3 metadata I/O
@@ -63,3 +63,14 @@ config.json       # User-specific app configuration (paths, API keys)
 - HTTP caching: custom `CacheInterceptor` with 12-hour localStorage cache for MusicBrainz API
 - `TitleFormatService` implements `%variable%` templating for filename patterns
 - Metadata pipeline: NodeID3 raw frames -> Track -> MetadataObj (with MetadataProperty wrappers) -> edit -> write back
+
+## Key Services
+
+- **`ValuesWrittenService`** (`values-written.service.ts`) - Tracks dirty state of metadata via a `BehaviorSubject<boolean>`. Starts as `true` (clean). Components call `markDirty()` when values change; `TrackService` calls `markWritten()` after writing tags or loading files. Used by `MetadataHandlerComponent` (Set Tags button styling) and `UpperButtonBarComponent` (unsaved changes confirmation on Load Files).
+
+## Adding New Metadata Properties
+
+To add a new user-defined (TXXX) metadata property:
+1. Add entry to `knownProperties` Map in `services/known-properties.ts`
+2. Add optional typed field to `MetadataObj` in `classes/track.classes.ts`
+3. The property will be automatically initialized by `TrackService.processTracks()` and written by `setTagData()` via the generic `knownProperties` iteration
