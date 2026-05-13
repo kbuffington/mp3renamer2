@@ -25,6 +25,7 @@ export class ReleaseDisplay extends Release {
     constructor(json: any, metadata: MetadataObj) {
         super(json);
         const partOfSet = metadata.partOfSet;
+        let needsArtistCol = false;
         metadata.trackNumber?.values.forEach((trackNumber: string, index) => {
             const pos = (partOfSet.useDefault ? partOfSet.default : partOfSet.values[index]).split(
                 '/',
@@ -43,7 +44,7 @@ export class ReleaseDisplay extends Release {
                 }
                 t.metadataArtist = metadata.artist?.values[index];
                 if (t.metadataArtist && t.artistString !== t.metadataArtist) {
-                    this.needsArtistCol = true;
+                    needsArtistCol = true;
                     const dmp = new DiffMatchPatch();
                     const diffs = dmp.diff_main(t.metadataArtist, t.artistString);
                     dmp.diff_cleanupSemantic(diffs);
@@ -52,7 +53,7 @@ export class ReleaseDisplay extends Release {
             }
         });
         this.needsArtistCol =
-            this.needsArtistCol || this.tracks.some(t => t.artistString !== this.artistString);
+            needsArtistCol || this.tracks.some(t => t.artistString !== this.artistString);
     }
 }
 
@@ -282,39 +283,60 @@ export class GetMetadataComponent implements OnInit {
             this.setMetadataVal(metadata, 'originalReleaseDate', '');
         }
 
+        const needsAlbumArtist = release.tracks.some(
+            track => track.artistString !== release.artistString,
+        );
         release.tracks.forEach((track: any) => {
             if (track.metadataFoundIndex >= 0) {
-                metadata.title.values[track.metadataFoundIndex] = track.title;
-                metadata.artist.values[track.metadataFoundIndex] = track.artistString;
-                metadata.partOfSet.values[track.metadataFoundIndex] = track.discSet;
-                metadata.DISCSUBTITLE.values[track.metadataFoundIndex] =
+                metadata.title!.values[track.metadataFoundIndex] = track.title;
+                metadata.artist!.values[track.metadataFoundIndex] = track.artistString;
+                metadata.partOfSet!.values[track.metadataFoundIndex] = track.discSet;
+                metadata.DISCSUBTITLE!.values[track.metadataFoundIndex] =
                     release.media[track.discNumber - 1].title ?? '';
-                metadata.ARTISTFILTER.values[track.metadataFoundIndex] = track.artistFilter;
+                metadata.ARTISTFILTER!.values[track.metadataFoundIndex] = track.artistFilter;
                 if (track.originalArtist) {
-                    metadata.originalArtist.values[track.metadataFoundIndex] = track.originalArtist;
+                    metadata.originalArtist!.values[track.metadataFoundIndex] =
+                        track.originalArtist;
                 }
-                let countries = [];
-                track.artistIDs.forEach((artistId: string) => {
-                    if (this.artistCache.has(artistId)) {
-                        countries.push(this.artistCache.get(artistId).country);
-                    }
-                });
-                countries = [...new Set(countries)];
-                metadata.ARTISTCOUNTRY.values[track.metadataFoundIndex] = countries.join('; ');
+                if (needsAlbumArtist) {
+                    let countries: string[] = [];
+                    track.artistIDs.forEach((artistId: string) => {
+                        if (this.artistCache.has(artistId)) {
+                            const country = this.artistCache.get(artistId)?.country;
+                            if (country) {
+                                countries.push(country);
+                            }
+                        }
+                    });
+                    countries = [...new Set(countries)];
+                    metadata.ARTISTCOUNTRY!.values[track.metadataFoundIndex] = countries.join('; ');
+                }
             }
         });
-        this.setDifferentFlag(metadata.artist);
+        this.setDifferentFlag(metadata.artist!);
         // these properties were changed in forEach, so find and set new default
         this.setNewDefault(metadata, 'originalArtist');
         this.setNewDefault(metadata, 'partOfSet');
         this.setNewDefault(metadata, 'DISCSUBTITLE');
         this.setNewDefault(metadata, 'ARTISTFILTER');
-        this.setNewDefault(metadata, 'ARTISTCOUNTRY');
+        if (needsAlbumArtist) {
+            this.setNewDefault(metadata, 'ARTISTCOUNTRY');
+        } else {
+            const releaseCountries = [
+                ...new Set(
+                    release.artistCredits
+                        .map(ac => this.artistCache.get(ac.artist!.id)?.country)
+                        .filter(c => c),
+                ),
+            ];
+            if (releaseCountries.length) {
+                this.setMetadataVal(metadata, 'ARTISTCOUNTRY', releaseCountries.join('; '));
+            }
+            metadata.ARTISTCOUNTRY!.different = false;
+            metadata.ARTISTCOUNTRY!.useDefault = true;
+        }
 
         // album artist
-        const needsAlbumArtist = release.tracks.some(
-            track => track.artistString !== release.artistString,
-        );
         this.setMetadataVal(
             metadata,
             'performerInfo',
