@@ -30,10 +30,10 @@ const EXCLUDED_TAGS = [
     '10s',
 ];
 
-class CacheEntry {
+type CacheEntry = {
     artist: ArtistData;
     addedTime: number;
-}
+};
 
 @Injectable({ providedIn: 'root' })
 export class ArtistCacheService {

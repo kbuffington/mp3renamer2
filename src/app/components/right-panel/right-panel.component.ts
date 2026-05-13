@@ -5,6 +5,7 @@ import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
 import { ValuesWrittenService } from '@services/values-written.service';
 import {
+    MetadataKey,
     MetadataObj,
     MetadataProperty,
     TrackOptions,
@@ -22,10 +23,10 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     @Input() tracks: any[] = [];
     @Input() stopEditing: number;
 
-    public conflictProperty: MetadataProperty;
-    public conflictDisplayName: string;
+    public conflictProperty: MetadataProperty = new MetadataProperty();
+    public conflictDisplayName: string = '';
     public conflictReadOnly = false;
-    public conflictHintFieldName = 'title';
+    public conflictHintFieldName: MetadataKey = 'title';
     public inputTypes = InputTypes;
     public metadata: MetadataObj;
     public metadataSubscription: Subscription;
@@ -84,9 +85,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     guessArtistSortOrder() {
         const meta = this.metadata;
-        const artist: string = meta.performerInfo.default
-            ? meta.performerInfo.default
-            : meta.artist.default;
+        const artist: string = meta.performerInfo?.default ?? meta.artist!.default;
         let sortOrder = '';
         if (artist.toLowerCase().indexOf('the ') === 0) {
             sortOrder = artist.substr(4) + ', The';
@@ -100,18 +99,20 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         this.updateValue('artistSortOrder', sortOrder);
     }
 
-    updateValue(fieldname: string, value: string) {
+    updateValue(fieldname: MetadataKey, value: string) {
         const metaField = this.metadata[fieldname];
-        metaField.default = value;
-        metaField.defaultChanged = true;
-        this.valuesWrittenService.markDirty();
+        if (metaField) {
+            metaField.default = value;
+            metaField.defaultChanged = true;
+            this.valuesWrittenService.markDirty();
+        }
     }
 
     public showConflict(
         property: MetadataProperty,
         name: string,
         readOnly = false,
-        hintFieldName = 'title',
+        hintFieldName: MetadataKey = 'title',
     ) {
         this.conflictProperty = property;
         this.conflictDisplayName = name;

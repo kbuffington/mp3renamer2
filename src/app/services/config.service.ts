@@ -2,38 +2,36 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ElectronService } from './electron.service';
 
-export class ConfigSettingsObject {
+export type ConfigSettingsObject = {
     homeDir: string;
     artistLogoDir: string;
     labelLogoDir: string;
     fanartApiKey: string;
     aadPath: string; // path to album art downloader executable
-    aadParams: string; // command line paramaters to pass to aad.exe
+    aadParams: string; // command line parameters to pass to aad.exe
     replaceUnicodeApostrophe: boolean;
     replaceUnicodeEllipsis: boolean;
     replaceUnicodeQuotes: boolean;
     replacementFileNameChars: {
-        '\\': '-',
-        '/': '-',
-        ':': '-',
-        '*': '',
-        '?': '',
-        '"': '\'',
-        '<': '',
-        '>': '_',
-        '|': '',
-    }
-
-    constructor(json) {
-        Object.assign(this, json);
-    }
-}
+        '\\': '-';
+        '/': '-';
+        ':': '-';
+        '*': '';
+        '?': '';
+        '"': "'";
+        '<': '';
+        '>': '_';
+        '|': '';
+    };
+};
 
 const CONFIG_FILE_NAME = 'config.json';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
-    private configuration: BehaviorSubject<ConfigSettingsObject> = new BehaviorSubject(new ConfigSettingsObject({}));
+    private configuration: BehaviorSubject<ConfigSettingsObject> = new BehaviorSubject(
+        {} as ConfigSettingsObject,
+    );
     private path: string;
 
     constructor(private electronService: ElectronService) {
@@ -57,13 +55,13 @@ export class ConfigService {
                 this.configuration.next(defaultConfig);
             } else {
                 const json = JSON.parse(data.toString());
-                this.configuration.next(new ConfigSettingsObject(Object.assign(this.defaultConfig(), json)));
+                this.configuration.next(Object.assign(this.defaultConfig(), json));
             }
         });
     }
 
     public defaultConfig(): ConfigSettingsObject {
-        const defaultConfig = new ConfigSettingsObject({
+        return {
             homeDir: this.electronService.remote.app.getAppPath(),
             artistLogoDir: this.electronService.remote.app.getPath('downloads'),
             labelLogoDir: this.electronService.remote.app.getPath('downloads'),
@@ -79,18 +77,20 @@ export class ConfigService {
                 ':': '-',
                 '*': '',
                 '?': '',
-                '"': '\'',
+                '"': "'",
                 '<': '',
                 '>': '_',
                 '|': '',
             },
-        });
-
-        return defaultConfig;
+        };
     }
 
     public saveConfig(config: ConfigSettingsObject): void {
-        this.electronService.fs.writeFile(`${this.path}/${CONFIG_FILE_NAME}`, JSON.stringify(config, null, 4), () => {});
+        this.electronService.fs.writeFile(
+            `${this.path}/${CONFIG_FILE_NAME}`,
+            JSON.stringify(config, null, 4),
+            () => {},
+        );
         this.configuration.next(config);
     }
 }

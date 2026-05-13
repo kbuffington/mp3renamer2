@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { knownProperties } from './known-properties';
 import {
     CommentStruct,
+    MetadataKey,
     MetadataObj,
     MetadataProperty,
     Track,
@@ -19,13 +20,13 @@ export class TrackService implements OnDestroy {
     private config: ConfigSettingsObject;
     private configSub: Subscription;
     private currentFolder: BehaviorSubject<string> = new BehaviorSubject('');
-    private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([]);
+    private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([] as Track[]);
     private trackMetaData: BehaviorSubject<MetadataObj> = new BehaviorSubject({});
     private trackOptions: BehaviorSubject<TrackOptions> = new BehaviorSubject({});
     private unknownProperties: UnknownPropertiesObj = {};
     private trackDataBackup: any;
-    private trackCount: number;
-    private selectedTracks: number[];
+    private trackCount = 0;
+    private selectedTracks: number[] = [];
     private rename: Function;
 
     public deleteString = '';
@@ -150,7 +151,7 @@ export class TrackService implements OnDestroy {
                 prop.useDefault,
                 prop.alias,
             );
-            metaData[name].write = prop.write ?? true;
+            metaData[name as MetadataKey].write = prop.write ?? true;
             if (prop.alias) {
                 aliases.push(prop.alias); // save all aliases for filtering out of unknownProperties
             }
@@ -212,8 +213,8 @@ export class TrackService implements OnDestroy {
     }
 
     private processField(
-        metadata: MetadataObj,
-        tracks,
+        metadata: MetadataObj | UnknownPropertiesObj,
+        tracks: Track[],
         property: string,
         userDefined: boolean,
         multiValue: boolean,
@@ -225,8 +226,8 @@ export class TrackService implements OnDestroy {
         metaProp.useDefault = useDefault;
         tracks.forEach(t => {
             if (!userDefined) {
-                if (t[property]) {
-                    this.setMetadataValue(metaProp, t[property]);
+                if ((t as any)[property]) {
+                    this.setMetadataValue(metaProp, (t as any)[property]);
                 } else {
                     metaProp.values.push('');
                 }
@@ -249,16 +250,13 @@ export class TrackService implements OnDestroy {
                 metaProp.different = true;
             }
         });
-        metadata[property] = metaProp;
+        (metadata as Record<string, MetadataProperty>)[property] = metaProp;
     }
 
     private setMetadataValue(metaProp: MetadataProperty, value: string | CommentStruct) {
         if (Array.isArray(value)) {
             value = value.join('; ');
         }
-        // if (value instanceof CommentStruct) {
-        //     console.l
-        // }
         const saveValue = value.hasOwnProperty('text') ? value['text'] : value;
         if (!metaProp.default) {
             metaProp.default = saveValue;
@@ -299,7 +297,7 @@ export class TrackService implements OnDestroy {
     public previewFilenames(pattern: string) {
         const trackList = this.getCurrentTracks();
         const metadata = this.trackMetaData.getValue();
-        const artist = metadata.performerInfo.default || metadata.artist.default;
+        const artist = metadata.performerInfo?.default || metadata.artist!.default;
         const config = this.config;
         const replaceCharsStr = Object.keys(config.replacementFileNameChars).join('');
         const regex = new RegExp(
@@ -308,12 +306,12 @@ export class TrackService implements OnDestroy {
         );
         trackList.forEach((t: Track, index: number) => {
             if (this.selectedTracks.includes(index)) {
-                const title = metadata.title.values[index].trim();
-                const partOfSet = metadata.partOfSet.useDefault
+                const title = metadata.title?.values[index].trim();
+                const partOfSet = metadata.partOfSet?.useDefault
                     ? metadata.partOfSet.default
-                    : metadata.partOfSet.values[index];
+                    : metadata.partOfSet?.values[index];
                 let discNum = '';
-                if (partOfSet.length) {
+                if (partOfSet?.length) {
                     if (partOfSet.includes('/')) {
                         const [disc, totalDiscs] = partOfSet.split('/');
                         discNum =
@@ -325,9 +323,9 @@ export class TrackService implements OnDestroy {
                     }
                 }
                 // const discNum = this.alphaRoman(metadata.partOfSet.values[index]);
-                const trackNumber = metadata.trackNumber.values[index];
+                const trackNumber = metadata.trackNumber!.values[index];
                 const filename =
-                    `${artist.trim()} [${metadata.album.default.trim()} ${discNum}${trackNumber}]` +
+                    `${artist.trim()} [${metadata.album!.default.trim()} ${discNum}${trackNumber}]` +
                     ` - ${title}${t.meta.extension}`;
                 // https://stackoverflow.com/a/70343927/911192
                 t.meta.filename = filename.replace(regex, m => {
@@ -376,23 +374,25 @@ export class TrackService implements OnDestroy {
         this.trackList.next(trackList);
     }
 
-    public getNewFolderName(): string {
-        if (Object.keys(this.config).length === 0) return undefined; // at startup config may not be loaded yet
+    public getNewFolderName(): string | undefined {
+        if (Object.keys(this.config).length === 0) return; // at startup config may not be loaded yet
         const config = this.config;
         const md = this.getCurrentMetadata();
-        const year = md.albumSortOrder.default || md.originalReleaseDate.default || md.date.default;
-        const artist = md.artistSortOrder.default || md.performerInfo.default || md.artist.default;
+        const year =
+            md.albumSortOrder?.default || md.originalReleaseDate?.default || md.date?.default;
+        const artist =
+            md.artistSortOrder?.default || md.performerInfo?.default || md.artist?.default;
         let editionYear = '';
         if (
-            md.originalReleaseDate.default &&
-            md.originalReleaseDate.default.substring(0, 4) < md.date.default.substring(0, 4)
+            md.originalReleaseDate?.default &&
+            md.originalReleaseDate.default.substring(0, 4) < md.date!.default.substring(0, 4)
         ) {
-            editionYear = md.date.default.substring(0, 4) + ' ';
+            editionYear = md.date!.default.substring(0, 4) + ' ';
         }
-        const edition = md.EDITION.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
+        const edition = md.EDITION?.default ? ` [${editionYear}${md.EDITION.default.trim()}]` : '';
         let newDir =
-            `${artist.trim()} - ${year ? year.substring(0, 4) + ' - ' : ''}` +
-            `${md.album.default.trim()}${edition}`;
+            `${artist?.trim()} - ${year ? year.substring(0, 4) + ' - ' : ''}` +
+            `${md.album?.default.trim()}${edition}`;
 
         const replaceCharsStr = Object.keys(config.replacementFileNameChars).join('');
         const regex = new RegExp(
@@ -415,7 +415,7 @@ export class TrackService implements OnDestroy {
             path.substring(0, path.length - 2).lastIndexOf(this.pathDelimiter) + 1,
         );
         const newDir = this.getNewFolderName();
-        if (newDir !== currentDir) {
+        if (newDir && newDir !== currentDir) {
             const newPath = basePath + newDir;
             let stats;
             try {
@@ -474,13 +474,13 @@ export class TrackService implements OnDestroy {
         });
         // TODO: Also write undefined properties
         Object.entries(this.unknownProperties).forEach(([key, value]) => {
-            metadata[key] = value;
+            (metadata as Record<string, MetadataProperty>)[key] = value;
         });
         const allEntries: [string, any][] = Object.entries(metadata);
         const seen = new Set(allEntries.map(([k]) => k));
         knownProperties.forEach((_, key) => {
-            if (!seen.has(key) && metadata[key]) {
-                allEntries.push([key, metadata[key]]);
+            if (!seen.has(key) && metadata[key as MetadataKey]) {
+                allEntries.push([key, metadata[key as MetadataKey]]);
             }
         });
         allEntries.forEach(([key, obj]) => {
@@ -582,7 +582,7 @@ export class TrackService implements OnDestroy {
         const metadata = this.getCurrentMetadata();
         const selectedCopy = [...this.selectedTracks];
         const tracks = this.getCurrentTracks();
-        const titles = metadata.title.origValues.map((origTitle, index) => {
+        const titles = metadata.title!.origValues.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {
                 let title;
                 if (!origTitle) {
@@ -591,7 +591,7 @@ export class TrackService implements OnDestroy {
                     const titleRegex = new RegExp(/\d+\]?[ .]+(-\s*)?(.*).mp3/);
                     if (titleRegex.test(origTitle)) {
                         const results = titleRegex.exec(origTitle);
-                        title = results[2];
+                        title = results![2];
                     }
                 }
                 title = origTitle.replace(this.deleteString, '');
@@ -603,7 +603,7 @@ export class TrackService implements OnDestroy {
             }
             return origTitle;
         });
-        metadata.title.values = titles;
+        metadata.title!.values = titles;
         this.setMetadata(metadata);
         this.selectedTracks = selectedCopy;
         this.valuesWrittenService.markDirty();

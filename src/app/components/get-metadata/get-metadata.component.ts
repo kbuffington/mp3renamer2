@@ -5,7 +5,7 @@ import { ArtistCredit, ArtistData, Release, Work } from '@classes/musicbrainz.cl
 import { MusicbrainzService } from '@services/musicbrainz.service';
 import { ThrottleService } from '@services/throttle.service';
 import { TrackService } from '@services/track.service';
-import { MetadataObj, MetadataProperty } from '@classes/track.classes';
+import { MetadataKey, MetadataObj, MetadataProperty } from '@classes/track.classes';
 import { throwError as observableThrowError } from 'rxjs';
 import { CacheService } from '@services/cache.service';
 import { ElectronService } from '@services/electron.service';
@@ -239,15 +239,15 @@ export class GetMetadataComponent implements OnInit {
         return observableThrowError(errMsg);
     }
 
-    private setMetadataVal(metadata: MetadataObj, key: string, val: string) {
-        metadata[key].defaultChanged = true;
-        metadata[key].default = val;
+    private setMetadataVal(metadata: MetadataObj, key: MetadataKey, val: string) {
+        metadata[key]!.defaultChanged = true;
+        metadata[key]!.default = val;
     }
 
-    private setNewDefault(metadata: MetadataObj, key: string) {
-        const firstVal = metadata[key].values.find(val => val) ?? '';
+    private setNewDefault(metadata: MetadataObj, key: MetadataKey) {
+        const firstVal = metadata[key]!.values.find(val => val) ?? '';
         this.setMetadataVal(metadata, key, firstVal);
-        this.setDifferentFlag(metadata[key]);
+        this.setDifferentFlag(metadata[key]!);
     }
 
     private setDifferentFlag(metaProp: MetadataProperty) {
@@ -261,14 +261,18 @@ export class GetMetadataComponent implements OnInit {
         this.setMetadataVal(metadata, 'artist', release.artistString);
         this.setMetadataVal(metadata, 'album', release.title);
         this.setMetadataVal(metadata, 'date', release.date);
-        this.setMetadataVal(metadata, 'CATALOGNUMBER', release.labelInfo.selectedCatalog ?? '');
+        this.setMetadataVal(metadata, 'CATALOGNUMBER', release.labelInfo?.selectedCatalog ?? '');
         this.setMetadataVal(metadata, 'EDITION', release.disambiguation);
-        this.setMetadataVal(metadata, 'LABEL', release.labelInfo.allLabels);
+        this.setMetadataVal(metadata, 'LABEL', release.labelInfo?.allLabels ?? '');
         this.setMetadataVal(metadata, 'RELEASECOUNTRY', release.country);
         this.setMetadataVal(metadata, 'RELEASETYPE', release.releaseGroup.primaryType);
         this.setMetadataVal(metadata, 'MUSICBRAINZ_RELEASEGROUPID', release.releaseGroup.id);
         this.setMetadataVal(metadata, 'MUSICBRAINZ_ARTISTID', release.artistCredits[0].artist.id);
-        this.setMetadataVal(metadata, 'MUSICBRAINZ_LABELID', release.labelInfo.labelIds.join('; '));
+        this.setMetadataVal(
+            metadata,
+            'MUSICBRAINZ_LABELID',
+            release.labelInfo?.labelIds.join('; ') ?? '',
+        );
         if (
             new Date(release.date).getTime() -
                 new Date(release.releaseGroup.firstReleaseDate).getTime() >
@@ -377,7 +381,7 @@ export class GetMetadataComponent implements OnInit {
         this.setNewDefault(metadata, 'VINYL TRACKNUMBER');
     }
 
-    public guessCase(prop) {
+    public guessCase(prop: string) {
         this.selectedRelease[prop] = this.titleCaseService.titleCaseString(
             this.selectedRelease[prop],
         );

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MetadataObj, MetadataProperty } from '@classes/track.classes';
+import { MetadataKey, MetadataObj, MetadataProperty } from '@classes/track.classes';
 import { TrackService } from '@services/track.service';
 import { ValuesWrittenService } from '@services/values-written.service';
 
@@ -14,7 +14,7 @@ export class ConflictModalComponent implements OnInit {
     @Input() displayName: string;
     @Input() showModal = false;
     @Input() readOnly = false;
-    @Input() hintFieldName: string;
+    @Input() hintFieldName: MetadataKey;
 
     @Output() fieldChange = new EventEmitter<MetadataProperty>();
     @Output() showModalChange = new EventEmitter<boolean>();
