@@ -94,12 +94,12 @@ export class TitleFormatService {
                     );
                 } else {
                     const prop = metadata[propObj.prop as MetadataKey];
-                    return index ? prop.values[index] : prop.default;
+                    return index ? prop!.values[index] : prop!.default;
                 }
             } else {
                 const prop = this.findProp(metadata, substring);
                 if (prop) {
-                    return index ? prop.values[index] : prop.default;
+                    return index ? prop!.values[index] : prop!.default;
                 }
                 return match;
             }

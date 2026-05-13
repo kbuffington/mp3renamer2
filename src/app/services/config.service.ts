@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ElectronService } from './electron.service';
 
+export type ReplaceableChar = '\\' | '/' | ':' | '*' | '?' | '"' | '<' | '>' | '|';
+
 export type ConfigSettingsObject = {
     homeDir: string;
     artistLogoDir: string;
@@ -12,17 +14,7 @@ export type ConfigSettingsObject = {
     replaceUnicodeApostrophe: boolean;
     replaceUnicodeEllipsis: boolean;
     replaceUnicodeQuotes: boolean;
-    replacementFileNameChars: {
-        '\\': '-';
-        '/': '-';
-        ':': '-';
-        '*': '';
-        '?': '';
-        '"': "'";
-        '<': '';
-        '>': '_';
-        '|': '';
-    };
+    replacementFileNameChars: Record<ReplaceableChar, string>;
 };
 
 export type ConfigKey = keyof ConfigSettingsObject;

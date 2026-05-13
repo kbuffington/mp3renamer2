@@ -27,9 +27,9 @@ export class ReleaseDisplay extends Release {
         const partOfSet = metadata.partOfSet;
         let needsArtistCol = false;
         metadata.trackNumber?.values.forEach((trackNumber: string, index) => {
-            const pos = (partOfSet.useDefault ? partOfSet.default : partOfSet.values[index]).split(
-                '/',
-            );
+            const pos = (
+                partOfSet?.useDefault ? partOfSet.default : partOfSet!.values[index]
+            ).split('/');
             const disc = parseInt(pos[0]) ? parseInt(pos[0]) : 1;
             const discTrackStr = `${disc}-${parseInt(trackNumber)}`;
             const t = this.tracks.find(track => track.discTrackStr === discTrackStr);
@@ -77,7 +77,7 @@ export class GetMetadataComponent implements OnInit {
     public hasCovers = false;
     public hasVinylTracks = false;
     public numCovers = 0; // number of cover artists for album
-    public numTracks: number;
+    public numTracks = 0;
     public releaseGroup: string;
     public selectedRelease: ReleaseDisplay;
     public useVinylNumbering = false;
@@ -105,9 +105,9 @@ export class GetMetadataComponent implements OnInit {
 
     ngOnInit() {
         this.metadata = this.ts.getCurrentMetadata();
-        this.artist = this.metadata.artist.default;
-        this.album = this.metadata.album.default;
-        this.releaseGroup = this.metadata.MUSICBRAINZ_RELEASEGROUPID.default;
+        this.artist = this.metadata.artist!.default;
+        this.album = this.metadata.album!.default;
+        this.releaseGroup = this.metadata.MUSICBRAINZ_RELEASEGROUPID?.default ?? '';
         this.numTracks = this.ts.getNumTracks();
         if (this.artist || this.album) {
             this.requestMetadata().then(() => {
@@ -369,10 +369,10 @@ export class GetMetadataComponent implements OnInit {
                 const number = String(track['number'] ?? '');
                 const sideMatch = number.match(/^([A-Za-z]+)/);
                 const numMatch = number.match(/(\d+)$/);
-                metadata['VINYL SIDE'].values[track.metadataFoundIndex] = sideMatch
+                metadata['VINYL SIDE']!.values[track.metadataFoundIndex] = sideMatch
                     ? sideMatch[1]
                     : '';
-                metadata['VINYL TRACKNUMBER'].values[track.metadataFoundIndex] = numMatch
+                metadata['VINYL TRACKNUMBER']!.values[track.metadataFoundIndex] = numMatch
                     ? numMatch[1]
                     : '';
             }
