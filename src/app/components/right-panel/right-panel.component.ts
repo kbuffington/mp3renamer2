@@ -16,7 +16,7 @@ import { tap, throttleTime } from 'rxjs/operators';
     selector: 'right-panel',
     templateUrl: './right-panel.component.html',
     styleUrls: ['./right-panel.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class RightPanelComponent implements OnInit, OnDestroy {
     @Input() tracks: any[] = [];
@@ -24,17 +24,18 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     public conflictProperty: MetadataProperty;
     public conflictDisplayName: string;
-    public conflictReadOnly: boolean;
+    public conflictReadOnly = false;
+    public conflictHintFieldName = 'title';
     public inputTypes = InputTypes;
     public metadata: MetadataObj;
     public metadataSubscription: Subscription;
-    public releaseTypes = [];
+    public releaseTypes: string[] = [];
     public showModal = false;
     public trackOptions: TrackOptions;
     public trackOptionsSubscription: Subscription;
     public unknownProperties: UnknownPropertiesObj;
 
-    private hasUnknownProps: boolean;
+    private hasUnknownProps = false;
 
     @ViewChild('coverImg') readonly coverImg: ElementRef;
 
@@ -106,10 +107,16 @@ export class RightPanelComponent implements OnInit, OnDestroy {
         this.valuesWrittenService.markDirty();
     }
 
-    public showConflict(property: MetadataProperty, name: string, readOnly = false) {
+    public showConflict(
+        property: MetadataProperty,
+        name: string,
+        readOnly = false,
+        hintFieldName = 'title',
+    ) {
         this.conflictProperty = property;
         this.conflictDisplayName = name;
         this.conflictReadOnly = readOnly;
+        this.conflictHintFieldName = hintFieldName;
         this.showModal = true;
     }
 
@@ -124,16 +131,16 @@ export class RightPanelComponent implements OnInit, OnDestroy {
 
     public setReleaseCountry(country: string) {
         const metadata = this.ts.getCurrentMetadata();
-        metadata.RELEASECOUNTRY.default = country;
-        metadata.RELEASECOUNTRY.defaultChanged = true;
+        metadata.RELEASECOUNTRY!.default = country;
+        metadata.RELEASECOUNTRY!.defaultChanged = true;
         this.ts.setMetadata(metadata);
         this.valuesWrittenService.markDirty();
     }
 
     public setLabel(label: string) {
         const metadata = this.ts.getCurrentMetadata();
-        metadata.LABEL.default = label;
-        metadata.LABEL.defaultChanged = true;
+        metadata.LABEL!.default = label;
+        metadata.LABEL!.defaultChanged = true;
         this.ts.setMetadata(metadata);
         this.valuesWrittenService.markDirty();
     }
@@ -149,7 +156,7 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
 
     public tab2Conflicts(): boolean {
-        return (
+        return !!(
             (!this.metadata.copyright?.defaultChanged && this.metadata.copyright?.different) ||
             (!this.metadata.encodedBy?.defaultChanged && this.metadata.encodedBy?.different) ||
             (!this.metadata.MUSICBRAINZ_ARTISTID?.defaultChanged &&
@@ -164,25 +171,25 @@ export class RightPanelComponent implements OnInit, OnDestroy {
     }
 
     public tab3hasValues(): boolean {
-        return this.trackOptions.showArtwork;
+        return this.trackOptions.showArtwork ?? false;
     }
 
     public openMusicBrainz(prop: string) {
         let mbid;
         let urlBase;
         if (prop === 'MUSICBRAINZ_ARTISTID') {
-            mbid = this.metadata.MUSICBRAINZ_ARTISTID.default;
+            mbid = this.metadata.MUSICBRAINZ_ARTISTID!.default;
             urlBase = 'artist';
         } else if (prop === 'MUSICBRAINZ_RELEASEGROUPID') {
             urlBase = 'release-group';
-            mbid = this.metadata.MUSICBRAINZ_RELEASEGROUPID.default;
+            mbid = this.metadata.MUSICBRAINZ_RELEASEGROUPID!.default;
         }
         const url = `https://musicbrainz.org/${urlBase}/${mbid}`;
         this.electronService.remote.shell.openExternal(url);
     }
 
     public openFanart() {
-        const artistId = this.metadata.MUSICBRAINZ_ARTISTID.default;
+        const artistId = this.metadata.MUSICBRAINZ_ARTISTID!.default;
         const url = `http://fanart.tv/artist/${artistId}`;
         this.electronService.remote.shell.openExternal(url);
     }
