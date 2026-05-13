@@ -25,6 +25,9 @@ export type ConfigSettingsObject = {
     };
 };
 
+export type ConfigKey = keyof ConfigSettingsObject;
+export type CharKey = keyof ConfigSettingsObject['replacementFileNameChars'];
+
 const CONFIG_FILE_NAME = 'config.json';
 
 @Injectable({ providedIn: 'root' })
