@@ -24,24 +24,24 @@ class ImgInfo {
     selector: 'image-handler',
     templateUrl: './image-handler.component.html',
     styleUrls: ['./image-handler.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class ImageHandlerComponent implements OnInit, OnDestroy {
     public imgPath = '';
     public embedImage: ImgInfo = { x: 0, y: 0 };
-    public localImages: ImgInfo[];
-    public defaultEmbedImg: string;
-    public embedImgLabel: string;
-    public metadata: MetadataObj;
-    public path: string;
-    public popoverImage: ImgInfo;
+    public localImages: ImgInfo[] = [];
+    public defaultEmbedImg?: string;
+    public embedImgLabel?: string;
+    public metadata: MetadataObj = {};
+    public path: string = '';
+    public popoverImage: ImgInfo | null = null;
     public title = 'Embedded';
-    public trackOptions: TrackOptions;
-    public trackOptionsSubscription: Subscription;
+    public trackOptions?: TrackOptions;
+    public trackOptionsSubscription: Subscription | null = null;
 
-    @ViewChild('coverImg') readonly coverImg: ElementRef;
-    @ViewChild('popOverContainer') popOverContainer: ElementRef;
-    @ViewChildren('localImg') readonly localImgEls: QueryList<ElementRef>;
+    @ViewChild('coverImg') readonly coverImg!: ElementRef;
+    @ViewChild('popOverContainer') popOverContainer!: ElementRef;
+    @ViewChildren('localImg') readonly localImgEls!: QueryList<ElementRef>;
 
     constructor(
         private ts: TrackService,
@@ -85,16 +85,17 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.trackOptionsSubscription.unsubscribe();
+        this.trackOptionsSubscription?.unsubscribe();
     }
 
     public onLoad(index?: number) {
-        if (index >= 0) {
-            this.localImages[index].x = (
-                this.localImgEls.get(index).nativeElement as HTMLImageElement
-            ).naturalWidth;
+        if (index !== undefined && index >= 0) {
+            const localImgEl = this.localImgEls.get(index);
+            if (!localImgEl) return;
+
+            this.localImages[index].x = (localImgEl.nativeElement as HTMLImageElement).naturalWidth;
             this.localImages[index].y = (
-                this.localImgEls.get(index).nativeElement as HTMLImageElement
+                localImgEl.nativeElement as HTMLImageElement
             ).naturalHeight;
         } else {
             this.embedImage.x = (this.coverImg.nativeElement as HTMLImageElement).naturalWidth;
@@ -104,7 +105,7 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
 
     public async loadImage(imgPath?: string) {
         if (imgPath) {
-            this.trackOptions.localArtwork = imgPath;
+            this.trackOptions!.localArtwork = imgPath;
         } else {
             const path = this.ts.getCurrentPath();
             await this.electronService.remote.dialog
@@ -114,13 +115,13 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
                 })
                 .then(result => {
                     console.log(result.filePaths);
-                    this.trackOptions.localArtwork = result.filePaths[0];
+                    this.trackOptions!.localArtwork = result.filePaths[0];
                 })
                 .catch(err => {
                     console.warn(err);
                 });
         }
-        if (this.trackOptions.localArtwork) {
+        if (this.trackOptions?.localArtwork) {
             const imgBuffer = this.electronService.fs.readFileSync(this.trackOptions.localArtwork);
             const imageData = new ImageStruct(imgBuffer);
             this.refreshImage();
