@@ -1,7 +1,7 @@
 {
 	"compileOnSave": false,
 	"compilerOptions": {
-    "baseUrl": "./src",
+    "rootDir": "./src",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "esModuleInterop": true,
@@ -22,16 +22,16 @@
     ],
     "paths": {
       "@classes/*": [
-        "app/classes/*"
+        "./src/app/classes/*"
       ],
       "@components/*": [
-        "app/components/*"
+        "./src/app/components/*"
       ],
       "@directives/*": [
-        "app/directives/*"
+        "./src/app/directives/*"
       ],
       "@services/*": [
-        "app/services/*"
+        "./src/app/services/*"
       ]
     },
     "useDefineForClassFields": false
