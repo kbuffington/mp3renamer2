@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, RouterLink } from '@angular/router';
 import { ClarityModule } from '@clr/angular';
 import { LeftPanelComponent } from '@components/left-panel/left-panel.component';
 import { MetadataHandlerComponent } from '@components/metadata-handler/metadata-handler.component';
@@ -17,11 +17,7 @@ describe('MainComponent', () => {
 
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
-            imports: [
-                ClarityModule,
-                FormsModule,
-                RouterTestingModule,
-            ],
+            imports: [ClarityModule, FormsModule, RouterLink],
             declarations: [
                 InputFieldComponent,
                 LeftPanelComponent,
@@ -31,6 +27,7 @@ describe('MainComponent', () => {
                 RightPanelComponent,
                 UpperButtonBarComponent,
             ],
+            providers: [provideRouter([])],
         }).compileComponents();
     }));
 
