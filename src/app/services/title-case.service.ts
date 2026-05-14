@@ -148,8 +148,9 @@ export class TitleCaseService {
         return words.join(' ');
     }
 
-    public hasBadCaps(titles: MetadataProperty): boolean {
-        return titles.values.some(title => {
+    public hasBadCaps(titles: string[], albumTitle: string): boolean {
+        const stringsToCheck = [...titles, albumTitle];
+        return stringsToCheck.some(title => {
             const words = title.split(' ');
             for (let i = 1; i < words.length - 1; i++) {
                 const word = words[i];
@@ -157,6 +158,7 @@ export class TitleCaseService {
                     return true;
                 }
             }
+            return false;
         });
     }
 }

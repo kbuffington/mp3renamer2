@@ -17,7 +17,7 @@ import { ValuesWrittenService } from './values-written.service';
 
 @Injectable({ providedIn: 'root' })
 export class TrackService implements OnDestroy {
-    private config: ConfigSettingsObject;
+    private config!: ConfigSettingsObject;
     private configSub: Subscription;
     private currentFolder: BehaviorSubject<string> = new BehaviorSubject('');
     private trackList: BehaviorSubject<Track[]> = new BehaviorSubject([] as Track[]);
@@ -151,7 +151,7 @@ export class TrackService implements OnDestroy {
                 prop.useDefault,
                 prop.alias,
             );
-            metaData[name as MetadataKey].write = prop.write ?? true;
+            metaData[name as MetadataKey]!.write = prop.write ?? true;
             if (prop.alias) {
                 aliases.push(prop.alias); // save all aliases for filtering out of unknownProperties
             }
@@ -568,14 +568,19 @@ export class TrackService implements OnDestroy {
 
     public fixCapitalization() {
         const metadata = this.getCurrentMetadata();
-        const titles = metadata.title!.values.map((origTitle, index) => {
+        metadata.title!.values = metadata.title!.values.map((origTitle, index) => {
             if (this.selectedTracks.includes(index)) {
                 return this.titleCaseService.fixCapitalization(origTitle);
             } else {
                 return origTitle;
             }
         });
-        metadata.title!.values = titles;
+        if (metadata.album?.default) {
+            metadata.album.default = this.titleCaseService.fixCapitalization(
+                metadata.album.default,
+            );
+            metadata.album.defaultChanged = true;
+        }
         this.setMetadata(metadata);
         this.valuesWrittenService.markDirty();
     }
