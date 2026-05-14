@@ -38,7 +38,7 @@ export class MainComponent implements OnInit, OnDestroy {
         });
         this.metadataSubscription = this.ts.getMetadata().subscribe(metadata => {
             this.metadata = metadata;
-            this.showArtist = this.metadata.artist.different;
+            this.showArtist = this.metadata.artist?.different ?? false;
         });
         this.setNamesCheck = setInterval(() => {
             this.isSetNamesDisabled();

@@ -20,31 +20,30 @@ import { Subscription } from 'rxjs';
     standalone: false,
 })
 export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges {
-    @Input() unknownProperties: UnknownPropertiesObj;
-    @Input() stopEditing: number;
+    @Input() unknownProperties!: UnknownPropertiesObj;
+    @Input() stopEditing!: number;
 
     @Output() unknownPropertiesChange = new EventEmitter<UnknownPropertiesObj[]>();
 
-    public unknownPropArray = [];
-    public unknownPropCopy = [];
-    public editing: boolean[] = [];
-    public selected: any[] = [];
+    public unknownPropArray: string[] = [];
+    public unknownPropCopy: string[] = [];
+    public editing: boolean[][] = [];
+    public selected: string[] = [];
 
-    private metadata: MetadataObj;
-    private metadataSubscription: Subscription;
+    // private metadataSubscription: Subscription | null = null;
     private loadedComponent = false;
 
     constructor(private ts: TrackService, private valuesWrittenService: ValuesWrittenService) {}
 
     ngOnInit() {
-        this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
-            this.metadata = m;
-        });
+        // this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
+        //     this.metadata = m;
+        // });
         this.loadedComponent = true;
     }
 
     ngOnDestroy() {
-        this.metadataSubscription.unsubscribe();
+        // this.metadataSubscription?.unsubscribe();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -63,7 +62,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
     public clearEditing() {
         const numRows = this.unknownPropArray.length;
         const numCols = 2;
-        const editingGrid = [];
+        const editingGrid: boolean[][] = [];
         for (let i = 0; i <= numRows; i++) {
             editingGrid[i] = [];
             for (let j = 0; j < numCols; j++) {
@@ -82,7 +81,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
 
     public selectionChanged(selection: any) {
         Object.keys(this.unknownProperties).forEach(p => (this.unknownProperties[p].write = false));
-        selection.forEach(key => {
+        selection.forEach((key: string) => {
             this.unknownProperties[key].write = true;
         });
         if (!this.loadedComponent) {
@@ -142,7 +141,7 @@ export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges 
         // wait for element to be rendered
         setTimeout(() => {
             const cell = document.getElementById(`cell-${row}-${colName}`);
-            const input = cell.getElementsByTagName('input')[0];
+            const input = cell?.getElementsByTagName('input')[0];
             if (input) {
                 input.focus();
             }

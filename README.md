@@ -18,7 +18,7 @@ npm install
 npm start
 
 # To run electron host
-electron .
+npx electron .
 ```
 
 ## Build and Deploy

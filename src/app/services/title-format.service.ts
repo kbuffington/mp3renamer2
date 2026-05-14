@@ -1,34 +1,33 @@
 import { Injectable } from '@angular/core';
-import { MetadataObj, MetadataProperty } from '@classes/track.classes';
+import { MetadataKey, MetadataObj, MetadataProperty } from '@classes/track.classes';
 
 import { TrackService } from './track.service';
-
 
 @Injectable({ providedIn: 'root' })
 export class TitleFormatService {
     private fbPropToMetadataProp = {
-        'folder': { prop: 'unused', methodName: 'getFolder' },
-        'path': { prop: 'unused', methodName: 'getPath' },
-        'albumsortorder': { prop: 'albumSortOrder' },
-        'artistsortorder': { prop: 'artistSortOrder' },
+        folder: { prop: 'unused', methodName: 'getFolder' },
+        path: { prop: 'unused', methodName: 'getPath' },
+        albumsortorder: { prop: 'albumSortOrder' },
+        artistsortorder: { prop: 'artistSortOrder' },
         // properties below require an index as they are track specific
         'album artist': { prop: 'performerInfo', methodName: 'getAlbumArtist' },
-        'discnumber': { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: false },
-        'totaldiscs': { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: true },
-        'tracknumber': { prop: 'trackNumber', methodName: 'getTrackNum', methodParam: true },
+        discnumber: { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: false },
+        totaldiscs: { prop: 'partOfSet', methodName: 'getDiscVal', methodParam: true },
+        tracknumber: { prop: 'trackNumber', methodName: 'getTrackNum', methodParam: true },
         'track number': { prop: 'trackNumber', methodName: 'getTrackNum', methodParam: false },
     };
 
     private fbFunctionEval = {
-        'year': { name: 'getYear' },
-        'lower': { name: 'lower' },
-        'roman': { name: 'roman' },
-        'upper': { name: 'upper' },
-        'if': { name: 'ifFunc' },
-        'ifequal': { name: 'ifEqual' },
-        'iflonger': { name: 'ifLonger' },
-        'ifgreater': { name: 'ifGreater' },
-    }
+        year: { name: 'getYear' },
+        lower: { name: 'lower' },
+        roman: { name: 'roman' },
+        upper: { name: 'upper' },
+        if: { name: 'ifFunc' },
+        ifequal: { name: 'ifEqual' },
+        iflonger: { name: 'ifLonger' },
+        ifgreater: { name: 'ifGreater' },
+    };
 
     constructor(private ts: TrackService) {}
 
@@ -83,19 +82,24 @@ export class TitleFormatService {
         });
         const metadata = this.ts.getCurrentMetadata();
         const valRegex = new RegExp(/%([^%]*)%/, 'g');
-        const formattedString = tf.replace(valRegex, (match, substring) => {
+        const formattedString = tf.replace(valRegex, (match, substring: string) => {
             const propObj = this.fbPropToMetadataProp[substring];
             if (propObj) {
                 if (propObj.methodName) {
-                    return this[propObj.methodName](metadata, propObj.prop, index, propObj.methodParam);
+                    return this[propObj.methodName](
+                        metadata,
+                        propObj.prop,
+                        index,
+                        propObj.methodParam,
+                    );
                 } else {
-                    const prop = metadata[propObj.prop];
-                    return index ? prop.values[index] : prop.default;
+                    const prop = metadata[propObj.prop as MetadataKey];
+                    return index ? prop!.values[index] : prop!.default;
                 }
             } else {
                 const prop = this.findProp(metadata, substring);
                 if (prop) {
-                    return index ? prop.values[index] : prop.default;
+                    return index ? prop!.values[index] : prop!.default;
                 }
                 return match;
             }
@@ -108,9 +112,13 @@ export class TitleFormatService {
     }
 
     private findProp(metadata: MetadataObj, propName: string): MetadataProperty {
-        return metadata[propName] ??
-            metadata[propName.toLocaleLowerCase()] ??
-            metadata[propName.toLocaleUpperCase()] ?? null;
+        const m = metadata as Record<string, MetadataProperty>;
+        return (
+            m[propName] ??
+            m[propName.toLocaleLowerCase()] ??
+            m[propName.toLocaleUpperCase()] ??
+            null
+        );
     }
 
     private getAlbumArtist(metadata: MetadataObj, prop: string, index: number): string {
@@ -125,7 +133,12 @@ export class TitleFormatService {
         return albumArtist;
     }
 
-    private getDiscVal(metadata: MetadataObj, prop: string, index: number, total: boolean): string {
+    private getDiscVal(
+        metadata: MetadataObj,
+        prop: MetadataKey,
+        index: number,
+        total: boolean,
+    ): string {
         if (index !== 0 && !index) return '';
         const setVal = metadata[prop].values[index]?.split('/');
         if (!setVal) return '';
@@ -136,7 +149,12 @@ export class TitleFormatService {
         }
     }
 
-    private getTrackNum(metadata: MetadataObj, prop: string, index: number, pad: boolean): string {
+    private getTrackNum(
+        metadata: MetadataObj,
+        prop: MetadataKey,
+        index: number,
+        pad: boolean,
+    ): string {
         if (index >= 0 && metadata[prop]?.values?.length > index) {
             let track: string = metadata[prop].values[index];
             track = parseInt(track, 10).toString();
@@ -169,7 +187,7 @@ export class TitleFormatService {
         return str.toLocaleLowerCase();
     }
 
-    private roman(num: number|string): string {
+    private roman(num: number | string): string {
         return this.ts.alphaRoman(num);
     }
 

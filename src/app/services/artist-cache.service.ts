@@ -5,6 +5,7 @@ const ARTIST_CACHE_KEY = 'artistCache';
 const STALE_TIME = 1000 * 60 * 60 * 24 * 90; // three months
 
 const EXCLUDED_TAGS = [
+    'aggro berlin',
     'american',
     'band',
     'british',
@@ -13,6 +14,7 @@ const EXCLUDED_TAGS = [
     'folk pop',
     'guitarist',
     'musician',
+    'nepo baby',
     'rick and morty',
     'seen live',
     'smoosh',
@@ -28,10 +30,10 @@ const EXCLUDED_TAGS = [
     '10s',
 ];
 
-class CacheEntry {
+type CacheEntry = {
     artist: ArtistData;
     addedTime: number;
-}
+};
 
 @Injectable({ providedIn: 'root' })
 export class ArtistCacheService {
@@ -56,7 +58,7 @@ export class ArtistCacheService {
         }
     }
 
-    public get(artistId: string): ArtistData {
+    public get(artistId: string): ArtistData | undefined {
         const cached = this.cacheMap.get(artistId);
 
         if (!cached || Date.now() - cached.addedTime > STALE_TIME) {
@@ -82,7 +84,7 @@ export class ArtistCacheService {
         return this.cacheMap.has(artistId);
     }
 
-    private deleteArtist(artistId): void {
+    private deleteArtist(artistId: string): void {
         this.cacheMap.delete(artistId);
         this.saveCacheMap();
     }

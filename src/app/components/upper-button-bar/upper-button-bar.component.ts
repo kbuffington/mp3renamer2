@@ -17,8 +17,8 @@ export class UpperButtonBarComponent implements OnInit, OnDestroy {
     public startNumber = 1;
     public capitalizationBad = false;
 
-    private metadataSubscription: Subscription;
-    private valuesWrittenSubscription: Subscription;
+    private metadataSubscription: Subscription | null = null;
+    private valuesWrittenSubscription: Subscription | null = null;
     public valuesWritten = true;
 
     constructor(
@@ -35,7 +35,10 @@ export class UpperButtonBarComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
-            this.capitalizationBad = this.titleCaseService.hasBadCaps(m.title);
+            this.capitalizationBad = this.titleCaseService.hasBadCaps(
+                m.title?.values ?? [],
+                m.album?.default ?? '',
+            );
         });
         this.valuesWrittenSubscription = this.valuesWrittenService.get().subscribe(v => {
             this.valuesWritten = v;
@@ -43,8 +46,8 @@ export class UpperButtonBarComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.metadataSubscription.unsubscribe();
-        this.valuesWrittenSubscription.unsubscribe();
+        this.metadataSubscription?.unsubscribe();
+        this.valuesWrittenSubscription?.unsubscribe();
     }
 
     /**

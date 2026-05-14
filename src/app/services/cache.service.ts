@@ -4,10 +4,10 @@ import { Injectable } from '@angular/core';
 const LOCAL_CACHE_KEY = 'localCache';
 const STALE_TIME = 1000 * 60 * 60 * 12; // 12 hours
 
-class CacheEntry {
+type CacheEntry = {
     body: any;
     addedTime: number;
-}
+};
 
 @Injectable({ providedIn: 'root' })
 export class CacheService {
@@ -27,9 +27,12 @@ export class CacheService {
             }
         });
         this.saveCacheMap();
-        console.log('CacheService initialized in:', (Date.now() - start) + 'ms');
+        console.log('CacheService initialized in:', Date.now() - start + 'ms');
         if (map) {
-            console.log('localStorage Cache size:', Math.round(map.length*10 / 1024)/10 + 'KB');
+            console.log(
+                'localStorage Cache size:',
+                Math.round((map.length * 10) / 1024) / 10 + 'KB',
+            );
         }
     }
 

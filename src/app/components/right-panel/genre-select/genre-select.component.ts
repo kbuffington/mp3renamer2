@@ -22,13 +22,12 @@ import { Subscription } from 'rxjs';
     standalone: false,
 })
 export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
-    @Input() genres: string;
+    @Input() genres!: string;
 
     @Output() genreSelected = new EventEmitter<string>();
 
     public genreList: GenreEntry[] = genreList;
     public selectedGenres: GenreEntry[] = [];
-    public selection;
     public showGuessButton = false;
 
     private metadataSub: Subscription;
@@ -40,7 +39,7 @@ export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
         private ac: ArtistCacheService,
     ) {
         this.metadataSub = ts.getMetadata().subscribe(m => {
-            this.showGuessButton = !!m.MUSICBRAINZ_ARTISTID.default;
+            this.showGuessButton = !!m.MUSICBRAINZ_ARTISTID?.default;
         });
     }
 
@@ -94,14 +93,14 @@ export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public inputChanged(text) {
+    public inputChanged(text: string) {
         if (text.length > 2 && !this.genreList.find(g => g.name === text)) {
             this.genreList[this.genreList.length - 1] = { name: text };
         }
     }
 
     public guessGenres() {
-        const artistId = this.ts.getCurrentMetadata().MUSICBRAINZ_ARTISTID.default;
+        const artistId = this.ts.getCurrentMetadata().MUSICBRAINZ_ARTISTID?.default;
         if (artistId) {
             const artist = this.ac.get(artistId);
             if (!artist) {

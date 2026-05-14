@@ -1,17 +1,20 @@
 {
 	"compileOnSave": false,
 	"compilerOptions": {
-    "baseUrl": "./src",
+    "rootDir": "./src",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "esModuleInterop": true,
     "declaration": false,
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "experimentalDecorators": true,
     "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
+    ],
+    "types": [
+      "jasmine"
     ],
     "lib": [
       "es2020",
@@ -19,16 +22,16 @@
     ],
     "paths": {
       "@classes/*": [
-        "app/classes/*"
+        "./src/app/classes/*"
       ],
       "@components/*": [
-        "app/components/*"
+        "./src/app/components/*"
       ],
       "@directives/*": [
-        "app/directives/*"
+        "./src/app/directives/*"
       ],
       "@services/*": [
-        "app/services/*"
+        "./src/app/services/*"
       ]
     },
     "useDefineForClassFields": false
