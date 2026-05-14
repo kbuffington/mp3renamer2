@@ -16,16 +16,16 @@ export enum InputTypes {
     selector: 'input-field',
     templateUrl: './input-field.component.html',
     styleUrls: ['./input-field.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class InputFieldComponent implements OnInit {
     @Input() inputType: string = InputTypes.Input;
-    @Input() label: string;
+    @Input() label!: string;
     @Input() labelStyle = '';
     @Input() countrySelect = false;
     @Input() readOnly = false;
-    @Input() selectOptions: string[] = undefined;
-    @Input() value: MetadataProperty;
+    @Input() selectOptions?: string[] = undefined;
+    @Input() value!: MetadataProperty;
     @Input() copyToClipboard = false;
 
     @Output() valueChange = new EventEmitter();
@@ -36,7 +36,7 @@ export class InputFieldComponent implements OnInit {
     public inputTypes = InputTypes;
     public showCopied = false;
 
-    private prevFocusedElement;
+    private prevFocusedElement: Element | null = null;
 
     constructor(
         private electronService: ElectronService,
@@ -62,13 +62,14 @@ export class InputFieldComponent implements OnInit {
         this.showConflicts.emit();
     }
 
-    public onFocus($event) {
+    public onFocus($event: FocusEvent) {
         if (this.prevFocusedElement === document.activeElement) {
             return;
         }
-        $event.target.select();
-        if (this.copyToClipboard && $event.target.value) {
-            this.electronService.remote.clipboard.writeText($event.target.value);
+        const target = $event.target as HTMLInputElement;
+        target.select();
+        if (this.copyToClipboard && target.value) {
+            this.electronService.remote.clipboard.writeText(target.value);
             this.showCopied = true;
         }
         setTimeout(() => {

@@ -13,9 +13,7 @@ const RELEASE_INCLUDES = [
     'work-rels',
     'work-level-rels',
 ];
-const NON_FUZZY_FIELDS = [
-    'date',
-];
+const NON_FUZZY_FIELDS = ['date'];
 
 @Injectable({ providedIn: 'root' })
 export class MusicbrainzService {
@@ -86,7 +84,7 @@ export class MusicbrainzService {
     }
 
     public getWorks(workIDs: string[]): Promise<any> {
-        const promises = [];
+        const promises: Promise<any>[] = [];
         workIDs.forEach(id => {
             promises.push(this.getWork(id));
         });
@@ -100,14 +98,20 @@ export class MusicbrainzService {
         if (areaObj.type === 'Country') {
             return areaObj.name;
         } else {
-            const parentIds = areaObj.relations?.filter(rel => rel.direction === 'backward').map(a => a.area?.id);
+            const parentIds = areaObj.relations
+                ?.filter(rel => rel.direction === 'backward')
+                .map(a => a.area?.id);
             if (parentIds) {
                 let country;
                 while (parentIds.length && !country) {
                     const parentId = parentIds.pop();
-                    country = await this.getCountry(parentId);
+                    if (parentId) {
+                        country = await this.getCountry(parentId);
+                    } else {
+                        break;
+                    }
                 }
-                return country;
+                return country ?? '';
             } else {
                 return '';
             }

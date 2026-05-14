@@ -2,24 +2,6 @@
     clr-combobox {
         max-width: 100%;
     }
-    &.country-code {
-        width: 2.5rem;
-        min-width: 2.5rem;
-
-        .clr-combobox-wrapper {
-            min-width: 100%;
-        }
-        input {
-            width: 1.5rem;
-            max-width: 1.5rem;
-        }
-
-        .clr-combobox-wrapper {
-            .clr-combobox-input {
-                width: 2.5rem;
-            }
-        }
-    }
 
     .clr-combobox-wrapper {
         background-color: white;
@@ -43,9 +25,6 @@
         }
 
         &.multi {
-            // width: 100%;
-            // width: 345px;
-            // overflow-x: scroll;
             min-width: 100%;
             padding-bottom: 1px;
             padding-left: 0;
@@ -53,6 +32,22 @@
 
         .label-combobox-pill {
             margin-top: 0;
+        }
+    }
+
+    // Single-select country code: input must be visible to show the 2-letter code
+    clr-combobox.country-code {
+        width: 4rem;
+        min-width: 4rem;
+
+        .clr-combobox-wrapper {
+            min-width: 100%;
+
+            .clr-combobox-input {
+                width: 1.75rem;
+                height: auto;
+                padding-left: 0.15rem;
+            }
         }
     }
 }

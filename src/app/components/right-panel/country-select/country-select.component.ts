@@ -10,7 +10,7 @@ import { countryCodes, CountryEntry } from '@services/countries';
 export class CountrySelectComponent implements OnInit, OnChanges {
     @Input() multiSelect = false;
     @Input() useCode = false;
-    @Input() countries: string;
+    @Input() countries!: string;
 
     @Output() countrySelected = new EventEmitter<string>();
 

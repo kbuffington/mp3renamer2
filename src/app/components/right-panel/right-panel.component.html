@@ -138,7 +138,14 @@
                             label="Art. Country:"
                             [(value)]="metadata.ARTISTCOUNTRY"
                             [inputType]="inputTypes.Country"
-                            (showConflicts)="showConflict(metadata.ARTISTCOUNTRY, 'Artist Country')"
+                            (showConflicts)="
+                                showConflict(
+                                    metadata.ARTISTCOUNTRY,
+                                    'Artist Country',
+                                    false,
+                                    'artist'
+                                )
+                            "
                         >
                         </input-field>
                         <!-- <input-field label="Art. Country:" [(value)]="metadata.ARTISTCOUNTRY" (showConflicts)="showConflict(metadata.xxx, '')"></input-field> -->
@@ -178,7 +185,7 @@
                                         label="Artist Sort:"
                                         [(value)]="metadata.artistSortOrder"
                                         (showConflicts)="
-                                            showConflict(metadata.artistShowOrder, 'Artist Sort')
+                                            showConflict(metadata.artistSortOrder, 'Artist Sort')
                                         "
                                     >
                                     </input-field>
@@ -334,6 +341,7 @@
     [(field)]="conflictProperty"
     [displayName]="conflictDisplayName"
     [readOnly]="conflictReadOnly"
+    [hintFieldName]="conflictHintFieldName"
     [(showModal)]="showModal"
 >
 </conflict-modal>

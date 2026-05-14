@@ -22,8 +22,8 @@ export class TrackObj {
 export class RenamerGridComponent implements OnInit, OnDestroy, OnChanges {
     @Input() showArtist = false;
     @Input() tracks: any[] = [];
-    @Input() metadata: MetadataObj;
-    @Input() closeMenu: number;
+    @Input() metadata!: MetadataObj;
+    @Input() closeMenu!: number;
 
     public editing: boolean[] = [];
     public selected: any[] = [];

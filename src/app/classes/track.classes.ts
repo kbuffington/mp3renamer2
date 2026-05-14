@@ -2,7 +2,7 @@
  * Track data comes from NodeID3. Should not be used internally except when
  * creating Metadata objects, or when preparing to write data to tags.
  */
-export class Track {
+export type Track = {
     artist?: string | string[];
     album?: string;
     composer?: string | string[];
@@ -24,7 +24,7 @@ export class Track {
         extension: string;
     };
     raw: any; // raw frames from the file
-}
+};
 
 export class MetadataProperty {
     private pvtDefault = '';
@@ -49,7 +49,7 @@ export class MetadataProperty {
     }
 }
 
-export class MetadataObj {
+export type MetadataObj = {
     album?: MetadataProperty;
     albumSortOrder?: MetadataProperty;
     artist?: MetadataProperty;
@@ -57,12 +57,14 @@ export class MetadataObj {
     ARTISTFILTER?: MetadataProperty;
     artistSortOrder?: MetadataProperty;
     CATALOGNUMBER?: MetadataProperty;
+    composer?: MetadataProperty;
     copyright?: MetadataProperty;
     comment?: MetadataProperty;
     date?: MetadataProperty;
     DISCSUBTITLE?: MetadataProperty;
     EDITION?: MetadataProperty;
     encodedBy?: MetadataProperty;
+    genre?: MetadataProperty;
     image?: MetadataProperty;
     LABEL?: MetadataProperty;
     MUSICBRAINZ_ARTISTID?: MetadataProperty;
@@ -72,13 +74,19 @@ export class MetadataObj {
     originalReleaseDate?: MetadataProperty;
     partOfSet?: MetadataProperty; // disc
     performerInfo?: MetadataProperty; // album artist
+    replaygain_album_gain?: MetadataProperty;
+    replaygain_album_peak?: MetadataProperty;
+    replaygain_track_gain?: MetadataProperty;
+    replaygain_track_peak?: MetadataProperty;
     RELEASECOUNTRY?: MetadataProperty;
     RELEASETYPE?: MetadataProperty;
     title?: MetadataProperty;
     trackNumber?: MetadataProperty;
     'VINYL SIDE'?: MetadataProperty;
     'VINYL TRACKNUMBER'?: MetadataProperty;
-}
+};
+
+export type MetadataKey = keyof MetadataObj;
 
 export class TrackOptions {
     showArtwork?: boolean;
@@ -89,11 +97,11 @@ export class UnknownPropertiesObj {
     [key: string]: MetadataProperty;
 }
 
-export class CommentStruct {
+export type CommentStruct = {
     language: string;
     shortText: string;
     text: string;
-}
+};
 
 export class ImageType {
     id = 3;
@@ -102,7 +110,6 @@ export class ImageType {
 
 export class ImageStruct {
     mime = 'jpeg';
-    description: string = undefined;
     imageBuffer: Buffer;
     type: ImageType;
 

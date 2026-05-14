@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MetadataObj, MetadataProperty } from '@classes/track.classes';
+import { MetadataKey, MetadataObj, MetadataProperty } from '@classes/track.classes';
 import { TrackService } from '@services/track.service';
 import { ValuesWrittenService } from '@services/values-written.service';
 
@@ -7,29 +7,28 @@ import { ValuesWrittenService } from '@services/values-written.service';
     selector: 'conflict-modal',
     templateUrl: './conflict-modal.component.html',
     styleUrls: ['./conflict-modal.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class ConflictModalComponent implements OnInit {
-    @Input() field: MetadataProperty;
-    @Input() displayName: string;
+    @Input() field!: MetadataProperty;
+    @Input() displayName!: string;
     @Input() showModal = false;
     @Input() readOnly = false;
+    @Input() hintFieldName!: MetadataKey;
 
     @Output() fieldChange = new EventEmitter<MetadataProperty>();
     @Output() showModalChange = new EventEmitter<boolean>();
 
     public showValues = false;
-    public metadata: MetadataObj;
+    public metadata: MetadataObj = {};
+    public placeholders: string[] = [];
 
-    private origDefault: string;
-    private origValues: string[];
-    private origUseDefault: boolean;
-    private origDefaultChanged: boolean;
+    private origDefault = '';
+    private origValues: string[] = [];
+    private origUseDefault = true;
+    private origDefaultChanged = false;
 
-    constructor(
-        private ts: TrackService,
-        private valuesWrittenService: ValuesWrittenService,
-    ) { }
+    constructor(private ts: TrackService, private valuesWrittenService: ValuesWrittenService) {}
 
     ngOnInit(): void {
         this.origUseDefault = this.field.useDefault;

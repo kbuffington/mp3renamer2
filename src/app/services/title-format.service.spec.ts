@@ -4,6 +4,7 @@ import { TitleCaseService } from './title-case.service';
 import { TitleFormatService } from './title-format.service';
 import { TrackService } from './track.service';
 import { TrackServiceMocks } from './track.service.mock';
+import { ValuesWrittenService } from './values-written.service';
 
 describe('TitleFormatService', () => {
     let service: TitleFormatService;
@@ -11,12 +12,19 @@ describe('TitleFormatService', () => {
     let titleCaseService: TitleCaseService;
     let configService: ConfigService;
     let electronService: ElectronService;
+    let valuesWrittenService: ValuesWrittenService;
 
     beforeAll(() => {
         electronService = new ElectronService();
         titleCaseService = new TitleCaseService();
         configService = new ConfigService(electronService);
-        trackService = new TrackService(electronService, titleCaseService, configService);
+        valuesWrittenService = new ValuesWrittenService();
+        trackService = new TrackService(
+            electronService,
+            titleCaseService,
+            configService,
+            valuesWrittenService,
+        );
     });
 
     beforeEach(() => {
@@ -34,9 +42,12 @@ describe('TitleFormatService', () => {
 
     it('eval with complex nested functions', () => {
         // expect(service.eval('$ifequal(1,%tracknumber%,20,ignored)', 0)).toBe('20');
-        expect(service.eval(
-            '%artist% $ifgreater($ifequal(1,%tracknumber%,20,ignored),%track number%,$lower(%artist%),%artist) %album%', 0))
-            .toBe('AC/DC ac/dc For Those About to Rock (We Salute You)');
+        expect(
+            service.eval(
+                '%artist% $ifgreater($ifequal(1,%tracknumber%,20,ignored),%track number%,$lower(%artist%),%artist) %album%',
+                0,
+            ),
+        ).toBe('AC/DC ac/dc For Those About to Rock (We Salute You)');
         expect(service.eval('%tracknumber%', 0)).toBe('01');
     });
 

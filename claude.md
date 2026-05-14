@@ -74,3 +74,13 @@ To add a new user-defined (TXXX) metadata property:
 1. Add entry to `knownProperties` Map in `services/known-properties.ts`
 2. Add optional typed field to `MetadataObj` in `classes/track.classes.ts`
 3. The property will be automatically initialized by `TrackService.processTracks()` and written by `setTagData()` via the generic `knownProperties` iteration
+
+## Testing Patterns
+
+- **Framework:** Karma + Jasmine
+- **HTTP services:** Use `provideHttpClient(withInterceptorsFromDi())` + `provideHttpClientTesting()` in providers; inject `HttpTestingController` to intercept requests and assert URLs. Call `httpMock.verify()` in `afterEach`.
+- **Services with dependencies:** Use `jasmine.createSpyObj` for spy objects and provide mocks via the `providers` array in `TestBed.configureTestingModule`. Use `BehaviorSubject` to simulate observable config/state dependencies.
+- **Async tests:** Use `async/await` with `await p` to resolve promise-returning methods after flushing HTTP requests. For observable-returning methods, use the `done` callback pattern.
+- **Recursive async flows:** After flushing an HTTP request that triggers a recursive async call, use `await Promise.resolve()` before expecting the next pending request.
+- **Test structure:** One `describe` per method, one `it` per behavior, but multiple similar tests should be grouped under the same `it`. Group with nested `describe` blocks. No `inject()` helper — prefer `TestBed.inject()`.
+- **Helpers:** Define small factory functions (e.g., `makeTrack`, `makeProp`, `makeAreaJson`) above the `describe` block to build test fixtures without boilerplate.

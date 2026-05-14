@@ -7,15 +7,15 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
     standalone: false,
 })
 export class EditableCellComponent implements OnChanges {
-    @Input() value: string;
-    @Input() editing: boolean;
+    @Input() value!: string;
+    @Input() editing!: boolean;
     @Input() dontSelect = 0; // number of characters to not select from end
 
     @Output() valueChange = new EventEmitter();
     @Output() editingChange = new EventEmitter();
     @Output() tabHandler = new EventEmitter();
 
-    private backup: string;
+    private backup!: string;
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.editing) {

@@ -1,10 +1,13 @@
 <div class="left-wrapper">
 	<div class="input-block clr-col-12">
-		<input-field label="Artist:"
-			[(value)]="metadata.artist"
-			(showConflicts)="showConflict(metadata.artist, 'Artist')"
-			[labelStyle]="{ 'max-width': '80px', 'min-width': '80px' }">
-		</input-field>
+		<div class="flex-container">
+			<input-field label="Artist:"
+				[(value)]="metadata.artist"
+				(showConflicts)="showConflict(metadata.artist, 'Artist')"
+				[labelStyle]="{ 'max-width': '80px', 'min-width': '80px' }">
+			</input-field>
+			<button class="btn btn-outline btn-sm btn-xs" (click)="setVariousArtists()">VA</button>
+		</div>
 		<input-field label="Album:"
 			[(value)]="metadata.album"
 			(showConflicts)="showConflict(metadata.album, 'Album')"

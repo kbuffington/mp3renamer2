@@ -6,7 +6,7 @@ export class FanartImg {
     filename?: string;
     loaded = false;
 
-    constructor(json) {
+    constructor(json: any) {
         this.id = json.id;
         this.likes = json.likes;
         this.url = json.url;
@@ -17,7 +17,7 @@ export class FanartImg {
 }
 
 export class AlbumCover extends FanartImg {
-    constructor(json) {
+    constructor(json: any) {
         super(json);
     }
 }
@@ -27,7 +27,7 @@ export class CdArt extends FanartImg {
     size: number;
     saveIndex = 0;
 
-    constructor(json) {
+    constructor(json: any) {
         super(json);
         this.disc = json.disc;
         this.size = json.size;
@@ -38,9 +38,9 @@ export class AlbumArt {
     albumcover: AlbumCover[];
     cdart: CdArt[];
 
-    constructor(json) {
-        this.albumcover = json.albumcover?.map(img => new AlbumCover(img)) ?? [];
-        this.cdart = json.cdart?.map(img => new CdArt(img)) ?? [];
+    constructor(json: any) {
+        this.albumcover = json.albumcover?.map((img: any) => new AlbumCover(img)) ?? [];
+        this.cdart = json.cdart?.map((img: any) => new CdArt(img)) ?? [];
     }
 }
 
@@ -59,7 +59,7 @@ export class FanartAlbum {
 export class HDMusicLogo extends FanartImg {
     save = false;
 
-    constructor(json) {
+    constructor(json: any) {
         super(json);
         if (json.save) {
             this.save = json.save;
@@ -72,10 +72,10 @@ export class FanartArtist {
     mbid: string;
     hdmusiclogos: HDMusicLogo[] = [];
 
-    constructor(json) {
+    constructor(json: any) {
         this.name = json.name;
         this.mbid = json.mbid_id;
-        this.hdmusiclogos = json.hdmusiclogo?.map(hdml => new HDMusicLogo(hdml)) ?? [];
+        this.hdmusiclogos = json.hdmusiclogo?.map((hdml: any) => new HDMusicLogo(hdml)) ?? [];
     }
 }
 
@@ -83,7 +83,7 @@ export class LabelLogo extends FanartImg {
     save = false;
     color: string;
 
-    constructor(json) {
+    constructor(json: any) {
         super(json);
         this.color = json.colour;
         if (json.save) {
@@ -96,9 +96,9 @@ export class FanartMusicLabel {
     labelId: string;
     musiclabels: LabelLogo[] = [];
 
-    constructor(json) {
+    constructor(json: any) {
         this.name = json.name;
         this.labelId = json.id;
-        this.musiclabels = json.musiclabel?.map(ml => new LabelLogo(ml)) ?? [];
+        this.musiclabels = json.musiclabel?.map((ml: any) => new LabelLogo(ml)) ?? [];
     }
 }
