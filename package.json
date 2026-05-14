@@ -14,7 +14,6 @@
         "rename": "ren H:\\mp3renamer2-new mp3renamer2",
         "test": "ng test",
         "lint": "ng lint",
-        "postinstall": "ngcc",
         "start-id3": "tsc --module commonjs ../node-id3/index.ts; electron .",
         "start": "ng serve"
     },
