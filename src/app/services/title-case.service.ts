@@ -10,7 +10,7 @@ export const lowerCaseWords = [
 ];
 
 // Acronyms or other words that should always be upper case
-export const upperCaseWords = ['DOA', 'LOL', 'LMAO', 'PCP', 'RIP', 'R&B', 'NWOBHM'];
+export const upperCaseWords = ['DOA', 'LOL', 'LMAO', 'PCP', 'RIP', 'R&B', 'NWOBHM', 'WTF'];
 
 // Words that should probably always be lower case
 export const alwaysLowerCaseWords = ['remix', 'feat.', 'x'];
