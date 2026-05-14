@@ -140,7 +140,7 @@ export class TrackService implements OnDestroy {
         let imageLoaded = false;
 
         this.unknownProperties = {};
-        const aliases = [];
+        const aliases: string[] = [];
         knownProperties.forEach((prop, name) => {
             this.processField(
                 metaData,
@@ -235,10 +235,10 @@ export class TrackService implements OnDestroy {
                 }
             } else {
                 metaProp.userDefined = true;
-                if (t.userDefined && (t.userDefined[property] || t.userDefined[alias])) {
+                if (t.userDefined && (t.userDefined[property] || (alias && t.userDefined[alias]))) {
                     this.setMetadataValue(
                         metaProp,
-                        t.userDefined[property] || t.userDefined[alias],
+                        t.userDefined[property] || (alias && t.userDefined[alias]),
                     ); // short-circuit eval
                 } else {
                     metaProp.values.push('');
@@ -259,7 +259,9 @@ export class TrackService implements OnDestroy {
         if (Array.isArray(value)) {
             value = value.join('; ');
         }
-        const saveValue = value.hasOwnProperty('text') ? value['text'] : value;
+        const saveValue = value.hasOwnProperty('text')
+            ? (value as CommentStruct).text
+            : (value as string);
         if (!metaProp.default) {
             metaProp.default = saveValue;
         }
@@ -448,6 +450,7 @@ export class TrackService implements OnDestroy {
                 } else {
                     const tempPath = newPath + ('' + Date.now()).substring(0, 6);
                     await this.rename(path, tempPath);
+                    await new Promise(resolve => setTimeout(resolve, 500));
                     await this.rename(tempPath, newPath);
                     console.log(`Renamed directory "${currentDir}" to "${newDir}"`);
                     this.getCurrentTracks().map(
