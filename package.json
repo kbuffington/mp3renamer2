@@ -9,13 +9,16 @@
     "build:win": "npm run build && npx @electron/packager . --platform=win32 --arch=x64 --ignore=\"(e2e|node_modules/.cache)\" --overwrite",
     "build:osx": "npm run build && npx @electron/packager . --platform=darwin --arch=x64 --ignore=\"(e2e|node_modules/.cache)\" --overwrite",
     "deploy:win": "npm run move && npm run delete && npm run rename",
-    "move": "xcopy mp3renamer2-win32-x64 H:\\mp3renamer2-new /E/H/C/I",
-    "delete": "rd /S /Q h:\\mp3renamer2 || echo \"Directory does not exist\"",
-    "rename": "ren H:\\mp3renamer2-new mp3renamer2",
+    "move": "(rd /S /Q %npm_package_config_deployDir%-temp || cd .) && xcopy mp3renamer2-win32-x64 %npm_package_config_deployDir%-temp /E/H/C/I",
+    "delete": "rd /S /Q %npm_package_config_deployDir% || echo \"Directory does not exist\"",
+    "rename": "ren %npm_package_config_deployDir%-temp %npm_package_name%",
     "test": "ng test",
     "lint": "ng lint",
     "start-id3": "tsc --module commonjs ../node-id3/index.ts; electron .",
     "start": "ng serve"
+  },
+  "config": {
+    "deployDir": "H:\\mp3renamer2"
   },
   "private": true,
   "dependencies": {
