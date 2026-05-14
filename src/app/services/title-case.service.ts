@@ -3,9 +3,11 @@ import { MetadataProperty } from '@classes/track.classes';
 
 // TODO: the first five words should be used by the musicbrainz fuzzy search in ReplaceCommonWords()
 // words that are lowercased if in the middle of a title (not first or last word)
-export const lowerCaseWords = ['a', 'an', 'the', 'and', 'of', 'but', 'as', 'or', 'for', 'nor',
+export const lowerCaseWords = [
+    'a', 'an', 'the', 'and', 'of', 'but', 'as', 'or', 'for', 'nor',
     'at', 'by', 'to', 'etc.', 'in', 'n\'', 'o\'', 'on',
-    'vs', 'vs.'];
+    'vs', 'vs.',
+];
 
 // Acronyms or other words that should always be upper case
 export const upperCaseWords = ['DOA', 'LOL', 'LMAO', 'PCP', 'RIP', 'R&B', 'NWOBHM'];
@@ -51,7 +53,7 @@ export class TitleCaseService {
 
     private titleCaseSection(str: string): string {
         let title = str;
-        const hyphenIndexes = [];
+        const hyphenIndexes: number[] = [];
         let blankStart = false;
         let blankEnd = false;
         title.split('').forEach((c, i) => {
@@ -74,8 +76,8 @@ export class TitleCaseService {
                 return word;
             } else {
                 // has letters to actually capitalize
-                const wordStart = word.match(/^[^a-zA-Z\d.]*/)[0];
-                const wordEnd = word.match(/[^a-zA-Z\d.]*$/)[0];
+                const wordStart = word.match(/^[^a-zA-Z\d.]*/)![0];
+                const wordEnd = word.match(/[^a-zA-Z\d.]*$/)![0];
                 word = word.slice(
                     wordStart.length,
                     wordEnd.length ? 0 - wordEnd.length : undefined,
@@ -120,10 +122,11 @@ export class TitleCaseService {
         if (offset < str.length) {
             titleSections.push(str.substring(offset));
         }
-        // console.log(titleSections);
-        str = titleSections.map((section) => {
+        str = titleSections
+            .map(section => {
                 return this.titleCaseSection(section);
-            }).join('');
+            })
+            .join('');
 
         return str;
     }
