@@ -1,6 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CdArt, FanartAlbum, FanartArtist, FanartImg, FanartMusicLabel, HDMusicLogo, LabelLogo } from '@classes/fanart.classes';
+import {
+    CdArt,
+    FanartAlbum,
+    FanartArtist,
+    FanartImg,
+    FanartMusicLabel,
+    HDMusicLogo,
+    LabelLogo,
+} from '@classes/fanart.classes';
 import { FanartService } from '@services/fanart.service';
 import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
@@ -11,16 +19,16 @@ import { MetadataObj } from '@classes/track.classes';
     selector: 'fanart',
     templateUrl: './fanart.component.html',
     styleUrls: ['./fanart.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class FanartComponent implements OnInit {
-    public artistData: FanartArtist;
-    public albumData: FanartAlbum;
+    public artistData!: FanartArtist;
+    public albumData!: FanartAlbum;
     public fetchingHdLogos = false;
     public fetchingLabels = 0;
     public musicLabels: FanartMusicLabel[] = [];
-    public popoverImage: FanartImg;
-    public popoverImageIndex: number;
+    public popoverImage: FanartImg | null = null;
+    public popoverImageIndex = 0;
     public multiDisc = false;
     public numLogos = 0;
     public numCds = 0;
@@ -31,19 +39,21 @@ export class FanartComponent implements OnInit {
     private labelIds: string[] = [];
     private hoverTimer: any;
     private releaseGroupId: string;
-    private configSettings: ConfigSettingsObject;
-    private metadata: MetadataObj;
+    private configSettings: ConfigSettingsObject = {} as ConfigSettingsObject;
+    private metadata?: MetadataObj;
 
-    @ViewChild('popOverContainer') popOverContainer: ElementRef;
+    @ViewChild('popOverContainer') popOverContainer!: ElementRef;
 
-    constructor(private electronService: ElectronService,
-                private configService: ConfigService,
-                private route: ActivatedRoute,
-                private router: Router,
-                private ts: TrackService,
-                private fanartService: FanartService) {
-        this.artistId = route.snapshot.queryParamMap.get('artistId');
-        this.releaseGroupId = route.snapshot.queryParamMap.get('albumId');
+    constructor(
+        private electronService: ElectronService,
+        private configService: ConfigService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private ts: TrackService,
+        private fanartService: FanartService,
+    ) {
+        this.artistId = route.snapshot.queryParamMap.get('artistId')!;
+        this.releaseGroupId = route.snapshot.queryParamMap.get('albumId')!;
         const labelIdsString = route.snapshot.queryParamMap.get('labelIds');
         if (labelIdsString) {
             this.labelIds = labelIdsString.split('; ');
@@ -58,10 +68,10 @@ export class FanartComponent implements OnInit {
     }
 
     private getArtistArt() {
-        let logo: HDMusicLogo = undefined;
+        let logo: HDMusicLogo | undefined = undefined;
         this.fetchingHdLogos = true;
         this.metadata = this.ts.getCurrentMetadata();
-        const artist = this.metadata.artist.default;
+        const artist = this.metadata.artist!.default;
         const path = `${this.configSettings.artistLogoDir}/${artist}.png`;
         if (this.electronService.fs.existsSync(path)) {
             logo = new HDMusicLogo({
@@ -70,22 +80,25 @@ export class FanartComponent implements OnInit {
                 url: `file://${path}?cb=${Date.now()}`,
             });
         }
-        this.fanartService.getArtist(this.artistId).then(artist => {
-            this.artistData = new FanartArtist(artist);
-            if (logo) {
-                this.artistData.hdmusiclogos.unshift(logo);
-            }
-            this.numLogos = this.artistData.hdmusiclogos.length;
-            this.fetchingHdLogos = false;
-            console.log(this.artistData);
-        }).catch((err) => {
-            this.fetchingHdLogos = false;
-            if (err.status === 404) {
-                console.log('No artist found for', this.artistId);
-            } else {
-                console.log(err);
-            }
-        });
+        this.fanartService
+            .getArtist(this.artistId)
+            .then(artist => {
+                this.artistData = new FanartArtist(artist);
+                if (logo) {
+                    this.artistData.hdmusiclogos.unshift(logo);
+                }
+                this.numLogos = this.artistData.hdmusiclogos.length;
+                this.fetchingHdLogos = false;
+                console.log(this.artistData);
+            })
+            .catch(err => {
+                this.fetchingHdLogos = false;
+                if (err.status === 404) {
+                    console.log('No artist found for', this.artistId);
+                } else {
+                    console.log(err);
+                }
+            });
     }
 
     private getAlbumArt() {
@@ -109,52 +122,61 @@ export class FanartComponent implements OnInit {
                 this.cds.push(cd);
             }
         });
-        this.fanartService.getAlbum(this.releaseGroupId).then(album => {
-            this.albumData = new FanartAlbum(album, this.releaseGroupId);
-            this.albumData.album.cdart.unshift(...this.cds);
-            this.numCds += this.albumData.album.cdart.length;
-            console.log(this.albumData);
-        }).catch(err => {
-            if (err.status === 404) {
-                console.log('No album found for', this.releaseGroupId);
-            } else {
-                console.log(err);
-            }
-        });
+        this.fanartService
+            .getAlbum(this.releaseGroupId)
+            .then(album => {
+                this.albumData = new FanartAlbum(album, this.releaseGroupId);
+                this.albumData.album.cdart.unshift(...this.cds);
+                this.numCds += this.albumData.album.cdart.length;
+                console.log(this.albumData);
+            })
+            .catch(err => {
+                if (err.status === 404) {
+                    console.log('No album found for', this.releaseGroupId);
+                } else {
+                    console.log(err);
+                }
+            });
     }
 
     private getLabelLogos() {
         this.labelIds.forEach(labelId => {
             this.fetchingLabels++;
-            this.fanartService.getLogo(labelId).then(musiclabel => {
-                const label = new FanartMusicLabel(musiclabel);
-                const saveName = this.getLabelSaveName(label.name);
-                const path = `${this.configSettings.labelLogoDir}/${saveName}.png`;
-                if (this.electronService.fs.existsSync(path)) {
-                    const logo = new LabelLogo({
-                        local: true,
-                        save: true,
-                        url: `file://${path}?cb=${Date.now()}`,
-                    });
-                    label.musiclabels.unshift(logo);
-                }
-                this.musicLabels.push(label);
-                this.numLabelLogos += label.musiclabels.length;
-                this.fetchingLabels--;
-                console.log(label);
-            }).catch(err => {
-                this.fetchingLabels--;
-                if (err.status === 404) {
-                    console.log('No logos found for label:', labelId);
-                } else {
-                    console.log(err);
-                }
-            });
+            this.fanartService
+                .getLogo(labelId)
+                .then(musiclabel => {
+                    const label = new FanartMusicLabel(musiclabel);
+                    const saveName = this.getLabelSaveName(label.name);
+                    const path = `${this.configSettings.labelLogoDir}/${saveName}.png`;
+                    if (this.electronService.fs.existsSync(path)) {
+                        const logo = new LabelLogo({
+                            local: true,
+                            save: true,
+                            url: `file://${path}?cb=${Date.now()}`,
+                        });
+                        label.musiclabels.unshift(logo);
+                    }
+                    this.musicLabels.push(label);
+                    this.numLabelLogos += label.musiclabels.length;
+                    this.fetchingLabels--;
+                    console.log(label);
+                })
+                .catch(err => {
+                    this.fetchingLabels--;
+                    if (err.status === 404) {
+                        console.log('No logos found for label:', labelId);
+                    } else {
+                        console.log(err);
+                    }
+                });
         });
     }
 
     private getLabelSaveName(labelName: string): string {
-        return labelName.replace(/ Records$/, '').replace(/ Recordings$/, '').replace(/ Music$/, '');
+        return labelName
+            .replace(/ Records$/, '')
+            .replace(/ Recordings$/, '')
+            .replace(/ Music$/, '');
     }
 
     public logoButtonClicked(logo: HDMusicLogo) {
@@ -162,7 +184,7 @@ export class FanartComponent implements OnInit {
         if (logo.save) {
             logo.save = false;
         } else {
-            this.artistData.hdmusiclogos.map(logo => logo.save = false);
+            this.artistData.hdmusiclogos.map(logo => (logo.save = false));
             logo.save = true;
         }
     }
@@ -172,7 +194,7 @@ export class FanartComponent implements OnInit {
         if (logo.save) {
             logo.save = false;
         } else {
-            label.musiclabels.map(logo => logo.save = false);
+            label.musiclabels.map(logo => (logo.save = false));
             logo.save = true;
         }
     }
@@ -197,7 +219,7 @@ export class FanartComponent implements OnInit {
             if (discs[index].saveIndex) {
                 discs[index].saveIndex = 0;
             } else {
-                discs.map(d => d.saveIndex = 0);
+                discs.map(d => (d.saveIndex = 0));
                 discs[index].saveIndex = 1;
             }
         }
@@ -208,15 +230,19 @@ export class FanartComponent implements OnInit {
     }
 
     public isSaveDisabled(): boolean {
-        return !this.artistData?.hdmusiclogos.find(val => val.save) &&
+        return (
+            !this.artistData?.hdmusiclogos.find(val => val.save) &&
             !this.albumData?.album.cdart.find(val => val.saveIndex) &&
-            !this.musicLabels.find(val => val.musiclabels.find(val => val.save));
+            !this.musicLabels.find(val => val.musiclabels.find(val => val.save))
+        );
     }
 
     public saveSelected() {
         const saveLogo = this.artistData?.hdmusiclogos.filter(val => val.save && !val.local) ?? [];
-        const saveDiscs = this.albumData?.album.cdart.filter(val => val.saveIndex && !val.local) ?? [];
-        const saveLabels = this.musicLabels.filter(val => val.musiclabels.filter(l => l.save).length > 0) ?? [];
+        const saveDiscs =
+            this.albumData?.album.cdart.filter(val => val.saveIndex && !val.local) ?? [];
+        const saveLabels =
+            this.musicLabels.filter(val => val.musiclabels.filter(l => l.save).length > 0) ?? [];
         saveLogo.forEach(logo => {
             this.electronService.ipcRenderer.send('download', {
                 url: logo.url,
@@ -300,13 +326,13 @@ export class FanartComponent implements OnInit {
             this.popoverImage = this.musicLabels[i].musiclabels[index];
         }
         if (!this.popoverImage.loaded) {
-            this.popoverImage = undefined;
+            this.popoverImage = null;
         } else {
             setTimeout(() => this.popOverContainer.nativeElement.focus());
         }
     }
 
-    public zoom(event, index: number, label?: FanartMusicLabel) {
+    public zoom(event: MouseEvent, index: number, label?: FanartMusicLabel) {
         event.stopPropagation();
         let imgIndex = index;
         if (label) {
