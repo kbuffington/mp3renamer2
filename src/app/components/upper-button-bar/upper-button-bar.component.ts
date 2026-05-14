@@ -37,7 +37,7 @@ export class UpperButtonBarComponent implements OnInit, OnDestroy {
         this.metadataSubscription = this.ts.getMetadata().subscribe(m => {
             this.capitalizationBad = this.titleCaseService.hasBadCaps(
                 m.title?.values ?? [],
-                m.album!.default ?? '',
+                m.album?.default ?? '',
             );
         });
         this.valuesWrittenSubscription = this.valuesWrittenService.get().subscribe(v => {

@@ -13,6 +13,9 @@
     "typeRoots": [
       "node_modules/@types"
     ],
+    "types": [
+      "jasmine"
+    ],
     "lib": [
       "es2020",
       "dom"
