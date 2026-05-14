@@ -7,7 +7,7 @@ import { MetadataHandlerComponent } from '@components/metadata-handler/metadata-
 import { RenamerGridComponent } from '@components/renamer-grid/renamer-grid.component';
 import { RightPanelComponent } from '@components/right-panel/right-panel.component';
 import { UpperButtonBarComponent } from '@components/upper-button-bar/upper-button-bar.component';
-import { InputFieldComponent } from 'app/input-field/input-field.component';
+import { InputFieldComponent } from '../../input-field/input-field.component';
 
 import { MainComponent } from './main.component';
 
