@@ -44,6 +44,7 @@ import {
     ClarityIcons,
     libraryIcon,
     checkIcon,
+    timesIcon,
     cogIcon,
     switchIcon,
     zoomInIcon,
@@ -57,6 +58,7 @@ import '@cds/core/icon/register.js';
 ClarityIcons.addIcons(
     arrowIcon,
     checkIcon,
+    timesIcon,
     cogIcon,
     copyIcon,
     infoCircleIcon,
