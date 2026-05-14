@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { InputTypes } from 'app/input-field/input-field.component';
+import { InputTypes } from '../../input-field/input-field.component';
 import { Subscription } from 'rxjs';
 import { TrackService } from '@services/track.service';
 import { ElectronService } from '@services/electron.service';
