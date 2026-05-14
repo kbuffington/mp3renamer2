@@ -1,4 +1,4 @@
-@import 'variables.scss';
+@use 'variables' as *;
 
 $image-max-size: 325px;
 
