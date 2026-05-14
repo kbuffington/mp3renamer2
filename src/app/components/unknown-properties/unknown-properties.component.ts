@@ -20,8 +20,8 @@ import { Subscription } from 'rxjs';
     standalone: false,
 })
 export class UnknownPropertiesComponent implements OnInit, OnDestroy, OnChanges {
-    @Input() unknownProperties: UnknownPropertiesObj;
-    @Input() stopEditing: number;
+    @Input() unknownProperties!: UnknownPropertiesObj;
+    @Input() stopEditing!: number;
 
     @Output() unknownPropertiesChange = new EventEmitter<UnknownPropertiesObj[]>();
 

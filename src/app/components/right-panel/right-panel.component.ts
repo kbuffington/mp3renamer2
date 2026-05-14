@@ -21,7 +21,7 @@ import { tap, throttleTime } from 'rxjs/operators';
 })
 export class RightPanelComponent implements OnInit, OnDestroy {
     @Input() tracks: any[] = [];
-    @Input() stopEditing: number;
+    @Input() stopEditing!: number;
 
     public conflictProperty: MetadataProperty = new MetadataProperty();
     public conflictDisplayName: string = '';

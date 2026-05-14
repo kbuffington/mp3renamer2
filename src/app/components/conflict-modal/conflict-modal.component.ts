@@ -10,23 +10,23 @@ import { ValuesWrittenService } from '@services/values-written.service';
     standalone: false,
 })
 export class ConflictModalComponent implements OnInit {
-    @Input() field: MetadataProperty;
-    @Input() displayName: string;
+    @Input() field!: MetadataProperty;
+    @Input() displayName!: string;
     @Input() showModal = false;
     @Input() readOnly = false;
-    @Input() hintFieldName: MetadataKey;
+    @Input() hintFieldName!: MetadataKey;
 
     @Output() fieldChange = new EventEmitter<MetadataProperty>();
     @Output() showModalChange = new EventEmitter<boolean>();
 
     public showValues = false;
-    public metadata: MetadataObj;
+    public metadata: MetadataObj = {};
     public placeholders: string[] = [];
 
-    private origDefault: string;
-    private origValues: string[];
-    private origUseDefault: boolean;
-    private origDefaultChanged: boolean;
+    private origDefault = '';
+    private origValues: string[] = [];
+    private origUseDefault = true;
+    private origDefaultChanged = false;
 
     constructor(private ts: TrackService, private valuesWrittenService: ValuesWrittenService) {}
 

@@ -22,7 +22,7 @@ import { Subscription } from 'rxjs';
     standalone: false,
 })
 export class GenreSelectComponent implements OnInit, OnChanges, OnDestroy {
-    @Input() genres: string;
+    @Input() genres!: string;
 
     @Output() genreSelected = new EventEmitter<string>();
 
