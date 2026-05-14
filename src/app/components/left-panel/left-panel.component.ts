@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { TrackService } from '@services/track.service';
+import { ValuesWrittenService } from '@services/values-written.service';
 import { Subscription } from 'rxjs';
 import { MetadataObj, MetadataProperty } from '../../classes/track.classes';
 
@@ -26,7 +27,7 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
     public metadataSubscription: Subscription;
     public showModal = false;
 
-    constructor(private ts: TrackService) {
+    constructor(private ts: TrackService, private valuesWrittenService: ValuesWrittenService) {
         this.deleteString = ts.deleteString;
         this.doTitleCase = ts.doTitleCase;
         this.findString = ts.findString;
@@ -52,6 +53,13 @@ export class LeftPanelComponent implements OnInit, OnDestroy {
 
     showArtistChanged(val) {
         this.showArtistChange.emit(val);
+    }
+
+    public setVariousArtists() {
+        this.metadata.artist!.default = 'Various Artists';
+        this.metadata.artist!.defaultChanged = true;
+        this.ts.setMetadata(this.metadata);
+        this.valuesWrittenService.markDirty();
     }
 
     public updateDeleteString(val: string) {
