@@ -30,7 +30,7 @@
         "node-id3tag": "^0.9.8"
     },
     "devDependencies": {
-        "@angular-devkit/build-angular": "^19.2.19",
+        "@angular-devkit/build-angular": "^21.2.11",
         "@angular/animations": "^19.2.18",
         "@angular/cli": "^19.2.19",
         "@angular/common": "^19.2.18",
