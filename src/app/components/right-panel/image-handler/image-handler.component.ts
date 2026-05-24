@@ -137,7 +137,7 @@ export class ImageHandlerComponent implements OnInit, OnDestroy {
         if (localFile) {
             this.imgPath = `file:///${localFile}${this.cachebuster}`;
         } else {
-            this.imgPath = `file:///${this.electronService.main.electronPath}/temp/embeddedArtwork.jpg${this.cachebuster}`;
+            this.imgPath = `file:///${this.electronService.main.tempPath}/embeddedArtwork.jpg${this.cachebuster}`;
         }
         console.log(this.imgPath);
     }

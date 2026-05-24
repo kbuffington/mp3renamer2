@@ -32,6 +32,7 @@ export class ElectronService {
         writeTags: Function,
         os: NodeJS.Platform,
         electronPath: string,
+        tempPath: string,
         cliArguments: string[]
         [key: string]: any
     };

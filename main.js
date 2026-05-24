@@ -5,6 +5,10 @@ const path = require('path');
 const fs = require('fs');
 require('@electron/remote/main').initialize();
 
+const tempPath = app.isPackaged
+    ? path.join(app.getPath('userData'), 'temp')
+    : path.join(__dirname, 'temp');
+
 let NodeID3tag;
 let debug = true;
 if (app.isPackaged) {
@@ -94,14 +98,8 @@ function processFiles(files) {
                 } else {
                     console.log(`writing image of size ${tags.image.imageBuffer.length}`);
                     imageWritten = true;
-                    let path;
-                    if (app.isPackaged) {
-                        path = app.getPath('exe').replace('mp3renamer2.exe', '');
-                        path += 'resources\\app\\temp\\';
-                    } else {
-                        path = './temp/';
-                    }
-                    const embedPath = `${path}embeddedArtwork.jpg`;
+                    fs.mkdirSync(tempPath, { recursive: true });
+                    const embedPath = path.join(tempPath, 'embeddedArtwork.jpg');
                     console.log(embedPath);
                     fs.writeFileSync(embedPath, tags.image.imageBuffer, 'binary');
                 }
@@ -250,6 +248,7 @@ exports.quitApp = quitApp;
 exports.writeTags = writeTags;
 exports.os = process.platform;
 exports.electronPath = __dirname;
+exports.tempPath = tempPath;
 exports.cliArguments = process.argv.slice(app.isPackaged ? 1 : 2); // skip first two arguments
 
 // In this file you can include the rest of your app's specific main process
