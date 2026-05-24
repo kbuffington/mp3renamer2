@@ -429,5 +429,71 @@ describe('TrackService', () => {
             expect(result).not.toContain(':');
             expect(result).not.toContain('/');
         });
+
+        it('collapses double spaces when a character is replaced with empty string', () => {
+            const m: MetadataObj = {
+                artist: makeProp(['Artist | Name']),
+                album: makeProp(['My Album'], true),
+                date: makeProp(['2000'], true),
+            };
+            service.setMetadata(m);
+            const result = service.getNewFolderName();
+            expect(result).not.toContain('  ');
+            expect(result).toContain('Artist Name');
+        });
+    });
+
+    // ── previewFilenames ─────────────────────────────────────────────────────
+
+    describe('previewFilenames()', () => {
+        beforeEach(() => {
+            service.setTracks([makeTrack('01.mp3', '/Music/', { trackNumber: '01' })]);
+            service.updateSelectedTracks([0]);
+            const m: MetadataObj = {
+                artist: makeProp(['The Beatles']),
+                album: makeProp(['Abbey Road'], true),
+                title: makeProp(['Come Together']),
+                trackNumber: makeProp(['01']),
+            };
+            service.setMetadata(m);
+        });
+
+        it('renames selected tracks using the artist, album, track number, and title', () => {
+            service.previewFilenames('');
+            expect(service.getCurrentTracks()[0].meta.filename).toBe(
+                'The Beatles [Abbey Road 01] - Come Together.mp3',
+            );
+        });
+
+        it('collapses double spaces when a character is replaced with empty string', () => {
+            const m: MetadataObj = {
+                artist: makeProp(['The Beatles']),
+                album: makeProp(['Abbey Road'], true),
+                title: makeProp(['Come | Together']),
+                trackNumber: makeProp(['01']),
+            };
+            service.setMetadata(m);
+            service.previewFilenames('');
+            const filename = service.getCurrentTracks()[0].meta.filename;
+            expect(filename).not.toContain('  ');
+            expect(filename).toContain('Come Together');
+        });
+
+        it('does not rename unselected tracks', () => {
+            service.setTracks([
+                makeTrack('01.mp3', '/Music/', { trackNumber: '01' }),
+                makeTrack('02.mp3', '/Music/', { trackNumber: '02' }),
+            ]);
+            service.updateSelectedTracks([0]);
+            const m: MetadataObj = {
+                artist: makeProp(['The Beatles']),
+                album: makeProp(['Abbey Road'], true),
+                title: makeProp(['Come Together', 'Something']),
+                trackNumber: makeProp(['01', '02']),
+            };
+            service.setMetadata(m);
+            service.previewFilenames('');
+            expect(service.getCurrentTracks()[1].meta.filename).toBe('02.mp3');
+        });
     });
 });

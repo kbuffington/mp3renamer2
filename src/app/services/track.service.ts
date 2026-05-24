@@ -332,9 +332,9 @@ export class TrackService implements OnDestroy {
                     `${artist.trim()} [${metadata.album!.default.trim()} ${discNum}${trackNumber}]` +
                     ` - ${title}${t.meta.extension}`;
                 // https://stackoverflow.com/a/70343927/911192
-                t.meta.filename = filename.replace(regex, m => {
-                    return config.replacementFileNameChars[m as ReplaceableChar];
-                });
+                t.meta.filename = filename
+                    .replace(regex, m => config.replacementFileNameChars[m as ReplaceableChar])
+                    .replace(/ {2,}/g, ' ');
             }
         });
         this.trackList.next(trackList);
@@ -403,9 +403,9 @@ export class TrackService implements OnDestroy {
             '[' + replaceCharsStr.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1') + ']',
             'g',
         );
-        newDir = newDir.replace(regex, m => {
-            return config.replacementFileNameChars[m as ReplaceableChar];
-        });
+        newDir = newDir
+            .replace(regex, m => config.replacementFileNameChars[m as ReplaceableChar])
+            .replace(/ {2,}/g, ' ');
 
         return newDir.replace(/\.+$/, '');
     }
