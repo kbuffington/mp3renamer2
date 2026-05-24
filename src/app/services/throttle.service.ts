@@ -5,7 +5,7 @@ export class ThrottleService {
     public requestsInQueue = 0;
 
     private requestQueueID = 0;
-    private lastDelay: number;
+    private lastDelay = 0;
     private lastRequestTime = 0;
 
     constructor() {}
