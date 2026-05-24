@@ -6,8 +6,8 @@
   "scripts": {
     "ng": "ng",
     "build": "ng build",
-    "build:win": "npm run build && npx @electron/packager . --platform=win32 --arch=x64 --ignore=\"(e2e|node_modules/.cache)\" --overwrite",
-    "build:osx": "npm run build && npx @electron/packager . --platform=darwin --arch=x64 --ignore=\"(e2e|node_modules/.cache)\" --overwrite",
+    "build:win": "npm run build && npx @electron/packager . --platform=win32 --arch=x64 --ignore=\"(^/src|^/e2e|^/node_modules/electron/|^/node_modules/\\.pnpm|^/node_modules/typescript|^/node_modules/@angular|^/node_modules/@angular-devkit|^/node_modules/@babel|^/node_modules/@schematics|^/node_modules/@esbuild|^/node_modules/esbuild-wasm|^/node_modules/sass|^/node_modules/webpack|^/node_modules/@algolia|^/node_modules/\\.cache|^/\\.angular)\" --overwrite",
+    "build:osx": "npm run build && npx @electron/packager . --platform=darwin --arch=x64 --ignore=\"(^/src|^/e2e|^/node_modules/electron/|^/node_modules/\\.pnpm|^/node_modules/typescript|^/node_modules/@angular|^/node_modules/@angular-devkit|^/node_modules/@babel|^/node_modules/@schematics|^/node_modules/@esbuild|^/node_modules/esbuild-wasm|^/node_modules/sass|^/node_modules/webpack|^/node_modules/@algolia|^/node_modules/\\.cache|^/\\.angular)\" --overwrite",
     "deploy:win": "npm run move && npm run delete && npm run rename",
     "move": "(rd /S /Q %npm_package_config_deployDir%-temp || cd .) && xcopy mp3renamer2-win32-x64 %npm_package_config_deployDir%-temp /E/H/C/I",
     "delete": "rd /S /Q %npm_package_config_deployDir% || echo \"Directory does not exist\"",
