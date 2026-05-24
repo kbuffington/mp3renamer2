@@ -1,7 +1,7 @@
-export class CountryEntry {
+export type CountryEntry = {
     code: string;
     name: string;
-}
+};
 
 export const countryCodes: CountryEntry[] = [
     { code: 'US', name: 'United States' },
@@ -64,7 +64,7 @@ export const countryCodes: CountryEntry[] = [
     { code: 'CD', name: 'Democratic Republic of the Congo' },
     { code: 'CF', name: 'Central African Republic' },
     { code: 'CH', name: 'Switzerland' },
-    { code: 'CI', name: 'Cote d\'Ivoire' },
+    { code: 'CI', name: "Cote d'Ivoire" },
     { code: 'CK', name: 'Cook Islands' },
     { code: 'CL', name: 'Chile' },
     { code: 'CM', name: 'Cameroon' },
