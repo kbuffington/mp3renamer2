@@ -34,7 +34,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.26",
     "@angular/animations": "^20.3.21",
-    "@angular/cli": "^20.3.26",
+    "@angular/cli": "^21.0.4",
     "@angular/common": "^20.3.21",
     "@angular/compiler": "^20.3.21",
     "@angular/compiler-cli": "^20.3.21",
